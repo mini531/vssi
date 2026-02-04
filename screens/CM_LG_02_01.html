@@ -68,11 +68,9 @@
 
                 <!-- ID -->
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-400 mb-2">아이디 <span
-                            class="text-red-500">*</span></label>
+                    <label class="form-label">아이디 <span>*</span></label>
                     <div class="flex gap-2">
-                        <input type="text" id="id" placeholder="아이디를 입력해 주세요."
-                            class="flex-1 bg-[#050912] border border-slate-800 text-xs text-white px-4 py-3 placeholder:text-slate-600 focus:border-teal-900 focus:outline-none focus:bg-[#050912] transition-colors"
+                        <input type="text" id="id" placeholder="아이디를 입력해 주세요." class="form-input flex-1"
                             oninput="resetError('id')">
                         <button onclick="checkId()"
                             class="bg-[#1f2937] hover:bg-[#374151] text-xs text-slate-200 px-4 font-bold border border-slate-700 transition-colors whitespace-nowrap">
@@ -88,69 +86,56 @@
 
                 <!-- Password -->
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-400 mb-2">비밀번호 <span
-                            class="text-red-500">*</span></label>
-                    <input type="password" id="pw" placeholder="비밀번호를 입력해 주세요."
-                        class="w-full bg-[#050912] border border-slate-800 text-xs text-white px-4 py-3 placeholder:text-slate-600 focus:border-teal-900 focus:outline-none transition-colors"
+                    <label class="form-label">비밀번호 <span>*</span></label>
+                    <input type="password" id="pw" placeholder="비밀번호를 입력해 주세요." class="form-input"
                         oninput="resetError('pw')">
-                    <div id="error-pw" class="text-xs text-red-400 mt-1.5 font-bold"></div>
+                    <div id="error-pw" class="form-error"></div>
                     <p class="input-guide-text">영문 대소문자, 숫자, 특수문자를 혼용하여 8자 이상</p>
                 </div>
 
                 <!-- Password Confirm -->
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-400 mb-2">비밀번호 확인 <span
-                            class="text-red-500">*</span></label>
-                    <input type="password" id="pwConfirm" placeholder="비밀번호를 다시 입력해 주세요."
-                        class="w-full bg-[#050912] border border-slate-800 text-xs text-white px-4 py-3 placeholder:text-slate-600 focus:border-teal-900 focus:outline-none transition-colors"
+                    <label class="form-label">비밀번호 확인 <span>*</span></label>
+                    <input type="password" id="pwConfirm" placeholder="비밀번호를 다시 입력해 주세요." class="form-input"
                         oninput="resetError('pwConfirm')">
-                    <div id="error-pwConfirm" class="text-xs text-red-400 mt-1.5 font-bold"></div>
+                    <div id="error-pwConfirm" class="form-error"></div>
                 </div>
 
                 <!-- Name -->
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-400 mb-2">이름 <span
-                            class="text-red-500">*</span></label>
-                    <input type="text" id="name" placeholder="이름을 입력해 주세요."
-                        class="w-full bg-[#050912] border border-slate-800 text-xs text-white px-4 py-3 placeholder:text-slate-600 focus:border-teal-900 focus:outline-none transition-colors"
+                    <label class="form-label">이름 <span>*</span></label>
+                    <input type="text" id="name" placeholder="이름을 입력해 주세요." class="form-input"
                         oninput="resetError('name')">
-                    <div id="error-name" class="text-xs text-red-400 mt-1.5 font-bold"></div>
+                    <div id="error-name" class="form-error"></div>
                 </div>
 
                 <!-- Affiliation -->
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-400 mb-2">소속 <span
-                            class="text-red-500">*</span></label>
-                    <input type="text" id="affiliation" placeholder="소속을 입력해 주세요."
-                        class="w-full bg-[#050912] border border-slate-800 text-xs text-white px-4 py-3 placeholder:text-slate-600 focus:border-teal-900 focus:outline-none transition-colors"
+                    <label class="form-label">소속 <span>*</span></label>
+                    <input type="text" id="affiliation" placeholder="소속을 입력해 주세요." class="form-input"
                         oninput="resetError('affiliation')">
-                    <div id="error-affiliation" class="text-xs text-red-400 mt-1.5 font-bold"></div>
+                    <div id="error-affiliation" class="form-error"></div>
                 </div>
 
                 <!-- Email -->
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-400 mb-2">이메일 <span
-                            class="text-red-500">*</span></label>
-                    <input type="email" id="email" placeholder="이메일을 입력해 주세요."
-                        class="w-full bg-[#050912] border border-slate-800 text-xs text-white px-4 py-3 placeholder:text-slate-600 focus:border-teal-900 focus:outline-none transition-colors"
+                    <label class="form-label">이메일 <span>*</span></label>
+                    <input type="email" id="email" placeholder="이메일을 입력해 주세요." class="form-input"
                         oninput="resetError('email')">
-                    <div id="error-email" class="text-xs text-red-400 mt-1.5 font-bold"></div>
+                    <div id="error-email" class="form-error"></div>
                 </div>
 
                 <!-- Phone -->
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-400 mb-2">휴대폰 번호 <span
-                            class="text-red-500">*</span></label>
-                    <input type="tel" id="phone" placeholder="휴대폰 번호를 입력해 주세요."
-                        class="w-full bg-[#050912] border border-slate-800 text-xs text-white px-4 py-3 placeholder:text-slate-600 focus:border-teal-900 focus:outline-none transition-colors"
+                    <label class="form-label">휴대폰 번호 <span>*</span></label>
+                    <input type="tel" id="phone" placeholder="휴대폰 번호를 입력해 주세요." class="form-input"
                         oninput="handlePhoneInput(this)">
-                    <div id="error-phone" class="text-xs text-red-400 mt-1.5 font-bold"></div>
+                    <div id="error-phone" class="form-error"></div>
                 </div>
 
                 <!-- System Selection -->
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-400 mb-2">이용 희망 시스템 <span
-                            class="text-red-500">*</span></label>
+                    <label class="form-label">이용 희망 시스템 <span>*</span></label>
                     <div class="bg-[#050912] border border-slate-800 p-4 space-y-3">
                         <label class="flex items-center group cursor-pointer">
                             <input type="checkbox" name="systems" value="IVMS"
@@ -198,18 +183,18 @@
                                 시스템</span>
                         </label>
                     </div>
-                    <div id="error-systems" class="text-xs text-red-400 mt-1.5 font-bold"></div>
+                    <div id="error-systems" class="form-error"></div>
                 </div>
 
                 <!-- Buttons -->
                 <div class="pt-6 space-y-3">
-                    <button onclick="handleSubmit()"
-                        class="w-full bg-[#117a6d] hover:bg-[#0e665b] text-white font-bold py-3.5 text-sm transition-colors shadow-lg shadow-teal-900/20">
+                    <button onclick="handleSubmit()" class="btn-primary">
                         신청
                     </button>
                     <div
-                        class="hover:bg-slate-800 transition-colors cursor-pointer w-full bg-[#1f2937] border border-slate-700 text-center py-3.5">
-                        <a href="CM_LG_01_01.html" class="text-slate-300 font-bold text-sm block w-full h-full">취소</a>
+                        class="hover:bg-slate-800 transition-colors cursor-pointer w-full bg-[#1f2937] border border-slate-700 text-center py-0">
+                        <!-- Simplified secondary button structure -->
+                        <a href="CM_LG_01_01.html" class="btn-secondary">취소</a>
                     </div>
                 </div>
 
@@ -255,20 +240,18 @@
         const getVal = (id) => document.getElementById(id).value.trim();
         const setErr = (id, msg) => {
             document.getElementById(`error-${id}`).innerText = msg;
-            // Add red border to input if it exists
+            // Add error class
             const input = document.getElementById(id);
             if (input) {
-                input.classList.add('border-red-500');
-                input.classList.remove('border-slate-800');
+                input.classList.add('error');
             }
         };
         const resetError = (id) => {
             document.getElementById(`error-${id}`).innerText = '';
-            // Remove red border
+            // Remove error class
             const input = document.getElementById(id);
             if (input) {
-                input.classList.remove('border-red-500');
-                input.classList.add('border-slate-800');
+                input.classList.remove('error');
             }
         };
 

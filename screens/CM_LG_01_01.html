@@ -34,23 +34,20 @@
 
             <div class="space-y-5">
                 <div class="space-y-2">
-                    <label class="text-xs font-bold text-slate-400">아이디</label>
-                    <input type="text" id="id" placeholder="아이디를 입력해 주세요."
-                        class="w-full bg-[#0a0f1d] border border-slate-700/50 px-4 py-3 text-xs text-white focus:border-teal-500 focus:outline-none placeholder:text-slate-600 transition-colors"
+                    <label class="form-label">아이디</label>
+                    <input type="text" id="id" placeholder="아이디를 입력해 주세요." class="form-input"
                         oninput="resetError('id')">
-                    <div id="error-id" class="hidden text-xs text-red-400 font-bold mt-1"></div>
+                    <div id="error-id" class="form-error hidden"></div>
                 </div>
 
                 <div class="space-y-2">
-                    <label class="text-xs font-bold text-slate-400">비밀번호</label>
-                    <input type="password" id="pw" placeholder="비밀번호를 입력해 주세요."
-                        class="w-full bg-[#0a0f1d] border border-slate-700/50 px-4 py-3 text-xs text-white focus:border-teal-500 focus:outline-none placeholder:text-slate-600 transition-colors"
+                    <label class="form-label">비밀번호</label>
+                    <input type="password" id="pw" placeholder="비밀번호를 입력해 주세요." class="form-input"
                         oninput="resetError('pw')" onkeydown="if(event.key === 'Enter') handleLogin()">
-                    <div id="error-pw" class="hidden text-xs text-red-400 font-bold mt-1"></div>
+                    <div id="error-pw" class="form-error hidden"></div>
                 </div>
 
-                <button onclick="handleLogin()"
-                    class="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-3.5 mt-2 transition-colors text-sm shadow-lg shadow-teal-900/20">
+                <button onclick="handleLogin()" class="btn-primary mt-2">
                     로그인
                 </button>
             </div>
@@ -120,10 +117,8 @@
             const input = document.getElementById(id);
             const errorDiv = document.getElementById('error-' + id);
 
-            // Reset border
-            input.classList.remove('border-red-500');
-            input.classList.add('border-slate-700/50');
-            input.classList.add('focus:border-teal-500'); // Restore focus color logic if needed, simplify by re-adding base logic
+            // Reset border (using class)
+            input.classList.remove('error');
 
             // Hide error text
             errorDiv.innerText = '';
@@ -135,9 +130,7 @@
             const errorDiv = document.getElementById('error-' + id);
 
             // Set border red
-            input.classList.remove('border-slate-700/50');
-            input.classList.remove('focus:border-teal-500');
-            input.classList.add('border-red-500');
+            input.classList.add('error');
 
             // Show error text
             errorDiv.innerText = msg;
