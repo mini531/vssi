@@ -10,49 +10,11 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        .rounded-2xl,
-        .rounded-lg,
-        .rounded-xl,
-        .rounded,
-        .rounded-md,
-        .rounded-sm {
-            border-radius: 0 !important;
-        }
-
-        .login-card-bg {
-            background-color: rgba(2, 6, 23, 0.2);
-            /* Very low opacity for 'near transparent' */
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            border-radius: 0.125rem;
-            /* rounded-sm equivalent */
-        }
-
-        .footer-bg {
-            background-color: rgba(12, 17, 29, 0.4);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        /* Modal Animation */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        .animate-fade-in {
-            animation: fadeIn 0.2s ease-out forwards;
-        }
+        /* All styles moved to style.css */
     </style>
 </head>
 
-<body
-    class="bg-[#050810] text-slate-200 h-screen flex flex-col items-center justify-center relative overflow-hidden font-sans bg-[url('../images/background.jpg')] bg-cover bg-center bg-no-repeat before:absolute before:inset-0 before:bg-black/40 before:z-0">
+<body class="app-bg h-screen flex flex-col items-center justify-center relative overflow-hidden font-sans">
 
     <!-- Upper Logo Section -->
     <div class="mb-12 text-center z-10">
