@@ -335,3 +335,110 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background-color: #334155;
   /* bg-slate-700 */
 }
+
+/* --- Standardized Components (Refactoring) --- */
+
+/* Filter Inputs & Selects */
+.filter-input,
+.filter-select {
+  width: 100%;
+  height: 34px;
+  background-color: #050912;
+  border: 1px solid #334155;
+  /* slate-700 */
+  color: white;
+  font-size: 0.75rem;
+  /* text-xs */
+  padding: 0.5rem;
+  /* p-2 */
+  border-radius: 0.25rem;
+  /* rounded */
+  transition: border-color 0.2s;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+  outline: none;
+  border-color: #14b8a6;
+  /* teal-500 */
+}
+
+/* Date Input overrides */
+.filter-input[type="date"] {
+  padding: 0.25rem;
+  /* p-1 */
+}
+
+/* Status Cards */
+.status-card {
+  background-color: #0b101b;
+  border: 1px solid #1e293b;
+  /* slate-800 */
+  padding: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Pagination Buttons */
+.page-btn {
+  width: 1.5rem;
+  /* w-6 */
+  height: 1.5rem;
+  /* h-6 */
+  font-size: 0.75rem;
+  /* text-xs */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  /* text-slate-500 */
+  border-radius: 0.125rem;
+  /* rounded-sm */
+  transition: background-color 0.2s;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.page-btn:hover {
+  background-color: #1e293b;
+  /* hover:bg-slate-800 */
+}
+
+.page-btn.active {
+  background-color: #0d9488;
+  /* bg-teal-600 */
+  color: white;
+}
+
+/* Pagination Select */
+.pagination-select {
+  background-color: #050912;
+  border: 1px solid #334155;
+  /* slate-700 */
+  font-size: 10px;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  /* px-2 py-1 */
+  height: 1.5rem;
+  /* h-6 */
+  border-radius: 0.25rem;
+}
+
+.pagination-select:focus {
+  outline: none;
+  border-color: #14b8a6;
+}
+
+/* Checkbox Standard */
+.form-checkbox {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid #475569;
+  /* slate-600 */
+  background-color: transparent;
+  cursor: pointer;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}

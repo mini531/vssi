@@ -11,6 +11,11 @@ You are an expert AI developer working on the VSSI project. You MUST strictly ad
     *   Label: `.form-label` (Asterisk in `<span>`).
     *   Button: `.btn-primary` (Teal), `.btn-secondary` (Dark).
     *   Error Text: `.form-error`.
+    *   Checkbox: `.form-checkbox`.
+*   **Dashboard Components**:
+    *   Filters: `.filter-input`, `.filter-select`.
+    *   Cards: `.status-card`.
+    *   Pagination: `.page-btn`, `.pagination-select`.
 
 ## 2. JavaScript Conventions
 *   **Modules**: Always use `js/include.js` for dynamic loading of `header.html` and `sidebar.html`.

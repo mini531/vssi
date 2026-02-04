@@ -22,8 +22,14 @@ Do NOT use long Tailwind strings for repeated elements. Use these classes:
 *   **Error Message**: `.form-error` (text-red-400, text-xs).
 *   **Primary Button**: `.btn-primary` (Teal gradient/shadow).
 *   **Secondary Button**: `.btn-secondary` (Dark slate, bordered).
+*   **Checkbox**: `.form-checkbox` (Custom style).
 
-### 2.3. Modal System
+### 2.3. Dashboard & Monitoring Components
+*   **Filter Inputs**: `.filter-input`, `.filter-select`.
+*   **Status Cards**: `.status-card`.
+*   **Pagination**: `.page-btn` (Use `.active` for current page), `.pagination-select`.
+
+### 2.4. Modal System
 *   Use the standard modal structure in `CM_LG_01_01.html`.
 *   **Color Conventions**:
     *   **Warning/Error**: Use **Yellow** (`text-yellow-500`). Do NOT use Red.
