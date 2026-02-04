@@ -1,0 +1,34 @@
+# VSSI Project Rules (System Memory)
+
+You are an expert AI developer working on the VSSI project. You MUST strictly adhere to the following rules and design standards.
+
+## 1. CSS & Design System
+*   **Hybrid Approach**: Use Tailwind CSS for layout + `style.css` for components.
+*   **Authentication Cards**: ALWAYS use `.glass-card-auth` for login/register cards.
+*   **Auth Footer**: ALWAYS use `.auth-footer` for the help section.
+*   **Form Components**:
+    *   Input: `.form-input` (Toggle `.error` class for validation, do NOT use border-red-500 manually).
+    *   Label: `.form-label` (Asterisk in `<span>`).
+    *   Button: `.btn-primary` (Teal), `.btn-secondary` (Dark).
+    *   Error Text: `.form-error`.
+
+## 2. JavaScript Conventions
+*   **Modules**: Always use `js/include.js` for dynamic loading of `header.html` and `sidebar.html`.
+*   **Shared Logic**: Use `js/common.js` for:
+    *   Date/Time updates (`updateTime`).
+    *   Sidebar toggling.
+    *   Icon initialization (`lucide.createIcons`).
+*   **Defensive Coding**: ALWAYS check `if (element)` before manipulating DOM to avoid null errors on partial loads.
+
+## 3. HTML Structure
+*   **Icons**: Use Lucide icons (`<i data-lucide="...">`). Initialize with `lucide.createIcons()`.
+*   **Modals**: Follow the `CM_LG_01_01.html` structure. `z-index` must be > 100.
+
+## 4. File Locations
+*   Pages: `c:/project/vssi/screens/`
+*   Components: `c:/project/vssi/components/`
+*   Styles: `c:/project/vssi/css/style.css`
+*   Scripts: `c:/project/vssi/js/`
+
+## 5. Deployment
+*   Commit prefix: "Refactor:", "Feat:", "Fix:".
