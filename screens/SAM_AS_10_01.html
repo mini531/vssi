@@ -333,65 +333,69 @@
                     </div>
 
                     <div id="filter-content" class="transition-all duration-300 ease-in-out overflow-hidden">
-                        <div class="p-4 flex flex-wrap items-end gap-3">
-                            <div class="w-[120px] shrink-0">
-                                <label class="block text-[10px] text-slate-500 mb-1">유형</label>
-                                <select
-                                    class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500 h-[34px]">
-                                    <option>전체</option>
-                                    <option>수신 (Inbound)</option>
-                                    <option>송신 (Outbound)</option>
-                                </select>
-                            </div>
-                            <div class="w-[160px] shrink-0">
-                                <label class="block text-[10px] text-slate-500 mb-1">시스템 이름</label>
-                                <select
-                                    class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500 h-[34px]">
-                                    <option>전체</option>
-                                    <option>VP-강남 (Gangnam)</option>
-                                    <option>VP-김포 (Gimpo)</option>
-                                    <option>VP-잠실 (Jamsil)</option>
-                                    <option>A 운항사 (Airline A)</option>
-                                    <option>B 운항사 (Airline B)</option>
-                                    <option>K-UAM Core</option>
-                                </select>
-                            </div>
-                            <div class="flex-1 min-w-[120px]">
-                                <label class="block text-[10px] text-slate-500 mb-1">라우팅 키</label>
-                                <input type="text" placeholder="Routing Key"
-                                    class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500 h-[34px]">
-                            </div>
-                            <div class="flex-1 min-w-[120px]">
-                                <label class="block text-[10px] text-slate-500 mb-1">큐 명칭</label>
-                                <input type="text" placeholder="Queue Name"
-                                    class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500 h-[34px]">
-                            </div>
-                            <div class="w-[120px] shrink-0">
-                                <label class="block text-[10px] text-slate-500 mb-1">상태 (State)</label>
-                                <select
-                                    class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500 h-[34px]">
-                                    <option>전체</option>
-                                    <option>정상 (Normal)</option>
-                                    <option>지연 (Delayed)</option>
-                                    <option>장애 (Error)</option>
-                                </select>
-                            </div>
-                            <div class="w-[240px] shrink-0">
-                                <label class="block text-[10px] text-slate-500 mb-1">최종 갱신일</label>
-                                <div class="flex space-x-2">
-                                    <input type="date"
-                                        class="flex-1 bg-[#050912] border border-slate-700 text-xs text-white p-2 h-[34px]">
-                                    <span class="text-slate-500 self-center text-[10px]">~</span>
-                                    <input type="date"
-                                        class="flex-1 bg-[#050912] border border-slate-700 text-xs text-white p-2 h-[34px]">
+                        <div class="p-4">
+                            <!-- Filter Fields: 6 Equal Columns -->
+                            <div class="grid grid-cols-6 gap-3 mb-4">
+                                <div>
+                                    <label class="block text-[10px] text-slate-500 mb-1">유형</label>
+                                    <select
+                                        class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500 h-[34px]">
+                                        <option>전체</option>
+                                        <option>수신 (Inbound)</option>
+                                        <option>송신 (Outbound)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] text-slate-500 mb-1">시스템 이름</label>
+                                    <select
+                                        class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500 h-[34px]">
+                                        <option>전체</option>
+                                        <option>VP-강남 (Gangnam)</option>
+                                        <option>VP-김포 (Gimpo)</option>
+                                        <option>VP-잠실 (Jamsil)</option>
+                                        <option>A 운항사 (Airline A)</option>
+                                        <option>B 운항사 (Airline B)</option>
+                                        <option>K-UAM Core</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] text-slate-500 mb-1">라우팅 키</label>
+                                    <input type="text" placeholder="Routing Key"
+                                        class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500 h-[34px]">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] text-slate-500 mb-1">큐 명칭</label>
+                                    <input type="text" placeholder="Queue Name"
+                                        class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500 h-[34px]">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] text-slate-500 mb-1">상태 (State)</label>
+                                    <select
+                                        class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500 h-[34px]">
+                                        <option>전체</option>
+                                        <option>정상 (Normal)</option>
+                                        <option>지연 (Delayed)</option>
+                                        <option>장애 (Error)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] text-slate-500 mb-1">최종 갱신일</label>
+                                    <div class="flex space-x-1"> <!-- Tighter spacing for date range -->
+                                        <input type="date"
+                                            class="w-1/2 bg-[#050912] border border-slate-700 text-[10px] text-white p-1 h-[34px]">
+                                        <!-- Smaller text for fit -->
+                                        <span class="text-slate-500 self-center text-[10px]">~</span>
+                                        <input type="date"
+                                            class="w-1/2 bg-[#050912] border border-slate-700 text-[10px] text-white p-1 h-[34px]">
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Search Buttons Inline -->
-                            <div class="flex items-center space-x-2 ml-auto">
+                            <!-- Search Buttons Row (Bottom Right) -->
+                            <div class="flex justify-end space-x-2 border-t border-slate-800/50 pt-4">
                                 <button
                                     class="px-3 border border-slate-600 text-xs text-slate-300 hover:bg-slate-800 flex items-center h-[34px]">
-                                    <i data-lucide="rotate-ccw" class="w-3 h-3 mr-1"></i>
+                                    <i data-lucide="rotate-ccw" class="w-3 h-3 mr-1"></i> 초기화
                                 </button>
                                 <button
                                     class="px-4 bg-teal-600 hover:bg-teal-500 text-xs text-white font-bold flex items-center h-[34px]">
