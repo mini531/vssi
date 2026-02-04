@@ -333,21 +333,20 @@
                     </div>
 
                     <div id="filter-content" class="transition-all duration-300 ease-in-out overflow-hidden">
-                        <div class="p-4 grid grid-cols-4 gap-4">
-                            <!-- Row 1 -->
-                            <div>
+                        <div class="p-4 flex flex-wrap items-end gap-3">
+                            <div class="w-[120px] shrink-0">
                                 <label class="block text-[10px] text-slate-500 mb-1">유형</label>
                                 <select
-                                    class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500">
+                                    class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500 h-[34px]">
                                     <option>전체</option>
                                     <option>수신 (Inbound)</option>
                                     <option>송신 (Outbound)</option>
                                 </select>
                             </div>
-                            <div>
+                            <div class="w-[160px] shrink-0">
                                 <label class="block text-[10px] text-slate-500 mb-1">시스템 이름</label>
                                 <select
-                                    class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500">
+                                    class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500 h-[34px]">
                                     <option>전체</option>
                                     <option>VP-강남 (Gangnam)</option>
                                     <option>VP-김포 (Gimpo)</option>
@@ -357,45 +356,45 @@
                                     <option>K-UAM Core</option>
                                 </select>
                             </div>
-                            <div>
+                            <div class="flex-1 min-w-[120px]">
                                 <label class="block text-[10px] text-slate-500 mb-1">라우팅 키</label>
-                                <input type="text" placeholder="Routing Key 입력"
-                                    class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500">
+                                <input type="text" placeholder="Routing Key"
+                                    class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500 h-[34px]">
                             </div>
-                            <div>
+                            <div class="flex-1 min-w-[120px]">
                                 <label class="block text-[10px] text-slate-500 mb-1">큐 명칭</label>
-                                <input type="text" placeholder="Queue Name 입력"
-                                    class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500">
+                                <input type="text" placeholder="Queue Name"
+                                    class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500 h-[34px]">
                             </div>
-
-                            <!-- Row 2 -->
-                            <div>
+                            <div class="w-[120px] shrink-0">
                                 <label class="block text-[10px] text-slate-500 mb-1">상태 (State)</label>
                                 <select
-                                    class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500">
+                                    class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500 h-[34px]">
                                     <option>전체</option>
                                     <option>정상 (Normal)</option>
                                     <option>지연 (Delayed)</option>
                                     <option>장애 (Error)</option>
                                 </select>
                             </div>
-                            <div class="col-span-2">
-                                <label class="block text-[10px] text-slate-500 mb-1">조회 기간</label>
+                            <div class="w-[240px] shrink-0">
+                                <label class="block text-[10px] text-slate-500 mb-1">최종 갱신일</label>
                                 <div class="flex space-x-2">
                                     <input type="date"
-                                        class="flex-1 bg-[#050912] border border-slate-700 text-xs text-white p-2">
-                                    <span class="text-slate-500 self-center">~</span>
+                                        class="flex-1 bg-[#050912] border border-slate-700 text-xs text-white p-2 h-[34px]">
+                                    <span class="text-slate-500 self-center text-[10px]">~</span>
                                     <input type="date"
-                                        class="flex-1 bg-[#050912] border border-slate-700 text-xs text-white p-2">
+                                        class="flex-1 bg-[#050912] border border-slate-700 text-xs text-white p-2 h-[34px]">
                                 </div>
                             </div>
-                            <div class="flex items-end justify-end space-x-2">
+
+                            <!-- Search Buttons Inline -->
+                            <div class="flex items-center space-x-2 ml-auto">
                                 <button
-                                    class="px-3 py-2 border border-slate-600 text-xs text-slate-300 hover:bg-slate-800 flex items-center h-[34px]">
-                                    <i data-lucide="rotate-ccw" class="w-3 h-3 mr-1"></i> 초기화
+                                    class="px-3 border border-slate-600 text-xs text-slate-300 hover:bg-slate-800 flex items-center h-[34px]">
+                                    <i data-lucide="rotate-ccw" class="w-3 h-3 mr-1"></i>
                                 </button>
                                 <button
-                                    class="px-4 py-2 bg-teal-600 hover:bg-teal-500 text-xs text-white font-bold flex items-center h-[34px]">
+                                    class="px-4 bg-teal-600 hover:bg-teal-500 text-xs text-white font-bold flex items-center h-[34px]">
                                     <i data-lucide="search" class="w-3 h-3 mr-1"></i> 조회
                                 </button>
                             </div>
