@@ -334,17 +334,28 @@
 
                     <div id="filter-content" class="transition-all duration-300 ease-in-out overflow-hidden">
                         <div class="p-4 grid grid-cols-4 gap-4">
+                            <!-- Row 1 -->
                             <div>
                                 <label class="block text-[10px] text-slate-500 mb-1">유형</label>
                                 <select
                                     class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500">
                                     <option>전체</option>
+                                    <option>수신 (Inbound)</option>
+                                    <option>송신 (Outbound)</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-[10px] text-slate-500 mb-1">시스템 이름</label>
-                                <input type="text" placeholder="시스템 명칭 입력"
+                                <select
                                     class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500">
+                                    <option>전체</option>
+                                    <option>VP-강남 (Gangnam)</option>
+                                    <option>VP-김포 (Gimpo)</option>
+                                    <option>VP-잠실 (Jamsil)</option>
+                                    <option>A 운항사 (Airline A)</option>
+                                    <option>B 운항사 (Airline B)</option>
+                                    <option>K-UAM Core</option>
+                                </select>
                             </div>
                             <div>
                                 <label class="block text-[10px] text-slate-500 mb-1">라우팅 키</label>
@@ -352,28 +363,42 @@
                                     class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500">
                             </div>
                             <div>
-                                <label class="block text-[10px] text-slate-500 mb-1">최종 갱신일</label>
+                                <label class="block text-[10px] text-slate-500 mb-1">큐 명칭</label>
+                                <input type="text" placeholder="Queue Name 입력"
+                                    class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500">
+                            </div>
+
+                            <!-- Row 2 -->
+                            <div>
+                                <label class="block text-[10px] text-slate-500 mb-1">상태 (State)</label>
+                                <select
+                                    class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2 focus:border-teal-500">
+                                    <option>전체</option>
+                                    <option>정상 (Normal)</option>
+                                    <option>지연 (Delayed)</option>
+                                    <option>장애 (Error)</option>
+                                </select>
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-[10px] text-slate-500 mb-1">조회 기간</label>
                                 <div class="flex space-x-2">
-                                    <div class="relative flex-1">
-                                        <input type="date"
-                                            class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2">
-                                    </div>
-                                    <div class="relative flex-1">
-                                        <input type="date"
-                                            class="w-full bg-[#050912] border border-slate-700 text-xs text-white p-2">
-                                    </div>
+                                    <input type="date"
+                                        class="flex-1 bg-[#050912] border border-slate-700 text-xs text-white p-2">
+                                    <span class="text-slate-500 self-center">~</span>
+                                    <input type="date"
+                                        class="flex-1 bg-[#050912] border border-slate-700 text-xs text-white p-2">
                                 </div>
                             </div>
-                        </div>
-                        <div class="px-4 pb-4 flex justify-end space-x-2">
-                            <button
-                                class="px-3 py-1.5 border border-slate-600 text-xs text-slate-300 hover:bg-slate-800 flex items-center">
-                                <i data-lucide="rotate-ccw" class="w-3 h-3 mr-1"></i> 초기화
-                            </button>
-                            <button
-                                class="px-4 py-1.5 bg-teal-600 hover:bg-teal-500 text-xs text-white font-bold flex items-center">
-                                <i data-lucide="search" class="w-3 h-3 mr-1"></i> 조회
-                            </button>
+                            <div class="flex items-end justify-end space-x-2">
+                                <button
+                                    class="px-3 py-2 border border-slate-600 text-xs text-slate-300 hover:bg-slate-800 flex items-center h-[34px]">
+                                    <i data-lucide="rotate-ccw" class="w-3 h-3 mr-1"></i> 초기화
+                                </button>
+                                <button
+                                    class="px-4 py-2 bg-teal-600 hover:bg-teal-500 text-xs text-white font-bold flex items-center h-[34px]">
+                                    <i data-lucide="search" class="w-3 h-3 mr-1"></i> 조회
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -397,28 +422,28 @@
                         </thead>
                         <tbody class="text-xs text-slate-300">
                             <!-- Row 1 -->
-                            <tr class="border-b border-slate-800/50 hover:bg-white/5">
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
                                 <td class="px-4 py-3"><span
                                         class="px-1.5 py-0.5 bg-purple-900/30 text-purple-400 border border-purple-800 text-[10px]">수신</span>
                                 </td>
-                                <td class="px-4 py-3 font-bold text-white">VP-강남</td>
+                                <td class="px-4 py-3 font-bold text-white">VP-강남 (Gangnam)</td>
                                 <td class="px-4 py-3 text-slate-500 font-mono">v1.gangnam.batt</td>
                                 <td class="px-4 py-3 text-slate-400 font-mono">q.infra.batt.v1</td>
                                 <td class="px-4 py-3 text-center text-slate-500 text-[10px]">CLASSIC</td>
                                 <td class="px-4 py-3 text-right text-red-500 font-bold">1,450</td>
                                 <td class="px-4 py-3 text-right">0</td>
                                 <td class="px-4 py-3 text-right text-orange-500">12</td>
-                                <td class="px-4 py-3 text-center text-slate-500">2026.02.04 15:45:12</td>
+                                <td class="px-4 py-3 text-center text-slate-500">2026.02.05 10:45:12</td>
                                 <td class="px-4 py-3 text-center"><span
                                         class="px-2 py-0.5 bg-red-900/20 text-red-500 border border-red-900 text-[10px]">장애</span>
                                 </td>
                             </tr>
                             <!-- Row 2 -->
-                            <tr class="border-b border-slate-800/50 hover:bg-white/5">
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
                                 <td class="px-4 py-3"><span
                                         class="px-1.5 py-0.5 bg-blue-900/30 text-blue-400 border border-blue-800 text-[10px]">송신</span>
                                 </td>
-                                <td class="px-4 py-3 font-bold text-white">A 운항사</td>
+                                <td class="px-4 py-3 font-bold text-white">A 운항사 (Airline A)</td>
                                 <td class="px-4 py-3 text-slate-500 font-mono">v1.airline_a.auth</td>
                                 <td class="px-4 py-3 text-slate-400 font-mono">q.status.auth.v1</td>
                                 <td class="px-4 py-3 text-center text-slate-500 text-[10px]">QUORUM</td>
@@ -431,11 +456,11 @@
                                 </td>
                             </tr>
                             <!-- Row 3 -->
-                            <tr class="border-b border-slate-800/50 hover:bg-white/5">
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
                                 <td class="px-4 py-3"><span
                                         class="px-1.5 py-0.5 bg-purple-900/30 text-purple-400 border border-purple-800 text-[10px]">수신</span>
                                 </td>
-                                <td class="px-4 py-3 font-bold text-white">VP-강남</td>
+                                <td class="px-4 py-3 font-bold text-white">VP-강남 (Gangnam)</td>
                                 <td class="px-4 py-3 text-slate-500 font-mono">v1.gangnam.status</td>
                                 <td class="px-4 py-3 text-slate-400 font-mono">q.infra.status.v1</td>
                                 <td class="px-4 py-3 text-center text-slate-500 text-[10px]">CLASSIC</td>
@@ -448,11 +473,11 @@
                                 </td>
                             </tr>
                             <!-- Row 4 -->
-                            <tr class="border-b border-slate-800/50 hover:bg-white/5">
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
                                 <td class="px-4 py-3"><span
                                         class="px-1.5 py-0.5 bg-blue-900/30 text-blue-400 border border-blue-800 text-[10px]">송신</span>
                                 </td>
-                                <td class="px-4 py-3 font-bold text-white">B 운항사</td>
+                                <td class="px-4 py-3 font-bold text-white">B 운항사 (Airline B)</td>
                                 <td class="px-4 py-3 text-slate-500 font-mono">v1.airline_b.plan</td>
                                 <td class="px-4 py-3 text-slate-400 font-mono">q.status.plan.v1</td>
                                 <td class="px-4 py-3 text-center text-slate-500 text-[10px]">QUORUM</td>
@@ -465,11 +490,11 @@
                                 </td>
                             </tr>
                             <!-- Row 5 -->
-                            <tr class="border-b border-slate-800/50 hover:bg-white/5">
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
                                 <td class="px-4 py-3"><span
                                         class="px-1.5 py-0.5 bg-purple-900/30 text-purple-400 border border-purple-800 text-[10px]">수신</span>
                                 </td>
-                                <td class="px-4 py-3 font-bold text-white">VP-김포</td>
+                                <td class="px-4 py-3 font-bold text-white">VP-김포 (Gimpo)</td>
                                 <td class="px-4 py-3 text-slate-500 font-mono">v1.gimpo.pos</td>
                                 <td class="px-4 py-3 text-slate-400 font-mono">q.flight.pos.v1</td>
                                 <td class="px-4 py-3 text-center text-slate-500 text-[10px]">CLASSIC</td>
@@ -477,6 +502,261 @@
                                 <td class="px-4 py-3 text-right">5</td>
                                 <td class="px-4 py-3 text-right">2</td>
                                 <td class="px-4 py-3 text-center text-slate-500">2026.02.04 15:42:05</td>
+                                <td class="px-4 py-3 text-center"><span
+                                        class="px-2 py-0.5 bg-teal-900/20 text-teal-500 border border-teal-900 text-[10px]">정상</span>
+                                </td>
+                            </tr>
+                            <!-- Row 6 -->
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
+                                <td class="px-4 py-3"><span
+                                        class="px-1.5 py-0.5 bg-purple-900/30 text-purple-400 border border-purple-800 text-[10px]">수신</span>
+                                </td>
+                                <td class="px-4 py-3 font-bold text-white">K-UAM Core</td>
+                                <td class="px-4 py-3 text-slate-500 font-mono">v1.core.weather</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono">q.data.weather.v1</td>
+                                <td class="px-4 py-3 text-center text-slate-500 text-[10px]">STREAM</td>
+                                <td class="px-4 py-3 text-right text-white">45</td>
+                                <td class="px-4 py-3 text-right">120</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-center text-slate-500">2026.02.04 15:41:55</td>
+                                <td class="px-4 py-3 text-center"><span
+                                        class="px-2 py-0.5 bg-teal-900/20 text-teal-500 border border-teal-900 text-[10px]">정상</span>
+                                </td>
+                            </tr>
+                            <!-- Row 7 -->
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
+                                <td class="px-4 py-3"><span
+                                        class="px-1.5 py-0.5 bg-blue-900/30 text-blue-400 border border-blue-800 text-[10px]">송신</span>
+                                </td>
+                                <td class="px-4 py-3 font-bold text-white">VP-미래 (Mirae)</td>
+                                <td class="px-4 py-3 text-slate-500 font-mono">v1.mirae.vertiport</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono">q.infra.vertiport.v1</td>
+                                <td class="px-4 py-3 text-center text-slate-500 text-[10px]">CLASSIC</td>
+                                <td class="px-4 py-3 text-right text-white">2</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-center text-slate-500">2026.02.04 15:40:12</td>
+                                <td class="px-4 py-3 text-center"><span
+                                        class="px-2 py-0.5 bg-teal-900/20 text-teal-500 border border-teal-900 text-[10px]">정상</span>
+                                </td>
+                            </tr>
+                            <!-- Row 8 -->
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
+                                <td class="px-4 py-3"><span
+                                        class="px-1.5 py-0.5 bg-purple-900/30 text-purple-400 border border-purple-800 text-[10px]">수신</span>
+                                </td>
+                                <td class="px-4 py-3 font-bold text-white">K-UAM Core</td>
+                                <td class="px-4 py-3 text-slate-500 font-mono">v1.core.flight</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono">q.flight.update.v1</td>
+                                <td class="px-4 py-3 text-center text-slate-500 text-[10px]">CLASSIC</td>
+                                <td class="px-4 py-3 text-right text-red-500 font-bold">2,103</td>
+                                <td class="px-4 py-3 text-right">15</td>
+                                <td class="px-4 py-3 text-right text-orange-500">55</td>
+                                <td class="px-4 py-3 text-center text-slate-500">2026.02.04 15:39:45</td>
+                                <td class="px-4 py-3 text-center"><span
+                                        class="px-2 py-0.5 bg-red-900/20 text-red-500 border border-red-900 text-[10px]">장애</span>
+                                </td>
+                            </tr>
+                            <!-- Row 9 -->
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
+                                <td class="px-4 py-3"><span
+                                        class="px-1.5 py-0.5 bg-blue-900/30 text-blue-400 border border-blue-800 text-[10px]">송신</span>
+                                </td>
+                                <td class="px-4 py-3 font-bold text-white">C 운항사 (Airline C)</td>
+                                <td class="px-4 py-3 text-slate-500 font-mono">v1.airline_c.auth</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono">q.auth.req.v1</td>
+                                <td class="px-4 py-3 text-center text-slate-500 text-[10px]">QUORUM</td>
+                                <td class="px-4 py-3 text-right text-white">12</td>
+                                <td class="px-4 py-3 text-right">3</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-center text-slate-500">2026.02.04 15:38:20</td>
+                                <td class="px-4 py-3 text-center"><span
+                                        class="px-2 py-0.5 bg-teal-900/20 text-teal-500 border border-teal-900 text-[10px]">정상</span>
+                                </td>
+                            </tr>
+                            <!-- Row 10 -->
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
+                                <td class="px-4 py-3"><span
+                                        class="px-1.5 py-0.5 bg-purple-900/30 text-purple-400 border border-purple-800 text-[10px]">수신</span>
+                                </td>
+                                <td class="px-4 py-3 font-bold text-white">VP-잠실 (Jamsil)</td>
+                                <td class="px-4 py-3 text-slate-500 font-mono">v1.jamsil.noise</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono">q.env.noise.v1</td>
+                                <td class="px-4 py-3 text-center text-slate-500 text-[10px]">STREAM</td>
+                                <td class="px-4 py-3 text-right text-white">89</td>
+                                <td class="px-4 py-3 text-right">89</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-center text-slate-500">2026.02.04 15:37:55</td>
+                                <td class="px-4 py-3 text-center"><span
+                                        class="px-2 py-0.5 bg-teal-900/20 text-teal-500 border border-teal-900 text-[10px]">정상</span>
+                                </td>
+                            </tr>
+                            <!-- Row 11 -->
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
+                                <td class="px-4 py-3"><span
+                                        class="px-1.5 py-0.5 bg-purple-900/30 text-purple-400 border border-purple-800 text-[10px]">수신</span>
+                                </td>
+                                <td class="px-4 py-3 font-bold text-white">VP-수서 (Suseo)</td>
+                                <td class="px-4 py-3 text-slate-500 font-mono">v1.suseo.batt</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono">q.infra.batt.v1</td>
+                                <td class="px-4 py-3 text-center text-slate-500 text-[10px]">CLASSIC</td>
+                                <td class="px-4 py-3 text-right text-white">0</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-center text-slate-500">2026.02.04 15:36:40</td>
+                                <td class="px-4 py-3 text-center"><span
+                                        class="px-2 py-0.5 bg-slate-800 text-slate-500 border border-slate-700 text-[10px]">대기</span>
+                                </td>
+                            </tr>
+                            <!-- Row 12 -->
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
+                                <td class="px-4 py-3"><span
+                                        class="px-1.5 py-0.5 bg-blue-900/30 text-blue-400 border border-blue-800 text-[10px]">송신</span>
+                                </td>
+                                <td class="px-4 py-3 font-bold text-white">A 운항사 (Airline A)</td>
+                                <td class="px-4 py-3 text-slate-500 font-mono">v1.airline_a.logs</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono">q.sys.logs.v1</td>
+                                <td class="px-4 py-3 text-center text-slate-500 text-[10px]">CLASSIC</td>
+                                <td class="px-4 py-3 text-right text-white">560</td>
+                                <td class="px-4 py-3 text-right">12</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-center text-slate-500">2026.02.04 15:35:15</td>
+                                <td class="px-4 py-3 text-center"><span
+                                        class="px-2 py-0.5 bg-orange-900/20 text-orange-500 border border-orange-900 text-[10px]">지연</span>
+                                </td>
+                            </tr>
+                            <!-- Row 13 -->
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
+                                <td class="px-4 py-3"><span
+                                        class="px-1.5 py-0.5 bg-purple-900/30 text-purple-400 border border-purple-800 text-[10px]">수신</span>
+                                </td>
+                                <td class="px-4 py-3 font-bold text-white">VP-코엑스 (Coex)</td>
+                                <td class="px-4 py-3 text-slate-500 font-mono">v1.coex.gate</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono">q.infra.gate.v1</td>
+                                <td class="px-4 py-3 text-center text-slate-500 text-[10px]">CLASSIC</td>
+                                <td class="px-4 py-3 text-right text-white">3</td>
+                                <td class="px-4 py-3 text-right">3</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-center text-slate-500">2026.02.04 15:34:22</td>
+                                <td class="px-4 py-3 text-center"><span
+                                        class="px-2 py-0.5 bg-teal-900/20 text-teal-500 border border-teal-900 text-[10px]">정상</span>
+                                </td>
+                            </tr>
+                            <!-- Row 14 -->
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
+                                <td class="px-4 py-3"><span
+                                        class="px-1.5 py-0.5 bg-blue-900/30 text-blue-400 border border-blue-800 text-[10px]">송신</span>
+                                </td>
+                                <td class="px-4 py-3 font-bold text-white">Emergency Center</td>
+                                <td class="px-4 py-3 text-slate-500 font-mono">v1.emergency.alert</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono">q.priority.alert.v1</td>
+                                <td class="px-4 py-3 text-center text-slate-500 text-[10px]">PRIORITY</td>
+                                <td class="px-4 py-3 text-right text-white">0</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-center text-slate-500">2026.02.04 15:33:05</td>
+                                <td class="px-4 py-3 text-center"><span
+                                        class="px-2 py-0.5 bg-teal-900/20 text-teal-500 border border-teal-900 text-[10px]">정상</span>
+                                </td>
+                            </tr>
+                            <!-- Row 15 -->
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
+                                <td class="px-4 py-3"><span
+                                        class="px-1.5 py-0.5 bg-purple-900/30 text-purple-400 border border-purple-800 text-[10px]">수신</span>
+                                </td>
+                                <td class="px-4 py-3 font-bold text-white">VP-여의도 (Yeouido)</td>
+                                <td class="px-4 py-3 text-slate-500 font-mono">v1.yeouido.wind</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono">q.env.wind.v1</td>
+                                <td class="px-4 py-3 text-center text-slate-500 text-[10px]">STREAM</td>
+                                <td class="px-4 py-3 text-right text-red-500 font-bold">5,002</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-right text-orange-500">105</td>
+                                <td class="px-4 py-3 text-center text-slate-500">2026.02.04 15:32:10</td>
+                                <td class="px-4 py-3 text-center"><span
+                                        class="px-2 py-0.5 bg-red-900/20 text-red-500 border border-red-900 text-[10px]">장애</span>
+                                </td>
+                            </tr>
+                            <!-- Row 16 -->
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
+                                <td class="px-4 py-3"><span
+                                        class="px-1.5 py-0.5 bg-blue-900/30 text-blue-400 border border-blue-800 text-[10px]">송신</span>
+                                </td>
+                                <td class="px-4 py-3 font-bold text-white">D 운항사 (Airline D)</td>
+                                <td class="px-4 py-3 text-slate-500 font-mono">v1.airline_d.plan</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono">q.status.plan.v1</td>
+                                <td class="px-4 py-3 text-center text-slate-500 text-[10px]">QUORUM</td>
+                                <td class="px-4 py-3 text-right text-white">7</td>
+                                <td class="px-4 py-3 text-right">1</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-center text-slate-500">2026.02.04 15:30:55</td>
+                                <td class="px-4 py-3 text-center"><span
+                                        class="px-2 py-0.5 bg-teal-900/20 text-teal-500 border border-teal-900 text-[10px]">정상</span>
+                                </td>
+                            </tr>
+                            <!-- Row 17 -->
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
+                                <td class="px-4 py-3"><span
+                                        class="px-1.5 py-0.5 bg-purple-900/30 text-purple-400 border border-purple-800 text-[10px]">수신</span>
+                                </td>
+                                <td class="px-4 py-3 font-bold text-white">K-UAM Core</td>
+                                <td class="px-4 py-3 text-slate-500 font-mono">v1.core.billing</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono">q.biz.billing.v1</td>
+                                <td class="px-4 py-3 text-center text-slate-500 text-[10px]">CLASSIC</td>
+                                <td class="px-4 py-3 text-right text-white">0</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-center text-slate-500">2026.02.04 15:29:40</td>
+                                <td class="px-4 py-3 text-center"><span
+                                        class="px-2 py-0.5 bg-slate-800 text-slate-500 border border-slate-700 text-[10px]">대기</span>
+                                </td>
+                            </tr>
+                            <!-- Row 18 -->
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
+                                <td class="px-4 py-3"><span
+                                        class="px-1.5 py-0.5 bg-blue-900/30 text-blue-400 border border-blue-800 text-[10px]">송신</span>
+                                </td>
+                                <td class="px-4 py-3 font-bold text-white">Traffic Control</td>
+                                <td class="px-4 py-3 text-slate-500 font-mono">v1.tcs.route</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono">q.flight.route.v1</td>
+                                <td class="px-4 py-3 text-center text-slate-500 text-[10px]">CLASSIC</td>
+                                <td class="px-4 py-3 text-right text-white">1,024</td>
+                                <td class="px-4 py-3 text-right">50</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-center text-slate-500">2026.02.04 15:28:15</td>
+                                <td class="px-4 py-3 text-center"><span
+                                        class="px-2 py-0.5 bg-orange-900/20 text-orange-500 border border-orange-900 text-[10px]">지연</span>
+                                </td>
+                            </tr>
+                            <!-- Row 19 -->
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
+                                <td class="px-4 py-3"><span
+                                        class="px-1.5 py-0.5 bg-purple-900/30 text-purple-400 border border-purple-800 text-[10px]">수신</span>
+                                </td>
+                                <td class="px-4 py-3 font-bold text-white">VP-인천 (Incheon)</td>
+                                <td class="px-4 py-3 text-slate-500 font-mono">v1.incheon.pax</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono">q.biz.pax.v1</td>
+                                <td class="px-4 py-3 text-center text-slate-500 text-[10px]">CLASSIC</td>
+                                <td class="px-4 py-3 text-right text-white">25</td>
+                                <td class="px-4 py-3 text-right">2</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-center text-slate-500">2026.02.04 15:27:00</td>
+                                <td class="px-4 py-3 text-center"><span
+                                        class="px-2 py-0.5 bg-teal-900/20 text-teal-500 border border-teal-900 text-[10px]">정상</span>
+                                </td>
+                            </tr>
+                            <!-- Row 20 -->
+                            <tr class="border-b border-slate-800/50 hover:bg-white/5 transition-colors">
+                                <td class="px-4 py-3"><span
+                                        class="px-1.5 py-0.5 bg-blue-900/30 text-blue-400 border border-blue-800 text-[10px]">송신</span>
+                                </td>
+                                <td class="px-4 py-3 font-bold text-white">E 운항사 (Airline E)</td>
+                                <td class="px-4 py-3 text-slate-500 font-mono">v1.airline_e.info</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono">q.info.gen.v1</td>
+                                <td class="px-4 py-3 text-center text-slate-500 text-[10px]">QUORUM</td>
+                                <td class="px-4 py-3 text-right text-white">8</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-right">0</td>
+                                <td class="px-4 py-3 text-center text-slate-500">2026.02.04 15:26:30</td>
                                 <td class="px-4 py-3 text-center"><span
                                         class="px-2 py-0.5 bg-teal-900/20 text-teal-500 border border-teal-900 text-[10px]">정상</span>
                                 </td>
