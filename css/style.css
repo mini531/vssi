@@ -88,13 +88,18 @@ body {
   border-bottom: 1px solid rgba(30, 41, 59, 0.5);
 }
 
-/* New Squared Glass Card Style */
-.glass-card-squared {
+/* Shared Auth Card Style */
+.glass-card-auth {
   background-color: rgba(2, 6, 23, 0.2);
+  /* bg-slate-950/20 */
   backdrop-filter: blur(12px);
+  /* backdrop-blur-md */
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  /* border-white/10 */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+  /* Custom shadow from register page */
   border-radius: 0.125rem;
+  /* rounded-sm */
   transition: all 0.3s;
 }
 
