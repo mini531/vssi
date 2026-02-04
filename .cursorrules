@@ -22,7 +22,12 @@ You are an expert AI developer working on the VSSI project. You MUST strictly ad
 
 ## 3. HTML Structure
 *   **Icons**: Use Lucide icons (`<i data-lucide="...">`). Initialize with `lucide.createIcons()`.
-*   **Modals**: Follow the `CM_LG_01_01.html` structure. `z-index` must be > 100.
+*   **Modals**:
+    *   Structure: Follow `CM_LG_01_01.html`. `z-index` > 100.
+    *   **Colors**:
+        *   **Warning/Error**: YELLOW (`text-yellow-500`, `bg-yellow-600/80`). **NO RED MODALS**.
+        *   **Success**: TEAL (`text-teal-400`, `bg-teal-600/80`).
+        *   **Confirm**: BLUE (`text-blue-400`, `bg-blue-600/80`).
 
 ## 4. File Locations
 *   Pages: `c:/project/vssi/screens/`

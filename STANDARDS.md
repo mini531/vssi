@@ -25,6 +25,10 @@ Do NOT use long Tailwind strings for repeated elements. Use these classes:
 
 ### 2.3. Modal System
 *   Use the standard modal structure in `CM_LG_01_01.html`.
+*   **Color Conventions**:
+    *   **Warning/Error**: Use **Yellow** (`text-yellow-500`). Do NOT use Red.
+    *   **Success**: Use **Teal**.
+    *   **Confirm**: Use **Blue**.
 *   Z-Index hierarchy:
     *   Content: `z-10`
     *   Header: `z-50`
