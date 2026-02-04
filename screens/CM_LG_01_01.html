@@ -28,6 +28,21 @@
             background-color: #0c111d;
             border-top: 1px solid #1e293b;
         }
+
+        /* Modal Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.2s ease-out forwards;
+        }
     </style>
 </head>
 
@@ -53,18 +68,22 @@
             <div class="space-y-5">
                 <div class="space-y-2">
                     <label class="text-xs font-bold text-slate-400">아이디</label>
-                    <input type="text" placeholder="아이디를 입력해 주세요."
-                        class="w-full bg-[#0a0f1d] border border-slate-700/50 px-4 py-3 text-xs text-white focus:border-teal-500 focus:outline-none placeholder:text-slate-600 transition-colors">
+                    <input type="text" id="id" placeholder="아이디를 입력해 주세요."
+                        class="w-full bg-[#0a0f1d] border border-slate-700/50 px-4 py-3 text-xs text-white focus:border-teal-500 focus:outline-none placeholder:text-slate-600 transition-colors"
+                        oninput="resetError('id')">
+                    <div id="error-id" class="hidden text-xs text-red-400 font-bold mt-1"></div>
                 </div>
 
                 <div class="space-y-2">
                     <label class="text-xs font-bold text-slate-400">비밀번호</label>
-                    <input type="password" placeholder="비밀번호를 입력해 주세요."
-                        class="w-full bg-[#0a0f1d] border border-slate-700/50 px-4 py-3 text-xs text-white focus:border-teal-500 focus:outline-none placeholder:text-slate-600 transition-colors">
+                    <input type="password" id="pw" placeholder="비밀번호를 입력해 주세요."
+                        class="w-full bg-[#0a0f1d] border border-slate-700/50 px-4 py-3 text-xs text-white focus:border-teal-500 focus:outline-none placeholder:text-slate-600 transition-colors"
+                        oninput="resetError('pw')" onkeydown="if(event.key === 'Enter') handleLogin()">
+                    <div id="error-pw" class="hidden text-xs text-red-400 font-bold mt-1"></div>
                 </div>
 
-                <button onclick="alert('로그인되었습니다 (데모)')"
-                    class="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-3.5 mt-2 transition-colors text-sm">
+                <button onclick="handleLogin()"
+                    class="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-3.5 mt-2 transition-colors text-sm shadow-lg shadow-teal-900/20">
                     로그인
                 </button>
             </div>
@@ -102,8 +121,118 @@
         <div class="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-teal-900/5 blur-[150px] rounded-full"></div>
     </div>
 
+    <!-- Modal Component (Warning) -->
+    <div id="modal-backdrop"
+        class="fixed inset-0 z-[250] flex items-center justify-center bg-black/80 backdrop-blur-sm hidden animate-fade-in">
+        <div id="modal-content"
+            class="bg-[#0b101b] border border-slate-700 p-10 max-w-sm w-full text-center shadow-[0_20px_60px_rgba(0,0,0,1)] z-[300]">
+            <!-- Icon -->
+            <div id="modal-icon"
+                class="mb-6 flex justify-center text-red-500 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                <i data-lucide="alert-circle" width="64" height="64"></i>
+            </div>
+
+            <h3 id="modal-title" class="text-xl font-bold text-white mb-2">로그인 실패</h3>
+            <p id="modal-desc" class="text-slate-300 mb-8 leading-relaxed whitespace-pre-line text-sm"></p>
+
+            <!-- Buttons -->
+            <div id="modal-buttons" class="flex space-x-2 justify-center">
+                <button onclick="closeModal()"
+                    class="w-full bg-red-600/80 hover:bg-red-500/80 border border-red-500/30 text-white py-3 font-bold text-sm">확인</button>
+            </div>
+        </div>
+    </div>
+
+
     <script>
         lucide.createIcons();
+
+        let failCount = 0;
+
+        function resetError(id) {
+            const input = document.getElementById(id);
+            const errorDiv = document.getElementById('error-' + id);
+
+            // Reset border
+            input.classList.remove('border-red-500');
+            input.classList.add('border-slate-700/50');
+            input.classList.add('focus:border-teal-500'); // Restore focus color logic if needed, simplify by re-adding base logic
+
+            // Hide error text
+            errorDiv.innerText = '';
+            errorDiv.classList.add('hidden');
+        }
+
+        function setError(id, msg) {
+            const input = document.getElementById(id);
+            const errorDiv = document.getElementById('error-' + id);
+
+            // Set border red
+            input.classList.remove('border-slate-700/50');
+            input.classList.remove('focus:border-teal-500');
+            input.classList.add('border-red-500');
+
+            // Show error text
+            errorDiv.innerText = msg;
+            errorDiv.classList.remove('hidden');
+        }
+
+        function showModal(title, msg) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerText = msg;
+            document.getElementById('modal-backdrop').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modal-backdrop').classList.add('hidden');
+        }
+
+        function handleLogin() {
+            const id = document.getElementById('id').value.trim();
+            const pw = document.getElementById('pw').value.trim();
+            let hasError = false;
+
+            if (!id) {
+                setError('id', '아이디를 입력해 주세요.');
+                hasError = true;
+            }
+            if (!pw) {
+                setError('pw', '비밀번호를 입력해 주세요.');
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            // Mock Login Logic
+            // Spec: "Fail 5 times -> Lock" logic.
+            // Let's pretend 'admin/1234' is correct for demo purposes, or just fail everything else to show modal.
+
+            // For this task, user usually wants it "working" as a demo.
+            // But they asked for specific fail modals.
+
+            // Hardcoded "Success"
+            const VALID_USER = 'admin';
+            const VALID_PW = '1234'; // Or just let any non-empty pass if we want easy demo?
+            // Actually, usually users want to just "Log in". 
+            // BUT the Prompt specifically asked for "Login Fail Modal" logic implementation as per the image.
+            // So I should implement a "fail" condition to demonstrate it.
+
+            // Let's say: if user enters 'fail', trigger fail. If normal, success.
+            // OR: simpler, make 'admin' success, everything else fail to show the feature.
+
+            if (id === 'admin' && pw === '1234') {
+                // Success
+                window.location.href = 'SAM_AS_10_01.html'; // Or COM_IT_01_01 if that existed
+            } else {
+                // Fail
+                failCount++;
+                if (failCount >= 5) {
+                    showModal('로그인 실패', '아이디 또는 비밀번호를 5회 연속 잘못 입력하여 로그인이 제한되었습니다.');
+                } else {
+                    showModal('로그인 실패', `아이디와 비밀번호를 확인해 주세요. 5회 연속 실패 시 로그인이 제한됩니다.\n(현재 실패 횟수: ${failCount}회)`);
+                }
+            }
+        }
     </script>
 </body>
 
