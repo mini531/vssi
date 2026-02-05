@@ -33,17 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function updatePermissions(roleId) {
         // Reset all checkboxes first
         const checkboxes = detailContent.querySelectorAll('input[type="checkbox"]');
-        console.log('Found checkboxes:', checkboxes.length);
 
-        checkboxes.forEach((cb, index) => {
+        checkboxes.forEach(cb => {
             cb.checked = false;
-            console.log(`Checkbox ${index}:`, {
-                display: window.getComputedStyle(cb).display,
-                visibility: window.getComputedStyle(cb).visibility,
-                opacity: window.getComputedStyle(cb).opacity,
-                width: window.getComputedStyle(cb).width,
-                height: window.getComputedStyle(cb).height
-            });
         });
 
         // Helper function to check checkboxes by system and permissions
