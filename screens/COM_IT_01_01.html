@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSSI - Intro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="dashboard-body app-screen-height intro-page" data-system-acronym="VSSI" data-page-title="">
+    <!-- Header (Fixed Top) -->
+    <div data-include="../components/header.html"></div>
+
+    <!-- Main Content Area -->
+    <main class="intro-main glass-bg">
+
+        <!-- Branding -->
+        <div class="brand-container">
+            <h1 class="brand-text">VSSI</h1>
+            <p class="brand-sub">Vertiport Standards and Safety Infrastructure</p>
+            <p class="brand-desc">K-UAM 상용화를 위한 버티포트 표준 및 통합운용 플랫폼</p>
+        </div>
+
+        <!-- System Grid -->
+        <div class="intro-grid">
+
+            <!-- IVMS -->
+            <a href="#" class="intro-banner">
+                <div class="intro-banner-icon">
+                    <i data-lucide="building-2"></i>
+                </div>
+                <div class="intro-banner-content">
+                    <span class="intro-banner-acronym">IVMS</span>
+                    <span class="intro-banner-title">Integrated Vertiport Management System</span>
+                    <span class="intro-banner-desc">버티포트 통합 관리 시스템</span>
+                </div>
+                <i data-lucide="chevron-right" class="intro-banner-chevron"></i>
+            </a>
+
+            <!-- IFPS -->
+            <a href="#" class="intro-banner">
+                <div class="intro-banner-icon">
+                    <i data-lucide="plane"></i>
+                </div>
+                <div class="intro-banner-content">
+                    <span class="intro-banner-acronym">IFPS</span>
+                    <span class="intro-banner-title">Integrated Flight Plan management System</span>
+                    <span class="intro-banner-desc">통합 비행 계획 관리 시스템</span>
+                </div>
+                <i data-lucide="chevron-right" class="intro-banner-chevron"></i>
+            </a>
+
+            <!-- IFRS -->
+            <a href="#" class="intro-banner">
+                <div class="intro-banner-icon">
+                    <i data-lucide="calendar"></i>
+                </div>
+                <div class="intro-banner-content">
+                    <span class="intro-banner-acronym">IFRS</span>
+                    <span class="intro-banner-title">Integrated Flight Reservation management System</span>
+                    <span class="intro-banner-desc">통합 운항 예약 시스템</span>
+                </div>
+                <i data-lucide="chevron-right" class="intro-banner-chevron"></i>
+            </a>
+
+            <!-- V-CDM -->
+            <a href="#" class="intro-banner">
+                <div class="intro-banner-icon">
+                    <i data-lucide="users"></i>
+                </div>
+                <div class="intro-banner-content">
+                    <span class="intro-banner-acronym">V-CDM</span>
+                    <span class="intro-banner-title">Vertiport-Collaborative Decision Making</span>
+                    <span class="intro-banner-desc">협동적 의사 결정 지원 시스템</span>
+                </div>
+                <i data-lucide="chevron-right" class="intro-banner-chevron"></i>
+            </a>
+
+            <!-- SAMS -->
+            <a href="SAM_AS_10_01.html" class="intro-banner" onclick="setSystem('SAMS', '관리자 시스템')">
+                <div class="intro-banner-icon">
+                    <i data-lucide="settings"></i>
+                </div>
+                <div class="intro-banner-content">
+                    <span class="intro-banner-acronym">SAMS</span>
+                    <span class="intro-banner-title">System Administration Management System</span>
+                    <span class="intro-banner-desc">관리자 시스템</span>
+                </div>
+                <i data-lucide="chevron-right" class="intro-banner-chevron"></i>
+            </a>
+
+        </div>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="../js/include.js"></script>
+    <script src="../js/common.js"></script>
+    <script>
+        function setSystem(acronym, name) {
+            localStorage.setItem('vssi-system-acronym', acronym);
+            localStorage.setItem('vssi-system-name', name);
+        }
+    </script>
+</body>
+
+</html>

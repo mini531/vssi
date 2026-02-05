@@ -145,27 +145,57 @@ function updateTime() {
 // Header Title Update (Sub Title)
 function updateHeaderTitle() {
     const titleEl = document.getElementById('header-page-title');
+    const divider = document.querySelector('.header-divider-text');
     if (!titleEl) return;
 
     const pageTitle = document.body.getAttribute('data-page-title');
-    if (pageTitle) {
+    if (pageTitle && pageTitle.trim() !== '') {
         titleEl.innerText = pageTitle;
+        if (divider) divider.style.display = ''; // Let CSS classes take over
+    } else {
+        titleEl.innerText = '';
+        if (divider) divider.style.display = 'none'; // Force hide
     }
 }
 
 // System Title Initialization (Main Title)
 function initSystemTitle() {
-    const savedName = localStorage.getItem('vssi-system-name') || '관리자 시스템';
-    const savedAcronym = localStorage.getItem('vssi-system-acronym') || 'SAMS';
+    const systemMap = {
+        'VSSI': 'VSSI',
+        'IVMS': '버티포트 통합 관리 시스템',
+        'IFPS': '통합 비행 계획 관리 시스템',
+        'IFRS': '통합 운항 예약 시스템',
+        'V-CDM': '협동적 의사 결정 지원 시스템',
+        'SAMS': '관리자 시스템'
+    };
+
+    const acronym = document.body.getAttribute('data-system-acronym');
+    let systemName = '';
+
+    if (acronym && systemMap[acronym]) {
+        systemName = systemMap[acronym];
+    } else {
+        // Fallback or localStorage
+        const savedName = localStorage.getItem('vssi-system-name');
+        const savedAcronym = localStorage.getItem('vssi-system-acronym');
+
+        if (savedName && savedAcronym) {
+            systemName = savedName;
+            updateSwitcherUI(savedAcronym);
+        } else {
+            systemName = 'VSSI';
+        }
+    }
 
     // Update Header
     const headerTitle = document.getElementById('header-system-title');
     if (headerTitle) {
-        headerTitle.innerText = savedName;
+        headerTitle.innerText = systemName;
     }
 
-    // Update Switcher UI state
-    updateSwitcherUI(savedAcronym);
+    if (acronym) {
+        updateSwitcherUI(acronym);
+    }
 }
 
 // Switch System

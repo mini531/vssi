@@ -2623,3 +2623,155 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   height: 1.25rem;
   /* h-5 */
 }
+
+/* Intro Page Layout */
+.intro-page .header-icon-btn,
+.intro-page .header-switcher-btn,
+.intro-page .header-divider {
+  display: none !important;
+}
+
+.header-logo {
+  display: none;
+}
+
+.header-logo {
+  display: none;
+}
+
+.intro-page .header-logo {
+  display: block !important;
+  font-weight: 900;
+  font-size: 1.25rem;
+  letter-spacing: -0.05em;
+  color: white;
+  margin-right: 1rem;
+}
+
+
+.intro-page .header-bar {
+  background-color: #0d1221;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.intro-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.intro-brand {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.intro-brand-title {
+  font-size: 4rem;
+  font-weight: 900;
+  color: white;
+  letter-spacing: -0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.intro-brand-sub {
+  font-size: 1.125rem;
+  color: #14b8a6;
+  /* accent-teal */
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.intro-brand-desc {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  /* slate-400 */
+}
+
+.intro-grid {
+  width: 100%;
+  max-width: 32rem;
+  /* w-128 */
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.intro-banner {
+  display: flex;
+  align-items: center;
+  background-color: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.25rem 1.5rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.intro-banner:hover {
+  background-color: rgba(30, 41, 59, 0.8);
+  border-color: rgba(20, 184, 166, 0.4);
+  transform: translateX(4px);
+}
+
+.intro-banner-icon {
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(20, 184, 166, 0.1);
+  border-radius: 0.5rem;
+  margin-right: 1.5rem;
+  color: #14b8a6;
+  flex-shrink: 0;
+}
+
+.intro-banner-content {
+  flex: 1;
+}
+
+.intro-banner-acronym {
+  display: inline-block;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: transparent;
+  background-clip: text;
+  background-image: linear-gradient(to bottom, white, #94a3b8);
+  line-height: normal;
+  letter-spacing: -0.025em;
+}
+
+.intro-banner-title {
+  display: block;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-bottom: 0.25rem;
+}
+
+.intro-banner-desc {
+  display: block;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.intro-banner-chevron {
+  color: #334155;
+  transition: color 0.2s;
+}
+
+.intro-banner:hover .intro-banner-chevron {
+  color: #14b8a6;
+}
+
+.intro-banner.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  filter: grayscale(0.5);
+}
