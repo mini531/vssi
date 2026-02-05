@@ -12,6 +12,13 @@ You are an expert AI developer working on the VSSI project. You MUST strictly ad
     *   Use `.auth-page-scroll` + inner `.auth-scroll-view` for scrolling pages (Register).
 *   **Branding & Cards**:
     *   **NEVER** use `w-[...]` or `max-w-[...]` for Login/Register cards. Use `.auth-card-container` (add `.auth-card-wide` for wider cards).
+    *   **NEVER** use `text-[#...]`, `bg-[#...]`, or standard Tailwind color classes (e.g., `text-emerald-500`) for status indicators (Success, Warning, Error, Info). Use semantic classes:
+        - Text: `.text-success`, `.text-warning`, `.text-error`, `.text-info`, `.text-purple`.
+        - Background Alpha: `.bg-success-alpha`, `.bg-warning-alpha`, etc.
+        - Status Card Decorations: `.status-card-deco.success`, etc.
+    *   **ALWAYS** use `.dashboard-body` for main app screen bodies.
+    *   **ALWAYS** use `.filter-input` and `.filter-select` for search/filter fields (ensure no border-radius).
+    *   **ALWAYS** use `.form-error` for input validation messages.
     *   **NEVER** use inline styles or complex Tailwind chains for the VSSI Logo. Use `.brand-container` and children.
 *   **Form Components**:
     *   Input: `.form-input` (Toggle `.error` class for validation, do NOT use border-red-500 manually). **NO ROUNDED CORNERS (border-radius: 0)**.
