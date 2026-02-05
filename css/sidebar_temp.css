@@ -1,0 +1,115 @@
+/* --- Sidebar Standardization --- */
+.sidebar-container {
+    position: relative;
+    z-index: 40;
+    height: 100%;
+    background-color: #0b101b;
+    /* bg-[#0b101b] */
+    border-right: 1px solid #1e293b;
+    /* border-slate-800 */
+    border: none;
+    /* override if needed as per original */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    transition: all 0.3s;
+    width: 0;
+    /* Default collapsed state logic if controlled by JS */
+}
+
+/* Base Navigation Button */
+.sidebar-nav-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    /* px-5 py-3 */
+    font-size: 13px;
+    /* text-[13px] */
+    color: #94a3b8;
+    /* text-slate-400 */
+    transition: color 0.2s, background-color 0.2s;
+    white-space: nowrap;
+}
+
+.sidebar-nav-btn:hover {
+    color: #ffffff;
+    background-color: rgba(30, 41, 59, 0.5);
+    /* hover:bg-slate-800/50 */
+}
+
+/* Active Navigation Button */
+.sidebar-nav-btn.active {
+    color: #14b8a6;
+    /* text-teal-500 */
+    font-weight: 700;
+    border-left: 2px solid #14b8a6;
+    /* border-l-2 border-teal-500 */
+    background-color: #0f1623;
+    /* bg-[#0f1623] */
+}
+
+.sidebar-nav-btn.group {
+    justify-content: space-between;
+}
+
+/* Icons */
+.sidebar-icon {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.75rem;
+    /* mr-3 */
+    opacity: 0.7;
+}
+
+.sidebar-nav-btn.active .sidebar-icon {
+    opacity: 1;
+}
+
+/* Chevron */
+.sidebar-chevron {
+    width: 0.875rem;
+    /* 3.5 */
+    height: 0.875rem;
+    opacity: 0.5;
+    transition: transform 0.2s;
+}
+
+.sidebar-nav-btn.active .sidebar-chevron {
+    transform: rotate(180deg);
+    opacity: 1;
+}
+
+/* Submenu Container */
+.sidebar-submenu {
+    background-color: #0f1623;
+    /* bg-[#0f1623] */
+}
+
+/* Submenu Button */
+.sidebar-sub-btn {
+    width: 100%;
+    padding-left: 3rem;
+    /* pl-12 */
+    padding-top: 0.625rem;
+    /* py-2.5 */
+    padding-bottom: 0.625rem;
+    font-size: 0.75rem;
+    /* text-xs */
+    color: #64748b;
+    /* text-slate-500 */
+    text-align: left;
+    white-space: nowrap;
+    transition: color 0.2s;
+}
+
+.sidebar-sub-btn:hover {
+    color: #cbd5e1;
+    /* text-slate-300 */
+}
+
+.sidebar-sub-btn.active {
+    color: #2dd4bf;
+    /* text-teal-400 */
+}

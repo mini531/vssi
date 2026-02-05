@@ -1,23 +1,22 @@
 <!-- Header -->
-<header class="h-12 bg-[#0b101b] border-b border-slate-800 flex items-center justify-between px-4 z-50 shrink-0">
+<header class="header-bar">
     <div class="flex items-center space-x-4">
         <!-- Hamburger -->
-        <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white transition-colors">
+        <button onclick="toggleSidebar()" class="header-icon-btn">
             <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
         <!-- System Switcher -->
-        <button onclick="toggleSystemSwitcher()" class="text-teal-500 hover:text-teal-400 transition-colors"
-            title="System Switcher">
+        <button onclick="toggleSystemSwitcher()" class="header-switcher-btn" title="System Switcher">
             <i data-lucide="grid" class="w-5 h-5"></i>
         </button>
 
-        <div class="h-4 w-px bg-slate-700 mx-2"></div>
+        <div class="header-divider"></div>
 
         <!-- Title -->
         <div class="flex items-center space-x-3">
-            <span class="text-sm font-bold text-slate-400 hidden md:inline">관리자 시스템</span>
+            <span class="header-title-main">관리자 시스템</span>
             <span class="text-xs text-slate-700 hidden md:inline">|</span>
-            <span class="text-sm text-slate-300">연계 상태 모니터링</span>
+            <span class="header-title-sub">연계 상태 모니터링</span>
         </div>
     </div>
 
@@ -25,27 +24,24 @@
     <div class="flex items-center space-x-2 md:space-x-6">
         <!-- Profile -->
         <div class="relative">
-            <button onclick="toggleProfile()"
-                class="flex items-center space-x-2 text-xs text-slate-300 hover:text-white">
+            <button onclick="toggleProfile()" class="header-profile-btn">
                 <i data-lucide="user" class="w-3.5 h-3.5 text-slate-500"></i>
                 <span class="hidden md:inline">관제사 홍길동</span>
                 <i data-lucide="chevron-down" class="w-3 h-3 text-slate-500 hidden md:inline"></i>
             </button>
             <!-- Dropdown -->
-            <div id="profile-dropdown"
-                class="absolute top-full right-0 mt-2 w-48 bg-[#0b101b] border border-slate-700 shadow-xl hidden z-[100]">
-                <a href="#" class="block px-4 py-3 text-xs text-slate-300 hover:bg-slate-800 flex items-center">
+            <div id="profile-dropdown" class="profile-dropdown-menu hidden">
+                <a href="#" class="profile-dropdown-item">
                     <i data-lucide="user" class="w-3.5 h-3.5 mr-2"></i> 회원 정보
                 </a>
-                <a href="CM_LG_01_01.html"
-                    class="block px-4 py-3 text-xs text-red-400 hover:bg-slate-800 flex items-center border-t border-slate-800">
+                <a href="CM_LG_01_01.html" class="profile-dropdown-item danger">
                     <i data-lucide="log-out" class="w-3.5 h-3.5 mr-2"></i> 로그아웃
                 </a>
             </div>
         </div>
 
         <!-- Date/Time -->
-        <div class="hidden md:flex items-center space-x-4 text-xs font-mono text-slate-500">
+        <div class="header-datetime">
             <div class="flex items-center space-x-2">
                 <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
                 <span id="server-date">2026.02.05</span>

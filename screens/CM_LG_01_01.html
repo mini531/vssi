@@ -14,100 +14,99 @@
     </style>
 </head>
 
-<body class="app-bg min-h-screen flex flex-col items-center justify-center relative overflow-y-auto font-sans">
+<body class="auth-body auth-page-scroll app-bg scrollbar-hide">
+    <div class="auth-scroll-view">
 
-    <!-- Upper Logo Section -->
-    <div class="mb-8 md:mb-12 text-center z-10 pt-10 md:pt-0">
-        <h1 class="text-4xl md:text-6xl font-medium tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 mb-4"
-            style="font-family: sans-serif;">VSSI</h1>
-        <p class="text-[10px] md:text-xs font-bold text-teal-500 tracking-[0.3em] uppercase mb-1">Vertiport Standards
-            and Safety
-            Infrastructure</p>
-        <p class="text-[10px] text-slate-500">K-UAM 상용화를 위한 버티포트 표준 및 통합운용 플랫폼</p>
-    </div>
-
-    <!-- Login Card -->
-    <div class="glass-card-auth w-[400px] z-10 relative overflow-hidden">
-
-        <!-- Login Form Section -->
-        <div class="p-10 pb-8">
-            <h2 class="text-center text-lg font-bold text-white mb-8">로그인</h2>
-
-            <div class="space-y-5">
-                <div class="space-y-2">
-                    <label class="form-label">아이디</label>
-                    <input type="text" id="id" placeholder="아이디를 입력해 주세요." class="form-input"
-                        oninput="resetError('id')">
-                    <div id="error-id" class="form-error hidden"></div>
-                </div>
-
-                <div class="space-y-2">
-                    <label class="form-label">비밀번호</label>
-                    <input type="password" id="pw" placeholder="비밀번호를 입력해 주세요." class="form-input"
-                        oninput="resetError('pw')" onkeydown="if(event.key === 'Enter') handleLogin()">
-                    <div id="error-pw" class="form-error hidden"></div>
-                </div>
-
-                <button onclick="handleLogin()" class="btn-primary mt-2">
-                    로그인
-                </button>
-            </div>
-
-            <div class="mt-6 flex flex-col items-center space-y-2 text-xs font-bold">
-                <a href="./CM_LG_02_01.html" class="text-teal-400 hover:text-teal-300 transition-colors">서비스 이용 신청</a>
-                <a href="#" class="text-slate-500 hover:text-slate-400 transition-colors">비밀번호 초기화</a>
-            </div>
+        <!-- Upper Logo Section -->
+        <div class="brand-container">
+            <h1 class="brand-text">VSSI</h1>
+            <p class="brand-sub">Vertiport Standards and Safety Infrastructure</p>
+            <p class="brand-desc">K-UAM 상용화를 위한 버티포트 표준 및 통합운용 플랫폼</p>
         </div>
 
-        <!-- Footer Help Section -->
-        <div class="auth-footer p-8 mt-2">
-            <div class="flex items-start space-x-3 mb-4">
-                <div class="mt-0.5 text-teal-500">
-                    <i data-lucide="help-circle" class="w-5 h-5"></i>
-                </div>
-                <div>
-                    <h3 class="text-sm font-bold text-white mb-2">이용에 도움이 필요하신가요?</h3>
-                    <p class="text-[11px] text-slate-400 leading-relaxed">
-                        로그인 문제나 권한 관련 문의는 버티포트 통합 관리 시스템 관리자에게 연락해 주세요.
-                    </p>
-                </div>
-            </div>
-            <div class="border-t border-dashed border-slate-800 pt-4 flex justify-between items-center">
-                <span class="text-[10px] font-bold text-slate-500">CS CENTER</span>
-                <span class="text-xs font-bold text-slate-300 font-mono">000-0000-0000</span>
-            </div>
-        </div>
+        <!-- Login Card -->
+        <div class="glass-card-auth auth-card-container">
 
+            <!-- Login Form Section -->
+            <div class="auth-card-body">
+                <div class="auth-card-header">
+                    <h2 class="auth-card-title">로그인</h2>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <label class="form-label">아이디</label>
+                        <input type="text" id="id" placeholder="아이디를 입력해 주세요." class="form-input"
+                            oninput="resetError('id')">
+                        <div id="error-id" class="form-error hidden"></div>
+                    </div>
+
+                    <div>
+                        <label class="form-label">비밀번호</label>
+                        <input type="password" id="pw" placeholder="비밀번호를 입력해 주세요." class="form-input"
+                            oninput="resetError('pw')" onkeydown="if(event.key === 'Enter') handleLogin()">
+                        <div id="error-pw" class="form-error hidden"></div>
+                    </div>
+
+                    <button onclick="handleLogin()" class="btn-primary mt-2">
+                        로그인
+                    </button>
+                </div>
+
+                <div class="auth-actions">
+                    <a href="./CM_LG_02_01.html" class="auth-link-primary">서비스 이용 신청</a>
+                    <a href="#" class="auth-link-secondary">비밀번호 초기화</a>
+                </div>
+            </div>
+
+            <div class="auth-footer p-8 mt-2">
+                <div class="auth-help-container">
+                    <div class="auth-help-icon-wrapper">
+                        <i data-lucide="help-circle" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="auth-help-title">이용에 도움이 필요하신가요?</h3>
+                        <p class="auth-help-desc">
+                            로그인 문제나 권한 관련 문의는 버티포트 통합 관리 시스템 관리자에게 연락해 주세요.
+                        </p>
+                    </div>
+                </div>
+                <div class="auth-cs-row">
+                    <span class="auth-cs-label">CS CENTER</span>
+                    <span class="auth-cs-number">000-0000-0000</span>
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <!-- Background Elements -->
-    <div class="absolute inset-0 pointer-events-none">
-        <div class="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-900/5 blur-[150px] rounded-full"></div>
-        <div class="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-teal-900/5 blur-[150px] rounded-full"></div>
+    <div class="auth-bg-decoration">
+        <div class="auth-bg-blob-blue"></div>
+        <div class="auth-bg-blob-teal"></div>
     </div>
 
+
+
+
     <!-- Modal Component (Warning) -->
-    <div id="modal-backdrop"
-        class="fixed inset-0 z-[250] flex items-center justify-center bg-black/80 backdrop-blur-sm hidden animate-fade-in">
-        <div id="modal-content"
-            class="bg-[#0b101b] border border-slate-700 p-10 max-w-sm w-full text-center shadow-[0_20px_60px_rgba(0,0,0,1)] z-[300]">
+    <div id="modal-backdrop" class="modal-overlay">
+        <div class="modal-dialog">
             <!-- Icon -->
-            <div id="modal-icon"
-                class="mb-6 flex justify-center text-yellow-500 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+            <div class="modal-icon text-yellow-500 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
                 <i data-lucide="alert-triangle" width="64" height="64"></i>
             </div>
 
-            <h3 id="modal-title" class="text-xl font-bold text-white mb-2">로그인 실패</h3>
-            <p id="modal-desc" class="text-slate-300 mb-8 leading-relaxed whitespace-pre-line text-sm"></p>
+            <h3 id="modal-title" class="modal-title">로그인 실패</h3>
+            <p id="modal-desc" class="modal-desc"></p>
 
             <!-- Buttons -->
-            <div id="modal-buttons" class="flex space-x-2 justify-center">
+            <div class="modal-btn-group">
                 <button onclick="closeModal()"
                     class="w-full bg-yellow-600/80 hover:bg-yellow-500/80 border border-yellow-500/30 text-white py-3 font-bold text-sm">확인</button>
             </div>
         </div>
     </div>
-
 
     <script>
         lucide.createIcons();
@@ -141,11 +140,11 @@
         function showModal(title, msg) {
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-desc').innerText = msg;
-            document.getElementById('modal-backdrop').classList.remove('hidden');
+            document.getElementById('modal-backdrop').classList.add('active');
         }
 
         function closeModal() {
-            document.getElementById('modal-backdrop').classList.add('hidden');
+            document.getElementById('modal-backdrop').classList.remove('active');
         }
 
         function handleLogin() {

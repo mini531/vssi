@@ -1,131 +1,97 @@
 <!-- Sidebar -->
-<aside id="sidebar"
-    class="relative z-40 h-full bg-[#0b101b] border-r border-slate-800 sidebar-transition w-0 border-none overflow-hidden flex flex-col shrink-0">
+<aside id="sidebar" class="sidebar-container w-0 border-none">
     <div class="py-4 flex flex-col h-full overflow-y-auto w-64 custom-scrollbar space-y-1">
 
-        <button
-            class="w-full flex items-center px-5 py-3 text-[13px] text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors whitespace-nowrap">
-            <i data-lucide="layout-grid" class="w-4 h-4 mr-3 opacity-70"></i>
+        <button class="sidebar-nav-btn">
+            <i data-lucide="layout-grid" class="sidebar-icon"></i>
             <span>대시보드</span>
         </button>
-        <button
-            class="w-full flex items-center px-5 py-3 text-[13px] text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors whitespace-nowrap">
-            <i data-lucide="activity" class="w-4 h-4 mr-3 opacity-70"></i>
+        <button class="sidebar-nav-btn">
+            <i data-lucide="activity" class="sidebar-icon"></i>
             <span>모니터링</span>
         </button>
-        <button
-            class="w-full flex items-center px-5 py-3 text-[13px] text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors whitespace-nowrap">
-            <i data-lucide="users" class="w-4 h-4 mr-3 opacity-70"></i>
+        <button class="sidebar-nav-btn">
+            <i data-lucide="users" class="sidebar-icon"></i>
             <span>사용자 관리</span>
         </button>
 
         <!-- Expanded Group -->
         <div>
             <!-- Added toggleSubmenu and whitespace-nowrap -->
-            <button onclick="toggleSubmenu('security-sub', this)"
-                class="w-full flex items-center px-5 py-3 text-[13px] text-slate-400 hover:text-white transition-colors justify-between whitespace-nowrap group">
+            <button onclick="toggleSubmenu('security-sub', this)" class="sidebar-nav-btn group">
                 <div class="flex items-center">
-                    <i data-lucide="shield" class="w-4 h-4 mr-3 opacity-70"></i>
+                    <i data-lucide="shield" class="sidebar-icon"></i>
                     <span>권한/보안</span>
                 </div>
-                <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-50 transition-transform duration-200"></i>
+                <i data-lucide="chevron-right" class="sidebar-chevron"></i>
             </button>
             <!-- Submenu -->
-            <div id="security-sub" class="hidden bg-[#0f1623]">
-                <button
-                    class="w-full pl-12 py-2.5 text-xs text-slate-500 hover:text-slate-300 text-left whitespace-nowrap">역할
-                    정의</button>
-                <button
-                    class="w-full pl-12 py-2.5 text-xs text-slate-500 hover:text-slate-300 text-left whitespace-nowrap">역할
-                    배정</button>
-                <button
-                    class="w-full pl-12 py-2.5 text-xs text-slate-500 hover:text-slate-300 text-left whitespace-nowrap">보안
-                    정책 설정</button>
+            <div id="security-sub" class="hidden sidebar-submenu">
+                <button class="sidebar-sub-btn">역할 정의</button>
+                <button class="sidebar-sub-btn">역할 배정</button>
+                <button class="sidebar-sub-btn">보안 정책 설정</button>
             </div>
         </div>
         <div>
-            <button onclick="toggleSubmenu('logs-sub', this)"
-                class="w-full flex items-center px-5 py-3 text-[13px] text-slate-400 hover:text-white transition-colors justify-between whitespace-nowrap group">
+            <button onclick="toggleSubmenu('logs-sub', this)" class="sidebar-nav-btn group">
                 <div class="flex items-center">
-                    <i data-lucide="file-text" class="w-4 h-4 mr-3 opacity-70"></i>
+                    <i data-lucide="file-text" class="sidebar-icon"></i>
                     <span>로그 조회</span>
                 </div>
-                <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-50 transition-transform duration-200"></i>
+                <i data-lucide="chevron-right" class="sidebar-chevron"></i>
             </button>
-            <div id="logs-sub" class="hidden bg-[#0f1623]">
-                <button
-                    class="w-full pl-12 py-2.5 text-xs text-slate-500 hover:text-slate-300 text-left whitespace-nowrap">시스템
-                    로그</button>
-                <button
-                    class="w-full pl-12 py-2.5 text-xs text-slate-500 hover:text-slate-300 text-left whitespace-nowrap">사용자
-                    활동 로그</button>
+            <div id="logs-sub" class="hidden sidebar-submenu">
+                <button class="sidebar-sub-btn">시스템 로그</button>
+                <button class="sidebar-sub-btn">사용자 활동 로그</button>
             </div>
         </div>
         <div>
-            <button onclick="toggleSubmenu('ops-sub', this)"
-                class="w-full flex items-center px-5 py-3 text-[13px] text-slate-400 hover:text-white transition-colors justify-between whitespace-nowrap group">
+            <button onclick="toggleSubmenu('ops-sub', this)" class="sidebar-nav-btn group">
                 <div class="flex items-center">
-                    <i data-lucide="settings" class="w-4 h-4 mr-3 opacity-70"></i>
+                    <i data-lucide="settings" class="sidebar-icon"></i>
                     <span>시스템 운영</span>
                 </div>
-                <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-50 transition-transform duration-200"></i>
+                <i data-lucide="chevron-right" class="sidebar-chevron"></i>
             </button>
-            <div id="ops-sub" class="hidden bg-[#0f1623]">
-                <button
-                    class="w-full pl-12 py-2.5 text-xs text-slate-500 hover:text-slate-300 text-left whitespace-nowrap">코드
-                    관리</button>
-                <button
-                    class="w-full pl-12 py-2.5 text-xs text-slate-500 hover:text-slate-300 text-left whitespace-nowrap">장애
-                    관리</button>
-                <button
-                    class="w-full pl-12 py-2.5 text-xs text-slate-500 hover:text-slate-300 text-left whitespace-nowrap">백업
-                    설정</button>
+            <div id="ops-sub" class="hidden sidebar-submenu">
+                <button class="sidebar-sub-btn">코드 관리</button>
+                <button class="sidebar-sub-btn">장애 관리</button>
+                <button class="sidebar-sub-btn">백업 설정</button>
             </div>
         </div>
         <div>
-            <button onclick="toggleSubmenu('link-sub', this)"
-                class="w-full flex items-center px-5 py-3 text-[13px] text-slate-400 hover:text-white transition-colors justify-between whitespace-nowrap group">
+            <button onclick="toggleSubmenu('link-sub', this)" class="sidebar-nav-btn group">
                 <div class="flex items-center">
-                    <i data-lucide="link" class="w-4 h-4 mr-3 opacity-70"></i>
+                    <i data-lucide="link" class="sidebar-icon"></i>
                     <span>연계 시스템 관리</span>
                 </div>
-                <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-50 transition-transform duration-200"></i>
+                <i data-lucide="chevron-right" class="sidebar-chevron"></i>
             </button>
-            <div id="link-sub" class="hidden bg-[#0f1623]">
-                <button
-                    class="w-full pl-12 py-2.5 text-xs text-slate-500 hover:text-slate-300 text-left whitespace-nowrap">버티포트</button>
-                <button
-                    class="w-full pl-12 py-2.5 text-xs text-slate-500 hover:text-slate-300 text-left whitespace-nowrap">운항사</button>
-                <button
-                    class="w-full pl-12 py-2.5 text-xs text-slate-500 hover:text-slate-300 text-left whitespace-nowrap">기체
-                    관리</button>
+            <div id="link-sub" class="hidden sidebar-submenu">
+                <button class="sidebar-sub-btn">버티포트</button>
+                <button class="sidebar-sub-btn">운항사</button>
+                <button class="sidebar-sub-btn">기체 관리</button>
             </div>
         </div>
 
         <!-- Active Group -->
         <!-- Default Expanded -->
         <div>
-            <button onclick="toggleSubmenu('linkops-sub', this)"
-                class="w-full flex items-center px-5 py-3 text-[13px] text-teal-500 font-bold transition-colors justify-between border-l-2 border-teal-500 bg-[#0f1623] whitespace-nowrap group">
+            <button onclick="toggleSubmenu('linkops-sub', this)" class="sidebar-nav-btn active group">
                 <div class="flex items-center">
-                    <i data-lucide="link-2" class="w-4 h-4 mr-3"></i>
+                    <i data-lucide="link-2" class="sidebar-icon"></i>
                     <span>연계 시스템 운영</span>
                 </div>
-                <i data-lucide="chevron-down" class="w-3.5 h-3.5 transition-transform duration-200 rotate-180"></i>
+                <i data-lucide="chevron-down" class="sidebar-chevron"></i>
             </button>
             <div id="linkops-sub" class="bg-[#0b101b]">
-                <button class="w-full pl-12 py-2.5 text-xs text-teal-400 text-left whitespace-nowrap">연계 상태
-                    모니터링</button>
-                <button
-                    class="w-full pl-12 py-2.5 text-xs text-slate-500 hover:text-slate-300 text-left whitespace-nowrap">연계
-                    시스템
-                    통계</button>
+                <button class="sidebar-sub-btn active">연계 상태 모니터링</button>
+                <button class="sidebar-sub-btn">연계 시스템 통계</button>
             </div>
         </div>
 
-        <button
-            class="w-full flex items-center px-5 py-3 text-[13px] text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors whitespace-nowrap">
-            <i data-lucide="bell" class="w-4 h-4 mr-3 opacity-70"></i>
+        <button class="sidebar-nav-btn">
+            <i data-lucide="bell" class="sidebar-icon"></i>
             <span>공지사항 관리</span>
         </button>
 

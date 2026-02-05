@@ -11,179 +11,148 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
-<body
-    class="bg-[#050810] text-slate-200 h-screen font-sans selection:bg-teal-500/30 overflow-hidden bg-[url('../images/background.jpg')] bg-cover bg-center bg-no-repeat bg-fixed before:absolute before:inset-0 before:bg-black/60 before:z-0 scrollbar-hide">
-    <div class="relative z-10 w-full h-full overflow-y-auto flex flex-col items-center py-20">
+<body class="auth-body auth-page-scroll app-bg scrollbar-hide">
+    <div class="auth-scroll-view">
 
-        <!-- Upper Logo Section (Synced with CM_LG_01_01) -->
-        <div class="mb-12 text-center z-10">
-            <h1 class="text-6xl font-medium tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 mb-4"
-                style="font-family: sans-serif;">VSSI</h1>
-            <p class="text-xs font-bold text-teal-500 tracking-[0.3em] uppercase mb-1">Vertiport Standards and Safety
-                Infrastructure</p>
-            <p class="text-[10px] text-slate-500">K-UAM 상용화를 위한 버티포트 표준 및 통합운용 플랫폼</p>
+
+        <div class="brand-container">
+            <h1 class="brand-text">VSSI</h1>
+            <p class="brand-sub">Vertiport Standards and Safety Infrastructure</p>
+            <p class="brand-desc">K-UAM 상용화를 위한 버티포트 표준 및 통합운용 플랫폼</p>
         </div>
 
-        <!-- Main Card -->
+
         <!-- Width broadened slightly to match screenshot aspect ratio -->
-        <div class="glass-card-auth w-full max-w-[500px] mx-4 p-10 relative mb-20 z-10">
+        <div class="glass-card-auth auth-card-container auth-card-wide">
 
-            <!-- Header -->
-            <div class="text-center mb-10 border-b border-slate-800 pb-6">
-                <h2 class="text-lg font-bold text-white tracking-widest">서비스 이용 신청</h2>
-            </div>
+            <div class="auth-card-body">
+                <!-- Header -->
+                <div class="auth-card-header">
+                    <h2 class="auth-card-title">서비스 이용 신청</h2>
+                </div>
 
-            <!-- Form Fields -->
-            <div class="space-y-6">
+                <!-- Form Fields -->
+                <div class="space-y-6">
 
-                <!-- ID -->
-                <div>
-                    <label class="form-label">아이디 <span>*</span></label>
-                    <div class="flex gap-2">
-                        <input type="text" id="id" placeholder="아이디를 입력해 주세요." class="form-input flex-1"
-                            oninput="resetError('id')">
-                        <button onclick="checkId()"
-                            class="bg-[#1f2937] hover:bg-[#374151] text-xs text-slate-200 px-4 font-bold border border-slate-700 transition-colors whitespace-nowrap">
-                            중복 확인
-                        </button>
-                    </div>
-                    <div id="error-id" class="text-xs text-red-400 mt-1.5 font-bold"></div>
-                    <!-- Helper text, replaced by error if needed, or kept as static help? 
+                    <!-- ID -->
+                    <div>
+                        <label class="form-label">아이디 <span>*</span></label>
+                        <div class="flex gap-2">
+                            <input type="text" id="id" placeholder="아이디를 입력해 주세요." class="form-input flex-1"
+                                oninput="resetError('id')">
+                            <button onclick="checkId()" class="btn-inline-check">
+                                중복 확인
+                            </button>
+                        </div>
+                        <div id="error-id" class="text-xs text-red-400 mt-1.5 font-bold"></div>
+                        <!-- Helper text, replaced by error if needed, or kept as static help? 
                      Previous design had fixed help text: "영문 또는 영문과 숫자 조합으로 5~20자리" 
                      Let's keep static help and show error below it if any. -->
-                    <p class="input-guide-text">영문 또는 영문과 숫자 조합으로 5~20자리</p>
-                </div>
-
-                <!-- Password -->
-                <div>
-                    <label class="form-label">비밀번호 <span>*</span></label>
-                    <input type="password" id="pw" placeholder="비밀번호를 입력해 주세요." class="form-input"
-                        oninput="resetError('pw')">
-                    <div id="error-pw" class="form-error"></div>
-                    <p class="input-guide-text">영문 대소문자, 숫자, 특수문자를 혼용하여 8자 이상</p>
-                </div>
-
-                <!-- Password Confirm -->
-                <div>
-                    <label class="form-label">비밀번호 확인 <span>*</span></label>
-                    <input type="password" id="pwConfirm" placeholder="비밀번호를 다시 입력해 주세요." class="form-input"
-                        oninput="resetError('pwConfirm')">
-                    <div id="error-pwConfirm" class="form-error"></div>
-                </div>
-
-                <!-- Name -->
-                <div>
-                    <label class="form-label">이름 <span>*</span></label>
-                    <input type="text" id="name" placeholder="이름을 입력해 주세요." class="form-input"
-                        oninput="resetError('name')">
-                    <div id="error-name" class="form-error"></div>
-                </div>
-
-                <!-- Affiliation -->
-                <div>
-                    <label class="form-label">소속 <span>*</span></label>
-                    <input type="text" id="affiliation" placeholder="소속을 입력해 주세요." class="form-input"
-                        oninput="resetError('affiliation')">
-                    <div id="error-affiliation" class="form-error"></div>
-                </div>
-
-                <!-- Email -->
-                <div>
-                    <label class="form-label">이메일 <span>*</span></label>
-                    <input type="email" id="email" placeholder="이메일을 입력해 주세요." class="form-input"
-                        oninput="resetError('email')">
-                    <div id="error-email" class="form-error"></div>
-                </div>
-
-                <!-- Phone -->
-                <div>
-                    <label class="form-label">휴대폰 번호 <span>*</span></label>
-                    <input type="tel" id="phone" placeholder="휴대폰 번호를 입력해 주세요." class="form-input"
-                        oninput="handlePhoneInput(this)">
-                    <div id="error-phone" class="form-error"></div>
-                </div>
-
-                <!-- System Selection -->
-                <div>
-                    <label class="form-label">이용 희망 시스템 <span>*</span></label>
-                    <div class="bg-[#050912] border border-slate-800 p-4 space-y-3">
-                        <label class="flex items-center group cursor-pointer">
-                            <input type="checkbox" name="systems" value="IVMS" class="custom-checkbox form-checkbox"
-                                onchange="resetError('systems')">
-                            <span class="text-xs font-bold text-white w-16">IVMS</span>
-                            <span
-                                class="text-[10px] text-slate-500 font-bold border-l border-slate-700 pl-3 group-hover:text-slate-300 transition-colors">버티포트
-                                통합 관리</span>
-                        </label>
-                        <label class="flex items-center group cursor-pointer">
-                            <input type="checkbox" name="systems" value="IFPS" class="custom-checkbox form-checkbox"
-                                onchange="resetError('systems')">
-                            <span class="text-xs font-bold text-white w-16">IFPS</span>
-                            <span
-                                class="text-[10px] text-slate-500 font-bold border-l border-slate-700 pl-3 group-hover:text-slate-300 transition-colors">통합
-                                비행 계획 관리</span>
-                        </label>
-                        <label class="flex items-center group cursor-pointer">
-                            <input type="checkbox" name="systems" value="IFRS" class="custom-checkbox form-checkbox"
-                                onchange="resetError('systems')">
-                            <span class="text-xs font-bold text-white w-16">IFRS</span>
-                            <span
-                                class="text-[10px] text-slate-500 font-bold border-l border-slate-700 pl-3 group-hover:text-slate-300 transition-colors">통합
-                                운항 예약</span>
-                        </label>
-                        <label class="flex items-center group cursor-pointer">
-                            <input type="checkbox" name="systems" value="V-CDM" class="custom-checkbox form-checkbox"
-                                onchange="resetError('systems')">
-                            <span class="text-xs font-bold text-white w-16">V-CDM</span>
-                            <span
-                                class="text-[10px] text-slate-500 font-bold border-l border-slate-700 pl-3 group-hover:text-slate-300 transition-colors">협동적
-                                의사 결정 지원</span>
-                        </label>
-                        <label class="flex items-center group cursor-pointer">
-                            <input type="checkbox" name="systems" value="SAMS" class="custom-checkbox form-checkbox"
-                                onchange="resetError('systems')">
-                            <span class="text-xs font-bold text-white w-16">SAMS</span>
-                            <span
-                                class="text-[10px] text-slate-500 font-bold border-l border-slate-700 pl-3 group-hover:text-slate-300 transition-colors">관리자
-                                시스템</span>
-                        </label>
+                        <p class="input-guide-text">영문 또는 영문과 숫자 조합으로 5~20자리</p>
                     </div>
-                    <div id="error-systems" class="form-error"></div>
-                </div>
 
-                <!-- Buttons -->
-                <div class="pt-6 space-y-3">
-                    <button onclick="handleSubmit()" class="btn-primary">
-                        신청
-                    </button>
-                    <div
-                        class="hover:bg-slate-800 transition-colors cursor-pointer w-full bg-[#1f2937] border border-slate-700 text-center py-0">
-                        <!-- Simplified secondary button structure -->
+                    <!-- Password -->
+                    <div>
+                        <label class="form-label">비밀번호 <span>*</span></label>
+                        <input type="password" id="pw" placeholder="비밀번호를 입력해 주세요." class="form-input"
+                            oninput="resetError('pw')">
+                        <div id="error-pw" class="form-error"></div>
+                        <p class="input-guide-text">영문 대소문자, 숫자, 특수문자를 혼용하여 8자 이상</p>
+                    </div>
+
+                    <!-- Password Confirm -->
+                    <div>
+                        <label class="form-label">비밀번호 확인 <span>*</span></label>
+                        <input type="password" id="pwConfirm" placeholder="비밀번호를 다시 입력해 주세요." class="form-input"
+                            oninput="resetError('pwConfirm')">
+                        <div id="error-pwConfirm" class="form-error"></div>
+                    </div>
+
+                    <!-- Name -->
+                    <div>
+                        <label class="form-label">이름 <span>*</span></label>
+                        <input type="text" id="name" placeholder="이름을 입력해 주세요." class="form-input"
+                            oninput="resetError('name')">
+                        <div id="error-name" class="form-error"></div>
+                    </div>
+
+                    <!-- Affiliation -->
+                    <div>
+                        <label class="form-label">소속 <span>*</span></label>
+                        <input type="text" id="affiliation" placeholder="소속을 입력해 주세요." class="form-input"
+                            oninput="resetError('affiliation')">
+                        <div id="error-affiliation" class="form-error"></div>
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label class="form-label">이메일 <span>*</span></label>
+                        <input type="email" id="email" placeholder="이메일을 입력해 주세요." class="form-input"
+                            oninput="resetError('email')">
+                        <div id="error-email" class="form-error"></div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div>
+                        <label class="form-label">휴대폰 번호 <span>*</span></label>
+                        <input type="tel" id="phone" placeholder="휴대폰 번호를 입력해 주세요." class="form-input"
+                            oninput="handlePhoneInput(this)">
+                        <div id="error-phone" class="form-error"></div>
+                    </div>
+
+                    <!-- System Selection -->
+                    <div>
+                        <label class="form-label">이용 희망 시스템 <span>*</span></label>
+                        <div class="auth-system-box">
+                            <label class="auth-system-item group">
+                                <input type="checkbox" name="systems" value="IVMS" class="custom-checkbox form-checkbox"
+                                    onchange="resetError('systems')">
+                                <span class="auth-system-code">IVMS</span>
+                                <span class="auth-system-desc">버티포트 통합 관리</span>
+                            </label>
+                            <label class="auth-system-item group">
+                                <input type="checkbox" name="systems" value="IFPS" class="custom-checkbox form-checkbox"
+                                    onchange="resetError('systems')">
+                                <span class="auth-system-code">IFPS</span>
+                                <span class="auth-system-desc">통합 비행 계획 관리</span>
+                            </label>
+                            <label class="auth-system-item group">
+                                <input type="checkbox" name="systems" value="IFRS" class="custom-checkbox form-checkbox"
+                                    onchange="resetError('systems')">
+                                <span class="auth-system-code">IFRS</span>
+                                <span class="auth-system-desc">통합 운항 예약</span>
+                            </label>
+                            <label class="auth-system-item group">
+                                <input type="checkbox" name="systems" value="V-CDM"
+                                    class="custom-checkbox form-checkbox" onchange="resetError('systems')">
+                                <span class="auth-system-code">V-CDM</span>
+                                <span class="auth-system-desc">협동적 의사 결정 지원</span>
+                            </label>
+                            <label class="auth-system-item group">
+                                <input type="checkbox" name="systems" value="SAMS" class="custom-checkbox form-checkbox"
+                                    onchange="resetError('systems')">
+                                <span class="auth-system-code">SAMS</span>
+                                <span class="auth-system-desc">관리자 시스템</span>
+                            </label>
+                        </div>
+                        <div id="error-systems" class="form-error"></div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="pt-6 space-y-3">
+                        <button onclick="handleSubmit()" class="btn-primary">
+                            신청
+                        </button>
                         <a href="CM_LG_01_01.html" class="btn-secondary">취소</a>
                     </div>
                 </div>
 
+
             </div>
+
+
+
         </div>
-
-        <!-- Modal Component -->
-        <div id="modal-backdrop"
-            class="fixed inset-0 z-[250] flex items-center justify-center bg-black/80 backdrop-blur-sm hidden animate-fade-in">
-            <div id="modal-content"
-                class="bg-[#0b101b] border border-slate-700 p-10 max-w-sm w-full text-center shadow-[0_20px_60px_rgba(0,0,0,1)] z-[300]">
-                <!-- Icon -->
-                <div id="modal-icon"
-                    class="mb-6 flex justify-center text-teal-400 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"></div>
-
-                <h3 id="modal-title" class="text-xl font-bold text-white mb-2"></h3>
-                <p id="modal-desc" class="text-slate-300 mb-8 leading-relaxed whitespace-pre-line text-sm"></p>
-
-                <!-- Buttons -->
-                <div id="modal-buttons" class="flex space-x-2 justify-center"></div>
-            </div>
-        </div>
-
-    </div>
 
     </div>
 
@@ -297,12 +266,12 @@
             descEl.innerText = content.desc;
             btnsEl.innerHTML = content.btns;
 
-            backdrop.classList.remove('hidden');
+            backdrop.classList.add('active');
             lucide.createIcons();
         }
 
         function closeModal() {
-            document.getElementById('modal-backdrop').classList.add('hidden');
+            document.getElementById('modal-backdrop').classList.remove('active');
         }
 
         function goToLogin() {
@@ -379,6 +348,20 @@
             });
         }
     </script>
+
+    <!-- Modal Component -->
+    <div id="modal-backdrop" class="modal-overlay">
+        <div class="modal-dialog">
+            <!-- Icon -->
+            <div id="modal-icon" class="modal-icon drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"></div>
+
+            <h3 id="modal-title" class="modal-title"></h3>
+            <p id="modal-desc" class="modal-desc"></p>
+
+            <!-- Buttons -->
+            <div id="modal-buttons" class="modal-btn-group"></div>
+        </div>
+    </div>
 </body>
 
 </html>

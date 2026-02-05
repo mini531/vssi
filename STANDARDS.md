@@ -9,8 +9,24 @@ We use a hybrid approach: **Tailwind CSS** for layout/spacing + **Standardized C
 ### 2.1. Authentication Screens (Login/Register)
 | Component | Class Name | Description |
 |-----------|------------|-------------|
-| **Card Container** | `.glass-card-auth` | The main translucent card. Squared corners, specific blur/shadow. |
+### 2.1. Authentication Screens (Login/Register)
+| Component | Class Name | Description |
+|-----------|------------|-------------|
+| **Layout** | `.auth-body` | Base class (font, color, min-height). |
+| **Centered Page** | `.auth-page-center` | Flex column centering (Login). |
+| **Scroll Page** | `.auth-page-scroll` | Fixed height, hidden overflow (Register). |
+| **Scroll View** | `.auth-scroll-view` | Inner scroll container for `.auth-page-scroll`. |
+| **Logos/Branding**| `.brand-container`, `.brand-text`, `.brand-sub`, `.brand-desc` | Standard branding block. Do NOT use inline styles or Tailwind text classes. |
+| **Login Card** | `.auth-card-login` | Fixed width (400px), relative positioning. |
+| **Register Card** | `.auth-card-register` | Responsive max-width (500px), margin handling. |
+| **Card Container** | `.glass-card-auth` | The main translucent card theme (Visuals only). |
+| **Actions/Links** | `.auth-actions`, `.auth-link-*` | Link container below forms. |
 | **Footer** | `.auth-footer` | Distinct, darker background area for Help/CS info. |
+| **Footer Internals** | `.auth-help-*`, `.auth-cs-*` | Standard styles for the help text and CS center row. |
+| **Header (Card)** | `.auth-card-header`, `.auth-card-title` | Standard card title with border. |
+| **Inline Button** | `.btn-inline-check` | Small button next to inputs (e.g. Duplicate Check). |
+| **System List** | `.auth-system-box`, `.auth-system-item` | Selection list styled container. |
+| **Modals** | `.modal-overlay`, `.modal-dialog` | Standard modal wrapper. MUST be child of Body. |
 
 ### 2.2. Form Components
 Do NOT use long Tailwind strings for repeated elements. Use these classes:

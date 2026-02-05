@@ -6,19 +6,30 @@ You are an expert AI developer working on the VSSI project. You MUST strictly ad
 *   **Hybrid Approach**: Use Tailwind CSS for layout + `style.css` for components.
 *   **Authentication Cards**: ALWAYS use `.glass-card-auth` for login/register cards.
 *   **Auth Footer**: ALWAYS use `.auth-footer` for the help section.
+*   **Auth Layout**:
+    *   Use `.auth-body` + `.app-bg` on `<body>`.
+    *   Use `.auth-page-center` for centered pages (Login).
+    *   Use `.auth-page-scroll` + inner `.auth-scroll-view` for scrolling pages (Register).
+*   **Branding & Cards**:
+    *   **NEVER** use `w-[...]` or `max-w-[...]` for Login/Register cards. Use `.auth-card-container` (add `.auth-card-wide` for wider cards).
+    *   **NEVER** use inline styles or complex Tailwind chains for the VSSI Logo. Use `.brand-container` and children.
 *   **Form Components**:
-    *   Input: `.form-input` (Toggle `.error` class for validation, do NOT use border-red-500 manually).
+    *   Input: `.form-input` (Toggle `.error` class for validation, do NOT use border-red-500 manually). **NO ROUNDED CORNERS (border-radius: 0)**.
     *   Label: `.form-label` (Asterisk in `<span>`).
-    *   Button: `.btn-primary` (Teal), `.btn-secondary` (Dark).
+    *   Button: `.btn-primary` (Teal), `.btn-secondary` (Dark). **NO ROUNDED CORNERS**.
     *   Error Text: `.form-error`.
     *   Checkbox: `.form-checkbox`.
 *   **Dashboard Components**:
     *   Layout: `.dashboard-body`.
-    *   Filters: `.filter-input`, `.filter-select`, `.filter-btn-search`, `.filter-btn-reset`.
+    *   Filters: `.filter-input`, `.filter-select`, `.filter-btn-search`, `.filter-btn-reset`. **NO ROUNDED CORNERS**.
     *   Search Panel: `.search-panel`, `.search-panel-header`, `.search-panel-content`.
     *   Cards: `.status-card`.
     *   Pagination: `.page-btn`, `.pagination-select`.
-    *   **System Switcher**: `.system-switcher-overlay`, `.system-switcher-dialog`, `.system-switcher-item`.
+    *   Pagination: `.page-btn`, `.pagination-select`.
+    *   **System Switcher**: `.system-switcher-overlay`, `.system-switcher-dialog`, `.system-switcher-header`, `.switcher-dot`, `.switcher-item-content`, `.switcher-acronym`, `.switcher-badge`.
+    *   **Sidebar**: `.sidebar-container`, `.sidebar-nav-btn` (toggle `.active`), `.sidebar-sub-btn`.
+    *   **Sidebar**: `.sidebar-container`, `.sidebar-nav-btn` (toggle `.active`), `.sidebar-sub-btn`.
+    *   **Header**: `.header-bar`, `.header-icon-btn`, `.header-profile-btn`, `.header-datetime`.
 
 ## 2. JavaScript Conventions
 *   **Modules**: Always use `js/include.js` for dynamic loading of `header.html` and `sidebar.html`.
@@ -31,7 +42,9 @@ You are an expert AI developer working on the VSSI project. You MUST strictly ad
 ## 3. HTML Structure
 *   **Icons**: Use Lucide icons (`<i data-lucide="...">`). Initialize with `lucide.createIcons()`.
 *   **Modals**:
-    *   Structure: Follow `CM_LG_01_01.html`. `z-index` > 100.
+    *   Structure: Use `.modal-overlay` > `.modal-dialog` structure.
+    *   **Position**: MUST be a direct child of `<body>`. NEVER place inside `.auth-scroll-view` or other containers.
+    *   **Classes**: Use `.modal-icon`, `.modal-title`, `.modal-desc`, `.modal-btn-group`.
     *   **Colors**:
         *   **Warning/Error**: YELLOW (`text-yellow-500`, `bg-yellow-600/80`). **NO RED MODALS**.
         *   **Success**: TEAL (`text-teal-400`, `bg-teal-600/80`).
