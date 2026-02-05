@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const implementedScreens = [
         'COM_LG_01_01',
         'COM_LG_02_01',
+        'COM_CM_01_01',
+        'COM_CM_01_02',
         'SAM_AS_10_01'
     ];
 
