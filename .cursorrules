@@ -31,11 +31,9 @@ You are an expert AI developer working on the VSSI project. You MUST strictly ad
     *   Filters: `.filter-input`, `.filter-select`, `.filter-btn-search`, `.filter-btn-reset`. **NO ROUNDED CORNERS**.
     *   Search Panel: `.search-panel`, `.search-panel-header`, `.search-panel-content`.
     *   Cards: `.status-card`.
-    *   Pagination: `.page-btn`, `.pagination-select`.
-    *   Pagination: `.page-btn`, `.pagination-select`.
+      - Pagination: `.table-footer`, `.pagination-info`, `.pagination-controls`, `.page-btn` (toggle `.active`), `.pagination-select`, `.pagination-icon`.
     *   **System Switcher**: `.system-switcher-overlay`, `.system-switcher-dialog`, `.system-switcher-header`, `.switcher-dot`, `.switcher-item-content`, `.switcher-acronym`, `.switcher-badge`.
-    *   **Sidebar**: `.sidebar-container`, `.sidebar-nav-btn` (toggle `.active`), `.sidebar-sub-btn`.
-    *   **Sidebar**: `.sidebar-container`, `.sidebar-nav-btn` (toggle `.active`), `.sidebar-sub-btn`.
+      - **Sidebar**: `.sidebar-container`, `.sidebar-nav-btn` (toggle `.active`), `.sidebar-sub-btn`.
     *   **Header**: `.header-bar`, `.header-left`, `.header-right`, `.header-group`, `.header-divider-text`, `.header-icon-btn`, `.header-profile-btn`, `.header-datetime`.
     *   **Global Layout**:
         - Use `.dashboard-body` on `<body>`.
@@ -57,10 +55,14 @@ You are an expert AI developer working on the VSSI project. You MUST strictly ad
     - Controls: `.filter-grid` (Max 7 items per row on screens >= 1200px), `.filter-label`, `.filter-input`, `.filter-select`, `.filter-input-flex`, `.filter-date-range`, `.filter-date-separator`.
     - Buttons: `.filter-actions`, `.filter-btn-common`, `.filter-btn-search`, `.filter-btn-reset`.
 *   **Tables & Pagination**:
-    - Table: `.table-main-wrapper`, `.table-scroll-area`, `.table-container`, `.data-table`, `.data-table-body`, `.data-table-row`. (NEVER use page-specific table classes like `.monitoring-table`)
-    - Sticky Header: `.data-table th` MUST have `position: sticky` and `top: 0` inside `.table-scroll-area`.
-    - Cell Types: `.text-cell-primary`, `.text-cell-secondary`, `.text-cell-mono`, `.text-cell-meta`, `.text-cell-date`, `.text-cell-number`, `.text-cell-number-bold`, `.text-cell-number-error`, `.text-cell-number-warning`.
-    - Utilities: `.text-center`, `.text-right`, `.badge`, `.badge-purple`, etc.
+    - Table: `.table-main-wrapper`, `.table-scroll-area`, `.table-container`, `.data-table`, `.data-table-body`, `.data-table-row`.
+    - Cell Alignment & Types:
+        - `.td-center`: Centered text, slate-500, font-size 12px.
+        - `.td-number`: Right-aligned, JetBrains Mono font.
+        - `.td-date`: Centered, slate-500, JetBrains Mono, font-size 12px.
+    - Cell Status & Formatting:
+        - Use semantic text colors: `.text-success`, `.text-warning`, `.text-error`, `.text-info`, etc.
+        - Use badges for status: `.badge` + `.badge-success`, `.badge-error`, `.badge-warning`, `.badge-info`, `.badge-purple`.
     - Pagination: `.table-footer`, `.pagination-info`, `.pagination-controls`, `.page-btn` (toggle `.active`), `.pagination-select`, `.pagination-select-margin`, `.pagination-icon`.
 
 ## 3. General Rules
