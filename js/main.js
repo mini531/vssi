@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'COM_LG_02_01',
         'COM_CM_01_01',
         'COM_CM_01_02',
+        'COM_IT_01_01',
         'SAM_AS_10_01'
     ];
 
