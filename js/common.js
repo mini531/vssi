@@ -235,3 +235,38 @@ function updateSwitcherUI(activeAcronym) {
         }
     }
 }
+
+// Loading Spinner Utils
+window.vssi = {
+    showLoading: function (text = '처리 중입니다...') {
+        let overlay = document.getElementById('global-loading');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'global-loading';
+            overlay.className = 'loading-overlay';
+            overlay.innerHTML = `
+                <i data-lucide="loader-2" class="loading-spinner"></i>
+                <div class="loading-text">${text}</div>
+            `;
+            document.body.appendChild(overlay);
+            if (window.lucide) {
+                lucide.createIcons({
+                    attrs: { 'stroke-width': 1.5 },
+                    nameAttr: 'data-lucide'
+                });
+            }
+        } else {
+            overlay.querySelector('.loading-text').innerText = text;
+        }
+
+        // Force reflow and add active class
+        overlay.offsetHeight;
+        overlay.classList.add('active');
+    },
+    hideLoading: function () {
+        const overlay = document.getElementById('global-loading');
+        if (overlay) {
+            overlay.classList.remove('active');
+        }
+    }
+};

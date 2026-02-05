@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Implemented Screens Whitelist
     const implementedScreens = [
-        'CM_LG_01_01',
-        'CM_LG_02_01',
+        'COM_LG_01_01',
+        'COM_LG_02_01',
         'SAM_AS_10_01'
     ];
 
