@@ -18,8 +18,8 @@ document.addEventListener('includes-loaded', () => {
     updateTime();
     setInterval(updateTime, 1000);
 
-    // Highlight Active Sidebar Menu if needed
-    // (Optional: Logic to add 'bg-teal-900' to current page link)
+    // Highlight Active Sidebar Menu
+    highlightActiveMenu();
 });
 
 // Sidebar Toggle
@@ -232,6 +232,78 @@ function updateSidebarMenu() {
             item.style.display = 'none';
         }
     });
+}
+
+// Dynamic Sidebar Menu Highlighting
+function highlightActiveMenu() {
+    const pageTitle = document.body.getAttribute('data-page-title');
+    if (!pageTitle) return;
+
+    const sidebar = document.getElementById('sidebar');
+    if (!sidebar) return;
+
+    // Remove all existing active states
+    const allBtns = sidebar.querySelectorAll('.sidebar-nav-btn, .sidebar-sub-btn');
+    allBtns.forEach(btn => btn.classList.remove('active'));
+
+    // Also remove active from group buttons and reset icons
+    const allGroups = sidebar.querySelectorAll('.sidebar-nav-btn.group');
+    allGroups.forEach(group => {
+        group.classList.remove('active');
+        const icon = group.querySelector('.sidebar-chevron');
+        if (icon) {
+            icon.classList.remove('rotate-90', 'rotate-180', 'lucide-chevron-down');
+            icon.classList.add('lucide-chevron-right');
+        }
+    });
+
+    // Close all submenus initially
+    const submenus = sidebar.querySelectorAll('.sidebar-submenu, .sidebar-submenu-list');
+    submenus.forEach(sub => sub.classList.add('hidden'));
+
+    let matched = false;
+
+    // 1. Try to match sub-menu items first
+    const subBtns = sidebar.querySelectorAll('.sidebar-sub-btn');
+    subBtns.forEach(btn => {
+        if (btn.textContent.trim() === pageTitle.trim()) {
+            btn.classList.add('active');
+            matched = true;
+
+            // Expand parent submenu
+            const parentSub = btn.closest('.sidebar-submenu, .sidebar-submenu-list');
+            if (parentSub) {
+                parentSub.classList.remove('hidden');
+                // Highlight the group button
+                const groupBtn = parentSub.previousElementSibling;
+                if (groupBtn && groupBtn.classList.contains('sidebar-nav-btn')) {
+                    groupBtn.classList.add('active', 'bg-[#0f1623]');
+                    const icon = groupBtn.querySelector('.sidebar-chevron');
+                    if (icon) {
+                        icon.classList.remove('lucide-chevron-right');
+                        icon.classList.add('lucide-chevron-down');
+                        if (icon.classList.contains('lucide-chevron-down')) {
+                            // No rotate needed if swapped to down, or use rotate
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // 2. If no sub-menu matched, try top-level buttons
+    if (!matched) {
+        const navBtns = sidebar.querySelectorAll('.sidebar-nav-btn:not(.group)');
+        navBtns.forEach(btn => {
+            const span = btn.querySelector('span');
+            if (span && span.textContent.trim() === pageTitle.trim()) {
+                btn.classList.add('active');
+            }
+        });
+    }
+
+    // Reinitalize icons for any changed elements
+    if (window.lucide) lucide.createIcons();
 }
 
 // Helper: Update Switcher UI State

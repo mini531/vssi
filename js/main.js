@@ -19,12 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function init() {
         setupTabs();
+        setupMobileSelect();
         renderTable();
         setupSearch();
     }
 
     function setupTabs() {
         const tabButtons = document.querySelectorAll('.tab-btn');
+        const mobileSelect = document.getElementById('mobile-tabs-select');
 
         tabButtons.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -32,8 +34,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.classList.add('active');
 
                 currentTab = btn.getAttribute('data-tab');
+                if (mobileSelect) mobileSelect.value = currentTab;
                 renderTable();
             });
+        });
+    }
+
+    function setupMobileSelect() {
+        const mobileSelect = document.getElementById('mobile-tabs-select');
+        const tabButtons = document.querySelectorAll('.tab-btn');
+
+        if (!mobileSelect) return;
+
+        mobileSelect.addEventListener('change', (e) => {
+            currentTab = e.target.value;
+
+            // Sync desktop tabs
+            tabButtons.forEach(btn => {
+                if (btn.getAttribute('data-tab') === currentTab) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            renderTable();
         });
     }
 

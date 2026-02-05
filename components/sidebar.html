@@ -27,7 +27,7 @@
             </button>
             <!-- Submenu -->
             <div id="security-sub" class="hidden sidebar-submenu">
-                <button class="sidebar-sub-btn">역할 정의</button>
+                <button class="sidebar-sub-btn" onclick="location.href='SAM_AU_01_01.html'">역할 정의</button>
                 <button class="sidebar-sub-btn">역할 배정</button>
                 <button class="sidebar-sub-btn">보안 정책 설정</button>
             </div>
@@ -77,15 +77,15 @@
         <!-- Active Group -->
         <!-- Default Expanded -->
         <div data-system="SAMS">
-            <button onclick="toggleSubmenu('linkops-sub', this)" class="sidebar-nav-btn active group">
+            <button onclick="toggleSubmenu('linkops-sub', this)" class="sidebar-nav-btn group">
                 <div class="sidebar-group-label">
                     <i data-lucide="link-2" class="sidebar-icon"></i>
                     <span>연계 시스템 운영</span>
                 </div>
-                <i data-lucide="chevron-down" class="sidebar-chevron"></i>
+                <i data-lucide="chevron-right" class="sidebar-chevron"></i>
             </button>
-            <div id="linkops-sub" class="sidebar-submenu-list">
-                <button class="sidebar-sub-btn active">연계 상태 모니터링</button>
+            <div id="linkops-sub" class="hidden sidebar-submenu">
+                <button class="sidebar-sub-btn" onclick="location.href='SAM_AS_10_01.html'">연계 상태 모니터링</button>
                 <button class="sidebar-sub-btn">실패 메시지 관리 (DLQ)</button>
                 <button class="sidebar-sub-btn">연계 시스템 통계</button>
             </div>
