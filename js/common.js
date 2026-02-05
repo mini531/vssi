@@ -5,6 +5,12 @@ document.addEventListener('includes-loaded', () => {
     // Initialize Icons
     if (window.lucide) lucide.createIcons();
 
+    // Update Header Title (Page Subtitle)
+    updateHeaderTitle();
+
+    // Initialize System Title (Header Main Title)
+    initSystemTitle();
+
     // Start Clock
     updateTime();
     setInterval(updateTime, 1000);
@@ -131,4 +137,80 @@ function updateTime() {
     const now = new Date();
     dateEl.innerText = now.getFullYear() + '.' + String(now.getMonth() + 1).padStart(2, '0') + '.' + String(now.getDate()).padStart(2, '0');
     timeEl.innerText = now.toTimeString().split(' ')[0];
+}
+
+// Header Title Update (Sub Title)
+function updateHeaderTitle() {
+    const titleEl = document.getElementById('header-page-title');
+    if (!titleEl) return;
+
+    const pageTitle = document.body.getAttribute('data-page-title');
+    if (pageTitle) {
+        titleEl.innerText = pageTitle;
+    }
+}
+
+// System Title Initialization (Main Title)
+function initSystemTitle() {
+    const savedName = localStorage.getItem('vssi-system-name') || '관리자 시스템';
+    const savedAcronym = localStorage.getItem('vssi-system-acronym') || 'SAMS';
+
+    // Update Header
+    const headerTitle = document.getElementById('header-system-title');
+    if (headerTitle) {
+        headerTitle.innerText = savedName;
+    }
+
+    // Update Switcher UI state
+    updateSwitcherUI(savedAcronym);
+}
+
+// Switch System
+function switchSystem(name, acronym) {
+    localStorage.setItem('vssi-system-name', name);
+    localStorage.setItem('vssi-system-acronym', acronym);
+
+    // Update Header
+    const headerTitle = document.getElementById('header-system-title');
+    if (headerTitle) {
+        headerTitle.innerText = name;
+    }
+
+    // Update Switcher UI
+    updateSwitcherUI(acronym);
+
+    // Close Modal
+    toggleSystemSwitcher();
+}
+
+// Helper: Update Switcher UI State
+function updateSwitcherUI(activeAcronym) {
+    // Remove active class and badges from all
+    const allItems = document.querySelectorAll('.system-switcher-item');
+    allItems.forEach(item => {
+        item.classList.remove('active');
+        const badge = item.querySelector('.switcher-badge');
+        if (badge) badge.remove();
+
+        const acronymSpan = item.querySelector('.switcher-acronym');
+        if (acronymSpan) acronymSpan.classList.remove('current');
+    });
+
+    // Add active to selected
+    const activeItem = document.getElementById(`switcher-item-${activeAcronym}`);
+    if (activeItem) {
+        activeItem.classList.add('active');
+
+        const acronymSpan = activeItem.querySelector('.switcher-acronym');
+        if (acronymSpan) acronymSpan.classList.add('current');
+
+        // Add badge
+        const contentDiv = activeItem.querySelector('.switcher-item-content');
+        if (contentDiv) {
+            const badge = document.createElement('span');
+            badge.className = 'switcher-badge';
+            badge.innerText = 'CURRENT';
+            contentDiv.appendChild(badge);
+        }
+    }
 }

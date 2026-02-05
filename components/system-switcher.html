@@ -14,7 +14,8 @@
         <!-- Content -->
         <div class="system-switcher-body">
             <!-- IVMS -->
-            <button class="system-switcher-item group">
+            <button id="switcher-item-IVMS" class="system-switcher-item group"
+                onclick="switchSystem('버티포트 통합 관리 시스템', 'IVMS')">
                 <div class="flex-1">
                     <div class="switcher-item-content">
                         <span class="switcher-acronym teal">IVMS</span>
@@ -25,7 +26,8 @@
             </button>
 
             <!-- IFPS -->
-            <button class="system-switcher-item group">
+            <button id="switcher-item-IFPS" class="system-switcher-item group"
+                onclick="switchSystem('통합 비행 계획 관리 시스템', 'IFPS')">
                 <div class="flex-1">
                     <div class="switcher-item-content">
                         <span class="switcher-acronym blue">IFPS</span>
@@ -36,7 +38,8 @@
             </button>
 
             <!-- IFRS -->
-            <button class="system-switcher-item group">
+            <button id="switcher-item-IFRS" class="system-switcher-item group"
+                onclick="switchSystem('통합 운항 예약 시스템', 'IFRS')">
                 <div class="flex-1">
                     <div class="switcher-item-content">
                         <span class="switcher-acronym purple">IFRS</span>
@@ -47,7 +50,8 @@
             </button>
 
             <!-- V-CDM -->
-            <button class="system-switcher-item group">
+            <button id="switcher-item-V-CDM" class="system-switcher-item group"
+                onclick="switchSystem('협동적 의사 결정 지원 시스템', 'V-CDM')">
                 <div class="flex-1">
                     <div class="switcher-item-content">
                         <span class="switcher-acronym orange">V-CDM</span>
@@ -58,7 +62,8 @@
             </button>
 
             <!-- SAMS (Current) -->
-            <button class="system-switcher-item active group">
+            <button id="switcher-item-SAMS" class="system-switcher-item group"
+                onclick="switchSystem('관리자 시스템', 'SAMS')">
                 <div class="flex-1">
                     <div class="switcher-item-content">
                         <span class="switcher-acronym current">SAMS</span>
