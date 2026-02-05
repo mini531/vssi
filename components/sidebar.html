@@ -2,21 +2,21 @@
 <aside id="sidebar" class="sidebar-container w-0 border-none">
     <div class="sidebar-nav custom-scrollbar space-y-1">
 
-        <button class="sidebar-nav-btn">
+        <button class="sidebar-nav-btn" data-system="ALL">
             <i data-lucide="layout-grid" class="sidebar-icon"></i>
             <span>대시보드</span>
         </button>
-        <button class="sidebar-nav-btn">
+        <button class="sidebar-nav-btn" data-system="ALL">
             <i data-lucide="activity" class="sidebar-icon"></i>
             <span>모니터링</span>
         </button>
-        <button class="sidebar-nav-btn">
+        <button class="sidebar-nav-btn" data-system="SAMS">
             <i data-lucide="users" class="sidebar-icon"></i>
             <span>사용자 관리</span>
         </button>
 
         <!-- Expanded Group -->
-        <div>
+        <div data-system="SAMS">
             <!-- Added toggleSubmenu and whitespace-nowrap -->
             <button onclick="toggleSubmenu('security-sub', this)" class="sidebar-nav-btn group">
                 <div class="sidebar-group-label">
@@ -32,7 +32,7 @@
                 <button class="sidebar-sub-btn">보안 정책 설정</button>
             </div>
         </div>
-        <div>
+        <div data-system="SAMS">
             <button onclick="toggleSubmenu('logs-sub', this)" class="sidebar-nav-btn group">
                 <div class="sidebar-group-label">
                     <i data-lucide="file-text" class="sidebar-icon"></i>
@@ -45,7 +45,7 @@
                 <button class="sidebar-sub-btn">사용자 활동 로그</button>
             </div>
         </div>
-        <div>
+        <div data-system="SAMS">
             <button onclick="toggleSubmenu('ops-sub', this)" class="sidebar-nav-btn group">
                 <div class="sidebar-group-label">
                     <i data-lucide="settings" class="sidebar-icon"></i>
@@ -59,7 +59,7 @@
                 <button class="sidebar-sub-btn">백업 설정</button>
             </div>
         </div>
-        <div>
+        <div data-system="SAMS">
             <button onclick="toggleSubmenu('link-sub', this)" class="sidebar-nav-btn group">
                 <div class="sidebar-group-label">
                     <i data-lucide="link" class="sidebar-icon"></i>
@@ -76,7 +76,7 @@
 
         <!-- Active Group -->
         <!-- Default Expanded -->
-        <div>
+        <div data-system="SAMS">
             <button onclick="toggleSubmenu('linkops-sub', this)" class="sidebar-nav-btn active group">
                 <div class="sidebar-group-label">
                     <i data-lucide="link-2" class="sidebar-icon"></i>
@@ -86,11 +86,12 @@
             </button>
             <div id="linkops-sub" class="sidebar-submenu-list">
                 <button class="sidebar-sub-btn active">연계 상태 모니터링</button>
+                <button class="sidebar-sub-btn">실패 메시지 관리 (DLQ)</button>
                 <button class="sidebar-sub-btn">연계 시스템 통계</button>
             </div>
         </div>
 
-        <button class="sidebar-nav-btn">
+        <button class="sidebar-nav-btn" data-system="SAMS">
             <i data-lucide="bell" class="sidebar-icon"></i>
             <span>공지사항 관리</span>
         </button>

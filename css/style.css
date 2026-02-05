@@ -1428,6 +1428,106 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /* Status Card Internals */
+@media (max-width: 767px) {
+
+  /* Allow whole screen scroll with body as the container */
+  .dashboard-body,
+  .app-screen-height {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: visible !important;
+    padding-top: 4rem !important;
+    /* Offset for fixed header */
+  }
+
+  .dashboard-content-full,
+  .dashboard-container-full,
+  .dashboard-main,
+  .dashboard-content {
+    height: auto !important;
+    overflow: visible !important;
+    min-height: 0 !important;
+  }
+
+  /* Fixed Header */
+  .header-bar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 4rem !important;
+    z-index: 1000 !important;
+  }
+
+  .status-card-grid {
+    grid-template-columns: 1fr;
+    gap: 1px;
+  }
+
+  .status-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 2px 10px;
+    height: auto;
+    min-height: 0;
+    gap: 8px;
+  }
+
+  .status-card-header {
+    margin-bottom: 0;
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .status-card-title {
+    font-size: 10.5px;
+    margin-bottom: 0;
+    line-height: 1;
+    color: #94a3b8;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .status-card-value {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    margin-left: auto;
+    line-height: 1;
+  }
+
+  .status-card-state,
+  .status-card-deco {
+    display: none !important;
+  }
+
+  .table-main-wrapper {
+    min-height: 0 !important;
+    flex: none;
+    height: auto;
+    overflow: visible !important;
+  }
+
+  .table-scroll-area {
+    overflow-x: auto;
+    overflow-y: visible !important;
+    height: auto !important;
+  }
+
+  /* Sidebar Fixed Positioning for Mobile */
+  .sidebar-container {
+    position: fixed !important;
+    top: 4rem !important;
+    left: 0 !important;
+    height: calc(100% - 4rem) !important;
+    z-index: 500 !important;
+    box-shadow: 20px 0 25px -5px rgba(0, 0, 0, 0.5);
+    background-color: #0b101b !important;
+  }
+}
+
 .status-card-header {
   display: flex;
   justify-content: space-between;
@@ -1496,11 +1596,27 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .filter-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .filter-grid>.filter-grid-wide {
+    grid-column: span 2;
+  }
 }
 
 @media (min-width: 1024px) {
   .filter-grid {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .filter-grid>div {
+    flex: 1 1 calc(100% / 8.5);
+    min-width: 140px;
+  }
+
+  .filter-grid>.filter-grid-wide {
+    flex: 2 1 calc(200% / 8.5);
+    min-width: 280px;
   }
 }
 
@@ -1554,64 +1670,36 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   /* white/5 */
 }
 
-.text-cell-primary {
-  font-weight: 700;
-  color: white;
+/* Typography Utilities */
+.font-bold {
+  font-weight: 700 !important;
 }
 
-.text-cell-secondary {
-  color: #64748b;
+.font-mono {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+.text-sm {
+  font-size: 12px !important;
+}
+
+.text-xs {
+  font-size: 10px !important;
+}
+
+/* Color Utilities */
+.text-white {
+  color: white !important;
+}
+
+.text-dim {
+  color: #64748b !important;
   /* slate-500 */
-  font-family: 'JetBrains Mono', monospace;
 }
 
-.text-cell-mono {
-  color: #94a3b8;
+.text-muted {
+  color: #94a3b8 !important;
   /* slate-400 */
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.text-cell-meta {
-  text-align: center;
-  color: #64748b;
-  /* slate-500 */
-  font-size: 12px;
-}
-
-.text-cell-date {
-  text-align: center;
-  color: #64748b;
-  /* slate-500 */
-}
-
-/* Number Cells */
-.text-cell-number {
-  text-align: right;
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.text-cell-number-bold {
-  text-align: right;
-  font-weight: 700;
-  color: white;
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.text-cell-number-error {
-  text-align: right;
-  color: #ef4444;
-  /* red-500 */
-  font-weight: 700;
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.text-cell-number-warning {
-  text-align: right;
-  color: #f97316;
-  /* orange-500 */
-  font-weight: 700;
-  /* Added bold */
-  font-family: 'JetBrains Mono', monospace;
 }
 
 /* Pagination Footer Internals */
@@ -1669,7 +1757,33 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   position: relative;
 }
 
-/* Table Utilities */
+/* Table Standard Classes (for global reusability) */
+
+
+.td-center {
+  text-align: center !important;
+  color: #64748b !important;
+  font-size: 12px !important;
+}
+
+.td-number {
+  text-align: right !important;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+.td-date {
+  text-align: center !important;
+  color: #64748b !important;
+  font-size: 12px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+
+/* Table Utilities (Atomic) */
+.text-left {
+  text-align: left;
+}
+
 .text-center {
   text-align: center;
 }

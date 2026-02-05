@@ -44,13 +44,17 @@ You are an expert AI developer working on the VSSI project. You MUST strictly ad
         - Use `.dashboard-content` + `.custom-scrollbar` for the scrollable area.
         - **NEW Full Height Standard**: Use `.dashboard-content-full` on `.dashboard-content` and `.dashboard-container-full` on `.dashboard-container`.
         - **NEW Scrolling Table Standard**: Use `.table-main-wrapper` to encapsulate `.table-scroll-area` and `.table-footer`. This ensures a unified border and no gaps. Column headers (`th`) MUST use `sticky` positioning to remain visible during scroll.
+        - **NEW Mobile Layout Standard**: 
+            - **Fixed Navigation**: ALWAYS use `position: fixed` for `.header-bar` and `.sidebar-container` on mobile to ensure persistence.
+            - **Natural Scrolling**: Main body containers (`.dashboard-body`, `.app-screen-height`, etc.) MUST allow natural vertical scrolling on mobile (`height: auto`, `overflow: visible`). Add `padding-top` to the body to account for the fixed header.
         - Use `.dashboard-container` for centered max-width content padding.
 
 ## 2. Component Standards
 *   **Status Cards**: `.status-card`, `.status-card-header`, `.status-card-title`, `.status-card-icon`, `.status-card-value`, `.status-card-state`, `.status-card-deco`.
+    - **Ultra-Compact (Mobile)**: Use `padding: 2px 10px`, left-aligned icon-first headers, and micro-fonts (`10px` for values).
 *   **Search/Filter**:
     - Panel: `.search-panel`, `.search-panel-header`, `.search-panel-title-group`, `.search-panel-title`, `.filter-chevron`, `.search-panel-content`, `.filter-panel-inner`.
-    - Controls: `.filter-grid`, `.filter-label`, `.filter-input`, `.filter-select`, `.filter-input-flex`, `.filter-date-range`, `.filter-date-separator`.
+    - Controls: `.filter-grid` (Max 7 items per row on screens >= 1200px), `.filter-label`, `.filter-input`, `.filter-select`, `.filter-input-flex`, `.filter-date-range`, `.filter-date-separator`.
     - Buttons: `.filter-actions`, `.filter-btn-common`, `.filter-btn-search`, `.filter-btn-reset`.
 *   **Tables & Pagination**:
     - Table: `.table-main-wrapper`, `.table-scroll-area`, `.table-container`, `.data-table`, `.data-table-body`, `.data-table-row`. (NEVER use page-specific table classes like `.monitoring-table`)

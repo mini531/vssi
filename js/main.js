@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pageTitle = document.getElementById('page-title');
     const totalCountEl = document.getElementById('total-count');
 
-    // Default tab
+    // Default filters
     let currentTab = 'COMMON';
 
     // Implemented Screens Whitelist
@@ -16,31 +16,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function init() {
         setupTabs();
-        renderTable(currentTab);
+        setupMobileSelect();
+        renderTable();
         setupSearch();
     }
 
     function setupTabs() {
         const tabButtons = document.querySelectorAll('.tab-btn');
+        const mobileSelect = document.getElementById('mobile-tabs-select');
+
         tabButtons.forEach(btn => {
             btn.addEventListener('click', () => {
-                // Remove active class from all
                 tabButtons.forEach(b => b.classList.remove('active'));
-                // Add active to clicked
                 btn.classList.add('active');
 
-                // Update current tab
                 currentTab = btn.getAttribute('data-tab');
-                renderTable(currentTab);
+                if (mobileSelect) mobileSelect.value = currentTab;
+                renderTable();
             });
         });
     }
 
-    function renderTable(tabKey) {
+    function setupMobileSelect() {
+        const mobileSelect = document.getElementById('mobile-tabs-select');
+        const tabButtons = document.querySelectorAll('.tab-btn');
+
+        if (!mobileSelect) return;
+
+        mobileSelect.addEventListener('change', (e) => {
+            currentTab = e.target.value;
+
+            // Sync desktop tabs
+            tabButtons.forEach(btn => {
+                if (btn.getAttribute('data-tab') === currentTab) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            renderTable();
+        });
+    }
+
+    function getYearHtml(date) {
+        if (!date) return '';
+
+        let html = date;
+        // Replace 2026년 with teal span
+        html = html.replace(/2026년/g, '<span class="text-teal-400 font-mono">2026년</span>');
+        // Replace 2027년 with amber span
+        html = html.replace(/2027년/g, '<span class="text-amber-400 font-mono">2027년</span>');
+
+        // If it's just a range or has other chars, the base color will be slate
+        return `<span class="text-slate-500">${html}</span>`;
+    }
+
+    function renderTable() {
         // Clear table
         tableBody.innerHTML = '';
 
-        const data = screenData[tabKey] || [];
+        let data = screenData[currentTab] || [];
+
+        // Track previous values for grouping
+        let prevCategory = '';
+        let prevMenu1 = '';
+        let prevMenu2 = '';
 
         // Update counts
         totalCountEl.textContent = data.length;
@@ -56,10 +97,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 ? `<span class="screen-id-link text-sm font-bold text-teal-400 hover:text-teal-300 cursor-pointer underline underline-offset-4 decoration-teal-500/30" onclick="openScreen('${item.id}')">${item.id}</span>`
                 : `<span class="text-sm font-bold text-slate-600 cursor-not-allowed" title="Not Implemented">${item.id}</span>`;
 
+            // Grouping Logic: Dim text if same as previous row
+            // Reset children if parent changes
+            const categoryChanged = item.category !== prevCategory;
+            const menu1Changed = categoryChanged || item.menu1 !== prevMenu1;
+            const menu2Changed = menu1Changed || item.menu2 !== prevMenu2;
+
+            const categoryClass = categoryChanged ? 'text-slate-400' : 'text-slate-400 opacity-20';
+            const menu1Class = menu1Changed ? 'text-slate-300 font-medium' : 'text-slate-300 font-medium opacity-20';
+            const menu2Class = menu2Changed ? 'text-slate-300' : 'text-slate-300 opacity-20';
+
+            const yearHtml = getYearHtml(item.date);
+
             tr.innerHTML = `
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-400">${item.category}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-300 font-medium">${item.menu1}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-300">${item.menu2}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm ${categoryClass}">${item.category}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm ${menu1Class}">${item.menu1}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm ${menu2Class}">${item.menu2}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     ${idHtml}
                 </td>
@@ -69,10 +122,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${item.type}
                     </span>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 font-mono">${item.date}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">${yearHtml}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-xs text-slate-500">${item.remarks}</td>
             `;
             tableBody.appendChild(tr);
+
+            // Update trackers
+            prevCategory = item.category;
+            prevMenu1 = item.menu1;
+            prevMenu2 = item.menu2;
         });
     }
 

@@ -33,8 +33,8 @@
                         <!-- Card 1: Active -->
                         <div class="status-card" role="button" tabindex="0" onclick="void(0)">
                             <div class="status-card-header">
-                                <span class="status-card-title">활성 큐 (ACTIVE)</span>
                                 <i data-lucide="activity" class="status-card-icon text-success"></i>
+                                <span class="status-card-title">활성 큐 (ACTIVE)</span>
                             </div>
                             <div class="status-card-value">1,450</div>
                             <div class="status-card-state text-success">
@@ -46,8 +46,8 @@
                         <!-- Card 2: Pending -->
                         <div class="status-card" role="button" tabindex="0" onclick="void(0)">
                             <div class="status-card-header">
-                                <span class="status-card-title">대기 (PENDING)</span>
                                 <i data-lucide="clock" class="status-card-icon text-info"></i>
+                                <span class="status-card-title">대기 (PENDING)</span>
                             </div>
                             <div class="status-card-value">25</div>
                             <div class="status-card-state text-info">
@@ -58,8 +58,8 @@
                         <!-- Card 3: Unacked -->
                         <div class="status-card" role="button" tabindex="0" onclick="void(0)">
                             <div class="status-card-header">
-                                <span class="status-card-title">처리 중 (UNACKED)</span>
                                 <i data-lucide="loader" class="status-card-icon text-warning"></i>
+                                <span class="status-card-title">처리 중 (UNACKED)</span>
                             </div>
                             <div class="status-card-value">8</div>
                             <div class="status-card-state text-warning">
@@ -70,8 +70,8 @@
                         <!-- Card 4: Dead Letter -->
                         <div class="status-card" role="button" tabindex="0" onclick="void(0)">
                             <div class="status-card-header">
-                                <span class="status-card-title">실패 (DEAD LETTER)</span>
                                 <i data-lucide="alert-circle" class="status-card-icon text-error"></i>
+                                <span class="status-card-title">실패 (DEAD LETTER)</span>
                             </div>
                             <div class="status-card-value">12</div>
                             <div class="status-card-state text-error">
@@ -99,19 +99,30 @@
                                         <label class="filter-label">유형</label>
                                         <select class="filter-select">
                                             <option>전체</option>
-                                            <option>수신 (Inbound)</option>
-                                            <option>송신 (Outbound)</option>
+                                            <option>수신</option>
+                                            <option>송신</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="filter-label">시스템 유형</label>
+                                        <select class="filter-select">
+                                            <option>전체</option>
+                                            <option>버티포트</option>
+                                            <option>운항사</option>
+                                            <option>기체</option>
+                                            <option>교통 관리자</option>
+                                            <option>도심항공 교통 정보 시스템</option>
                                         </select>
                                     </div>
                                     <div>
                                         <label class="filter-label">시스템 이름</label>
                                         <select class="filter-select">
                                             <option>전체</option>
-                                            <option>VP-강남 (Gangnam)</option>
-                                            <option>VP-김포 (Gimpo)</option>
-                                            <option>VP-잠실 (Jamsil)</option>
-                                            <option>A 운항사 (Airline A)</option>
-                                            <option>B 운항사 (Airline B)</option>
+                                            <option>VP-강남</option>
+                                            <option>VP-김포</option>
+                                            <option>VP-잠실</option>
+                                            <option>A 운항사</option>
+                                            <option>B 운항사</option>
                                             <option>K-UAM Core</option>
                                         </select>
                                     </div>
@@ -124,21 +135,23 @@
                                         <input type="text" placeholder="Queue Name" class="filter-input">
                                     </div>
                                     <div>
-                                        <label class="filter-label">상태 (State)</label>
+                                        <label class="filter-label">상태</label>
                                         <select class="filter-select">
                                             <option>전체</option>
-                                            <option>정상 (Normal)</option>
-                                            <option>지연 (Delayed)</option>
-                                            <option>장애 (Error)</option>
+                                            <option>정상</option>
+                                            <option>지연</option>
+                                            <option>장애</option>
                                         </select>
                                     </div>
-                                    <div>
-                                        <label class="filter-label">최종 갱신일</label>
+                                    <div class="filter-grid-wide">
+                                        <label class="filter-label">최근 갱신일</label>
                                         <div class="filter-date-range">
-                                            <input type="date" class="filter-input filter-input-flex"
+                                            <input type="date" id="filter-date-start"
+                                                class="filter-input filter-input-flex"
                                                 onclick="try{this.showPicker()}catch(e){}">
                                             <span class="filter-date-separator">~</span>
-                                            <input type="date" class="filter-input filter-input-flex"
+                                            <input type="date" id="filter-date-end"
+                                                class="filter-input filter-input-flex"
                                                 onclick="try{this.showPicker()}catch(e){}">
                                         </div>
                                     </div>
@@ -165,7 +178,8 @@
                                 <table class="data-table">
                                     <thead>
                                         <tr>
-                                            <th>유형</th>
+                                            <th class="text-center">유형</th>
+                                            <th>시스템 유형</th>
                                             <th>시스템 이름</th>
                                             <th>라우팅 키</th>
                                             <th>큐 명칭</th>
@@ -173,270 +187,290 @@
                                             <th class="text-right">대기</th>
                                             <th class="text-right">처리 중</th>
                                             <th class="text-right">실패</th>
-                                            <th class="text-center">최종 갱신일</th>
+                                            <th class="text-center">최근 갱신일</th>
                                             <th class="text-center">상태</th>
                                         </tr>
                                     </thead>
                                     <tbody class="data-table-body">
                                         <!-- Row 1 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-purple">수신</span></td>
-                                            <td class="text-cell-primary">VP-강남 (Gangnam)</td>
-                                            <td class="text-cell-secondary">v1.gangnam.batt</td>
-                                            <td class="text-cell-mono">q.infra.batt.v1</td>
-                                            <td class="text-cell-meta">CLASSIC</td>
-                                            <td class="text-cell-number-error">1,450</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-number-warning">12</td>
-                                            <td class="text-cell-date">2026.02.05 10:45:12</td>
-                                            <td class="text-center"><span class="badge badge-error">장애</span></td>
+                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
+                                            <td>버티포트</td>
+                                            <td>VP-강남</td>
+                                            <td>v1.gangnam.batt</td>
+                                            <td>q.infra.batt.v1</td>
+                                            <td class="td-center">CLASSIC</td>
+                                            <td class="td-number font-bold text-error">1,450</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-number font-bold text-warning">12</td>
+                                            <td class="td-date">2026.02.05 10:45:12</td>
+                                            <td class="td-center"><span class="badge badge-error">장애</span></td>
                                         </tr>
                                         <!-- Row 2 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-info">송신</span></td>
-                                            <td class="text-cell-primary">A 운항사 (Airline A)</td>
-                                            <td class="text-cell-secondary">v1.airline_a.auth</td>
-                                            <td class="text-cell-mono">q.status.auth.v1</td>
-                                            <td class="text-cell-meta">QUORUM</td>
-                                            <td class="text-cell-number-bold">120</td>
-                                            <td class="text-cell-number">2</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-date">2026.02.04 15:44:55</td>
-                                            <td class="text-center"><span class="badge badge-warning">지연</span></td>
+                                            <td class="td-center"><span class="badge badge-info">송신</span></td>
+                                            <td>운항사</td>
+                                            <td>A 운항사</td>
+                                            <td>v1.airline_a.auth</td>
+                                            <td>q.status.auth.v1</td>
+                                            <td class="td-center">QUORUM</td>
+                                            <td class="td-number font-bold text-white">120</td>
+                                            <td class="td-number">2</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-date">2026.02.04 15:44:55</td>
+                                            <td class="td-center"><span class="badge badge-warning">지연</span></td>
                                         </tr>
                                         <!-- Row 3 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-purple">수신</span></td>
-                                            <td class="text-cell-primary">VP-강남 (Gangnam)</td>
-                                            <td class="text-cell-secondary">v1.gangnam.status</td>
-                                            <td class="text-cell-mono">q.infra.status.v1</td>
-                                            <td class="text-cell-meta">CLASSIC</td>
-                                            <td class="text-cell-number-bold">15</td>
-                                            <td class="text-cell-number">2</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-date">2026.02.04 15:44:30</td>
-                                            <td class="text-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
+                                            <td>버티포트</td>
+                                            <td>VP-강남</td>
+                                            <td>v1.gangnam.status</td>
+                                            <td>q.infra.status.v1</td>
+                                            <td class="td-center">CLASSIC</td>
+                                            <td class="td-number font-bold text-white">15</td>
+                                            <td class="td-number">2</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-date">2026.02.04 15:44:30</td>
+                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 4 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-info">송신</span></td>
-                                            <td class="text-cell-primary">B 운항사 (Airline B)</td>
-                                            <td class="text-cell-secondary">v1.airline_b.plan</td>
-                                            <td class="text-cell-mono">q.status.plan.v1</td>
-                                            <td class="text-cell-meta">QUORUM</td>
-                                            <td class="text-cell-number">5</td>
-                                            <td class="text-cell-number">1</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-date">2026.02.04 15:43:10</td>
-                                            <td class="text-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center"><span class="badge badge-info">송신</span></td>
+                                            <td>운항사</td>
+                                            <td>B 운항사</td>
+                                            <td>v1.airline_b.plan</td>
+                                            <td>q.status.plan.v1</td>
+                                            <td class="td-center">QUORUM</td>
+                                            <td class="td-number">5</td>
+                                            <td class="td-number">1</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-date">2026.02.04 15:43:10</td>
+                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 5 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-purple">수신</span></td>
-                                            <td class="text-cell-primary">VP-김포 (Gimpo)</td>
-                                            <td class="text-cell-secondary">v1.gimpo.pos</td>
-                                            <td class="text-cell-mono">q.flight.pos.v1</td>
-                                            <td class="text-cell-meta">CLASSIC</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-number">5</td>
-                                            <td class="text-cell-number">2</td>
-                                            <td class="text-cell-date">2026.02.04 15:42:05</td>
-                                            <td class="text-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
+                                            <td>버티포트</td>
+                                            <td>VP-김포</td>
+                                            <td>v1.gimpo.pos</td>
+                                            <td>q.flight.pos.v1</td>
+                                            <td class="td-center">CLASSIC</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-number">5</td>
+                                            <td class="td-number">2</td>
+                                            <td class="td-date">2026.02.04 15:42:05</td>
+                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 6 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-purple">수신</span></td>
-                                            <td class="text-cell-primary">K-UAM Core</td>
-                                            <td class="text-cell-secondary">v1.core.weather</td>
-                                            <td class="text-cell-mono">q.data.weather.v1</td>
-                                            <td class="text-cell-meta">STREAM</td>
-                                            <td class="text-cell-number">45</td>
-                                            <td class="text-cell-number">120</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-date">2026.02.04 15:41:55</td>
-                                            <td class="text-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
+                                            <td>도심항공 교통 정보 시스템</td>
+                                            <td>K-UAM Core</td>
+                                            <td>v1.core.weather</td>
+                                            <td>q.data.weather.v1</td>
+                                            <td class="td-center">STREAM</td>
+                                            <td class="td-number">45</td>
+                                            <td class="td-number">120</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-date">2026.02.04 15:41:55</td>
+                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 7 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-info">송신</span></td>
-                                            <td class="text-cell-primary">VP-미래 (Mirae)</td>
-                                            <td class="text-cell-secondary">v1.mirae.vertiport</td>
-                                            <td class="text-cell-mono">q.infra.vertiport.v1</td>
-                                            <td class="text-cell-meta">CLASSIC</td>
-                                            <td class="text-cell-number">2</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-date">2026.02.04 15:40:12</td>
-                                            <td class="text-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center"><span class="badge badge-info">송신</span></td>
+                                            <td>버티포트</td>
+                                            <td>VP-미래</td>
+                                            <td>v1.mirae.vertiport</td>
+                                            <td>q.infra.vertiport.v1</td>
+                                            <td class="td-center">CLASSIC</td>
+                                            <td class="td-number">2</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-date">2026.02.04 15:40:12</td>
+                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 8 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-purple">수신</span></td>
-                                            <td class="text-cell-primary">K-UAM Core</td>
-                                            <td class="text-cell-secondary">v1.core.flight</td>
-                                            <td class="text-cell-mono">q.flight.update.v1</td>
-                                            <td class="text-cell-meta">CLASSIC</td>
-                                            <td class="text-cell-number-error">2,103</td>
-                                            <td class="text-cell-number">15</td>
-                                            <td class="text-cell-number-warning">55</td>
-                                            <td class="text-cell-date">2026.02.04 15:39:45</td>
-                                            <td class="text-center"><span class="badge badge-error">장애</span></td>
+                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
+                                            <td>도심항공 교통 정보 시스템</td>
+                                            <td>K-UAM Core</td>
+                                            <td>v1.core.flight</td>
+                                            <td>q.flight.update.v1</td>
+                                            <td class="td-center">CLASSIC</td>
+                                            <td class="td-number font-bold text-error">2,103</td>
+                                            <td class="td-number">15</td>
+                                            <td class="td-number font-bold text-warning">55</td>
+                                            <td class="td-date">2026.02.04 15:39:45</td>
+                                            <td class="td-center"><span class="badge badge-error">장애</span></td>
                                         </tr>
                                         <!-- Row 9 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-info">송신</span></td>
-                                            <td class="text-cell-primary">C 운항사 (Airline C)</td>
-                                            <td class="text-cell-secondary">v1.airline_c.auth</td>
-                                            <td class="text-cell-mono">q.auth.req.v1</td>
-                                            <td class="text-cell-meta">QUORUM</td>
-                                            <td class="text-cell-number">12</td>
-                                            <td class="text-cell-number">3</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-date">2026.02.04 15:38:20</td>
-                                            <td class="text-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center"><span class="badge badge-info">송신</span></td>
+                                            <td>운항사</td>
+                                            <td>C 운항사</td>
+                                            <td>v1.airline_c.auth</td>
+                                            <td>q.auth.req.v1</td>
+                                            <td class="td-center">QUORUM</td>
+                                            <td class="td-number">12</td>
+                                            <td class="td-number">3</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-date">2026.02.04 15:38:20</td>
+                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 10 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-purple">수신</span></td>
-                                            <td class="text-cell-primary">VP-잠실 (Jamsil)</td>
-                                            <td class="text-cell-secondary">v1.jamsil.noise</td>
-                                            <td class="text-cell-mono">q.env.noise.v1</td>
-                                            <td class="text-cell-meta">STREAM</td>
-                                            <td class="text-cell-number">89</td>
-                                            <td class="text-cell-number">89</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-date">2026.02.04 15:37:55</td>
-                                            <td class="text-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
+                                            <td>버티포트</td>
+                                            <td>VP-잠실</td>
+                                            <td>v1.jamsil.noise</td>
+                                            <td>q.env.noise.v1</td>
+                                            <td class="td-center">STREAM</td>
+                                            <td class="td-number">89</td>
+                                            <td class="td-number">89</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-date">2026.02.04 15:37:55</td>
+                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 11 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-purple">수신</span></td>
-                                            <td class="text-cell-primary">VP-수서 (Suseo)</td>
-                                            <td class="text-cell-secondary">v1.suseo.batt</td>
-                                            <td class="text-cell-mono">q.infra.batt.v1</td>
-                                            <td class="text-cell-meta">CLASSIC</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-date">2026.02.04 15:36:40</td>
-                                            <td class="text-center"><span class="badge badge-default">대기</span></td>
+                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
+                                            <td>버티포트</td>
+                                            <td>VP-수서</td>
+                                            <td>v1.suseo.batt</td>
+                                            <td>q.infra.batt.v1</td>
+                                            <td class="td-center">CLASSIC</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-date">2026.02.04 15:36:40</td>
+                                            <td class="td-center"><span class="badge badge-default">대기</span></td>
                                         </tr>
                                         <!-- Row 12 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-info">송신</span></td>
-                                            <td class="text-cell-primary">A 운항사 (Airline A)</td>
-                                            <td class="text-cell-secondary">v1.airline_a.logs</td>
-                                            <td class="text-cell-mono">q.sys.logs.v1</td>
-                                            <td class="text-cell-meta">CLASSIC</td>
-                                            <td class="text-cell-number">560</td>
-                                            <td class="text-cell-number">12</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-date">2026.02.04 15:35:15</td>
-                                            <td class="text-center"><span class="badge badge-warning">지연</span></td>
+                                            <td class="td-center"><span class="badge badge-info">송신</span></td>
+                                            <td>운항사</td>
+                                            <td>A 운항사</td>
+                                            <td>v1.airline_a.logs</td>
+                                            <td>q.sys.logs.v1</td>
+                                            <td class="td-center">CLASSIC</td>
+                                            <td class="td-number">560</td>
+                                            <td class="td-number">12</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-date">2026.02.04 15:35:15</td>
+                                            <td class="td-center"><span class="badge badge-warning">지연</span></td>
                                         </tr>
                                         <!-- Row 13 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-purple">수신</span></td>
-                                            <td class="text-cell-primary">VP-코엑스 (Coex)</td>
-                                            <td class="text-cell-secondary">v1.coex.gate</td>
-                                            <td class="text-cell-mono">q.infra.gate.v1</td>
-                                            <td class="text-cell-meta">CLASSIC</td>
-                                            <td class="text-cell-number">3</td>
-                                            <td class="text-cell-number">3</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-date">2026.02.04 15:34:22</td>
-                                            <td class="text-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
+                                            <td>버티포트</td>
+                                            <td>VP-코엑스</td>
+                                            <td>v1.coex.gate</td>
+                                            <td>q.infra.gate.v1</td>
+                                            <td class="td-center">CLASSIC</td>
+                                            <td class="td-number">3</td>
+                                            <td class="td-number">3</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-date">2026.02.04 15:34:22</td>
+                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 14 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-info">송신</span></td>
-                                            <td class="text-cell-primary">Emergency Center</td>
-                                            <td class="text-cell-secondary">v1.emergency.alert</td>
-                                            <td class="text-cell-mono">q.priority.alert.v1</td>
-                                            <td class="text-cell-meta">PRIORITY</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-date">2026.02.04 15:33:05</td>
-                                            <td class="text-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center"><span class="badge badge-info">송신</span></td>
+                                            <td class="text-cell-meta">교통 관리자</td>
+                                            <td>Emergency Center</td>
+                                            <td>v1.emergency.alert</td>
+                                            <td>q.priority.alert.v1</td>
+                                            <td class="td-center">PRIORITY</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-date">2026.02.04 15:33:05</td>
+                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 15 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-purple">수신</span></td>
-                                            <td class="text-cell-primary">VP-여의도 (Yeouido)</td>
-                                            <td class="text-cell-secondary">v1.yeouido.wind</td>
-                                            <td class="text-cell-mono">q.env.wind.v1</td>
-                                            <td class="text-cell-meta">STREAM</td>
-                                            <td class="text-cell-number-error">5,002</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-number-warning">105</td>
-                                            <td class="text-cell-date">2026.02.04 15:32:10</td>
-                                            <td class="text-center"><span class="badge badge-error">장애</span></td>
+                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
+                                            <td>버티포트</td>
+                                            <td>VP-여의도</td>
+                                            <td>v1.yeouido.wind</td>
+                                            <td>q.env.wind.v1</td>
+                                            <td class="td-center">STREAM</td>
+                                            <td class="td-number font-bold text-error">5,002</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-number font-bold text-warning">105</td>
+                                            <td class="td-date">2026.02.04 15:32:10</td>
+                                            <td class="td-center"><span class="badge badge-error">장애</span></td>
                                         </tr>
                                         <!-- Row 16 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-info">송신</span></td>
-                                            <td class="text-cell-primary">D 운항사 (Airline D)</td>
-                                            <td class="text-cell-secondary">v1.airline_d.plan</td>
-                                            <td class="text-cell-mono">q.status.plan.v1</td>
-                                            <td class="text-cell-meta">QUORUM</td>
-                                            <td class="text-cell-number">7</td>
-                                            <td class="text-cell-number">1</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-date">2026.02.04 15:30:55</td>
-                                            <td class="text-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center"><span class="badge badge-info">송신</span></td>
+                                            <td>운항사</td>
+                                            <td>D 운항사</td>
+                                            <td>v1.airline_d.plan</td>
+                                            <td>q.status.plan.v1</td>
+                                            <td class="td-center">QUORUM</td>
+                                            <td class="td-number">7</td>
+                                            <td class="td-number">1</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-date">2026.02.04 15:30:55</td>
+                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 17 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-purple">수신</span></td>
-                                            <td class="text-cell-primary">K-UAM Core</td>
-                                            <td class="text-cell-secondary">v1.core.billing</td>
-                                            <td class="text-cell-mono">q.biz.billing.v1</td>
-                                            <td class="text-cell-meta">CLASSIC</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-date">2026.02.04 15:29:40</td>
-                                            <td class="text-center"><span class="badge badge-default">대기</span></td>
+                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
+                                            <td>도심항공 교통 정보 시스템</td>
+                                            <td>K-UAM Core</td>
+                                            <td>v1.core.billing</td>
+                                            <td>q.biz.billing.v1</td>
+                                            <td class="td-center">CLASSIC</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-date">2026.02.04 15:29:40</td>
+                                            <td class="td-center"><span class="badge badge-default">대기</span></td>
                                         </tr>
                                         <!-- Row 18 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-info">송신</span></td>
-                                            <td class="text-cell-primary">Traffic Control</td>
-                                            <td class="text-cell-secondary">v1.tcs.route</td>
-                                            <td class="text-cell-mono">q.flight.route.v1</td>
-                                            <td class="text-cell-meta">CLASSIC</td>
-                                            <td class="text-cell-number">1,024</td>
-                                            <td class="text-cell-number">50</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-date">2026.02.04 15:28:15</td>
-                                            <td class="text-center"><span class="badge badge-warning">지연</span></td>
+                                            <td class="td-center"><span class="badge badge-info">송신</span></td>
+                                            <td class="text-cell-meta">교통 관리자</td>
+                                            <td>Traffic Control</td>
+                                            <td>v1.tcs.route</td>
+                                            <td>q.flight.route.v1</td>
+                                            <td class="td-center">CLASSIC</td>
+                                            <td class="td-number">1,024</td>
+                                            <td class="td-number">50</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-date">2026.02.04 15:28:15</td>
+                                            <td class="td-center"><span class="badge badge-warning">지연</span></td>
                                         </tr>
                                         <!-- Row 19 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-purple">수신</span></td>
-                                            <td class="text-cell-primary">VP-인천 (Incheon)</td>
-                                            <td class="text-cell-secondary">v1.incheon.pax</td>
-                                            <td class="text-cell-mono">q.biz.pax.v1</td>
-                                            <td class="text-cell-meta">CLASSIC</td>
-                                            <td class="text-cell-number">25</td>
-                                            <td class="text-cell-number">2</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-date">2026.02.04 15:27:00</td>
-                                            <td class="text-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
+                                            <td>버티포트</td>
+                                            <td>VP-인천</td>
+                                            <td>v1.incheon.pax</td>
+                                            <td>q.biz.pax.v1</td>
+                                            <td class="td-center">CLASSIC</td>
+                                            <td class="td-number">25</td>
+                                            <td class="td-number">2</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-date">2026.02.04 15:27:00</td>
+                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 20 -->
                                         <tr class="data-table-row">
-                                            <td><span class="badge badge-info">송신</span></td>
-                                            <td class="text-cell-primary">E 운항사 (Airline E)</td>
-                                            <td class="text-cell-secondary">v1.airline_e.info</td>
-                                            <td class="text-cell-mono">q.info.gen.v1</td>
-                                            <td class="text-cell-meta">QUORUM</td>
-                                            <td class="text-cell-number">8</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-number">0</td>
-                                            <td class="text-cell-date">2026.02.04 15:26:30</td>
-                                            <td class="text-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center"><span class="badge badge-info">송신</span></td>
+                                            <td>운항사</td>
+                                            <td>E 운항사</td>
+                                            <td>v1.airline_e.info</td>
+                                            <td>q.info.gen.v1</td>
+                                            <td class="td-center">QUORUM</td>
+                                            <td class="td-number">8</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-number">0</td>
+                                            <td class="td-date">2026.02.04 15:42:05</td>
+                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -486,6 +520,15 @@
 
     <script src="../js/include.js"></script>
     <script src="../js/common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            const startInput = document.getElementById('filter-date-start');
+            const endInput = document.getElementById('filter-date-end');
+            if (startInput) startInput.value = today;
+            if (endInput) endInput.value = today;
+        });
+    </script>
 </body>
 
 </html>

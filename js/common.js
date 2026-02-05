@@ -11,6 +11,9 @@ document.addEventListener('includes-loaded', () => {
     // Initialize System Title (Header Main Title)
     initSystemTitle();
 
+    // Update Sidebar based on active system
+    updateSidebarMenu();
+
     // Start Clock
     updateTime();
     setInterval(updateTime, 1000);
@@ -181,6 +184,24 @@ function switchSystem(name, acronym) {
 
     // Close Modal
     toggleSystemSwitcher();
+
+    // Update Sidebar
+    updateSidebarMenu();
+}
+
+// Sidebar Menu Visibility Filter
+function updateSidebarMenu() {
+    const currentSystem = localStorage.getItem('vssi-system-acronym') || 'SAMS';
+    const sidebarItems = document.querySelectorAll('[data-system]');
+
+    sidebarItems.forEach(item => {
+        const sys = item.getAttribute('data-system');
+        if (sys === 'ALL' || sys === currentSystem) {
+            item.style.display = '';
+        } else {
+            item.style.display = 'none';
+        }
+    });
 }
 
 // Helper: Update Switcher UI State
