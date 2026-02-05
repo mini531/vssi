@@ -16,10 +16,9 @@
 
 <body class="dashboard-body app-screen-height">
 
-    <!-- Stanadlone Modal View (Directly in main layout as per feedback) -->
-    <!-- Not a modal trigger/toggle, but the page content itself -->
-    <div class="modal-overlay active">
-        <div class="modal-dialog">
+    <!-- Main Content Area: Centered and Borderless as per feedback -->
+    <div class="layout-centered-screen">
+        <div class="text-center max-w-md w-full">
             <!-- Icon with Standardized Warning Class -->
             <div class="modal-icon warning">
                 <i data-lucide="alert-triangle" width="64" height="64"></i>
@@ -31,10 +30,9 @@
                 지속적으로 문제가 발생할 경우, 관리자에게 문의해 주세요.
             </p>
 
-            <!-- Standard Warning Button Group -->
+            <!-- Standardized Warning Button Group -->
             <div class="modal-btn-group">
-                <button onclick="goToMain()"
-                    class="w-full bg-yellow-600/80 hover:bg-yellow-500/80 border border-yellow-500/30 text-white py-3 font-bold text-sm">확인</button>
+                <button onclick="goToMain()" class="btn-modal-warning btn-w-md">확인</button>
             </div>
         </div>
     </div>

@@ -151,7 +151,32 @@ body {
   border-bottom: 1px solid rgba(30, 41, 59, 0.5);
 }
 
-/* Shared Auth Card Style */
+/* Standard Spacing Utilities */
+.spacing-y-6>*+* {
+  margin-top: 1.5rem;
+}
+
+.spacing-y-3>*+* {
+  margin-top: 0.75rem;
+}
+
+.pt-standard {
+  padding-top: 1.5rem;
+}
+
+.flex-gap-2 {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.flex-1 {
+  flex: 1 1 0%;
+}
+
+.flex-none {
+  flex: none;
+}
+
 .glass-card-auth {
   background-color: rgba(2, 6, 23, 0.2);
   /* bg-slate-950/20 */
@@ -1792,6 +1817,40 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   text-align: right;
 }
 
+.btn-w-md {
+  width: 120px !important;
+}
+
+.mr-standard {
+  margin-right: 0.5rem;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+.pc-only {
+  display: none !important;
+}
+
+@media (min-width: 768px) {
+  .pc-only {
+    display: flex !important;
+  }
+}
+
+.mobile-only {
+  display: flex !important;
+}
+
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+
+
 /* Layout Utilities */
 .layout-centered-screen {
   display: flex;
@@ -1916,6 +1975,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   /* mb-6 */
   display: flex;
   justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
 }
 
 .modal-title {
@@ -1923,8 +1985,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   /* text-xl */
   font-weight: 700;
   color: white;
-  margin-bottom: 0.5rem;
-  /* mb-2 */
+  margin-bottom: 1rem;
+  /* mb-4 */
 }
 
 /* --- Standardized Modal Variations --- */
@@ -1953,6 +2015,97 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   /* hover:bg-yellow-500/80 */
 }
 
+.btn-modal-primary {
+  background-color: rgba(37, 99, 235, 0.8);
+  /* bg-blue-600/80 */
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  /* border-blue-500/30 */
+  color: white;
+  padding: 0.75rem 0;
+  font-weight: 700;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  text-align: center;
+}
+
+.btn-modal-primary:hover {
+  background-color: rgba(59, 130, 246, 0.8);
+}
+
+.btn-modal-secondary {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #cbd5e1;
+  /* slate-300 */
+  padding: 0.75rem 0;
+  font-weight: 700;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  background: transparent;
+  text-align: center;
+}
+
+.btn-modal-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.btn-modal-error {
+  background-color: rgba(220, 38, 38, 0.8);
+  /* bg-red-600/80 */
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  /* border-red-500/30 */
+  color: white;
+  padding: 0.75rem 0;
+  font-weight: 700;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+}
+
+.btn-modal-error:hover {
+  background-color: rgba(239, 68, 68, 0.8);
+}
+
+.btn-modal-success {
+  background-color: rgba(13, 148, 136, 0.8);
+  /* bg-teal-600/80 */
+  border: 1px solid rgba(20, 184, 166, 0.3);
+  /* border-teal-500/30 */
+  color: white;
+  padding: 0.75rem 0;
+  font-weight: 700;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+}
+
+.btn-modal-success:hover {
+  background-color: rgba(20, 184, 166, 0.8);
+}
+
+.text-icon-warning {
+  color: #eab308 !important;
+}
+
+.text-icon-error {
+  color: #ef4444 !important;
+}
+
+.text-icon-success {
+  color: #14b8a6 !important;
+}
+
+.text-icon-info {
+  color: #3b82f6 !important;
+}
+
+
+
 .modal-desc {
   color: #cbd5e1;
   /* slate-300 */
@@ -1970,7 +2123,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   gap: 0.5rem;
   /* space-x-2 */
   justify-content: center;
+  margin-top: 1.5rem;
 }
+
+.btn-flex {
+  flex: 1;
+}
+
 
 /* --- Sidebar Standardization --- */
 .sidebar-container {
@@ -2446,4 +2605,21 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Auth Footer & Help Icon Refinement */
+.auth-footer {
+  padding: 2rem;
+  /* p-8 */
+  margin-top: 0.5rem;
+  /* mt-2 */
+  background-color: rgba(2, 6, 23, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.auth-help-icon-wrapper i {
+  width: 1.25rem;
+  /* w-5 */
+  height: 1.25rem;
+  /* h-5 */
 }
