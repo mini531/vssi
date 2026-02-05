@@ -1109,6 +1109,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .data-table th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   background-color: #0f1623;
   border-bottom: 1px solid #1e293b;
   /* slate-800 */
@@ -1368,6 +1371,52 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     padding: 2rem;
     /* md:p-8 */
   }
+}
+
+/* Full Height Dashboard Layout Standard */
+.dashboard-content-full {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Prevent body scroll */
+  height: 100%;
+}
+
+.dashboard-container-full {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  /* Important for flex child scrolling */
+  height: 100%;
+  max-width: 100%;
+  gap: 1.5rem;
+}
+
+.table-main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background-color: #0b101b;
+  border: 1px solid #1e293b;
+  overflow: hidden;
+  /* Clip contents */
+}
+
+.table-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-scroll-area .table-container {
+  border: none;
+  /* Container inside scroll area doesn't need its own border */
+  flex: 1;
 }
 
 .dashboard-container {

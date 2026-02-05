@@ -42,6 +42,8 @@ You are an expert AI developer working on the VSSI project. You MUST strictly ad
         - Use `.dashboard-main-flex` for the container below the header (flex-1 overflow-hidden).
         - Use `.dashboard-main` for the content area.
         - Use `.dashboard-content` + `.custom-scrollbar` for the scrollable area.
+        - **NEW Full Height Standard**: Use `.dashboard-content-full` on `.dashboard-content` and `.dashboard-container-full` on `.dashboard-container`.
+        - **NEW Scrolling Table Standard**: Use `.table-main-wrapper` to encapsulate `.table-scroll-area` and `.table-footer`. This ensures a unified border and no gaps. Column headers (`th`) MUST use `sticky` positioning to remain visible during scroll.
         - Use `.dashboard-container` for centered max-width content padding.
 
 ## 2. Component Standards
@@ -51,7 +53,8 @@ You are an expert AI developer working on the VSSI project. You MUST strictly ad
     - Controls: `.filter-grid`, `.filter-label`, `.filter-input`, `.filter-select`, `.filter-input-flex`, `.filter-date-range`, `.filter-date-separator`.
     - Buttons: `.filter-actions`, `.filter-btn-common`, `.filter-btn-search`, `.filter-btn-reset`.
 *   **Tables & Pagination**:
-    - Table: `.table-container`, `.data-table`, `.data-table-body`, `.data-table-row`. (NEVER use page-specific table classes like `.monitoring-table`)
+    - Table: `.table-main-wrapper`, `.table-scroll-area`, `.table-container`, `.data-table`, `.data-table-body`, `.data-table-row`. (NEVER use page-specific table classes like `.monitoring-table`)
+    - Sticky Header: `.data-table th` MUST have `position: sticky` and `top: 0` inside `.table-scroll-area`.
     - Cell Types: `.text-cell-primary`, `.text-cell-secondary`, `.text-cell-mono`, `.text-cell-meta`, `.text-cell-date`, `.text-cell-number`, `.text-cell-number-bold`, `.text-cell-number-error`, `.text-cell-number-warning`.
     - Utilities: `.text-center`, `.text-right`, `.badge`, `.badge-purple`, etc.
     - Pagination: `.table-footer`, `.pagination-info`, `.pagination-controls`, `.page-btn` (toggle `.active`), `.pagination-select`, `.pagination-select-margin`, `.pagination-icon`.

@@ -45,6 +45,8 @@ Do NOT use long Tailwind strings for repeated elements. Use these classes:
     - Use `.dashboard-body` on `<body>`.
     - Use `.dashboard-main-flex` for the main container below the header.
     - Use `.dashboard-main` and `.dashboard-content` for inner layouts.
+    - **Monitoring Standard**: For screens with a scrollable list, use `.dashboard-content-full` and `.dashboard-container-full`. 
+    - **Table Layout Standard**: Wrap the table section in `.table-main-wrapper` which contains `.table-scroll-area` and `.table-footer`. This ensures a unified border and zero-gap layout. Column headers (`th`) MUST be `sticky` so they remain visible while scrolling the table body.
 *   **Filter Panel**: 
     - Structure: `.search-panel` > `.search-panel-header` > `.search-panel-content` > `.filter-panel-inner`.
     - Controls: `.filter-grid`, `.filter-label`, `.filter-input`, `.filter-select`, `.filter-input-flex`.
