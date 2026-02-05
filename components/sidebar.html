@@ -1,6 +1,6 @@
 <!-- Sidebar -->
 <aside id="sidebar" class="sidebar-container w-0 border-none">
-    <div class="py-4 flex flex-col h-full overflow-y-auto w-64 custom-scrollbar space-y-1">
+    <div class="sidebar-nav custom-scrollbar space-y-1">
 
         <button class="sidebar-nav-btn">
             <i data-lucide="layout-grid" class="sidebar-icon"></i>
@@ -19,7 +19,7 @@
         <div>
             <!-- Added toggleSubmenu and whitespace-nowrap -->
             <button onclick="toggleSubmenu('security-sub', this)" class="sidebar-nav-btn group">
-                <div class="flex items-center">
+                <div class="sidebar-group-label">
                     <i data-lucide="shield" class="sidebar-icon"></i>
                     <span>권한/보안</span>
                 </div>
@@ -34,7 +34,7 @@
         </div>
         <div>
             <button onclick="toggleSubmenu('logs-sub', this)" class="sidebar-nav-btn group">
-                <div class="flex items-center">
+                <div class="sidebar-group-label">
                     <i data-lucide="file-text" class="sidebar-icon"></i>
                     <span>로그 조회</span>
                 </div>
@@ -47,7 +47,7 @@
         </div>
         <div>
             <button onclick="toggleSubmenu('ops-sub', this)" class="sidebar-nav-btn group">
-                <div class="flex items-center">
+                <div class="sidebar-group-label">
                     <i data-lucide="settings" class="sidebar-icon"></i>
                     <span>시스템 운영</span>
                 </div>
@@ -61,7 +61,7 @@
         </div>
         <div>
             <button onclick="toggleSubmenu('link-sub', this)" class="sidebar-nav-btn group">
-                <div class="flex items-center">
+                <div class="sidebar-group-label">
                     <i data-lucide="link" class="sidebar-icon"></i>
                     <span>연계 시스템 관리</span>
                 </div>
@@ -78,13 +78,13 @@
         <!-- Default Expanded -->
         <div>
             <button onclick="toggleSubmenu('linkops-sub', this)" class="sidebar-nav-btn active group">
-                <div class="flex items-center">
+                <div class="sidebar-group-label">
                     <i data-lucide="link-2" class="sidebar-icon"></i>
                     <span>연계 시스템 운영</span>
                 </div>
                 <i data-lucide="chevron-down" class="sidebar-chevron"></i>
             </button>
-            <div id="linkops-sub" class="bg-[#0b101b]">
+            <div id="linkops-sub" class="sidebar-submenu-list">
                 <button class="sidebar-sub-btn active">연계 상태 모니터링</button>
                 <button class="sidebar-sub-btn">연계 시스템 통계</button>
             </div>

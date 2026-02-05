@@ -36,9 +36,30 @@ You are an expert AI developer working on the VSSI project. You MUST strictly ad
     *   **System Switcher**: `.system-switcher-overlay`, `.system-switcher-dialog`, `.system-switcher-header`, `.switcher-dot`, `.switcher-item-content`, `.switcher-acronym`, `.switcher-badge`.
     *   **Sidebar**: `.sidebar-container`, `.sidebar-nav-btn` (toggle `.active`), `.sidebar-sub-btn`.
     *   **Sidebar**: `.sidebar-container`, `.sidebar-nav-btn` (toggle `.active`), `.sidebar-sub-btn`.
-    *   **Header**: `.header-bar`, `.header-icon-btn`, `.header-profile-btn`, `.header-datetime`.
+    *   **Header**: `.header-bar`, `.header-left`, `.header-right`, `.header-group`, `.header-divider-text`, `.header-icon-btn`, `.header-profile-btn`, `.header-datetime`.
+    *   **Global Layout**:
+        - Use `.dashboard-body` on `<body>`.
+        - Use `.dashboard-main-flex` for the container below the header (flex-1 overflow-hidden).
+        - Use `.dashboard-main` for the content area.
+        - Use `.dashboard-content` + `.custom-scrollbar` for the scrollable area.
+        - Use `.dashboard-container` for centered max-width content padding.
 
-## 2. JavaScript Conventions
+## 2. Component Standards
+*   **Status Cards**: `.status-card`, `.status-card-header`, `.status-card-title`, `.status-card-icon`, `.status-card-value`, `.status-card-state`, `.status-card-deco`.
+*   **Search/Filter**:
+    - Panel: `.search-panel`, `.search-panel-header`, `.search-panel-title-group`, `.search-panel-title`, `.filter-chevron`, `.search-panel-content`, `.filter-panel-inner`.
+    - Controls: `.filter-grid`, `.filter-label`, `.filter-input`, `.filter-select`, `.filter-input-flex`, `.filter-date-range`, `.filter-date-separator`.
+    - Buttons: `.filter-actions`, `.filter-btn-common`, `.filter-btn-search`, `.filter-btn-reset`.
+*   **Tables & Pagination**:
+    - Table: `.table-container`, `.data-table`, `.data-table-body`, `.data-table-row`. (NEVER use page-specific table classes like `.monitoring-table`)
+    - Cell Types: `.text-cell-primary`, `.text-cell-secondary`, `.text-cell-mono`, `.text-cell-meta`, `.text-cell-date`, `.text-cell-number`, `.text-cell-number-bold`, `.text-cell-number-error`, `.text-cell-number-warning`.
+    - Utilities: `.text-center`, `.text-right`, `.badge`, `.badge-purple`, etc.
+    - Pagination: `.table-footer`, `.pagination-info`, `.pagination-controls`, `.page-btn` (toggle `.active`), `.pagination-select`, `.pagination-select-margin`, `.pagination-icon`.
+
+## 3. General Rules
+*   **NEVER** use inline Tailwind classes for width, height, spacing, or colors in standardized components.
+*   **ALWAYS** use the semantic classes listed above to ensure project-wide consistency.
+*   **Icons**: Use Lucide icons. For component-specific icons, use `.status-card-icon`, `.trend-icon`, or `.pagination-icon`.
 *   **Modules**: Always use `js/include.js` for dynamic loading of `header.html` and `sidebar.html`.
 *   **Shared Logic**: Use `js/common.js` for:
     *   Date/Time updates (`updateTime`).

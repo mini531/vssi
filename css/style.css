@@ -66,6 +66,14 @@ body {
   /* overflow: hidden; Removed global overflow hidden to allow specific page control */
 }
 
+.dashboard-body {
+  background-color: #0b101b;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .app-screen-height {
   height: 100vh;
   height: 100dvh;
@@ -539,17 +547,6 @@ input:-webkit-autofill:active {
   transition: width 0.3s ease-in-out;
 }
 
-/* Monitoring Table */
-.monitoring-table th {
-  font-size: 11px;
-  color: #6b7280;
-  font-weight: normal;
-}
-
-.monitoring-table td {
-  font-size: 12px;
-  border-bottom: 1px solid #1f2937;
-}
 
 /* Date Picker Dark Mode */
 input[type="date"]::-webkit-calendar-picker-indicator {
@@ -563,7 +560,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Labels */
 .form-label {
   display: block;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: #94a3b8;
   /* text-slate-400 */
@@ -783,6 +780,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   box-shadow: 0 0 0 1px var(--accent-teal);
 }
 
+.filter-input-flex {
+  flex: 1;
+  min-width: 0;
+}
+
 /* Date Input overrides */
 .filter-input[type="date"] {
   position: relative;
@@ -850,6 +852,31 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   padding: 1rem;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.status-card:hover {
+  background-color: #161e2e;
+  border-color: #334155;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+.status-card:active {
+  transform: translateY(0);
+}
+
+/* Standard Icon Sizes & Spacing */
+.status-card-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.trend-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-right: 0.25rem;
 }
 
 /* Pagination Buttons */
@@ -901,6 +928,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .pagination-select:focus {
   outline: none;
   border-color: #14b8a6;
+}
+
+.pagination-select-margin {
+  margin-left: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .pagination-select-margin {
+    margin-left: 1rem;
+  }
 }
 
 /* Checkbox Standard */
@@ -1029,16 +1066,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   transition: width 0.3s ease-in-out;
 }
 
-/* Monitoring Table overrides */
-.monitoring-table th {
-  font-size: 11px;
-  color: #6b7280;
-  font-weight: normal;
-}
-
-.monitoring-table td {
-  font-size: 12px;
-}
 
 /* Date Picker Dark Mode */
 input[type="date"]::-webkit-calendar-picker-indicator {
@@ -1088,7 +1115,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   padding: 0.75rem 1rem;
   /* px-4 py-3 */
   text-align: left;
-  font-size: 11px;
+  font-size: 12px;
   color: #6b7280;
   /* slate-500/600 */
   font-weight: normal;
@@ -1374,7 +1401,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .status-card-title {
-  font-size: 10px;
+  font-size: 12px;
   color: #64748b;
   /* slate-500 */
   font-weight: 700;
@@ -1389,10 +1416,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: white;
 }
 
-.status-card-trend {
+.status-card-state {
   margin-top: 0.5rem;
   /* mt-2 */
-  font-size: 10px;
+  font-size: 12px;
   display: flex;
   align-items: center;
 }
@@ -1443,7 +1470,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .filter-label {
   display: block;
-  font-size: 10px;
+  font-size: 12px;
   color: #64748b;
   /* slate-500 */
   margin-bottom: 0.25rem;
@@ -1460,7 +1487,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: #64748b;
   /* slate-500 */
   align-self: center;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .filter-actions {
@@ -1512,7 +1539,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   text-align: center;
   color: #64748b;
   /* slate-500 */
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .text-cell-date {
@@ -1580,6 +1607,106 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     /* space-x-2 */
     align-self: auto;
   }
+}
+
+.pagination-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.filter-chevron {
+  width: 1rem;
+  height: 1rem;
+  color: #475569;
+  /* slate-600 */
+  transition: transform 0.2s;
+}
+
+.filter-panel-inner {
+  padding: 1rem;
+}
+
+.dashboard-main-flex {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Table Utilities */
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* System Switcher Modal */
+.system-switcher-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.3s;
+}
+
+.system-switcher-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.system-switcher-dialog {
+  background-color: #0b101b;
+  border: 1px solid var(--border-color);
+  width: 100%;
+  max-width: 28rem;
+  /* max-w-md */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  transform: translateY(0);
+}
+
+.system-switcher-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.switcher-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  /* space-x-2 */
+}
+
+/* Close button - standardized icon size */
+.system-switcher-header .close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 0.2s;
+}
+
+.system-switcher-header .close-btn:hover {
+  color: white;
+}
+
+.close-icon-sm {
+  width: 1.125rem;
+  /* 18px */
+  height: 1.125rem;
+  /* 18px */
 }
 
 /* --- Standard Modal System --- */
@@ -1677,17 +1804,25 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /* Base Navigation Button */
+.sidebar-group-label {
+  display: flex;
+  align-items: center;
+}
+
 .sidebar-nav-btn {
   width: 100%;
   display: flex;
   align-items: center;
-  padding: 0.75rem 1.25rem;
-  /* px-5 py-3 */
-  font-size: 13px;
-  /* text-[13px] */
+  padding: 0.75rem 1rem;
+  /* p-3 */
   color: #94a3b8;
   /* text-slate-400 */
-  transition: color 0.2s, background-color 0.2s;
+  font-size: 0.875rem;
+  /* text-sm */
+  transition: all 0.2s;
+  border: none;
+  background: transparent;
+  cursor: pointer;
   white-space: nowrap;
 }
 
@@ -1776,20 +1911,23 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 /* --- Header Standardization --- */
 .header-bar {
-  height: 3rem;
-  /* h-12 */
-  background-color: #0b101b;
-  /* bg-[#0b101b] */
-  border-bottom: 1px solid #1e293b;
-  /* border-slate-800 */
+  height: 4rem;
+  /* h-16 */
+  width: 100%;
+  /* added missing w-full */
+  background-color: #0d1221;
+  /* bg-[#0d1221] */
+  border-bottom: 1px solid var(--border-color);
+  padding-left: 1rem;
+  padding-right: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-left: 1rem;
-  /* px-4 */
-  padding-right: 1rem;
-  z-index: 50;
+  position: relative;
+  z-index: 40;
+  /* added missing z-40 */
   flex-shrink: 0;
+  /* added missing shrink-0 */
 }
 
 .header-icon-btn {
@@ -1800,6 +1938,31 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .header-icon-btn:hover {
   color: #ffffff;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.header-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-divider-text {
+  color: #334155;
+  /* slate-700 */
+  margin: 0 0.25rem;
+  font-size: 0.75rem;
 }
 
 .header-switcher-btn {
@@ -1862,6 +2025,37 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .header-profile-btn:hover {
   color: #ffffff;
+}
+
+.sidebar-container {
+  width: 16rem;
+  /* w-64 */
+  background-color: #0b101b;
+  /* bg-[#0b101b] */
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  /* added missing h-full */
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  z-index: 50;
+}
+
+.sidebar-nav {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  width: 16rem;
+  /* fixed width content to prevent layout shifts during transition */
+}
+
+/* Sidebar Submenu List */
+.sidebar-submenu-list {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .profile-dropdown-menu {

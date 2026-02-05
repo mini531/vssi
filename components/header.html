@@ -1,6 +1,6 @@
 <!-- Header -->
 <header class="header-bar">
-    <div class="flex items-center space-x-4">
+    <div class="header-left">
         <!-- Hamburger -->
         <button onclick="toggleSidebar()" class="header-icon-btn">
             <i data-lucide="menu" class="w-5 h-5"></i>
@@ -12,16 +12,15 @@
 
         <div class="header-divider"></div>
 
-        <!-- Title -->
-        <div class="flex items-center space-x-3">
+        <div class="header-group">
             <span class="header-title-main">관리자 시스템</span>
-            <span class="text-xs text-slate-700 hidden md:inline">|</span>
+            <span class="header-divider-text hidden md:inline">|</span>
             <span class="header-title-sub">연계 상태 모니터링</span>
         </div>
     </div>
 
     <!-- Header Right -->
-    <div class="flex items-center space-x-2 md:space-x-6">
+    <div class="header-right">
         <!-- Profile -->
         <div class="relative">
             <button onclick="toggleProfile()" class="header-profile-btn">
@@ -42,11 +41,11 @@
 
         <!-- Date/Time -->
         <div class="header-datetime">
-            <div class="flex items-center space-x-2">
+            <div class="header-group">
                 <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
                 <span id="server-date">2026.02.05</span>
             </div>
-            <div class="flex items-center space-x-2">
+            <div class="header-group">
                 <i data-lucide="clock" class="w-3.5 h-3.5"></i>
                 <span id="server-time" class="text-teal-500">00:06:57</span>
             </div>

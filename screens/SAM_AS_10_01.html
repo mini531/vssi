@@ -13,13 +13,13 @@
 
 <body class="dashboard-body app-screen-height">
     <!-- Header (Fixed Top) -->
-    <div id="header-container" class="w-full shrink-0 z-40 relative" data-include="../components/header.html"></div>
+    <div data-include="../components/header.html"></div>
 
     <!-- Main Flex Container (Sidebar + Content) -->
-    <div class="flex flex-1 overflow-hidden relative">
+    <div class="dashboard-main-flex">
 
         <!-- Sidebar -->
-        <div id="sidebar-container" class="shrink-0 h-full" data-include="../components/sidebar.html"></div>
+        <div data-include="../components/sidebar.html"></div>
 
         <!-- Main Content (Pushed by Sidebar) -->
         <main class="dashboard-main" id="main-content">
@@ -31,51 +31,51 @@
                     <!-- Status Cards (Row 1) -->
                     <div class="status-card-grid">
                         <!-- Card 1: Active -->
-                        <div class="status-card">
+                        <div class="status-card" role="button" tabindex="0" onclick="void(0)">
                             <div class="status-card-header">
                                 <span class="status-card-title">활성 큐 (ACTIVE)</span>
-                                <i data-lucide="activity" class="w-4 h-4 text-success"></i>
+                                <i data-lucide="activity" class="status-card-icon text-success"></i>
                             </div>
                             <div class="status-card-value">1,450</div>
-                            <div class="status-card-trend text-success">
-                                <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> +12.5%
+                            <div class="status-card-state text-success">
+                                <i data-lucide="check-circle" class="trend-icon"></i> 정상 연계 중
                             </div>
                             <!-- Deco Line -->
                             <div class="status-card-deco success"></div>
                         </div>
                         <!-- Card 2: Pending -->
-                        <div class="status-card">
+                        <div class="status-card" role="button" tabindex="0" onclick="void(0)">
                             <div class="status-card-header">
                                 <span class="status-card-title">대기 (PENDING)</span>
-                                <i data-lucide="clock" class="w-4 h-4 text-info"></i>
+                                <i data-lucide="clock" class="status-card-icon text-info"></i>
                             </div>
                             <div class="status-card-value">25</div>
-                            <div class="status-card-trend text-slate-400">
-                                <i data-lucide="minus" class="w-3 h-3 mr-1"></i> 변동 없음
+                            <div class="status-card-state text-info">
+                                <i data-lucide="check" class="trend-icon"></i> 지연 없음
                             </div>
                             <div class="status-card-deco info"></div>
                         </div>
                         <!-- Card 3: Unacked -->
-                        <div class="status-card">
+                        <div class="status-card" role="button" tabindex="0" onclick="void(0)">
                             <div class="status-card-header">
                                 <span class="status-card-title">처리 중 (UNACKED)</span>
-                                <i data-lucide="loader" class="w-4 h-4 text-warning"></i>
+                                <i data-lucide="loader" class="status-card-icon text-warning"></i>
                             </div>
                             <div class="status-card-value">8</div>
-                            <div class="status-card-trend text-warning">
-                                <i data-lucide="arrow-up-right" class="w-3 h-3 mr-1"></i> +2
+                            <div class="status-card-state text-warning">
+                                <i data-lucide="refresh-cw" class="trend-icon"></i> 메시지 처리 중
                             </div>
                             <div class="status-card-deco warning"></div>
                         </div>
                         <!-- Card 4: Dead Letter -->
-                        <div class="status-card">
+                        <div class="status-card" role="button" tabindex="0" onclick="void(0)">
                             <div class="status-card-header">
                                 <span class="status-card-title">실패 (DEAD LETTER)</span>
-                                <i data-lucide="alert-circle" class="w-4 h-4 text-error"></i>
+                                <i data-lucide="alert-circle" class="status-card-icon text-error"></i>
                             </div>
                             <div class="status-card-value">12</div>
-                            <div class="status-card-trend text-error">
-                                <i data-lucide="alert-triangle" class="w-3 h-3 mr-1"></i> 확인 필요
+                            <div class="status-card-state text-error">
+                                <i data-lucide="alert-triangle" class="trend-icon"></i> 미처리 메시지 발생
                             </div>
                             <div class="status-card-deco error"></div>
                         </div>
@@ -85,15 +85,14 @@
                     <div class="search-panel">
                         <div class="search-panel-header" onclick="toggleFilter()">
                             <div class="search-panel-title-group">
-                                <i data-lucide="filter" class="w-4 h-4 text-teal-500"></i>
+                                <i data-lucide="filter" class="status-card-icon text-success"></i>
                                 <span class="search-panel-title">검색 필터</span>
                             </div>
-                            <i data-lucide="chevron-up" id="filter-chevron"
-                                class="w-4 h-4 text-slate-600 transition-transform duration-200"></i>
+                            <i data-lucide="chevron-up" id="filter-chevron" class="filter-chevron"></i>
                         </div>
 
                         <div id="filter-content" class="search-panel-content">
-                            <div class="p-4">
+                            <div class="filter-panel-inner">
                                 <!-- Filter Fields: Responsive Columns -->
                                 <div class="filter-grid">
                                     <div>
@@ -136,11 +135,11 @@
                                     <div>
                                         <label class="filter-label">최종 갱신일</label>
                                         <div class="filter-date-range"> <!-- Tighter spacing for date range -->
-                                            <input type="date" class="filter-input w-1/2"
+                                            <input type="date" class="filter-input filter-input-flex"
                                                 onclick="try{this.showPicker()}catch(e){}">
                                             <!-- Smaller text for fit -->
                                             <span class="filter-date-separator">~</span>
-                                            <input type="date" class="filter-input w-1/2"
+                                            <input type="date" class="filter-input filter-input-flex"
                                                 onclick="try{this.showPicker()}catch(e){}">
                                         </div>
                                     </div>
@@ -149,10 +148,10 @@
                                 <!-- Search Buttons Row (Bottom Right) -->
                                 <div class="filter-actions">
                                     <button class="filter-btn-common filter-btn-reset">
-                                        <i data-lucide="rotate-ccw" class="w-3 h-3 mr-1"></i> 초기화
+                                        <i data-lucide="rotate-ccw" class="trend-icon"></i> 초기화
                                     </button>
                                     <button class="filter-btn-common filter-btn-search">
-                                        <i data-lucide="search" class="w-3 h-3 mr-1"></i> 조회
+                                        <i data-lucide="search" class="trend-icon"></i> 조회
                                     </button>
                                 </div>
                             </div>
@@ -161,7 +160,7 @@
 
                     <!-- Table -->
                     <div class="table-container">
-                        <table class="data-table monitoring-table">
+                        <table class="data-table">
                             <thead>
                                 <tr>
                                     <th>유형</th>
@@ -500,9 +499,10 @@
                                 <button class="hidden md:flex page-btn">10</button>
 
                                 <!-- Next -->
-                                <button class="page-btn"><i data-lucide="chevron-right" class="w-3 h-3"></i></button>
+                                <button class="page-btn"><i data-lucide="chevron-right"
+                                        class="pagination-icon"></i></button>
 
-                                <select class="pagination-select ml-2 md:ml-4">
+                                <select class="pagination-select pagination-select-margin">
                                     <option>20개씩 보기</option>
                                     <option>30개씩 보기</option>
                                     <option>50개씩 보기</option>
@@ -516,7 +516,6 @@
         </main>
     </div>
 
-    <!-- System Switcher Modal -->
     <!-- System Switcher Modal -->
     <div data-include="../components/system-switcher.html"></div>
 

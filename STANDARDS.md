@@ -41,12 +41,26 @@ Do NOT use long Tailwind strings for repeated elements. Use these classes:
 *   **Checkbox**: `.form-checkbox` (Custom style).
 
 ### 2.3. Dashboard & Monitoring Components
-*   **Layout**: `.dashboard-body` (Standard 100vh flex layout).
-*   **Filter Inputs**: `.filter-input`, `.filter-select`.
-*   **Filter Panel**: `.search-panel`, `.search-panel-header`, `.search-panel-content`.
-*   **Filter Buttons**: `.filter-btn-common` (Base), `.filter-btn-search` (Teal), `.filter-btn-reset` (Transparent).
-*   **Status Cards**: `.status-card`.
-*   **Pagination**: `.page-btn` (Use `.active` for current page), `.pagination-select`.
+*   **Layout**: 
+    - Use `.dashboard-body` on `<body>`.
+    - Use `.dashboard-main-flex` for the main container below the header.
+    - Use `.dashboard-main` and `.dashboard-content` for inner layouts.
+*   **Filter Panel**: 
+    - Structure: `.search-panel` > `.search-panel-header` > `.search-panel-content` > `.filter-panel-inner`.
+    - Controls: `.filter-grid`, `.filter-label`, `.filter-input`, `.filter-select`, `.filter-input-flex`.
+    - Buttons: `.filter-actions`, `.filter-btn-common`, `.filter-btn-search`, `.filter-btn-reset`.
+*   **Status Cards**: 
+    - Structure: `.status-card` > `.status-card-header` > `.status-card-title` + `.status-card-icon`.
+    - States: `.status-card-value`, `.status-card-state`, `.status-card-deco`.
+*   **Tables & Pagination**:
+    - Table: `.table-container`, `.data-table`, `.data-table-body`, `.data-table-row`. 
+    - **Uniformity**: All tables in the system MUST share the same attributes and use the `.data-table` class. Do NOT create page-specific table classes.
+    - Cells: `.text-cell-*` (primary, secondary, mono, meta, date, number, etc.).
+    - Utilities: `.text-center`, `.text-right`.
+    - Pagination: `.table-footer`, `.pagination-info`, `.pagination-controls`, `.page-btn`, `.pagination-select`, `.pagination-select-margin`.
+*   **Icons**:
+    - Standard Icons: Use `.status-card-icon` (16x16), `.trend-icon`/`.pagination-icon` (12x12).
+    - Avoid inline sizing (`w-4 h-4`, etc.) in components.
 
 ### 2.5. Common Components
 *   **System Switcher**:
