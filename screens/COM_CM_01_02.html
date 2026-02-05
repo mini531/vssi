@@ -16,19 +16,25 @@
 
 <body class="dashboard-body app-screen-height">
 
-    <!-- Modal Overlay (Direct child of body as per cursorrules) -->
-    <div class="modal-overlay active" id="error-modal">
+    <!-- Stanadlone Modal View (Directly in main layout as per feedback) -->
+    <!-- Not a modal trigger/toggle, but the page content itself -->
+    <div class="modal-overlay active">
         <div class="modal-dialog">
-            <div class="modal-icon">
-                <i data-lucide="alert-triangle" class="w-16 h-16 text-yellow-500"></i>
+            <!-- Icon with Yellow Theme -->
+            <div class="modal-icon text-yellow-500 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                <i data-lucide="alert-triangle" width="64" height="64"></i>
             </div>
+
             <h2 class="modal-title">페이지를 찾을 수 없습니다.</h2>
             <p class="modal-desc">
                 찾고 있는 페이지가 존재하지 않습니다.
                 지속적으로 문제가 발생할 경우, 관리자에게 문의해 주세요.
             </p>
+
+            <!-- Standard Warning Button Group -->
             <div class="modal-btn-group">
-                <button onclick="goToMain()" class="btn-primary w-48">확인</button>
+                <button onclick="goToMain()"
+                    class="w-full bg-yellow-600/80 hover:bg-yellow-500/80 border border-yellow-500/30 text-white py-3 font-bold text-sm">확인</button>
             </div>
         </div>
     </div>
