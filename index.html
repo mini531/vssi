@@ -28,113 +28,73 @@
     </div>
 
     <!-- Header -->
-    <header class="glass-header h-16 flex items-center justify-between px-6 z-20 relative shrink-0">
-        <div class="flex items-center space-x-3">
-            <div
-                class="w-8 h-8 bg-gradient-to-br from-teal-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-teal-500/20">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                </svg>
+    <header class="header-bar glass-header">
+        <div class="header-left">
+            <div class="brand-logo">
+                <i data-lucide="activity"></i>
             </div>
-            <div>
-                <h1 class="font-black text-xl tracking-tighter text-white leading-none">VSSI <span
-                        class="text-teal-500">PLATFORM</span></h1>
-                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-none mt-0.5">Screen
-                    List Management</p>
+            <div class="header-title-group">
+                <h1 class="header-system-title">VSSI <span class="text-teal-500">PLATFORM</span></h1>
+                <p class="header-page-title text-[10px] opacity-50 uppercase tracking-widest font-bold">Screen List
+                    Management</p>
             </div>
         </div>
-
-        <!-- Top right content removed as requested -->
     </header>
 
     <!-- Main Content -->
     <main class="flex-1 flex flex-col overflow-hidden relative z-10 p-6 max-w-[1920px] mx-auto w-full">
 
         <!-- Controls & Metrics -->
-        <div class="flex flex-col gap-4 mb-6">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <!-- Desktop Tabs (Hidden on Mobile) -->
-                <div class="glass-panel rounded-lg p-1.5 hidden md:flex space-x-1" id="tabs-container">
-                    <button
-                        class="tab-btn active px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition-colors"
-                        data-tab="COMMON">공통 영역</button>
-                    <button
-                        class="tab-btn px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition-colors"
-                        data-tab="IVMS">IVMS (버티포트 통합 관리)</button>
-                    <button
-                        class="tab-btn px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition-colors"
-                        data-tab="IFPS">IFPS (통합 비행 계획 관리)</button>
-                    <button
-                        class="tab-btn px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition-colors"
-                        data-tab="IFRS">IFRS (통합 운항 예약)</button>
-                    <button
-                        class="tab-btn px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition-colors"
-                        data-tab="V-CDM">V-CDM (협동적 의사 결정 지원)</button>
-                    <button
-                        class="tab-btn px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition-colors"
-                        data-tab="SAMS">SAMS (관리자 시스템)</button>
-                </div>
+        <div class="search-panel flex-none mb-4">
+            <div class="search-panel-content p-4" style="display: block;">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <!-- Tabs -->
+                    <div class="glass-panel p-1 flex overflow-x-auto no-scrollbar" id="tabs-container">
+                        <button class="tab-btn active" data-tab="COMMON">공통</button>
+                        <button class="tab-btn" data-tab="IVMS">IVMS</button>
+                        <button class="tab-btn" data-tab="IFPS">IFPS</button>
+                        <button class="tab-btn" data-tab="IFRS">IFRS</button>
+                        <button class="tab-btn" data-tab="V-CDM">V-CDM</button>
+                        <button class="tab-btn" data-tab="SAMS">SAMS</button>
+                    </div>
 
-                <!-- Mobile Category Select (Visible on Mobile Only) -->
-                <select id="mobile-tabs-select"
-                    class="md:hidden w-full bg-slate-900/80 border border-slate-700 rounded-lg px-4 py-3 text-sm text-white focus:border-teal-500 focus:outline-none">
-                    <option value="COMMON">공통 영역</option>
-                    <option value="IVMS">IVMS (버티포트 통합 관리)</option>
-                    <option value="IFPS">IFPS (통합 비행 계획 관리)</option>
-                    <option value="IFRS">IFRS (통합 운항 예약)</option>
-                    <option value="V-CDM">V-CDM (협동적 의사 결정 지원)</option>
-                    <option value="SAMS">SAMS (관리자 시스템)</option>
-                </select>
-            </div>
-
-            <!-- Search & Total -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div class="flex items-center space-x-3">
-                    <div class="glass-panel px-4 py-2 rounded-lg flex items-center text-xs text-slate-400 font-bold">
-                        <span>TOTAL: <span id="total-count" class="text-teal-400 ml-1 text-sm">0</span> Scrn</span>
+                    <!-- Search -->
+                    <div class="filter-grid" style="grid-template-columns: 1fr; margin-top: 0;">
+                        <input type="text" id="search-input" placeholder="화면 ID 또는 이름 검색..."
+                            class="filter-input w-full md:w-80">
                     </div>
                 </div>
-                <div class="relative group flex-1 md:flex-none">
-                    <input type="text" id="search-input" placeholder="Search Screens..."
-                        class="w-full md:w-80 bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-2 pl-10 text-sm text-white focus:border-teal-500 focus:outline-none transition-all placeholder:text-slate-600">
-                    <svg class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 group-focus-within:text-teal-500 transition-colors"
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
+
+                <div class="flex items-center justify-between mt-4">
+                    <div class="text-xs text-slate-500 font-bold">
+                        TOTAL: <span id="total-count" class="text-teal-400 ml-1">0</span> Screens
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Table Container -->
-        <div class="glass-panel flex-1 rounded-xl overflow-hidden flex flex-col shadow-2xl">
-            <div class="overflow-auto flex-1 custom-scrollbar">
-                <table class="w-full text-left border-collapse">
-                    <thead class="sticky top-0 z-10 bg-slate-950/90 backdrop-blur border-b border-slate-800">
-                        <tr>
-                            <th class="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">구분
-                            </th>
-                            <th class="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">1차 메뉴
-                            </th>
-                            <th class="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">2차 메뉴
-                            </th>
-                            <th class="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">화면 ID
-                            </th>
-                            <th class="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">화면 이름
-                            </th>
-                            <th class="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">구분
-                            </th>
-                            <th class="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">개발 시기
-                            </th>
-                            <th class="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">비고
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody id="screen-table-body" class="divide-y divide-slate-800/50 text-slate-300">
-                        <!-- Content rendered by JS -->
-                    </tbody>
-                </table>
+        <!-- Table Area Wrapper -->
+        <div class="table-main-wrapper">
+            <div class="table-scroll-area custom-scrollbar">
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th class="text-center">구분</th>
+                                <th>1차 메뉴</th>
+                                <th>2차 메뉴</th>
+                                <th>화면 ID</th>
+                                <th>화면 이름</th>
+                                <th class="text-center">구분</th>
+                                <th class="text-center">개발 시기</th>
+                                <th>비고</th>
+                            </tr>
+                        </thead>
+                        <tbody id="screen-table-body" class="data-table-body">
+                            <!-- Content rendered by JS -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
