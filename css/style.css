@@ -1927,6 +1927,32 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   /* mb-2 */
 }
 
+/* --- Standardized Modal Variations --- */
+.modal-icon.warning {
+  color: #eab308;
+  /* text-yellow-500 */
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
+}
+
+.btn-modal-warning {
+  width: 100%;
+  background-color: rgba(202, 138, 4, 0.8);
+  /* bg-yellow-600/80 */
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  /* border-yellow-500/30 */
+  color: white;
+  padding: 0.75rem 0;
+  font-weight: 700;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.btn-modal-warning:hover {
+  background-color: rgba(234, 179, 8, 0.8);
+  /* hover:bg-yellow-500/80 */
+}
+
 .modal-desc {
   color: #cbd5e1;
   /* slate-300 */
