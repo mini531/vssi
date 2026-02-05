@@ -13,9 +13,12 @@ You are an expert AI developer working on the VSSI project. You MUST strictly ad
     *   Error Text: `.form-error`.
     *   Checkbox: `.form-checkbox`.
 *   **Dashboard Components**:
-    *   Filters: `.filter-input`, `.filter-select`.
+    *   Layout: `.dashboard-body`.
+    *   Filters: `.filter-input`, `.filter-select`, `.filter-btn-search`, `.filter-btn-reset`.
+    *   Search Panel: `.search-panel`, `.search-panel-header`, `.search-panel-content`.
     *   Cards: `.status-card`.
     *   Pagination: `.page-btn`, `.pagination-select`.
+    *   **System Switcher**: `.system-switcher-overlay`, `.system-switcher-dialog`, `.system-switcher-item`.
 
 ## 2. JavaScript Conventions
 *   **Modules**: Always use `js/include.js` for dynamic loading of `header.html` and `sidebar.html`.

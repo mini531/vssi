@@ -25,9 +25,17 @@ Do NOT use long Tailwind strings for repeated elements. Use these classes:
 *   **Checkbox**: `.form-checkbox` (Custom style).
 
 ### 2.3. Dashboard & Monitoring Components
+*   **Layout**: `.dashboard-body` (Standard 100vh flex layout).
 *   **Filter Inputs**: `.filter-input`, `.filter-select`.
+*   **Filter Panel**: `.search-panel`, `.search-panel-header`, `.search-panel-content`.
+*   **Filter Buttons**: `.filter-btn-common` (Base), `.filter-btn-search` (Teal), `.filter-btn-reset` (Transparent).
 *   **Status Cards**: `.status-card`.
 *   **Pagination**: `.page-btn` (Use `.active` for current page), `.pagination-select`.
+
+### 2.5. Common Components
+*   **System Switcher**:
+    *   Use `.system-switcher-overlay` and `.system-switcher-dialog`.
+    *   Items use `.system-switcher-item` (supports `.active`).
 
 ### 2.4. Modal System
 *   Use the standard modal structure in `CM_LG_01_01.html`.
