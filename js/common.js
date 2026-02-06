@@ -11,8 +11,11 @@ document.addEventListener('includes-loaded', () => {
     // Initialize System Title (Header Main Title)
     initSystemTitle();
 
-    // Update Sidebar based on active system
+    // Update Sidebar based on active active system
     updateSidebarMenu();
+
+    // Restore Sidebar State (Open/Closed)
+    restoreSidebarState();
 
     // Start Clock
     updateTime();
@@ -23,6 +26,7 @@ document.addEventListener('includes-loaded', () => {
 });
 
 // Sidebar Toggle
+// Sidebar Toggle
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     if (!sidebar) return;
@@ -30,9 +34,27 @@ function toggleSidebar() {
     if (sidebar.classList.contains('w-64')) {
         sidebar.classList.remove('w-64');
         sidebar.classList.add('w-0', 'border-none');
+        localStorage.setItem('vssi-sidebar-state', 'closed');
     } else {
         sidebar.classList.remove('w-0', 'border-none');
         sidebar.classList.add('w-64');
+        localStorage.setItem('vssi-sidebar-state', 'open');
+    }
+}
+
+// Restore Sidebar State
+function restoreSidebarState() {
+    const sidebar = document.getElementById('sidebar');
+    if (!sidebar) return;
+
+    const savedState = localStorage.getItem('vssi-sidebar-state');
+    if (savedState === 'open') {
+        sidebar.classList.remove('w-0', 'border-none');
+        sidebar.classList.add('w-64');
+    } else {
+        // Ensure default closed state if strictly needed, though HTML defaults to closed
+        sidebar.classList.remove('w-64');
+        sidebar.classList.add('w-0', 'border-none');
     }
 }
 

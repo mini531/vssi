@@ -42,9 +42,8 @@
         <!-- Tabs Section -->
         <div class="tabs-panel">
             <div class="tabs-wrapper">
-                <!-- Desktop Tabs -->
-                <div class="glass-panel hidden md:flex items-center gap-1 overflow-x-auto no-scrollbar"
-                    id="tabs-container">
+                <!-- Desktop Tabs (Now visible on all screens) -->
+                <div class="glass-panel flex items-center gap-1 overflow-x-auto no-scrollbar" id="tabs-container">
                     <button class="tab-btn active" data-tab="COMMON">
                         <span class="tab-label">공통</span>
                     </button>
@@ -65,8 +64,8 @@
                     </button>
                 </div>
 
-                <!-- Mobile Select Box -->
-                <div class="md:hidden w-full min-w-[140px]">
+                <!-- Mobile Select Box (Hidden as tabs are now universal) -->
+                <div class="hidden w-full min-w-[140px]">
                     <select id="mobile-tabs-select" class="filter-select select-mobile">
                         <option value="COMMON">공통</option>
                         <option value="IVMS">IVMS(버티포트 통합 관리 시스템)</option>

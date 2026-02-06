@@ -111,6 +111,10 @@ body {
   overflow: hidden;
 }
 
+.dashboard-main {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
 .app-screen-height {
   height: 100vh;
   height: 100dvh;
@@ -243,6 +247,7 @@ body {
   justify-content: center;
   position: relative;
   overflow-y: auto;
+  animation: fadeIn 0.4s ease-out forwards;
 }
 
 .auth-page-scroll {
@@ -267,6 +272,7 @@ body {
   padding-top: 5rem;
   /* py-20 */
   padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+  animation: fadeIn 0.4s ease-out forwards;
 
 }
 
@@ -519,6 +525,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   width: 100%;
+  animation: fadeIn 0.4s ease-out forwards;
 }
 
 /* Background Decoration */
@@ -721,7 +728,8 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 4px;
   padding: 1rem;
-  margin-bottom: 1rem;
+  margin: 0 0.5rem 1rem 0.5rem;
+  /* mx-2 mb-4 equivalent */
   transition: all 0.2s;
 }
 
@@ -734,13 +742,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.75rem;
 }
 
 .system-perm-title {
   font-size: 0.8125rem;
   font-weight: 700;
-  color: var(--accent-teal);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .system-perm-controls {
@@ -857,7 +864,22 @@ input:-webkit-autofill:active {
 
 .clickable-row {
   cursor: pointer;
+  transition: all 0.2s;
 }
+
+.clickable-row.active {
+  background-color: rgba(51, 65, 85, 0.5);
+}
+
+.registration-form-panel {
+  margin-bottom: 24px;
+  padding: 1rem;
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  border-radius: 0.25rem;
+  background-color: rgba(30, 41, 59, 0.2);
+}
+
+
 
 .screen-id-link {
   color: var(--accent-teal);
@@ -1481,6 +1503,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
   border-color: rgba(71, 85, 105, 0.5);
   box-shadow: 0 0 12px rgba(71, 85, 105, 0.3);
+}
+
+/* Disabled State for all buttons */
+.btn-primary:disabled,
+.btn-danger:disabled,
+.btn-secondary:disabled,
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none;
 }
 
 /* Filter Buttons */
@@ -3296,4 +3329,65 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: not-allowed;
   pointer-events: none;
   filter: grayscale(0.5);
+}
+
+/* Semantic Classes for Role Definition Header */
+.pane-header-right {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.bulk-select-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-right: 1rem;
+}
+
+.bulk-select-group.hidden {
+  display: none !important;
+}
+
+.action-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.action-btn-group.hidden {
+  display: none !important;
+}
+
+/* Ensure hidden utility works if not already active from framework */
+.hidden {
+  display: none !important;
+}
+
+/* Dedicated Bulk Select Row */
+.bulk-select-row {
+  padding: 0.75rem 1.5rem;
+  /* Increased padding to match card indentation */
+  border-bottom: 1px dashed rgba(30, 41, 59, 0.5);
+  background: rgba(13, 18, 30, 0.95);
+  /* Using dark bg with slight opacity for sticky */
+  backdrop-filter: blur(4px);
+  display: flex !important;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  margin-bottom: 0.5rem;
+}
+
+.bulk-select-row.hidden {
+  display: none !important;
+}
+
+.bulk-select-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #2dd4bf;
+  /* text-teal-400 */
 }

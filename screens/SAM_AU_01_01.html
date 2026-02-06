@@ -38,7 +38,7 @@
                                     <i data-lucide="shield-check" class="status-card-icon text-success"></i>
                                     <span class="search-panel-title">권한 목록</span>
                                 </div>
-                                <button class="btn-sm btn-primary">
+                                <button id="btn-reg-start" class="btn-sm btn-primary" onclick="initRegistrationMode()">
                                     <i data-lucide="plus" class="trend-icon"></i> 권한 등록
                                 </button>
                             </div>
@@ -100,181 +100,246 @@
                                     <div class="search-panel-title-group">
                                         <i data-lucide="settings-2" class="status-card-icon text-success"></i>
                                         <span class="search-panel-title">시스템별 권한 관리 - <span id="selected-role-name"
-                                                class="text-teal-400"></span></span>
+                                                class="text-success"></span></span>
                                     </div>
-                                    <!-- View Mode Buttons -->
-                                    <div id="view-mode-buttons" style="display: flex; gap: 0.5rem;">
-                                        <button class="btn-sm btn-primary" onclick="enterEditMode()">
-                                            <i data-lucide="edit-3" class="trend-icon"></i> 수정
-                                        </button>
-                                        <button class="btn-sm btn-danger" onclick="showDeleteWarning()">
-                                            <i data-lucide="trash-2" class="trend-icon"></i> 삭제
-                                        </button>
+
+                                    <!-- Registration Mode Header (Hidden by default) -->
+                                    <div id="reg-header-group" class="hidden search-panel-title-group">
+                                        <i data-lucide="plus-circle" class="status-card-icon text-success"></i>
+                                        <span class="search-panel-title">권한 등록</span>
                                     </div>
-                                    <!-- Edit Mode Buttons -->
-                                    <div id="edit-mode-buttons" style="display: none; gap: 0.5rem;">
-                                        <button class="btn-sm btn-primary" onclick="saveChanges()">
-                                            <i data-lucide="save" class="trend-icon"></i> 저장
-                                        </button>
-                                        <button class="btn-sm btn-secondary" onclick="cancelEdit()">
-                                            <i data-lucide="x" class="trend-icon"></i> 취소
-                                        </button>
+
+
+
+                                    <!-- Buttons Group -->
+                                    <div class="pane-header-right">
+                                        <!-- View Mode Buttons -->
+                                        <div id="view-mode-buttons" class="action-btn-group">
+                                            <button class="btn-sm btn-primary" onclick="enterEditMode()">
+                                                <i data-lucide="edit-3" class="trend-icon"></i> 수정
+                                            </button>
+                                            <button class="btn-sm btn-danger" onclick="showDeleteWarning()">
+                                                <i data-lucide="trash-2" class="trend-icon"></i> 삭제
+                                            </button>
+                                        </div>
+                                        <!-- Edit Mode Buttons -->
+                                        <div id="edit-mode-buttons" class="action-btn-group hidden">
+                                            <button class="btn-sm btn-primary" onclick="saveChanges()">
+                                                <i data-lucide="save" class="trend-icon"></i> 저장
+                                            </button>
+                                            <button class="btn-sm btn-secondary" onclick="cancelEdit()">
+                                                <i data-lucide="x" class="trend-icon"></i> 취소
+                                            </button>
+                                        </div>
+                                        <!-- Registration Mode Buttons -->
+                                        <div id="reg-mode-buttons" class="action-btn-group hidden">
+                                            <button class="btn-sm btn-primary" onclick="saveRegistration()">
+                                                <i data-lucide="save" class="trend-icon"></i> 저장
+                                            </button>
+                                            <button class="btn-sm btn-secondary" onclick="cancelRegistration()">
+                                                <i data-lucide="x" class="trend-icon"></i> 취소
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="pane-content custom-scrollbar">
-                                    <div class="p-2">
-                                        <!-- IVMS -->
-                                        <div class="system-perm-card">
-                                            <div class="system-perm-header">
-                                                <span class="system-perm-title">IVMS (버티포트 통합 관리 시스템)</span>
+
+                                <!-- Content Area -->
+                                <div class="pane-content custom-scrollbar flex-1">
+                                    <!-- Registration Inputs (Hidden by default) -->
+                                    <div id="registration-form" class="registration-form-panel hidden">
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="form-label">권한 아이디 <span
+                                                        class="text-error">*</span></label>
+                                                <input type="text" id="reg-role-id" class="form-input"
+                                                    placeholder="예: ROLE_MANAGER">
+                                                <div id="error-reg-role-id" class="form-error hidden"></div>
+                                            </div>
+                                            <div>
+                                                <label class="form-label">권한 이름 <span
+                                                        class="text-error">*</span></label>
+                                                <input type="text" id="reg-role-name" class="form-input"
+                                                    placeholder="예: 매니저">
+                                                <div id="error-reg-role-name" class="form-error hidden"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Bulk Select Row (Hidden in View Mode) - STICKY INSIDE SCROLL AREA -->
+                                    <div id="bulk-select-controls" class="bulk-select-row hidden">
+                                        <span class="bulk-select-label">전체 선택</span>
+                                        <div class="system-perm-controls">
+                                            <label class="perm-checkbox-group">
+                                                <input type="checkbox" id="select-all-read"
+                                                    class="custom-checkbox form-checkbox"
+                                                    onchange="toggleAllPermissions('read')">
+                                                <span class="perm-checkbox-label">Read</span>
+                                            </label>
+                                            <label class="perm-checkbox-group">
+                                                <input type="checkbox" id="select-all-write"
+                                                    class="custom-checkbox form-checkbox"
+                                                    onchange="toggleAllPermissions('write')">
+                                                <span class="perm-checkbox-label">Write</span>
+                                            </label>
+                                            <label class="perm-checkbox-group">
+                                                <input type="checkbox" id="select-all-delete"
+                                                    class="custom-checkbox form-checkbox"
+                                                    onchange="toggleAllPermissions('delete')">
+                                                <span class="perm-checkbox-label">Delete</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- IVMS -->
+                                    <div class="system-perm-card">
+                                        <div class="system-perm-header">
+                                            <span class="system-perm-title">IVMS (버티포트 통합 관리 시스템)</span>
+                                            <div class="system-perm-controls">
+                                                <label class="perm-checkbox-group">
+                                                    <input type="checkbox" class="custom-checkbox form-checkbox"
+                                                        data-system="ivms" data-permission="read" disabled>
+                                                    <span class="perm-checkbox-label">Read</span>
+                                                </label>
+                                                <label class="perm-checkbox-group">
+                                                    <input type="checkbox" class="custom-checkbox form-checkbox"
+                                                        data-system="ivms" data-permission="write" disabled>
+                                                    <span class="perm-checkbox-label">Write</span>
+                                                </label>
+                                                <label class="perm-checkbox-group">
+                                                    <input type="checkbox" class="custom-checkbox form-checkbox"
+                                                        data-system="ivms" data-permission="delete" disabled>
+                                                    <span class="perm-checkbox-label">Delete</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- IFPS -->
+                                    <div class="system-perm-card">
+                                        <div class="system-perm-header">
+                                            <span class="system-perm-title">IFPS (통합 비행 계획 관리 시스템)</span>
+                                            <div class="system-perm-controls">
+                                                <label class="perm-checkbox-group">
+                                                    <input type="checkbox" class="custom-checkbox form-checkbox"
+                                                        data-system="ifps" data-permission="read" disabled>
+                                                    <span class="perm-checkbox-label">Read</span>
+                                                </label>
+                                                <label class="perm-checkbox-group">
+                                                    <input type="checkbox" class="custom-checkbox form-checkbox"
+                                                        data-system="ifps" data-permission="write" disabled>
+                                                    <span class="perm-checkbox-label">Write</span>
+                                                </label>
+                                                <label class="perm-checkbox-group">
+                                                    <input type="checkbox" class="custom-checkbox form-checkbox"
+                                                        data-system="ifps" data-permission="delete" disabled>
+                                                    <span class="perm-checkbox-label">Delete</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- IFRS -->
+                                    <div class="system-perm-card">
+                                        <div class="system-perm-header">
+                                            <span class="system-perm-title">IFRS (통합 운항 예약 시스템)</span>
+                                        </div>
+                                        <!-- IFRS Subsection: 운항사 전용 -->
+                                        <div class="system-perm-subsection">
+                                            <div class="system-perm-subheader">
+                                                <span class="system-perm-subtitle">운항사 전용</span>
                                                 <div class="system-perm-controls">
                                                     <label class="perm-checkbox-group">
                                                         <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="ivms" data-permission="read" disabled>
+                                                            data-system="ifrs-airline" data-permission="read" disabled>
                                                         <span class="perm-checkbox-label">Read</span>
                                                     </label>
                                                     <label class="perm-checkbox-group">
                                                         <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="ivms" data-permission="write" disabled>
+                                                            data-system="ifrs-airline" data-permission="write" disabled>
                                                         <span class="perm-checkbox-label">Write</span>
                                                     </label>
                                                     <label class="perm-checkbox-group">
                                                         <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="ivms" data-permission="delete" disabled>
+                                                            data-system="ifrs-airline" data-permission="delete"
+                                                            disabled>
                                                         <span class="perm-checkbox-label">Delete</span>
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <!-- IFPS -->
-                                        <div class="system-perm-card">
-                                            <div class="system-perm-header">
-                                                <span class="system-perm-title">IFPS (통합 비행 계획 관리 시스템)</span>
+                                        <!-- IFRS Subsection: 버티포트 전용 -->
+                                        <div class="system-perm-subsection">
+                                            <div class="system-perm-subheader">
+                                                <span class="system-perm-subtitle">버티포트 전용</span>
                                                 <div class="system-perm-controls">
                                                     <label class="perm-checkbox-group">
                                                         <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="ifps" data-permission="read" disabled>
+                                                            data-system="ifrs-vertiport" data-permission="read"
+                                                            disabled>
                                                         <span class="perm-checkbox-label">Read</span>
                                                     </label>
                                                     <label class="perm-checkbox-group">
                                                         <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="ifps" data-permission="write" disabled>
+                                                            data-system="ifrs-vertiport" data-permission="write"
+                                                            disabled>
                                                         <span class="perm-checkbox-label">Write</span>
                                                     </label>
                                                     <label class="perm-checkbox-group">
                                                         <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="ifps" data-permission="delete" disabled>
+                                                            data-system="ifrs-vertiport" data-permission="delete"
+                                                            disabled>
                                                         <span class="perm-checkbox-label">Delete</span>
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <!-- IFRS -->
-                                        <div class="system-perm-card">
-                                            <div class="system-perm-header">
-                                                <span class="system-perm-title">IFRS (통합 운항 예약 시스템)</span>
-                                            </div>
-                                            <!-- IFRS Subsection: 운항사 전용 -->
-                                            <div class="system-perm-subsection">
-                                                <div class="system-perm-subheader">
-                                                    <span class="system-perm-subtitle">운항사 전용</span>
-                                                    <div class="system-perm-controls">
-                                                        <label class="perm-checkbox-group">
-                                                            <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                                data-system="ifrs-airline" data-permission="read"
-                                                                disabled>
-                                                            <span class="perm-checkbox-label">Read</span>
-                                                        </label>
-                                                        <label class="perm-checkbox-group">
-                                                            <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                                data-system="ifrs-airline" data-permission="write"
-                                                                disabled>
-                                                            <span class="perm-checkbox-label">Write</span>
-                                                        </label>
-                                                        <label class="perm-checkbox-group">
-                                                            <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                                data-system="ifrs-airline" data-permission="delete"
-                                                                disabled>
-                                                            <span class="perm-checkbox-label">Delete</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- IFRS Subsection: 버티포트 전용 -->
-                                            <div class="system-perm-subsection">
-                                                <div class="system-perm-subheader">
-                                                    <span class="system-perm-subtitle">버티포트 전용</span>
-                                                    <div class="system-perm-controls">
-                                                        <label class="perm-checkbox-group">
-                                                            <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                                data-system="ifrs-vertiport" data-permission="read"
-                                                                disabled>
-                                                            <span class="perm-checkbox-label">Read</span>
-                                                        </label>
-                                                        <label class="perm-checkbox-group">
-                                                            <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                                data-system="ifrs-vertiport" data-permission="write"
-                                                                disabled>
-                                                            <span class="perm-checkbox-label">Write</span>
-                                                        </label>
-                                                        <label class="perm-checkbox-group">
-                                                            <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                                data-system="ifrs-vertiport" data-permission="delete"
-                                                                disabled>
-                                                            <span class="perm-checkbox-label">Delete</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
+                                    <!-- V-CDM -->
+                                    <div class="system-perm-card">
+                                        <div class="system-perm-header">
+                                            <span class="system-perm-title">V-CDM (협동적 의사 결정 지원 시스템)</span>
+                                            <div class="system-perm-controls">
+                                                <label class="perm-checkbox-group">
+                                                    <input type="checkbox" class="custom-checkbox form-checkbox"
+                                                        data-system="vcdm" data-permission="read" disabled>
+                                                    <span class="perm-checkbox-label">Read</span>
+                                                </label>
+                                                <label class="perm-checkbox-group">
+                                                    <input type="checkbox" class="custom-checkbox form-checkbox"
+                                                        data-system="vcdm" data-permission="write" disabled>
+                                                    <span class="perm-checkbox-label">Write</span>
+                                                </label>
+                                                <label class="perm-checkbox-group">
+                                                    <input type="checkbox" class="custom-checkbox form-checkbox"
+                                                        data-system="vcdm" data-permission="delete" disabled>
+                                                    <span class="perm-checkbox-label">Delete</span>
+                                                </label>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <!-- V-CDM -->
-                                        <div class="system-perm-card">
-                                            <div class="system-perm-header">
-                                                <span class="system-perm-title">V-CDM (협동적 의사 결정 지원 시스템)</span>
-                                                <div class="system-perm-controls">
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="vcdm" data-permission="read" disabled>
-                                                        <span class="perm-checkbox-label">Read</span>
-                                                    </label>
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="vcdm" data-permission="write" disabled>
-                                                        <span class="perm-checkbox-label">Write</span>
-                                                    </label>
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="vcdm" data-permission="delete" disabled>
-                                                        <span class="perm-checkbox-label">Delete</span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- SAMS -->
-                                        <div class="system-perm-card">
-                                            <div class="system-perm-header">
-                                                <span class="system-perm-title">SAMS (관리자 시스템)</span>
-                                                <div class="system-perm-controls">
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="sams" data-permission="read" disabled>
-                                                        <span class="perm-checkbox-label">Read</span>
-                                                    </label>
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="sams" data-permission="write" disabled>
-                                                        <span class="perm-checkbox-label">Write</span>
-                                                    </label>
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="sams" data-permission="delete" disabled>
-                                                        <span class="perm-checkbox-label">Delete</span>
-                                                    </label>
-                                                </div>
+                                    <!-- SAMS -->
+                                    <div class="system-perm-card">
+                                        <div class="system-perm-header">
+                                            <span class="system-perm-title">SAMS (관리자 시스템)</span>
+                                            <div class="system-perm-controls">
+                                                <label class="perm-checkbox-group">
+                                                    <input type="checkbox" class="custom-checkbox form-checkbox"
+                                                        data-system="sams" data-permission="read" disabled>
+                                                    <span class="perm-checkbox-label">Read</span>
+                                                </label>
+                                                <label class="perm-checkbox-group">
+                                                    <input type="checkbox" class="custom-checkbox form-checkbox"
+                                                        data-system="sams" data-permission="write" disabled>
+                                                    <span class="perm-checkbox-label">Write</span>
+                                                </label>
+                                                <label class="perm-checkbox-group">
+                                                    <input type="checkbox" class="custom-checkbox form-checkbox"
+                                                        data-system="sams" data-permission="delete" disabled>
+                                                    <span class="perm-checkbox-label">Delete</span>
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -305,6 +370,35 @@
             <!-- Button -->
             <div class="modal-btn-group">
                 <button onclick="closeDeleteWarning()" class="btn-modal-warning">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-icon info">
+                <i data-lucide="help-circle" width="64" height="64" class="text-icon-info"></i>
+            </div>
+            <h3 class="modal-title">권한 등록</h3>
+            <p class="modal-desc">입력하신 정보로 권한을 등록하시겠습니까?</p>
+            <div class="modal-btn-group">
+                <button onclick="closeConfirmModal()" class="btn-flex btn-modal-secondary">취소</button>
+                <button onclick="processRegistration()" class="btn-flex btn-modal-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-icon success">
+                <i data-lucide="check-circle-2" width="64" height="64" class="text-icon-success"></i>
+            </div>
+            <h3 class="modal-title">등록 완료</h3>
+            <p class="modal-desc">권한 등록이 완료되었습니다.</p>
+            <div class="modal-btn-group">
+                <button onclick="closeSuccessModal()" class="btn-modal-success">확인</button>
             </div>
         </div>
     </div>

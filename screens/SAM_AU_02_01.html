@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMS - Role Assignment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="dashboard-body app-screen-height" data-system-acronym="SAMS" data-page-title="역할 배정">
+    <!-- Header (Fixed Top) -->
+    <div data-include="../components/header.html"></div>
+
+    <!-- Main Flex Container (Sidebar + Content) -->
+    <div class="dashboard-main-flex">
+
+        <!-- Sidebar -->
+        <div data-include="../components/sidebar.html"></div>
+
+        <!-- Main Content (Pushed by Sidebar) -->
+        <main class="dashboard-main" id="main-content">
+
+            <!-- Content Scroll Area -->
+            <div class="dashboard-content dashboard-content-full custom-scrollbar">
+                <div class="dashboard-container dashboard-container-full">
+
+                    <!-- Split Pane Container -->
+                    <div class="split-container">
+
+                        <!-- Left Pane: Role List -->
+                        <div class="split-pane-left">
+                            <div class="pane-header">
+                                <div class="search-panel-title-group">
+                                    <i data-lucide="shield-check" class="status-card-icon text-success"></i>
+                                    <span class="search-panel-title">권한 목록</span>
+                                </div>
+                                <!-- Registration button removed as per requirements -->
+                            </div>
+                            <div class="pane-content custom-scrollbar">
+                                <div class="table-container">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>권한 아이디</th>
+                                                <th>권한 이름</th>
+                                                <th class="text-center">생성 일시</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="role-list-body">
+                                            <!-- Initial data or JS rendered items -->
+                                            <tr class="data-table-row clickable-row" data-role-id="ROLE_TOTAL_ADMIN">
+                                                <td>ROLE_TOTAL_ADMIN</td>
+                                                <td>통합 관리자</td>
+                                                <td class="td-date text-center">2026.01.20 14:30</td>
+                                            </tr>
+                                            <tr class="data-table-row clickable-row" data-role-id="ROLE_TOTAL_OPERATOR">
+                                                <td>ROLE_TOTAL_OPERATOR</td>
+                                                <td>통합 운용자</td>
+                                                <td class="td-date text-center">2026.01.20 09:15</td>
+                                            </tr>
+                                            <tr class="data-table-row clickable-row" data-role-id="ROLE_VCDM_OPERATOR">
+                                                <td>ROLE_VCDM_OPERATOR</td>
+                                                <td>VCDM 운용자</td>
+                                                <td class="td-date text-center">2026.01.21 16:45</td>
+                                            </tr>
+                                            <tr class="data-table-row clickable-row" data-role-id="ROLE_AIRLINE">
+                                                <td>ROLE_AIRLINE</td>
+                                                <td>항공사</td>
+                                                <td class="td-date text-center">2026.01.21 11:20</td>
+                                            </tr>
+                                            <tr class="data-table-row clickable-row"
+                                                data-role-id="ROLE_VERTIPORT_OPERATOR">
+                                                <td>ROLE_VERTIPORT_OPERATOR</td>
+                                                <td>버티포트운용자</td>
+                                                <td class="td-date text-center">2026.01.22 13:00</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Pane: User Assignment -->
+                        <div class="split-pane-right" id="detail-pane">
+                            <!-- Empty State -->
+                            <div id="empty-state" class="empty-state">
+                                <i data-lucide="users" class="empty-state-icon"></i>
+                                <p class="empty-state-text">좌측 목록에서 권한을 선택하여<br>배정된 사용자를 확인하세요.</p>
+                            </div>
+
+                            <!-- Detail Content (Hidden initially) -->
+                            <div id="detail-content" class="hidden h-full flex flex-col">
+                                <div class="pane-header">
+                                    <div class="search-panel-title-group">
+                                        <i data-lucide="user-check" class="status-card-icon text-success"></i>
+                                        <span class="search-panel-title">권한 별 사용자 배정 목록 - <span id="selected-role-name"
+                                                class="text-success"></span></span>
+                                    </div>
+
+                                    <!-- Buttons Group -->
+                                    <div class="pane-header-right">
+                                        <div class="action-btn-group">
+                                            <button id="btn-change-role" class="btn-sm btn-primary"
+                                                onclick="changeRoleModal()" disabled>
+                                                <i data-lucide="edit" class="trend-icon"></i> 권한 변경
+                                            </button>
+                                            <button class="btn-sm btn-primary" onclick="assignUserModal()">
+                                                <i data-lucide="user-plus" class="trend-icon"></i> 사용자 추가 배정
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- User Table Content -->
+                                <div class="pane-content custom-scrollbar flex-1 flex flex-col">
+                                    <div class="table-container flex-1">
+                                        <table class="data-table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="w-10 text-center">
+                                                        <label class="perm-checkbox-group justify-center">
+                                                            <input type="checkbox" id="user-select-all"
+                                                                class="custom-checkbox form-checkbox">
+                                                        </label>
+                                                    </th>
+                                                    <th>아이디</th>
+                                                    <th>이름</th>
+                                                    <th>소속</th>
+                                                    <th>이메일</th>
+                                                    <th>휴대폰 번호</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="user-list-body">
+                                                <!-- JS Rendered -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <!-- Pagination Footer -->
+                                    <div class="table-footer flex-none mt-auto pt-4 border-t border-slate-700/50">
+                                        <span class="pagination-info">총 <span id="total-user-count">0</span> 명</span>
+                                        <div class="pagination-controls">
+                                            <button class="page-btn active">1</button>
+                                            <button class="page-btn">2</button>
+                                            <button class="page-btn"><i data-lucide="chevron-right"
+                                                    class="pagination-icon"></i></button>
+                                            <select class="pagination-select pagination-select-margin">
+                                                <option>20개씩 보기</option>
+                                                <option>50개씩 보기</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div> <!-- End of split-container -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- System Switcher Modal -->
+    <div data-include="../components/system-switcher.html"></div>
+
+    <!-- Delete Warning Modal (Placeholder for now logic) -->
+
+    <script src="../js/include.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/SAM_AU_02_01.js"></script>
+</body>
+
+</html>

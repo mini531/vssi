@@ -52,7 +52,7 @@ const screenData = {
         { category: "메인 메뉴", menu1: "사용자 관리", menu2: "-", id: "SAM_US_01_03", name: "사용자 계정 수정", type: "일반", date: "2026년", remarks: "" },
         { category: "메인 메뉴", menu1: "사용자 관리", menu2: "-", id: "SAM_US_02_01", name: "사용자 계정 등록 이메일", type: "이메일", date: "2027년", remarks: "사용자 계정 등록 후 안내하는 이메일" },
         { category: "메인 메뉴", menu1: "권한/보안", menu2: "역할 정의", id: "SAM_AU_01_01", name: "역할 그룹 관리", type: "일반", date: "2026년", remarks: "좌측: 역할 목록 / 우측: 메뉴 트리(R/W 권한) | 슈퍼바이저, 운용자 등 역할(Role) ID/명칭 정의" },
-        { category: "메인 메뉴", menu1: "권한/보안", menu2: "역할 정의", id: "SAM_AU_01_02", name: "역할 그룹 등록", type: "모달", date: "2026년", remarks: "" },
+        { category: "메인 메뉴", menu1: "권한/보안", menu2: "역할 정의", id: "SAM_AU_01_02", name: "역할 그룹 등록 (SAM_AU_01_01에 포함)", type: "모달", date: "2026년", remarks: "" },
         { category: "메인 메뉴", menu1: "권한/보안", menu2: "역할 배정", id: "SAM_AU_02_01", name: "역할 배정", type: "일반", date: "2026년", remarks: "좌측: 역할 / 우측: 사용자 매핑" },
         { category: "메인 메뉴", menu1: "권한/보안", menu2: "보안 정책 설정", id: "SAM_AU_03_01", name: "보안 정책 설정", type: "일반", date: "2026년", remarks: "세션 타임아웃 시간, 중복 로그인 허용 여부, 다중 로그인 허용 여부" },
         { category: "메인 메뉴", menu1: "로그 조회", menu2: "시스템 로그", id: "SAM_LG_01_01", name: "시스템 로그", type: "일반", date: "2026년", remarks: "시스템 로그 조회, 다운로드" },

@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'COM_CM_01_01',
         'COM_CM_01_02',
         'COM_IT_01_01',
-        'SAM_AS_10_01'
+        'SAM_AS_10_01',
+        'SAM_AU_01_01'
     ];
 
     function init() {
@@ -96,9 +97,16 @@ document.addEventListener('DOMContentLoaded', () => {
             tr.style.animationDelay = `${index * 0.05}s`;
 
             const isImplemented = implementedScreens.includes(item.id);
-            const idHtml = isImplemented
-                ? `<span class="text-sm font-bold text-teal-400 hover:text-teal-300 cursor-pointer underline underline-offset-4 decoration-teal-500/30" onclick="openScreen('${item.id}')">${item.id}</span>`
-                : `<span class="text-sm font-bold text-slate-600 cursor-not-allowed" title="Not Implemented">${item.id}</span>`;
+            let idHtml = '';
+
+            if (isImplemented) {
+                idHtml = `<span class="text-sm font-bold text-teal-400 hover:text-teal-300 cursor-pointer underline underline-offset-4 decoration-teal-500/30" onclick="openScreen('${item.id}')">${item.id}</span>`;
+            } else if (item.id === 'SAM_AU_01_02') {
+                // Special case for Included Modal - Primary Color but not a link
+                idHtml = `<span class="text-sm font-bold text-teal-400 opacity-80">${item.id}</span>`;
+            } else {
+                idHtml = `<span class="text-sm font-bold text-slate-600 cursor-not-allowed" title="Not Implemented">${item.id}</span>`;
+            }
 
             // Grouping Logic: Dim text if same as previous row
             const categoryChanged = item.category !== prevCategory;
