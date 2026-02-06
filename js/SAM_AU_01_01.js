@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
             emptyState.classList.add('hidden');
             detailContent.classList.remove('hidden');
 
+            // Open Detail Pane (Mobile)
+            openDetailPane();
+
             // Force Disable Checkboxes (Bug Fix)
             const checkboxes = detailContent.querySelectorAll('input[type="checkbox"]');
             checkboxes.forEach(cb => cb.disabled = true);
@@ -64,30 +67,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Role-based permission patterns
         switch (roleId) {
-            case 'ROLE_TOTAL_ADMIN':
+            case 'role_total':
                 // 통합 관리자: All permissions
                 checkboxes.forEach(cb => cb.checked = true);
                 break;
 
-            case 'ROLE_TOTAL_OPERATOR':
+            case 'role_operator':
                 // 통합 운용자: IVMS, IFPS, SAMS write access
                 setPermissions('ivms', ['read', 'write']);
                 setPermissions('ifps', ['read', 'write']);
                 setPermissions('sams', ['read', 'write']);
                 break;
 
-            case 'ROLE_VCDM_OPERATOR':
+            case 'role_vcdm':
                 // VCDM 운용자: V-CDM write access only
                 setPermissions('vcdm', ['read', 'write']);
                 break;
 
-            case 'ROLE_AIRLINE':
+            case 'role_airline':
                 // 항공사: IFRS 운항사 전용 write access only
                 setPermissions('ifrs-airline', ['read', 'write']);
                 break;
 
-            case 'ROLE_VERTIPORT_OPERATOR':
-                // 버티포트운용자: IFRS 버티포트 전용 write access only
+            case 'role_vertiport':
+                // 버티포트 운용자: IFRS 버티포트 전용 write access only
                 setPermissions('ifrs-vertiport', ['read', 'write']);
                 break;
         }
@@ -109,12 +112,32 @@ function enterEditMode() {
     document.getElementById('view-mode-buttons').classList.add('hidden');
     document.getElementById('edit-mode-buttons').classList.remove('hidden');
 
-    // Show Bulk Select
+    // Show Registration Form Inputs (reused for Edit)
+    document.getElementById('registration-form').classList.remove('hidden');
+
+    // Show Bulk Select Controls
     document.getElementById('bulk-select-controls').classList.remove('hidden');
-    // Reset bulk select checkboxes
-    document.getElementById('select-all-read').checked = false;
-    document.getElementById('select-all-write').checked = false;
-    document.getElementById('select-all-delete').checked = false;
+
+    // Clear any previous validation errors
+    clearValidationErrors();
+
+    // Populate Inputs
+    const roleId = document.querySelector('.clickable-row.active').dataset.roleId;
+    const roleName = document.querySelector('.clickable-row.active').cells[1].textContent;
+
+    const idInput = document.getElementById('reg-role-id');
+    const nameInput = document.getElementById('reg-role-name');
+
+    idInput.value = roleId;
+    nameInput.value = roleName;
+
+    // Set Read-only/Disabled states
+    idInput.disabled = true; // ID is not editable
+    nameInput.disabled = false;
+    nameInput.focus();
+
+    // Hide required asterisk for ID in edit mode
+    document.getElementById('reg-role-id-required').classList.add('hidden');
 
     // Enable all checkboxes
     const checkboxes = document.querySelectorAll('#detail-content input[type="checkbox"]');
@@ -127,6 +150,21 @@ function enterEditMode() {
 }
 
 function saveChanges() {
+    const nameInput = document.getElementById('reg-role-name');
+    const nameError = document.getElementById('error-reg-role-name');
+
+    // Validate Name
+    if (!nameInput.value.trim()) {
+        nameError.textContent = '권한 이름을 입력해 주세요.';
+        nameError.classList.remove('hidden');
+        nameInput.classList.add('error');
+        nameInput.focus();
+        return;
+    } else {
+        nameError.classList.add('hidden');
+        nameInput.classList.remove('error');
+    }
+
     // Here you would normally save the changes via API
     console.log('Saving changes...');
 
@@ -146,8 +184,15 @@ function exitEditMode() {
     document.getElementById('view-mode-buttons').classList.remove('hidden');
     document.getElementById('edit-mode-buttons').classList.add('hidden');
 
-    // Hide Bulk Select
+    // Hide Inputs
+    document.getElementById('registration-form').classList.add('hidden');
+
+    // Hide Bulk Select Controls
     document.getElementById('bulk-select-controls').classList.add('hidden');
+
+    // Reset Input Styles (in case they were modified for edit mode)
+    const idInput = document.getElementById('reg-role-id');
+    idInput.disabled = false;
 
     // Disable all checkboxes
     const checkboxes = document.querySelectorAll('#detail-content input[type="checkbox"]');
@@ -185,8 +230,22 @@ function initRegistrationMode() {
     document.getElementById('registration-form').classList.remove('hidden');
 
     // Clear Inputs
-    document.getElementById('reg-role-id').value = '';
-    document.getElementById('reg-role-name').value = '';
+    const idInput = document.getElementById('reg-role-id');
+    const nameInput = document.getElementById('reg-role-name');
+
+    idInput.value = '';
+    nameInput.value = '';
+
+    // Clear any previous validation errors (critical for switching modes)
+    clearValidationErrors();
+
+    // Ensure inputs are enabled and standard style (resetting from potential Edit Mode)
+    idInput.disabled = false;
+    nameInput.disabled = false;
+
+    // Show required asterisk for ID in registration mode
+    document.getElementById('reg-role-id-required').classList.remove('hidden');
+
     document.getElementById('error-reg-role-id').classList.add('hidden');
     document.getElementById('error-reg-role-name').classList.add('hidden');
 
@@ -213,6 +272,9 @@ function cancelRegistration() {
     const detailTitleGroup = document.getElementById('detail-content').querySelector('.search-panel-title-group');
     if (detailTitleGroup) detailTitleGroup.classList.remove('hidden');
     document.getElementById('reg-header-group').classList.add('hidden');
+
+    // Close Detail Pane (Mobile) - return to list if cancelling from mobile reg
+    closeDetailPane();
 
     // Hide Bulk Select
     document.getElementById('bulk-select-controls').classList.add('hidden');
@@ -322,3 +384,31 @@ function updateBulkSelectState(type) {
     // Optional: If some are checked, could use indeterminate state
     // selectAllCb.indeterminate = !allChecked && enabledCheckboxes.some(cb => cb.checked);
 }
+
+function clearValidationErrors() {
+    const idInput = document.getElementById('reg-role-id');
+    const nameInput = document.getElementById('reg-role-name');
+    const idError = document.getElementById('error-reg-role-id');
+    const nameError = document.getElementById('error-reg-role-name');
+
+    // Remove error classes
+    idInput.classList.remove('error');
+    nameInput.classList.remove('error');
+
+    // Hide error messages
+    idError.classList.add('hidden');
+    nameError.classList.add('hidden');
+}
+
+// Mobile Split Pane Functions
+function openDetailPane() {
+    document.querySelector('.split-container').classList.add('show-detail');
+}
+
+function closeDetailPane() {
+    document.querySelector('.split-container').classList.remove('show-detail');
+}
+
+// Ensure globally available
+window.closeDetailPane = closeDetailPane;
+window.openDetailPane = openDetailPane;
