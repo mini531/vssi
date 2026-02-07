@@ -1102,6 +1102,7 @@ html {
 
 @media (max-width: 767px) {
   .system-perm-subheader {
+    padding-left: 1rem;
     gap: 0.5rem;
   }
 
