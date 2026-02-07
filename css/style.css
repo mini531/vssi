@@ -2858,6 +2858,41 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
 }
 
+/* Standard Modal Header (Wide Modals) */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  /* mb-6 */
+  padding-bottom: 1rem;
+  /* pb-4 */
+  border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+  /* border-slate-800/50 */
+}
+
+.modal-title-left {
+  font-size: 1.25rem;
+  /* text-xl */
+  font-weight: 700;
+  color: white;
+  text-align: left;
+}
+
+.close-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #94a3b8;
+  /* slate-400 */
+  cursor: pointer;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+
+.close-icon:hover {
+  color: white;
+}
+
 .modal-title {
   font-size: 1.25rem;
   /* text-xl */

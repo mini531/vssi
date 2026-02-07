@@ -195,7 +195,10 @@
     <!-- Change Role Modal -->
     <div id="change-role-modal" class="modal-overlay">
         <div class="modal-dialog modal-wide">
-            <h3 class="modal-title">권한 변경</h3>
+            <div class="modal-header">
+                <h3 class="modal-title-left">권한 변경</h3>
+                <i data-lucide="x" class="close-icon" onclick="closeChangeRoleModal()"></i>
+            </div>
 
             <!-- Default Content -->
             <div class="modal-content">
@@ -247,8 +250,8 @@
             <div class="modal-icon success">
                 <i data-lucide="check-circle" width="64" height="64" class="text-icon-success"></i>
             </div>
-            <h3 class="modal-title">변경 완료</h3>
-            <p class="modal-desc">권한이 성공적으로 변경되었습니다.</p>
+            <h3 class="modal-title" id="success-modal-title">완료</h3>
+            <p class="modal-desc" id="success-modal-desc">작업이 성공적으로 완료되었습니다.</p>
             <div class="modal-btn-group">
                 <button onclick="closeSuccessModal()" class="btn-primary">확인</button>
             </div>
@@ -258,7 +261,10 @@
     <!-- Assign User Modal -->
     <div id="assign-user-modal" class="modal-overlay">
         <div class="modal-dialog modal-wide">
-            <h3 class="modal-title">사용자 추가 배정</h3>
+            <div class="modal-header">
+                <h3 class="modal-title-left">사용자 추가 배정</h3>
+                <i data-lucide="x" class="close-icon" onclick="closeAssignModal()"></i>
+            </div>
             <div class="mb-standard">
                 <h4 class="modal-section-title">권한</h4>
                 <div class="info">

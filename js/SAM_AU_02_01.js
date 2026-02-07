@@ -255,6 +255,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Show Success Modal
         setTimeout(() => {
+            document.getElementById('success-modal-title').innerText = '변경 완료';
+            document.getElementById('success-modal-desc').innerText = '권한이 성공적으로 변경되었습니다.';
             document.getElementById('success-modal').classList.add('active');
         }, 200);
     }
@@ -262,6 +264,10 @@ document.addEventListener('DOMContentLoaded', () => {
     window.closeSuccessModal = function () {
         document.getElementById('success-modal').classList.remove('active');
         // Ideally reload or refresh list
+    }
+
+    window.closeAssignModal = function () {
+        document.getElementById('assign-user-modal').classList.remove('active');
     }
 
     // --- Assign User Modal Logic ---
@@ -436,6 +442,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // For now, just close and show success
         closeAssignUserModal();
         setTimeout(() => {
+            const roleName = document.getElementById('assign-modal-role-name').innerText;
+            document.getElementById('success-modal-title').innerText = '배정 완료';
+            document.getElementById('success-modal-desc').innerText = `${roleName} 권한에 사용자 추가 배정이 완료되었습니다.`;
             document.getElementById('success-modal').classList.add('active');
         }, 200);
     };
