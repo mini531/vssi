@@ -95,3 +95,19 @@ You are an expert AI developer working on the VSSI project. You MUST strictly ad
 
 ## 5. Deployment
 *   Commit prefix: "Refactor:", "Feat:", "Fix:".
+
+## 6. CRITICAL CSS RULES (MUST READ - VIOLATION PROHIBITED)
+
+1.  **NO DUPLICATES**: Before adding ANY new class to `style.css`, you **MUST** search the ENTIRE file to see if it exists.
+    *   *Example*: Do not add `.search-panel-header` if it already exists. Remove duplicates immediately if found.
+2.  **REUSE EXISTING CLASSES**: Use project-standard classes whenever possible. Do not create new classes if a similar one exists.
+    *   *Examples*: Use `.modal-section-title` for all modal titles. Use `.search-panel` for all search containers.
+3.  **GENERIC SEMANTIC NAMING**: If you must create a new class, name it for **reusability**, not specific context.
+    *   *Bad*: `.role-info-text`, `.assign-user-btn-group`
+    *   *Good*: `.info-text` (white/bold), `.info-description` (dim/slate-500), `.info` (flex container)
+4.  **NO INLINE UTILITY SOUP**: Do not rely on long strings of Tailwind/utility classes in HTML for common elements. Abstract them into a standard semantic class in `style.css`.
+    *   *Bad*: `<span class="text-white font-bold ml-2 text-sm">`
+    *   *Good*: `<span class="info-text">`
+5.  **LAYOUT ABSTRACTION**: Use generic layout classes for grouping.
+    *   *Example*: Use `.info` (flex gap-2 items-center) for grouping text/labels. Do NOT use button-specific classes like `.action-btn-group` for text layout.
+6.  **CHECK WHITE-SPACE**: When checking layout issues (spacing), always verify if `white-space: pre-line` is causing unwanted indentation rendering. Use margin utilities (`.mb-standard`) instead of container padding if content is text-heavy.

@@ -264,4 +264,190 @@ document.addEventListener('DOMContentLoaded', () => {
         // Ideally reload or refresh list
     }
 
+    // --- Assign User Modal Logic ---
+
+    // Mock Unassigned Users Data
+    const unassignedUsers = Array.from({ length: 35 }, (_, i) => ({
+        id: `user_new_${i + 1}`,
+        name: `신규사용자${i + 1}`,
+        dept: i % 3 === 0 ? '개발팀' : (i % 3 === 1 ? '운영팀' : '기획팀')
+    }));
+
+    let currentUnassignedUsers = [...unassignedUsers];
+
+    window.assignUserModal = function () {
+        const modal = document.getElementById('assign-user-modal');
+        const selectedRoleNameElem = document.getElementById('selected-role-name');
+
+        if (!selectedRoleNameElem || !selectedRoleNameElem.innerText) {
+            console.warn('Role not selected');
+            return;
+        }
+
+        const roleName = selectedRoleNameElem.innerText;
+
+        // Set Role Info
+        document.getElementById('assign-modal-role-name').innerText = roleName;
+        // Use currentRoleId for display
+        const roleId = currentRoleId || 'role_unknown';
+        document.getElementById('assign-modal-role-id').innerText = `(${roleId})`;
+
+        // Reset Filter
+        resetAssignFilter();
+
+        // Render List
+        renderUnassignedUserList(unassignedUsers);
+
+        modal.classList.add('active');
+    };
+
+    window.closeAssignUserModal = function () {
+        document.getElementById('assign-user-modal').classList.remove('active');
+    };
+
+    function renderUnassignedUserList(users) {
+        const tbody = document.getElementById('assign-user-list-body');
+        tbody.innerHTML = '';
+
+        if (users.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center py-8 text-slate-500">검색된 사용자가 없습니다.</td></tr>';
+            updateAssignModalCount();
+            return;
+        }
+
+        users.forEach(user => {
+            const tr = document.createElement('tr');
+            tr.className = 'data-table-row clickable-row';
+            tr.onclick = (e) => {
+                if (e.target.type !== 'checkbox') {
+                    const checkbox = tr.querySelector('.assign-user-checkbox');
+                    checkbox.checked = !checkbox.checked;
+                    updateAssignModalCount();
+                }
+            };
+
+            tr.innerHTML = `
+                <td class="text-center">
+                    <label class="perm-checkbox-group justify-center">
+                        <input type="checkbox" class="custom-checkbox form-checkbox assign-user-checkbox" value="${user.id}">
+                    </label>
+                </td>
+                <td>${user.id}</td>
+                <td>${user.name}</td>
+                <td>${user.dept}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // Add checkbox listener for count update
+        const checkboxes = tbody.querySelectorAll('.assign-user-checkbox');
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', updateAssignModalCount);
+        });
+
+        updateAssignModalCount();
+    }
+
+    // Filter Logic
+    window.toggleAssignModalFilter = function () {
+        const content = document.getElementById('assign-filter-content');
+        const chevron = document.getElementById('assign-filter-chevron');
+        content.classList.toggle('hidden');
+        if (content.classList.contains('hidden')) {
+            chevron.style.transform = 'rotate(0deg)';
+        } else {
+            chevron.style.transform = 'rotate(180deg)';
+        }
+    };
+
+    window.applyAssignFilter = function () {
+        const typeVal = document.getElementById('filter-assign-type').value;
+        const keywordVal = document.getElementById('filter-assign-keyword').value.toLowerCase();
+
+        currentUnassignedUsers = unassignedUsers.filter(user => {
+            if (!keywordVal) return true; // No keyword = show all
+
+            if (typeVal === 'id') {
+                return user.id.toLowerCase().includes(keywordVal);
+            } else if (typeVal === 'name') {
+                return user.name.toLowerCase().includes(keywordVal);
+            } else if (typeVal === 'dept') {
+                return user.dept.toLowerCase().includes(keywordVal);
+            } else {
+                // 'all' or empty type selected: search all fields
+                return user.id.toLowerCase().includes(keywordVal) ||
+                    user.name.toLowerCase().includes(keywordVal) ||
+                    user.dept.toLowerCase().includes(keywordVal);
+            }
+        });
+
+        renderUnassignedUserList(currentUnassignedUsers);
+    };
+
+    window.resetAssignFilter = function () {
+        document.getElementById('filter-assign-type').value = '';
+        document.getElementById('filter-assign-keyword').value = '';
+        document.getElementById('filter-assign-keyword').placeholder = '키워드 입력'; // Reset placeholder
+        currentUnassignedUsers = [...unassignedUsers];
+        renderUnassignedUserList(currentUnassignedUsers);
+    };
+
+    // Filter Placeholder Logic
+    const filterTypeSelect = document.getElementById('filter-assign-type');
+    const filterKeywordInput = document.getElementById('filter-assign-keyword');
+
+    if (filterTypeSelect && filterKeywordInput) {
+        filterTypeSelect.addEventListener('change', function () {
+            const type = this.value;
+            if (type === 'id') {
+                filterKeywordInput.placeholder = '아이디 입력';
+            } else if (type === 'name') {
+                filterKeywordInput.placeholder = '이름 입력';
+            } else if (type === 'dept') {
+                filterKeywordInput.placeholder = '소속 입력';
+            } else {
+                filterKeywordInput.placeholder = '키워드 입력';
+            }
+        });
+    }
+
+    // Selection & Save
+    function updateAssignModalCount() {
+        const total = currentUnassignedUsers.length;
+        const selected = document.querySelectorAll('.assign-user-checkbox:checked').length;
+
+        document.getElementById('assign-modal-total-count').innerText = total;
+        document.getElementById('assign-modal-selected-count').innerText = selected;
+
+        document.getElementById('btn-save-assign').disabled = selected === 0;
+
+        // Update Select All Checkbox State
+        const selectAllCb = document.getElementById('assign-user-select-all');
+        const allCheckboxes = document.querySelectorAll('.assign-user-checkbox');
+        if (allCheckboxes.length > 0) {
+            selectAllCb.checked = selected === allCheckboxes.length;
+        } else {
+            selectAllCb.checked = false;
+        }
+    }
+
+    window.saveAssignUser = function () {
+        // In a real app, this would send an API request
+        // For now, just close and show success
+        closeAssignUserModal();
+        setTimeout(() => {
+            document.getElementById('success-modal').classList.add('active');
+        }, 200);
+    };
+
+    // Select All Listener
+    const selectAllCb = document.getElementById('assign-user-select-all');
+    if (selectAllCb) {
+        selectAllCb.addEventListener('change', (e) => {
+            const checkboxes = document.querySelectorAll('.assign-user-checkbox');
+            checkboxes.forEach(cb => cb.checked = e.target.checked);
+            updateAssignModalCount();
+        });
+    }
+
 });

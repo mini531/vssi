@@ -255,6 +255,104 @@
         </div>
     </div>
 
+    <!-- Assign User Modal -->
+    <div id="assign-user-modal" class="modal-overlay">
+        <div class="modal-dialog modal-wide">
+            <h3 class="modal-title">사용자 추가 배정</h3>
+            <div class="mb-standard">
+                <h4 class="modal-section-title">권한</h4>
+                <div class="info">
+                    <span id="assign-modal-role-name" class="info-text"></span>
+                    <span id="assign-modal-role-id" class="info-description"></span>
+                </div>
+            </div>
+            <!-- MOVED: Unassigned User List Title -->
+            <h4 class="modal-section-title">배정할 사용자 선택</h4>
+            <div class="modal-content modal-content-stack">
+
+
+
+
+                <!-- Search Filter (Collapsed by default) -->
+                <div class="search-panel flex-none">
+                    <div class="search-panel-header" onclick="toggleAssignModalFilter()">
+                        <div class="search-panel-title-group">
+                            <i data-lucide="filter" class="status-card-icon text-success"></i>
+                            <span class="search-panel-title">검색 필터</span>
+                        </div>
+                        <i data-lucide="chevron-down" id="assign-filter-chevron" class="filter-chevron"></i>
+                    </div>
+
+                    <div id="assign-filter-content" class="search-panel-content hidden">
+                        <div class="filter-panel-inner">
+                            <div class="filter-grid">
+                                <div>
+                                    <label class="filter-label">키워드</label>
+                                    <div class="filter-grid">
+                                        <select id="filter-assign-type" class="filter-select">
+                                            <option value="">선택</option>
+                                            <option value="id">아이디</option>
+                                            <option value="name">이름</option>
+                                            <option value="dept">소속</option>
+                                        </select>
+                                        <input type="text" id="filter-assign-keyword" class="filter-input"
+                                            placeholder="키워드 입력">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="filter-actions">
+                                <button class="filter-btn-common filter-btn-reset" onclick="resetAssignFilter()">
+                                    <i data-lucide="rotate-ccw" class="trend-icon"></i> 초기화
+                                </button>
+                                <button class="filter-btn-common filter-btn-search" onclick="applyAssignFilter()">
+                                    <i data-lucide="search" class="trend-icon"></i> 조회
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Unassigned User List -->
+                <div>
+
+                    <div class="table-container modal-table-scroll custom-scrollbar">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th class="w-10 text-center">
+                                        <label class="perm-checkbox-group justify-center">
+                                            <input type="checkbox" id="assign-user-select-all"
+                                                class="custom-checkbox form-checkbox">
+                                        </label>
+                                    </th>
+                                    <th>아이디</th>
+                                    <th>이름</th>
+                                    <th>소속</th>
+                                </tr>
+                            </thead>
+                            <tbody id="assign-user-list-body" class="data-table-body">
+                                <!-- JS Populated -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Added Count Info -->
+                    <div class="table-footer flex-none">
+                        <span class="pagination-info">선택 <span id="assign-modal-selected-count"
+                                class="text-teal-400">0</span> 명 / 총 <span id="assign-modal-total-count">0</span>
+                            명</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Buttons -->
+            <div class="modal-btn-group">
+                <button onclick="closeAssignUserModal()" class="btn-secondary">취소</button>
+                <button id="btn-save-assign" onclick="saveAssignUser()" class="btn-primary" disabled>저장</button>
+            </div>
+        </div>
+    </div>
+
     <script src="../js/include.js"></script>
     <script src="../js/common.js"></script>
     <script src="../js/SAM_AU_02_01.js"></script>
