@@ -132,6 +132,43 @@ html {
   height: 100dvh;
 }
 
+/* =========================
+   Custom Scrollbar (Global)
+   ========================= */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.6);
+}
+
+/* ================================
+   Settings Form Grid (Responsive)
+   ================================ */
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .settings-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 /* Scrollbar Customization - Default */
 ::-webkit-scrollbar {
   width: 8px;

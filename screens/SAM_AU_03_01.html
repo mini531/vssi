@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMS - Security Policy Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="dashboard-body app-screen-height" data-system-acronym="SAMS" data-page-title="보안 정책 설정">
+    <!-- Header (Fixed Top) -->
+    <div data-include="../components/header.html"></div>
+
+    <!-- Main Flex Container (Sidebar + Content) -->
+    <div class="dashboard-main-flex">
+
+        <!-- Sidebar -->
+        <div data-include="../components/sidebar.html"></div>
+
+        <!-- Main Content -->
+        <main class="dashboard-main" id="main-content">
+
+            <!-- Content Scroll Area -->
+            <div class="dashboard-content dashboard-content-full custom-scrollbar">
+                <div class="dashboard-container dashboard-container-full">
+
+                    <!-- Single Pane Container -->
+                    <div class="glass-panel">
+
+                        <!-- Header -->
+                        <div class="pane-header">
+                            <div class="search-panel-title-group">
+                                <i data-lucide="shield" class="status-card-icon text-success"></i>
+                                <span class="search-panel-title">보안 정책 설정</span>
+                            </div>
+
+                            <!-- Buttons Group -->
+                            <div class="pane-header-right">
+                                <!-- View Mode Buttons -->
+                                <div id="view-mode-buttons" class="action-btn-group">
+                                    <button class="btn-sm btn-primary" onclick="enterEditMode()">
+                                        <i data-lucide="edit-3" class="trend-icon"></i> 수정
+                                    </button>
+                                </div>
+                                <!-- Edit Mode Buttons -->
+                                <div id="edit-mode-buttons" class="action-btn-group hidden">
+                                    <button class="btn-sm btn-primary" onclick="saveChanges()">
+                                        <i data-lucide="save" class="trend-icon"></i> 저장
+                                    </button>
+                                    <button class="btn-sm btn-secondary" onclick="cancelEdit()">
+                                        <i data-lucide="x" class="trend-icon"></i> 취소
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Content Area -->
+                        <div class="pane-content custom-scrollbar">
+
+                            <div class="spacing-y-6">
+                                <!-- Security Settings Row (3 columns) -->
+                                <div class="settings-grid">
+                                    <!-- Session Timeout Setting -->
+                                    <div>
+                                        <label class="form-label">세션 타임아웃 시간 (분)</label>
+                                        <input type="number" id="session-timeout" class="form-input" placeholder="30"
+                                            min="1" max="1440" disabled>
+                                        <div id="error-session-timeout" class="form-error"></div>
+                                        <p class="input-guide-text hidden">1-1440분</p>
+                                    </div>
+
+                                    <!-- Password Expiry Period -->
+                                    <div>
+                                        <label class="form-label">비밀번호 만료 기간 (일)</label>
+                                        <input type="number" id="password-expiry" class="form-input" placeholder="90"
+                                            min="0" max="365" disabled>
+                                        <div id="error-password-expiry" class="form-error"></div>
+                                        <p class="input-guide-text hidden">0-365일 (0=무제한)</p>
+                                    </div>
+
+                                    <!-- Login Failure Limit -->
+                                    <div>
+                                        <label class="form-label">로그인 실패 허용 횟수</label>
+                                        <input type="number" id="login-failure-limit" class="form-input" placeholder="5"
+                                            min="3" max="10" disabled>
+                                        <div id="error-login-failure-limit" class="form-error"></div>
+                                        <p class="input-guide-text hidden">3-10회</p>
+                                    </div>
+                                </div>
+
+                                <!-- Duplicate Login Setting -->
+                                <div>
+                                    <label class="form-label">중복 로그인 허용</label>
+                                    <label class="perm-checkbox-group">
+                                        <input type="checkbox" id="allow-duplicate-login"
+                                            class="custom-checkbox form-checkbox" disabled>
+                                        <span class="perm-checkbox-label">동일 계정으로 여러 기기에서 동시 로그인 허용</span>
+                                    </label>
+                                    <p class="input-guide-text hidden">체크 해제 시 새로운 로그인이 발생하면 기존 세션이 종료됩니다</p>
+                                </div>
+
+                                <!-- Multiple Login Setting -->
+                                <div>
+                                    <label class="form-label">다중 로그인 허용</label>
+                                    <label class="perm-checkbox-group">
+                                        <input type="checkbox" id="allow-multiple-login"
+                                            class="custom-checkbox form-checkbox" disabled>
+                                        <span class="perm-checkbox-label">동일 계정으로 다중 브라우저/탭에서 동시 로그인 허용</span>
+                                    </label>
+                                    <p class="input-guide-text hidden">체크 해제 시 하나의 세션만 유지됩니다</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+    </div>
+    </div>
+    </main>
+    </div>
+
+    <!-- System Switcher Modal -->
+    <div data-include="../components/system-switcher.html"></div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-icon info">
+                <i data-lucide="help-circle" width="64" height="64" class="text-icon-info"></i>
+            </div>
+            <h3 class="modal-title">보안 정책 저장</h3>
+            <p class="modal-desc">변경된 보안 정책 설정을 저장하시겠습니까?</p>
+            <div class="modal-btn-group">
+                <button onclick="closeConfirmModal()" class="btn-flex btn-modal-secondary">취소</button>
+                <button onclick="processSave()" class="btn-flex btn-modal-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-icon success">
+                <i data-lucide="check-circle" width="64" height="64" class="text-icon-success"></i>
+            </div>
+            <h3 class="modal-title">저장 완료</h3>
+            <p class="modal-desc">보안 정책 설정이 성공적으로 저장되었습니다.</p>
+            <div class="modal-btn-group">
+                <button onclick="closeSuccessModal()" class="btn-modal-success">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/include.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/SAM_AU_03_01.js"></script>
+</body>
+
+</html>
