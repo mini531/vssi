@@ -1059,6 +1059,18 @@ html {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+@media (max-width: 767px) {
+  .system-perm-header {
+    gap: 0.5rem;
+  }
+
+  .system-perm-header>* {
+    flex: 1 1 100%;
+  }
 }
 
 .system-perm-title {
@@ -1084,6 +1096,18 @@ html {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+@media (max-width: 767px) {
+  .system-perm-subheader {
+    gap: 0.5rem;
+  }
+
+  .system-perm-subheader>* {
+    flex: 1 1 100%;
+  }
 }
 
 .system-perm-subtitle {
@@ -3823,14 +3847,39 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex !important;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
   position: sticky;
   top: 0;
   z-index: 10;
   margin-bottom: 0.5rem;
 }
 
+@media (max-width: 767px) {
+  .bulk-select-row {
+    gap: 0.5rem;
+  }
+
+  .bulk-select-row>* {
+    flex: 1 1 100%;
+  }
+}
+
 .bulk-select-row.hidden {
   display: none !important;
+}
+
+/* Registration Form Grid */
+.registration-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 767px) {
+  .registration-form-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .header-logo {

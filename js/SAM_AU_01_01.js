@@ -256,7 +256,10 @@ function initRegistrationMode() {
         cb.disabled = false;
     });
 
-    // 7. Focus on ID
+    // 7. Show right pane on mobile (like view/edit mode)
+    openDetailPane();
+
+    // 8. Focus on ID
     document.getElementById('reg-role-id').focus();
 }
 
