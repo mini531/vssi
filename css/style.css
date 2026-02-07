@@ -990,8 +990,24 @@ html {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
   background: transparent;
   /* Inherit panel background */
+}
+
+@media (max-width: 767px) {
+  .pane-header {
+    gap: 0.5rem;
+  }
+
+  .pane-header>* {
+    flex: 1 1 100%;
+  }
+
+  .pane-header-right {
+    justify-content: flex-end;
+  }
 }
 
 .pane-content {
@@ -2525,6 +2541,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   text-align: left;
 }
 
+@media (min-width: 480px) {
+  .filter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .filter-grid>.filter-grid-wide {
+    grid-column: span 2;
+  }
+}
+
 @media (min-width: 768px) {
   .filter-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2709,6 +2735,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: #64748b !important;
   font-size: 12px !important;
   font-family: 'JetBrains Mono', monospace !important;
+}
+
+/* Hide date columns on mobile */
+@media (max-width: 767px) {
+
+  .td-date,
+  th:last-child {
+    display: none !important;
+  }
 }
 
 

@@ -394,3 +394,16 @@ window.vssi = {
         }
     }
 };
+
+// Close sidebar on mobile after menu click
+function closeSidebarOnMobile() {
+    // Check if mobile (window width < 1024px)
+    if (window.innerWidth < 1024) {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar && sidebar.classList.contains('w-64')) {
+            sidebar.classList.remove('w-64');
+            sidebar.classList.add('w-0', 'border-none');
+        }
+    }
+}
+
