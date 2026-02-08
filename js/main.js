@@ -16,7 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'COM_IT_01_01',
         'SAM_AS_10_01',
         'SAM_AU_01_01',
-        'SAM_AU_02_01'
+        'SAM_AU_02_01',
+        'SAM_US_01_01'
     ];
 
     function init() {
