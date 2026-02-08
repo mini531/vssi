@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMS - User Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="dashboard-body app-screen-height" data-system-acronym="SAMS" data-page-title="사용자 관리">
+    <!-- Header (Fixed Top) -->
+    <div data-include="../components/header.html"></div>
+
+    <!-- Main Flex Container (Sidebar + Content) -->
+    <div class="dashboard-main-flex">
+
+        <!-- Sidebar -->
+        <div data-include="../components/sidebar.html"></div>
+
+        <!-- Main Content (Pushed by Sidebar) -->
+        <main class="dashboard-main" id="main-content">
+
+            <!-- Content Scroll Area -->
+            <div class="dashboard-content dashboard-content-full custom-scrollbar">
+                <div class="dashboard-container dashboard-container-full">
+
+                    <!-- Split Pane Container -->
+                    <div class="split-container">
+
+                        <!-- Left Pane: User List -->
+                        <div class="split-pane-left">
+                            <div class="pane-header">
+                                <div class="search-panel-title-group">
+                                    <i data-lucide="users" class="status-card-icon text-success"></i>
+                                    <span class="search-panel-title">사용자 목록</span>
+                                </div>
+                                <button id="btn-reg-start" class="btn-sm btn-primary" onclick="initRegistrationMode()">
+                                    <i data-lucide="plus" class="trend-icon"></i> 사용자 등록
+                                </button>
+                            </div>
+                            <div class="pane-content custom-scrollbar flex-1 flex flex-col">
+                                <div class="table-container flex-1">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>아이디</th>
+                                                <th>이름</th>
+                                                <th>소속</th>
+                                                <th>현재 권한</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="user-list-body">
+                                            <!-- JS Rendered -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- Pagination Footer -->
+                                <div class="table-footer flex-none mt-auto pt-4 border-t border-slate-700/50">
+                                    <span class="pagination-info" id="user-total-count">총 128 건</span>
+                                    <!-- Static for now, consistent with SAM_AS_10_01 -->
+                                    <div class="pagination-controls">
+                                        <button class="page-btn active">1</button>
+                                        <button class="page-btn">2</button>
+                                        <button class="page-btn">3</button>
+                                        <button class="page-btn pc-only">4</button>
+                                        <button class="page-btn pc-only">5</button>
+                                        <button class="page-btn"><i data-lucide="chevron-right"
+                                                class="pagination-icon"></i></button>
+                                        <select class="pagination-select pagination-select-margin">
+                                            <option>20개씩 보기</option>
+                                            <option>50개씩 보기</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Pane: User Detail -->
+                        <div class="split-pane-right" id="detail-pane">
+                            <!-- Empty State -->
+                            <div id="empty-state" class="empty-state">
+                                <i data-lucide="user" class="empty-state-icon"></i>
+                                <p class="empty-state-text">좌측 목록에서 사용자를 선택해 주세요.</p>
+                            </div>
+
+                            <!-- Detail Content (Hidden initially) -->
+                            <div id="detail-content" class="hidden h-full flex flex-col">
+                                <div class="pane-header">
+                                    <!-- Right Pane Header Group (Target for hiding in Reg Mode) -->
+                                    <div id="right-pane-header">
+                                        <div class="search-panel-title-group">
+                                            <i data-lucide="user-check" class="status-card-icon text-success"></i>
+                                            <span class="search-panel-title">사용자 정보 - <span id="selected-user-name"
+                                                    class="text-success"></span></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Registration Mode Header (Hidden by default) -->
+                                    <div id="reg-header-group" class="hidden search-panel-title-group">
+                                        <i data-lucide="user-plus" class="status-card-icon text-success"></i>
+                                        <span class="search-panel-title">사용자 등록</span>
+                                    </div>
+
+                                    <!-- Buttons Group -->
+                                    <div class="pane-header-right">
+                                        <!-- View Mode Buttons -->
+                                        <div id="view-mode-buttons" class="action-btn-group">
+                                            <button class="btn-sm btn-secondary mobile-list-btn"
+                                                onclick="closeDetailPane()">
+                                                <i data-lucide="list" class="trend-icon"></i> 목록
+                                            </button>
+                                            <button class="btn-sm btn-primary" onclick="enterEditMode()">
+                                                <i data-lucide="edit-3" class="trend-icon"></i> 수정
+                                            </button>
+                                            <button class="btn-sm btn-danger" onclick="showDeleteWarning()">
+                                                <i data-lucide="trash-2" class="trend-icon"></i> 삭제
+                                            </button>
+                                        </div>
+                                        <!-- Edit Mode Buttons -->
+                                        <div id="edit-mode-buttons" class="action-btn-group hidden">
+                                            <button class="btn-sm btn-primary" onclick="saveChanges()">
+                                                <i data-lucide="save" class="trend-icon"></i> 저장
+                                            </button>
+                                            <button class="btn-sm btn-secondary" onclick="cancelEdit()">
+                                                <i data-lucide="x" class="trend-icon"></i> 취소
+                                            </button>
+                                        </div>
+                                        <!-- Registration Mode Buttons -->
+                                        <div id="reg-mode-buttons" class="action-btn-group hidden">
+                                            <button class="btn-sm btn-secondary mobile-list-btn"
+                                                onclick="closeDetailPane()">
+                                                <i data-lucide="list" class="trend-icon"></i> 목록
+                                            </button>
+                                            <button class="btn-sm btn-primary" onclick="processRegistration()">
+                                                <i data-lucide="save" class="trend-icon"></i> 저장
+                                            </button>
+                                            <button class="btn-sm btn-secondary" onclick="cancelRegistration()">
+                                                <i data-lucide="x" class="trend-icon"></i> 취소
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Form Content -->
+                                <div class="pane-content custom-scrollbar flex-1">
+                                    <div id="user-form" class="registration-form-panel">
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <!-- ID -->
+                                            <div>
+                                                <label class="form-label">아이디 <span
+                                                        class="text-error required-mark">*</span></label>
+                                                <div class="flex-gap-2">
+                                                    <input type="text" id="user-id" class="form-input flex-1"
+                                                        placeholder="영문, 숫자 5~20자" disabled
+                                                        oninput="resetError('user-id')">
+                                                    <button id="btn-check-id" class="btn-inline-check hidden"
+                                                        onclick="checkIdDuplicate()">중복 확인</button>
+                                                </div>
+                                                <div id="error-user-id" class="form-error"></div>
+                                            </div>
+                                            <!-- Status -->
+                                            <div>
+                                                <label class="form-label">사용 상태 <span
+                                                        class="text-error">*</span></label>
+                                                <div class="flex items-center gap-4 h-[42px]">
+                                                    <label class="perm-checkbox-group">
+                                                        <input type="radio" name="user-status" value="used"
+                                                            class="custom-radio" disabled>
+                                                        <span class="perm-checkbox-label">사용</span>
+                                                    </label>
+                                                    <label class="perm-checkbox-group">
+                                                        <input type="radio" name="user-status" value="unused"
+                                                            class="custom-radio" disabled>
+                                                        <span class="perm-checkbox-label">미사용</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+
+                                            <!-- Name -->
+                                            <div>
+                                                <label class="form-label">이름 <span
+                                                        class="text-error required-mark">*</span></label>
+                                                <input type="text" id="user-name" class="form-input" placeholder="이름 입력"
+                                                    disabled oninput="resetError('user-name')">
+                                                <div id="error-user-name" class="form-error"></div>
+                                            </div>
+                                            <!-- Affiliation (Dept) -->
+                                            <div>
+                                                <label class="form-label">소속 <span
+                                                        class="text-error required-mark">*</span></label>
+                                                <input type="text" id="user-dept" class="form-input" placeholder="소속 입력"
+                                                    disabled oninput="resetError('user-dept')">
+                                                <div id="error-user-dept" class="form-error"></div>
+                                            </div>
+                                            <!-- Email -->
+                                            <div>
+                                                <label class="form-label">이메일 <span
+                                                        class="text-error required-mark">*</span></label>
+                                                <input type="email" id="user-email" class="form-input"
+                                                    placeholder="sample@email.com" disabled
+                                                    oninput="resetError('user-email')">
+                                                <div id="error-user-email" class="form-error"></div>
+                                            </div>
+                                            <!-- Phone -->
+                                            <div>
+                                                <label class="form-label">휴대폰 번호 <span
+                                                        class="text-error">*</span></label>
+                                                <input type="text" id="user-phone" class="form-input"
+                                                    placeholder="010-0000-0000" disabled
+                                                    oninput="resetError('user-phone')">
+                                                <div id="error-user-phone" class="form-error"></div>
+                                            </div>
+
+                                            <div id="password-section" class="col-span-2">
+                                                <label class="form-label">비밀번호</label>
+                                                <button id="btn-reset-pw" class="btn-sm btn-secondary"
+                                                    onclick="resetPassword()" disabled>비밀번호 초기화</button>
+                                            </div>
+
+                                            <div id="reg-password-section" class="col-span-2 hidden">
+                                                <div class="grid grid-cols-2 gap-4">
+                                                    <div>
+                                                        <label class="form-label">비밀번호 <span
+                                                                class="text-error required-mark">*</span></label>
+                                                        <input type="password" id="user-pw" class="form-input"
+                                                            placeholder="비밀번호 입력" oninput="resetError('user-pw')">
+                                                        <div id="error-user-pw" class="form-error"></div>
+                                                        <p class="input-guide-text">영문 대소문자, 숫자, 특수문자를 혼용하여 8자 이상</p>
+                                                    </div>
+                                                    <div>
+                                                        <label class="form-label">비밀번호 확인 <span
+                                                                class="text-error required-mark">*</span></label>
+                                                        <input type="password" id="user-pw-confirm" class="form-input"
+                                                            placeholder="비밀번호 확인"
+                                                            oninput="resetError('user-pw-confirm')">
+                                                        <div id="error-user-pw-confirm" class="form-error"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-span-2">
+                                                <label class="form-label">권한 <span
+                                                        class="text-error required-mark">*</span></label>
+                                                <div class="flex-gap-2">
+                                                    <input type="text" id="user-role-name" class="form-input flex-1"
+                                                        placeholder="권한을 선택하세요" disabled readonly>
+                                                    <input type="hidden" id="user-role-id">
+                                                    <button id="btn-select-role" class="btn-inline-check"
+                                                        onclick="openRoleSelectModal()" disabled>
+                                                        선택
+                                                    </button>
+                                                </div>
+                                                <div id="error-user-role" class="form-error"></div>
+                                            </div>
+
+                                            <!-- Systems (Checkboxes) -->
+                                            <div id="desired-systems-section" class="col-span-2">
+                                                <label class="form-label">이용 희망 시스템 <span
+                                                        class="text-error">*</span></label>
+                                                <div class="auth-system-box">
+                                                    <label class="auth-system-item group">
+                                                        <input type="checkbox" name="user-systems" value="IVMS"
+                                                            class="custom-checkbox form-checkbox" disabled>
+                                                        <span class="auth-system-code">IVMS</span>
+                                                        <span class="auth-system-desc">버티포트 통합 관리</span>
+                                                    </label>
+                                                    <label class="auth-system-item group">
+                                                        <input type="checkbox" name="user-systems" value="IFPS"
+                                                            class="custom-checkbox form-checkbox" disabled>
+                                                        <span class="auth-system-code">IFPS</span>
+                                                        <span class="auth-system-desc">통합 비행 계획 관리</span>
+                                                    </label>
+                                                    <label class="auth-system-item group">
+                                                        <input type="checkbox" name="user-systems" value="IFRS"
+                                                            class="custom-checkbox form-checkbox" disabled>
+                                                        <span class="auth-system-code">IFRS</span>
+                                                        <span class="auth-system-desc">통합 운항 예약</span>
+                                                    </label>
+                                                    <label class="auth-system-item group">
+                                                        <input type="checkbox" name="user-systems" value="V-CDM"
+                                                            class="custom-checkbox form-checkbox" disabled>
+                                                        <span class="auth-system-code">V-CDM</span>
+                                                        <span class="auth-system-desc">협동적 의사 결정 지원</span>
+                                                    </label>
+                                                    <label class="auth-system-item group">
+                                                        <input type="checkbox" name="user-systems" value="SAMS"
+                                                            class="custom-checkbox form-checkbox" disabled>
+                                                        <span class="auth-system-code">SAMS</span>
+                                                        <span class="auth-system-desc">관리자 시스템</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <!-- Dates (View/Edit Mode Only) -->
+                                            <div id="user-dates-section" class="col-span-2 hidden">
+                                                <div class="grid grid-cols-2 gap-4">
+                                                    <div>
+                                                        <label class="form-label">등록 일시</label>
+                                                        <input type="text" id="user-reg-date" class="form-input"
+                                                            disabled>
+                                                    </div>
+                                                    <div>
+                                                        <label class="form-label">수정 일시</label>
+                                                        <input type="text" id="user-mod-date" class="form-input"
+                                                            disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div> <!-- End of split-container -->
+                    </div>
+                </div>
+        </main>
+    </div>
+
+    <!-- System Switcher Modal -->
+    <div data-include="../components/system-switcher.html"></div>
+
+    <!-- Delete Confirm Modal (Style from COM_LG_02_01) -->
+    <div id="delete-confirm-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-icon info">
+                <i data-lucide="help-circle" width="64" height="64" class="text-icon-info"></i>
+            </div>
+            <h3 class="modal-title">사용자 삭제</h3>
+            <p class="modal-desc">선택한 사용자를 삭제하시겠습니까?<br>삭제 후 복구할 수 없습니다.</p>
+            <div class="modal-btn-group">
+                <button onclick="closeDeleteConfirm()" class="btn-flex btn-modal-secondary">취소</button>
+                <button onclick="confirmDeleteAction()" class="btn-flex btn-modal-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-icon success">
+                <i data-lucide="check-circle-2" width="64" height="64" class="text-icon-success"></i>
+            </div>
+            <h3 class="modal-title">완료</h3>
+            <p id="success-message" class="modal-desc">요청 처리가 완료되었습니다.</p>
+            <div class="modal-btn-group">
+                <button onclick="closeSuccessModal()" class="btn-modal-success">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Role Select Modal -->
+    <div id="role-select-modal" class="modal-overlay">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-header">
+                <h3 class="modal-title-left">권한 선택</h3>
+                <i data-lucide="x" class="close-icon" onclick="closeRoleSelectModal()"></i>
+            </div>
+            <div class="modal-content">
+                <div class="modal-role-group">
+                    <h4 class="modal-section-title">변경할 권한 선택</h4>
+                    <div id="role-select-list" class="modal-selection-list">
+                        <!-- JS Populated -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-btn-group">
+                <button onclick="closeRoleSelectModal()" class="btn-flex btn-secondary">취소</button>
+                <button onclick="confirmRoleSelect()" class="btn-flex btn-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generic Result Modal (Warning Style for "Deleted") -->
+    <div id="result-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-icon warning">
+                <i data-lucide="alert-triangle" width="64" height="64" class="text-icon-warning"></i>
+            </div>
+            <h3 class="modal-title" id="result-modal-title">알림</h3>
+            <p class="modal-desc" id="result-modal-desc"></p>
+            <div class="modal-btn-group">
+                <button onclick="closeResultModal()" class="btn-modal-warning">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/include.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/SAM_US_01_01.js"></script>
+</body>
+
+</html>

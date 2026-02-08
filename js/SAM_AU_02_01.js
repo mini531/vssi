@@ -273,13 +273,60 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Assign User Modal Logic ---
 
     // Mock Unassigned Users Data
-    const unassignedUsers = Array.from({ length: 35 }, (_, i) => ({
-        id: `user_new_${i + 1}`,
-        name: `신규사용자${i + 1}`,
-        dept: i % 3 === 0 ? '개발팀' : (i % 3 === 1 ? '운영팀' : '기획팀')
-    }));
+    const unassignedUsers = [
+        { id: 'staff.kim', name: '김철수', dept: '인사팀' },
+        { id: 'staff.lee', name: '이영희', dept: '재무팀' },
+        { id: 'manager.park', name: '박지성', dept: '총무팀' },
+        { id: 'eng.choi', name: '최현우', dept: '시설관리팀' },
+        { id: 'intern.jung', name: '정민아', dept: 'IT지원팀' },
+        { id: 'staff.yoo', name: '유재석', dept: '홍보팀' },
+        { id: 'manager.kang', name: '강호동', dept: '영업1팀' },
+        { id: 'eng.shin', name: '신동엽', dept: '기술연구소' },
+        { id: 'intern.lee', name: '이수근', dept: '경영지원팀' },
+        { id: 'staff.park', name: '박명수', dept: '구매팀' },
+        { id: 'manager.jung', name: '정준하', dept: '법무팀' },
+        { id: 'eng.haha', name: '하동훈', dept: '보안팀' },
+        { id: 'intern.noh', name: '노홍철', dept: '마케팅팀' },
+        { id: 'staff.gil', name: '길성준', dept: '비서실' },
+        { id: 'manager.joo', name: '주우재', dept: '전략기획팀' },
+        { id: 'eng.kim', name: '김종국', dept: '안전관리팀' },
+        { id: 'intern.song', name: '송지효', dept: 'CS팀' },
+        { id: 'staff.jeon', name: '전소민', dept: '디자인팀' },
+        { id: 'manager.yang', name: '양세찬', dept: '영업2팀' },
+        { id: 'eng.ji', name: '지석진', dept: '감사팀' }
+    ];
 
-    let currentUnassignedUsers = [...unassignedUsers];
+    // Aggregated User Data for Assign Modal
+    let allAssignableUsers = [];
+
+    // Helper to refresh the source data
+    function refreshAssignableUsers() {
+        allAssignableUsers = [];
+
+        // 1. Add users from existing roles
+        for (const [roleId, users] of Object.entries(usersByRole)) {
+            // Find role name
+            const roleObj = [
+                { id: 'role_total', name: '통합 관리자' },
+                { id: 'role_operator', name: '통합 운용자' },
+                { id: 'role_vcdm', name: 'V-CDM 운용자' },
+                { id: 'role_airline', name: '항공사' },
+                { id: 'role_vertiport', name: '버티포트 운용자' }
+            ].find(r => r.id === roleId);
+
+            const roleName = roleObj ? roleObj.name : roleId;
+
+            users.forEach(user => {
+                allAssignableUsers.push({ ...user, currentRole: roleName, currentRoleId: roleId });
+            });
+        }
+
+        // 2. Add unassigned users
+        unassignedUsers.forEach(user => {
+            allAssignableUsers.push({ ...user, currentRole: '미배정', currentRoleId: null });
+        });
+    }
+
 
     window.assignUserModal = function () {
         const modal = document.getElementById('assign-user-modal');
@@ -298,11 +345,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const roleId = currentRoleId || 'role_unknown';
         document.getElementById('assign-modal-role-id').innerText = `(${roleId})`;
 
-        // Reset Filter
-        resetAssignFilter();
+        // Refresh Data Source
+        refreshAssignableUsers();
+
+        // Initial Filter: Exclude users ALREADY in this role
+        // We act on `unassignedUsers` variable name to reuse existing filter logic, but it now holds filtered ALL users
+        // NOTE: In a real app we might fetch from API. Here we filter `allAssignableUsers`.
+        currentUnassignedUsers = allAssignableUsers.filter(u => u.currentRoleId !== roleId);
+
+        // Reset UI Filter inputs
+        document.getElementById('filter-assign-type').value = 'all';
+        document.getElementById('filter-assign-keyword').value = '';
+        document.getElementById('filter-assign-keyword').placeholder = '키워드 입력';
 
         // Render List
-        renderUnassignedUserList(unassignedUsers);
+        renderUnassignedUserList(currentUnassignedUsers);
 
         modal.classList.add('active');
     };
@@ -316,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tbody.innerHTML = '';
 
         if (users.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="4" class="text-center py-8 text-slate-500">검색된 사용자가 없습니다.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-slate-500">배정 가능한 사용자가 없습니다.</td></tr>';
             updateAssignModalCount();
             return;
         }
@@ -341,6 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${user.id}</td>
                 <td>${user.name}</td>
                 <td>${user.dept}</td>
+                <td><span class="badge ${user.currentRole === '미배정' ? 'badge-gray' : 'badge-blue'}">${user.currentRole}</span></td>
             `;
             tbody.appendChild(tr);
         });
@@ -370,7 +428,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const typeVal = document.getElementById('filter-assign-type').value;
         const keywordVal = document.getElementById('filter-assign-keyword').value.toLowerCase();
 
-        currentUnassignedUsers = unassignedUsers.filter(user => {
+        // Base source is the filtered list (users NOT in current role)
+        // We need to re-derive this base list because `currentUnassignedUsers` is overwritten by filter results.
+        // Ideally we keep `baseAssignableUsers` separate, but for simplicity:
+        // Let's refetch base list (all users) and exclude current role again.
+        const roleId = currentRoleId || 'role_unknown';
+        const baseList = allAssignableUsers.filter(u => u.currentRoleId !== roleId);
+
+        currentUnassignedUsers = baseList.filter(user => {
             if (!keywordVal) return true; // No keyword = show all
 
             if (typeVal === 'id') {
@@ -379,8 +444,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 return user.name.toLowerCase().includes(keywordVal);
             } else if (typeVal === 'dept') {
                 return user.dept.toLowerCase().includes(keywordVal);
+            } else if (typeVal === 'all') {
+                // 'all' selected: search all fields
+                return user.id.toLowerCase().includes(keywordVal) ||
+                    user.name.toLowerCase().includes(keywordVal) ||
+                    user.dept.toLowerCase().includes(keywordVal);
             } else {
-                // 'all' or empty type selected: search all fields
+                // Fallback (should normally be covered by 'all' or specific types)
                 return user.id.toLowerCase().includes(keywordVal) ||
                     user.name.toLowerCase().includes(keywordVal) ||
                     user.dept.toLowerCase().includes(keywordVal);
@@ -391,10 +461,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.resetAssignFilter = function () {
-        document.getElementById('filter-assign-type').value = '';
+        document.getElementById('filter-assign-type').value = 'all';
         document.getElementById('filter-assign-keyword').value = '';
         document.getElementById('filter-assign-keyword').placeholder = '키워드 입력'; // Reset placeholder
-        currentUnassignedUsers = [...unassignedUsers];
+
+        // Reset to base list
+        const roleId = currentRoleId || 'role_unknown';
+        currentUnassignedUsers = allAssignableUsers.filter(u => u.currentRoleId !== roleId);
         renderUnassignedUserList(currentUnassignedUsers);
     };
 
