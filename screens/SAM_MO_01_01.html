@@ -11,7 +11,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
-<body class="dashboard-body app-screen-height" data-system-acronym="SAMS" data-page-title="모니?�링">
+<body class="dashboard-body app-screen-height" data-system-acronym="SAMS" data-page-title="모니터링">
     <!-- Header (Fixed Top) -->
     <div data-include="../components/header.html"></div>
 
@@ -33,7 +33,7 @@
                         <div class="pane-header cursor-pointer select-none" onclick="toggleDiagram()">
                             <div class="search-panel-title-group">
                                 <i data-lucide="activity" class="status-card-icon text-success"></i>
-                                <span class="search-panel-title">?�프???�합 구성??/span>
+                                <span class="search-panel-title">인프라 통합 구성도</span>
                             </div>
                             <div class="pane-header-right">
                                 <i data-lucide="chevron-up" id="diagram-chevron"
@@ -48,7 +48,7 @@
                                 <div class="sys-node-group">
                                     <div class="sys-node ivs">
                                         <div class="text-sm text-blue-400 mb-1">IVS</div>
-                                        <div class="text-lg">?�합?�용?�스??/div>
+                                        <div class="text-lg">통합운용시스템</div>
                                     </div>
                                 </div>
 
@@ -68,11 +68,11 @@
                                         class="sys-node-group flex-row bg-slate-900/50 p-4 rounded border border-slate-800">
                                         <div class="sys-node vos">
                                             <div class="text-xs text-green-400 mb-1">VOS #1</div>
-                                            <div>김?�공??/div>
+                                            <div>김포공항</div>
                                         </div>
                                         <div class="sys-node vos">
                                             <div class="text-xs text-green-400 mb-1">VOS #2</div>
-                                            <div>?�실</div>
+                                            <div>잠실</div>
                                         </div>
                                         <div class="sys-node vos opacity-50">
                                             <div class="text-xs text-slate-500 mb-1">...</div>
@@ -85,7 +85,7 @@
                                         class="sys-node-group flex-row bg-slate-900/50 p-4 rounded border border-slate-800">
                                         <div class="sys-node single">
                                             <div class="text-xs text-orange-400 mb-1">Single VOS</div>
-                                            <div>?�립???�스??/div>
+                                            <div>독립형 시스템</div>
                                         </div>
                                     </div>
                                 </div>
@@ -98,7 +98,7 @@
                         <div class="pane-header flex-none">
                             <div class="search-panel-title-group">
                                 <i data-lucide="server" class="status-card-icon text-success"></i>
-                                <span class="search-panel-title">?�버 ?�태 목록</span>
+                                <span class="search-panel-title">서버 상태 목록</span>
                             </div>
                         </div>
 
@@ -111,24 +111,24 @@
                                         <table class="data-table">
                                             <thead>
                                                 <tr>
-                                                    <th>?�스??구분</th>
-                                                    <th>?�버 �?/th>
+                                                    <th>시스템 구분</th>
+                                                    <th>서버 명</th>
                                                     <th>IP 주소</th>
-                                                    <th class="text-center">?�태</th>
+                                                    <th class="text-center">상태</th>
                                                     <th class="text-right">CPU (%)</th>
-                                                    <th class="text-right">메모�?(%)</th>
-                                                    <th class="text-right">?�스??(%)</th>
-                                                    <th class="text-center">마�?�?갱신</th>
-                                                    <th class="text-center">모니?�링</th>
+                                                    <th class="text-right">메모리 (%)</th>
+                                                    <th class="text-right">디스크 (%)</th>
+                                                    <th class="text-center">마지막 갱신</th>
+                                                    <th class="text-center">모니터링</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="data-table-body" id="server-list-body">
                                                 <!-- Mock Data -->
                                                 <tr class="data-table-row">
-                                                    <td>IVS (?�합)</td>
+                                                    <td>IVS (통합)</td>
                                                     <td>IVS-WEB-01</td>
                                                     <td>192.168.10.101</td>
-                                                    <td class="td-center"><span class="badge badge-success">?�상</span>
+                                                    <td class="td-center"><span class="badge badge-success">정상</span>
                                                     </td>
                                                     <td class="td-number">12.00</td>
                                                     <td class="td-number">45.00</td>
@@ -138,24 +138,24 @@
                                                         <div class="action-btn-group justify-center">
                                                             <button class="btn-icon-sm"
                                                                 onclick="openHardwareModal('IVS-WEB-01')"
-                                                                title="?�드?�어"><i data-lucide="cpu"></i></button>
+                                                                title="하드웨어"><i data-lucide="cpu"></i></button>
                                                             <button class="btn-icon-sm"
-                                                                onclick="openNetworkModal('IVS-WEB-01')" title="?�트?�크"><i
+                                                                onclick="openNetworkModal('IVS-WEB-01')" title="네트워크"><i
                                                                     data-lucide="network"></i></button>
                                                             <button class="btn-icon-sm"
                                                                 onclick="openInterfaceModal('IVS-WEB-01')"
-                                                                title="?�터?�이??><i data-lucide="activity"></i></button>
+                                                                title="인터페이스"><i data-lucide="activity"></i></button>
                                                             <button class="btn-icon-sm"
-                                                                onclick="openDataModal('IVS-WEB-01')" title="?�이??><i
+                                                                onclick="openDataModal('IVS-WEB-01')" title="데이터"><i
                                                                     data-lucide="database"></i></button>
                                                         </div>
                                                     </td>
                                                 </tr>
                                                 <tr class="data-table-row">
-                                                    <td>IVS (?�합)</td>
+                                                    <td>IVS (통합)</td>
                                                     <td>IVS-WAS-01</td>
                                                     <td>192.168.10.102</td>
-                                                    <td class="td-center"><span class="badge badge-success">?�상</span>
+                                                    <td class="td-center"><span class="badge badge-success">정상</span>
                                                     </td>
                                                     <td class="td-number">25.00</td>
                                                     <td class="td-number">60.00</td>
@@ -165,24 +165,24 @@
                                                         <div class="action-btn-group justify-center">
                                                             <button class="btn-icon-sm"
                                                                 onclick="openHardwareModal('IVS-WAS-01')"
-                                                                title="?�드?�어"><i data-lucide="cpu"></i></button>
+                                                                title="하드웨어"><i data-lucide="cpu"></i></button>
                                                             <button class="btn-icon-sm"
-                                                                onclick="openNetworkModal('IVS-WAS-01')" title="?�트?�크"><i
+                                                                onclick="openNetworkModal('IVS-WAS-01')" title="네트워크"><i
                                                                     data-lucide="network"></i></button>
                                                             <button class="btn-icon-sm"
                                                                 onclick="openInterfaceModal('IVS-WAS-01')"
-                                                                title="?�터?�이??><i data-lucide="activity"></i></button>
+                                                                title="인터페이스"><i data-lucide="activity"></i></button>
                                                             <button class="btn-icon-sm"
-                                                                onclick="openDataModal('IVS-WAS-01')" title="?�이??><i
+                                                                onclick="openDataModal('IVS-WAS-01')" title="데이터"><i
                                                                     data-lucide="database"></i></button>
                                                         </div>
                                                     </td>
                                                 </tr>
                                                 <tr class="data-table-row">
-                                                    <td>VOS #1 (김??</td>
+                                                    <td>VOS #1 (김포)</td>
                                                     <td>VOS-SVR-01</td>
                                                     <td>10.10.10.101</td>
-                                                    <td class="td-center"><span class="badge badge-success">?�상</span>
+                                                    <td class="td-center"><span class="badge badge-success">정상</span>
                                                     </td>
                                                     <td class="td-number">15.00</td>
                                                     <td class="td-number">35.00</td>
@@ -192,15 +192,15 @@
                                                         <div class="action-btn-group justify-center">
                                                             <button class="btn-icon-sm"
                                                                 onclick="openHardwareModal('VOS-SVR-01')"
-                                                                title="?�드?�어"><i data-lucide="cpu"></i></button>
+                                                                title="하드웨어"><i data-lucide="cpu"></i></button>
                                                             <button class="btn-icon-sm"
-                                                                onclick="openNetworkModal('VOS-SVR-01')" title="?�트?�크"><i
+                                                                onclick="openNetworkModal('VOS-SVR-01')" title="네트워크"><i
                                                                     data-lucide="network"></i></button>
                                                             <button class="btn-icon-sm"
                                                                 onclick="openInterfaceModal('VOS-SVR-01')"
-                                                                title="?�터?�이??><i data-lucide="activity"></i></button>
+                                                                title="인터페이스"><i data-lucide="activity"></i></button>
                                                             <button class="btn-icon-sm"
-                                                                onclick="openDataModal('VOS-SVR-01')" title="?�이??><i
+                                                                onclick="openDataModal('VOS-SVR-01')" title="데이터"><i
                                                                     data-lucide="database"></i></button>
                                                         </div>
                                                     </td>
@@ -209,7 +209,7 @@
                                                     <td>Single VOS</td>
                                                     <td>S-VOS-MAIN</td>
                                                     <td>172.16.100.10</td>
-                                                    <td class="td-center"><span class="badge badge-error">?�애</span></td>
+                                                    <td class="td-center"><span class="badge badge-error">장애</span></td>
                                                     <td class="td-number font-bold text-error">99.00</td>
                                                     <td class="td-number font-bold text-error">99.00</td>
                                                     <td class="td-number font-bold text-error">90.00</td>
@@ -218,15 +218,15 @@
                                                         <div class="action-btn-group justify-center">
                                                             <button class="btn-icon-sm"
                                                                 onclick="openHardwareModal('S-VOS-MAIN')"
-                                                                title="?�드?�어"><i data-lucide="cpu"></i></button>
+                                                                title="하드웨어"><i data-lucide="cpu"></i></button>
                                                             <button class="btn-icon-sm"
-                                                                onclick="openNetworkModal('S-VOS-MAIN')" title="?�트?�크"><i
+                                                                onclick="openNetworkModal('S-VOS-MAIN')" title="네트워크"><i
                                                                     data-lucide="network"></i></button>
                                                             <button class="btn-icon-sm"
                                                                 onclick="openInterfaceModal('S-VOS-MAIN')"
-                                                                title="?�터?�이??><i data-lucide="activity"></i></button>
+                                                                title="인터페이스"><i data-lucide="activity"></i></button>
                                                             <button class="btn-icon-sm"
-                                                                onclick="openDataModal('S-VOS-MAIN')" title="?�이??><i
+                                                                onclick="openDataModal('S-VOS-MAIN')" title="데이터"><i
                                                                     data-lucide="database"></i></button>
                                                         </div>
                                                     </td>
@@ -239,7 +239,7 @@
 
                             <!-- Pagination Footer -->
                             <div class="table-footer flex-none">
-                                <div class="pagination-info">�?4 �?/div>
+                                <div class="pagination-info">총 4 건</div>
                             </div>
                         </div>
                     </div>
@@ -282,7 +282,7 @@
 
         // Hardware Modal Functions
         function openHardwareModal(serverName) {
-            document.getElementById('hardware-modal-title').textContent = serverName + ' ?�드?�어 ?�세';
+            document.getElementById('hardware-modal-title').textContent = serverName + ' 하드웨어 상세';
             document.getElementById('modal-hardware').classList.add('active');
         }
         function closeHardwareModal() {
@@ -291,7 +291,7 @@
 
         // Network Modal Functions
         function openNetworkModal(serverName) {
-            document.getElementById('network-modal-title').textContent = serverName + ' ?�트?�크 ?�세';
+            document.getElementById('network-modal-title').textContent = serverName + ' 네트워크 상세';
             document.getElementById('modal-network').classList.add('active');
         }
         function closeNetworkModal() {
@@ -300,7 +300,7 @@
 
         // Interface Modal Functions
         function openInterfaceModal(serverName) {
-            document.getElementById('interface-modal-title').textContent = serverName + ' ?�터?�이???�세';
+            document.getElementById('interface-modal-title').textContent = serverName + ' 인터페이스 상세';
             document.getElementById('modal-interface').classList.add('active');
         }
         function closeInterfaceModal() {
@@ -309,7 +309,7 @@
 
         // Data Modal Functions
         function openDataModal(serverName) {
-            document.getElementById('data-modal-title').textContent = serverName + ' ?�이???�세';
+            document.getElementById('data-modal-title').textContent = serverName + ' 데이터 상세';
             document.getElementById('modal-data').classList.add('active');
         }
         function closeDataModal() {
@@ -317,227 +317,81 @@
         }
     </script>
 
-<!-- 1. Hardware Modal -->
-<div id="modal-hardware" class="modal-overlay">
-    <div class="modal-dialog modal-wide">
-        <div class="modal-header">
-            <h3 class="modal-title-left" id="hardware-modal-title">?�드?�어 ?�세</h3>
-            <i data-lucide="x" class="close-icon" onclick="closeHardwareModal()"></i>
-        </div>
-        <div class="modal-content modal-content-monitoring custom-scrollbar">
-            <div class="monitoring-card mb-4">
-                <div class="pane-header p-0 border-none mb-2">
-                    <div class="search-panel-title-group">
-                        <i data-lucide="cpu" class="status-card-icon text-info"></i>
-                        <span class="search-panel-title">CPU ?�용�?(24h)</span>
+    <!-- Monitoring Detail Modal -->
+    <div id="monitoring-detail-modal" class="modal-overlay">
+        <div class="modal-dialog modal-wide-80">
+            <div class="modal-header">
+                <h3 class="modal-title-left" id="monitoring-modal-title">상세 모니터링</h3>
+                <i data-lucide="x" class="close-icon" onclick="closeMonitoringModal()"></i>
+            </div>
+
+            <div class="modal-content modal-content-monitoring custom-scrollbar">
+                <div class="modal-monitoring-grid">
+
+                    <!-- Hardware Monitoring -->
+                    <div class="monitoring-card">
+                        <div class="pane-header p-0 border-none">
+                            <div class="search-panel-title-group">
+                                <i data-lucide="cpu" class="status-card-icon text-info"></i>
+                                <span class="search-panel-title">하드웨어 모니터링</span>
+                            </div>
+                        </div>
+                        <div class="text-xs text-slate-400">2026년 CPU/Mem/Disk 시계열 차트</div>
+                        <div class="monitoring-chart-placeholder">
+                            CPU/Memory/Disk Usage Chart Area
+                        </div>
                     </div>
-                </div>
-                <div class="w-full bg-slate-800 rounded-full h-2.5 mb-1">
-                    <div class="bg-blue-600 h-2.5 rounded-full w-[45%]"></div>
-                </div>
-                <div class="flex justify-between text-xs text-slate-400">
-                    <span>Min: 12%</span>
-                    <span>Max: 68%</span>
-                    <span>Avg: 45%</span>
+
+                    <!-- Network Traffic -->
+                    <div class="monitoring-card">
+                        <div class="pane-header p-0 border-none">
+                            <div class="search-panel-title-group">
+                                <i data-lucide="network" class="status-card-icon text-success"></i>
+                                <span class="search-panel-title">네트워크 트래픽</span>
+                            </div>
+                        </div>
+                        <div class="text-xs text-slate-400">2026년 패킷 손실, 지연시간 모니터링</div>
+                        <div class="monitoring-chart-placeholder">
+                            Packet Loss / Latency Chart Area
+                        </div>
+                    </div>
+
+                    <!-- Interface Status -->
+                    <div class="monitoring-card">
+                        <div class="pane-header p-0 border-none">
+                            <div class="search-panel-title-group">
+                                <i data-lucide="activity" class="status-card-icon text-warning"></i>
+                                <span class="search-panel-title">인터페이스 현황</span>
+                            </div>
+                        </div>
+                        <div class="text-xs text-slate-400">2026년 MQ 송수신, 트랜잭션 성공/실패 카운트</div>
+                        <div class="monitoring-chart-placeholder">
+                            MQ / Transaction Count Chart Area
+                        </div>
+                    </div>
+
+                    <!-- Data Interface Status -->
+                    <div class="monitoring-card">
+                        <div class="pane-header p-0 border-none">
+                            <div class="search-panel-title-group">
+                                <i data-lucide="database" class="status-card-icon text-purple"></i>
+                                <span class="search-panel-title">데이터 인터페이스 현황</span>
+                            </div>
+                        </div>
+                        <div class="text-xs text-slate-400">2026년 인터페이스별 메시지 콜 횟수, MQ 서버 송수신 현황, 데이터 트랜잭션 용량 정보</div>
+                        <div class="monitoring-chart-placeholder">
+                            Message Call / Data Capacity Chart Area
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
-            <div class="monitoring-card mb-4">
-                <div class="pane-header p-0 border-none mb-2">
-                    <div class="search-panel-title-group">
-                        <i data-lucide="layers" class="status-card-icon text-purple"></i>
-                        <span class="search-panel-title">메모�??�유??/span>
-                    </div>
-                </div>
-                <div class="w-full bg-slate-800 rounded-full h-2.5 mb-1">
-                    <div class="bg-purple-600 h-2.5 rounded-full w-[70%]"></div>
-                </div>
-                <div class="flex justify-between text-xs text-slate-400">
-                    <span>Total: 32GB</span>
-                    <span>Used: 22.4GB</span>
-                    <span>Free: 9.6GB</span>
-                </div>
+            <div class="modal-btn-group">
+                <button onclick="closeMonitoringModal()" class="btn-primary">확인</button>
             </div>
-
-            <div class="monitoring-card">
-                <div class="pane-header p-0 border-none mb-2">
-                    <div class="search-panel-title-group">
-                        <i data-lucide="hard-drive" class="status-card-icon text-warning"></i>
-                        <span class="search-panel-title">?�스??I/O</span>
-                    </div>
-                </div>
-                <div class="monitoring-chart-placeholder h-32">
-                    <div class="w-full h-full flex items-end gap-1 px-4 pb-2">
-                        <div class="w-2 bg-slate-700 h-1/4"></div>
-                        <div class="w-2 bg-slate-700 h-1/3"></div>
-                        <div class="w-2 bg-slate-700 h-1/2"></div>
-                        <div class="w-2 bg-slate-700 h-2/3"></div>
-                        <div class="w-2 bg-warning h-3/4"></div>
-                        <div class="w-2 bg-slate-700 h-1/2"></div>
-                        <div class="w-2 bg-slate-700 h-1/3"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal-btn-group">
-            <button onclick="closeHardwareModal()" class="btn-primary">?�인</button>
         </div>
     </div>
-</div>
-
-<!-- 2. Network Modal -->
-<div id="modal-network" class="modal-overlay">
-    <div class="modal-dialog modal-wide">
-        <div class="modal-header">
-            <h3 class="modal-title-left" id="network-modal-title">?�트?�크 ?�세</h3>
-            <i data-lucide="x" class="close-icon" onclick="closeNetworkModal()"></i>
-        </div>
-        <div class="modal-content modal-content-monitoring custom-scrollbar">
-            <div class="monitoring-card mb-4">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-sm font-bold text-slate-300">Inbound Traffic</span>
-                    <span class="badge badge-success">Normal</span>
-                </div>
-                <div class="w-full bg-slate-800 rounded h-16 relative overflow-hidden">
-                    <svg viewBox="0 0 100 20" class="w-full h-full absolute bottom-0">
-                        <path fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="0.5"
-                            d="M0 10 Q 25 20 50 10 T 100 10 V 20 H 0 Z"></path>
-                    </svg>
-                </div>
-            </div>
-            <div class="monitoring-card">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-sm font-bold text-slate-300">Outbound Traffic</span>
-                    <span class="badge badge-success">Normal</span>
-                </div>
-                <div class="w-full bg-slate-800 rounded h-16 relative overflow-hidden">
-                    <svg viewBox="0 0 100 20" class="w-full h-full absolute bottom-0">
-                        <path fill="rgba(59, 130, 246, 0.2)" stroke="#3b82f6" stroke-width="0.5"
-                            d="M0 15 Q 25 5 50 15 T 100 15 V 20 H 0 Z"></path>
-                    </svg>
-                </div>
-            </div>
-            <div class="grid grid-cols-2 gap-4 mt-4">
-                <div class="bg-slate-800 p-2 rounded text-center">
-                    <div class="text-xs text-slate-400">Packet Loss</div>
-                    <div class="text-lg font-mono text-white">0.02%</div>
-                </div>
-                <div class="bg-slate-800 p-2 rounded text-center">
-                    <div class="text-xs text-slate-400">Latency</div>
-                    <div class="text-lg font-mono text-white">12ms</div>
-                </div>
-            </div>
-        </div>
-        <div class="modal-btn-group">
-            <button onclick="closeNetworkModal()" class="btn-primary">?�인</button>
-        </div>
-    </div>
-</div>
-
-<!-- 3. Interface Modal -->
-<div id="modal-interface" class="modal-overlay">
-    <div class="modal-dialog modal-wide">
-        <div class="modal-header">
-            <h3 class="modal-title-left" id="interface-modal-title">?�터?�이???�세</h3>
-            <i data-lucide="x" class="close-icon" onclick="closeInterfaceModal()"></i>
-        </div>
-        <div class="modal-content modal-content-monitoring custom-scrollbar">
-            <table class="w-full text-sm text-left text-slate-400">
-                <thead class="text-xs uppercase bg-slate-800 text-slate-200">
-                    <tr>
-                        <th class="px-4 py-2">Interface ID</th>
-                        <th class="px-4 py-2">Status</th>
-                        <th class="px-4 py-2 text-right">Transactions</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-700">
-                    <tr>
-                        <td class="px-4 py-3 font-mono">IF-IVS-001</td>
-                        <td class="px-4 py-3"><span class="badge badge-success">Active</span></td>
-                        <td class="px-4 py-3 text-right font-mono">1,240</td>
-                    </tr>
-                    <tr>
-                        <td class="px-4 py-3 font-mono">IF-IVS-002</td>
-                        <td class="px-4 py-3"><span class="badge badge-warning">Slow</span></td>
-                        <td class="px-4 py-3 text-right font-mono">850</td>
-                    </tr>
-                    <tr>
-                        <td class="px-4 py-3 font-mono">IF-EXT-005</td>
-                        <td class="px-4 py-3"><span class="badge badge-error">Down</span></td>
-                        <td class="px-4 py-3 text-right font-mono">0</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="modal-btn-group">
-            <button onclick="closeInterfaceModal()" class="btn-primary">?�인</button>
-        </div>
-    </div>
-</div>
-
-<!-- 4. Data Interface Modal -->
-<div id="modal-data" class="modal-overlay">
-    <div class="modal-dialog modal-wide">
-        <div class="modal-header">
-            <h3 class="modal-title-left" id="data-modal-title">?�이???�세</h3>
-            <i data-lucide="x" class="close-icon" onclick="closeDataModal()"></i>
-        </div>
-        <div class="modal-content modal-content-monitoring custom-scrollbar">
-            <div class="monitoring-card mb-4">
-                <div class="pane-header p-0 border-none mb-2">
-                    <div class="search-panel-title-group">
-                        <i data-lucide="database" class="status-card-icon text-purple"></i>
-                        <span class="search-panel-title">MQ Message Flow</span>
-                    </div>
-                </div>
-                <div class="flex items-center justify-between px-4 py-2 bg-slate-800 rounded">
-                    <div class="text-center">
-                        <div class="text-xs text-slate-500">Inbound Queue</div>
-                        <div class="text-xl font-bold text-success">450</div>
-                    </div>
-                    <i data-lucide="arrow-right" class="text-slate-500"></i>
-                    <div class="text-center">
-                        <div class="text-xs text-slate-500">Processing</div>
-                        <div class="text-xl font-bold text-warning">12</div>
-                    </div>
-                    <i data-lucide="arrow-right" class="text-slate-500"></i>
-                    <div class="text-center">
-                        <div class="text-xs text-slate-500">Outbound Queue</div>
-                        <div class="text-xl font-bold text-info">890</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="monitoring-card">
-                <div class="pane-header p-0 border-none mb-2">
-                    <div class="search-panel-title-group">
-                        <i data-lucide="hard-drive" class="status-card-icon text-slate-400"></i>
-                        <span class="search-panel-title">Data Throughput</span>
-                    </div>
-                </div>
-                <div class="space-y-2">
-                    <div class="flex justify-between text-xs">
-                        <span class="text-slate-400">Write OPS</span>
-                        <span class="text-slate-200">2,400/s</span>
-                    </div>
-                    <div class="w-full bg-slate-800 rounded-full h-1.5">
-                        <div class="bg-indigo-500 h-1.5 rounded-full w-[60%]"></div>
-                    </div>
-                    <div class="flex justify-between text-xs mt-2">
-                        <span class="text-slate-400">Read OPS</span>
-                        <span class="text-slate-200">12,500/s</span>
-                    </div>
-                    <div class="w-full bg-slate-800 rounded-full h-1.5">
-                        <div class="bg-indigo-400 h-1.5 rounded-full w-[85%]"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal-btn-group">
-            <button onclick="closeDataModal()" class="btn-primary">?�인</button>
-        </div>
-    </div>
-</div>
 </body>
 
 </html>
