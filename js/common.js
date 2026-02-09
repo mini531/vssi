@@ -31,13 +31,13 @@ function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     if (!sidebar) return;
 
-    if (sidebar.classList.contains('w-64')) {
-        sidebar.classList.remove('w-64');
+    if (sidebar.classList.contains('w-56')) {
+        sidebar.classList.remove('w-56');
         sidebar.classList.add('w-0', 'border-none');
         localStorage.setItem('vssi-sidebar-state', 'closed');
     } else {
         sidebar.classList.remove('w-0', 'border-none');
-        sidebar.classList.add('w-64');
+        sidebar.classList.add('w-56');
         localStorage.setItem('vssi-sidebar-state', 'open');
     }
 }
@@ -50,10 +50,10 @@ function restoreSidebarState() {
     const savedState = localStorage.getItem('vssi-sidebar-state');
     if (savedState === 'open') {
         sidebar.classList.remove('w-0', 'border-none');
-        sidebar.classList.add('w-64');
+        sidebar.classList.add('w-56');
     } else {
         // Ensure default closed state if strictly needed, though HTML defaults to closed
-        sidebar.classList.remove('w-64');
+        sidebar.classList.remove('w-56');
         sidebar.classList.add('w-0', 'border-none');
     }
 }
@@ -400,8 +400,8 @@ function closeSidebarOnMobile() {
     // Check if mobile (window width < 1024px)
     if (window.innerWidth < 1024) {
         const sidebar = document.getElementById('sidebar');
-        if (sidebar && sidebar.classList.contains('w-64')) {
-            sidebar.classList.remove('w-64');
+        if (sidebar && sidebar.classList.contains('w-56')) {
+            sidebar.classList.remove('w-56');
             sidebar.classList.add('w-0', 'border-none');
         }
     }

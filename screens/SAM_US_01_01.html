@@ -60,6 +60,18 @@
                                         <div class="filter-panel-inner">
                                             <div class="filter-grid">
                                                 <div>
+                                                    <label class="filter-label">권한</label>
+                                                    <select id="filter-user-role" class="filter-select">
+                                                        <option value="all">전체</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label class="filter-label">상태</label>
+                                                    <select id="filter-user-status" class="filter-select">
+                                                        <option value="all">전체</option>
+                                                    </select>
+                                                </div>
+                                                <div class="filter-grid-wide">
                                                     <label class="filter-label">키워드</label>
                                                     <div class="filter-date-range">
                                                         <select id="filter-user-type" class="filter-select">
@@ -72,12 +84,6 @@
                                                             placeholder="키워드 입력"
                                                             onkeyup="if(event.key === 'Enter') applyUserFilter()">
                                                     </div>
-                                                </div>
-                                                <div>
-                                                    <label class="filter-label">권한</label>
-                                                    <select id="filter-user-role" class="filter-select">
-                                                        <option value="all">전체</option>
-                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -102,6 +108,7 @@
                                                 <th>이름</th>
                                                 <th>소속</th>
                                                 <th>권한</th>
+                                                <th>상태</th>
                                             </tr>
                                         </thead>
                                         <tbody id="user-list-body">
@@ -408,7 +415,7 @@
             </div>
             <div class="modal-content">
                 <div class="modal-role-group">
-                    <h4 class="modal-section-title">권한</h4>
+                    <h4 class="modal-section-title">권한 <span class="required-mark text-error">*</span></h4>
                     <div id="role-select-list" class="modal-selection-list">
                         <!-- JS Populated -->
                     </div>
@@ -430,7 +437,7 @@
             </div>
             <div class="modal-content">
                 <div class="modal-role-group">
-                    <h4 class="modal-section-title">상태</h4>
+                    <h4 class="modal-section-title">상태 <span class="required-mark text-error">*</span></h4>
                     <div id="status-select-list" class="modal-selection-list">
                         <!-- JS Populated -->
                     </div>

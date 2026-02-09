@@ -56,7 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'normal', name: '정상' },
         { id: 'locked', name: '잠김' },
         { id: 'suspended', name: '정지' },
-        { id: 'withdrawn', name: '탈퇴' }
+        { id: 'withdrawn', name: '탈퇴' },
+        { id: 'pending', name: '승인 대기' }
     ];
 
     // === Elements ===
@@ -118,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterUserType = document.getElementById('filter-user-type');
     const filterUserKeyword = document.getElementById('filter-user-keyword');
     const filterUserRole = document.getElementById('filter-user-role');
+    const filterUserStatus = document.getElementById('filter-user-status');
 
     // === Initialization ===
 
@@ -128,6 +130,16 @@ document.addEventListener('DOMContentLoaded', () => {
             option.value = role.id;
             option.textContent = role.name;
             filterUserRole.appendChild(option);
+        });
+    }
+
+    // Populate Status Filter
+    if (filterUserStatus) {
+        statuses.forEach(status => {
+            const option = document.createElement('option');
+            option.value = status.id;
+            option.textContent = status.name;
+            filterUserStatus.appendChild(option);
         });
     }
 
@@ -174,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Empty State for List
         if (filteredUsers.length === 0) {
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td colspan="4" class="text-center py-4">검색 결과가 없습니다.</td>`;
+            tr.innerHTML = `<td colspan="5" class="text-center py-4">검색 결과가 없습니다.</td>`;
             userListBody.appendChild(tr);
             return;
         }
@@ -190,11 +202,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 tr.classList.add('active');
             }
 
+            // Map old 'used'/'unused' to new status if needed (migration logic)
+            let displayStatus = user.status;
+            if (displayStatus === 'used') displayStatus = 'normal';
+            if (displayStatus === 'unused') displayStatus = 'suspended';
+
+            const statusObj = statuses.find(s => s.id === displayStatus);
+            const statusName = statusObj ? statusObj.name : displayStatus;
+
             tr.innerHTML = `
                 <td>${user.id}</td>
                 <td>${user.name}</td>
                 <td>${user.dept}</td>
                 <td>${user.roleName}</td>
+                <td>${statusName}</td>
             `;
 
             // Map old 'used'/'unused' to new status if needed (migration logic)
@@ -224,6 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.resetUserFilter = function () {
         if (filterUserRole) filterUserRole.value = 'all';
+        if (filterUserStatus) filterUserStatus.value = 'all';
         filterUserType.value = 'all';
         filterUserKeyword.value = '';
         renderUserList();
@@ -673,7 +695,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // === Password Reset ===
     window.resetPassword = function () {
         // Mock logic
-        showSuccessModal('비밀번호를 11111111로 초기화 하였습니다.');
+        showSuccessModal('비밀번호를 11111111로 초기화 하였습니다.', '비밀번호 초기화');
     };
 
     // === Role Select Modal ===
