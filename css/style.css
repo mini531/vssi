@@ -1227,7 +1227,7 @@ input:-webkit-autofill:active {
 
 .registration-form-panel {
   margin-bottom: 24px;
-  padding: 1rem;
+  padding: 0.5rem;
   background-color: rgba(30, 41, 59, 0.2);
 }
 

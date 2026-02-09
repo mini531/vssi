@@ -482,9 +482,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const desiredSystemsSection = document.getElementById('desired-systems-section');
         if (desiredSystemsSection) desiredSystemsSection.classList.remove('hidden');
 
-        // SHOW Dates (Edit Mode - Readonly)
+        // HIDE Dates (Edit Mode)
         const userDatesSection = document.getElementById('user-dates-section');
-        if (userDatesSection) userDatesSection.classList.remove('hidden');
+        if (userDatesSection) userDatesSection.classList.add('hidden');
 
         // Enable Reset PW Button
         const btnResetPw = document.getElementById('btn-reset-pw');
