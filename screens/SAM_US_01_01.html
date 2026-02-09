@@ -73,17 +73,23 @@
                                                             onkeyup="if(event.key === 'Enter') applyUserFilter()">
                                                     </div>
                                                 </div>
+                                                <div>
+                                                    <label class="filter-label">권한</label>
+                                                    <select id="filter-user-role" class="filter-select">
+                                                        <option value="all">전체</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="filter-actions">
-                                                <button class="filter-btn-common filter-btn-reset"
-                                                    onclick="resetUserFilter()">
-                                                    <i data-lucide="rotate-ccw" class="trend-icon"></i> 초기화
-                                                </button>
-                                                <button class="filter-btn-common filter-btn-search"
-                                                    onclick="applyUserFilter()">
-                                                    <i data-lucide="search" class="trend-icon"></i> 조회
-                                                </button>
-                                            </div>
+                                        </div>
+                                        <div class="filter-actions">
+                                            <button class="filter-btn-common filter-btn-reset"
+                                                onclick="resetUserFilter()">
+                                                <i data-lucide="rotate-ccw" class="trend-icon"></i> 초기화
+                                            </button>
+                                            <button class="filter-btn-common filter-btn-search"
+                                                onclick="applyUserFilter()">
+                                                <i data-lucide="search" class="trend-icon"></i> 조회
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -103,23 +109,23 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <!-- Pagination Footer -->
-                                <div class="table-footer">
-                                    <span class="pagination-info" id="user-total-count">총 128 건</span>
-                                    <!-- Static for now, consistent with SAM_AS_10_01 -->
-                                    <div class="pagination-controls">
-                                        <button class="page-btn active">1</button>
-                                        <button class="page-btn">2</button>
-                                        <button class="page-btn">3</button>
-                                        <button class="page-btn pc-only">4</button>
-                                        <button class="page-btn pc-only">5</button>
-                                        <button class="page-btn"><i data-lucide="chevron-right"
-                                                class="pagination-icon"></i></button>
-                                        <select class="pagination-select pagination-select-margin">
-                                            <option>20개씩 보기</option>
-                                            <option>50개씩 보기</option>
-                                        </select>
-                                    </div>
+                            </div>
+                            <!-- Pagination Footer -->
+                            <div class="table-footer">
+                                <span class="pagination-info" id="user-total-count">총 128 건</span>
+                                <!-- Static for now, consistent with SAM_AS_10_01 -->
+                                <div class="pagination-controls">
+                                    <button class="page-btn active">1</button>
+                                    <button class="page-btn">2</button>
+                                    <button class="page-btn">3</button>
+                                    <button class="page-btn pc-only">4</button>
+                                    <button class="page-btn pc-only">5</button>
+                                    <button class="page-btn"><i data-lucide="chevron-right"
+                                            class="pagination-icon"></i></button>
+                                    <select class="pagination-select pagination-select-margin">
+                                        <option>20개씩 보기</option>
+                                        <option>50개씩 보기</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -167,11 +173,11 @@
                                         </div>
                                         <!-- Edit Mode Buttons -->
                                         <div id="edit-mode-buttons" class="action-btn-group hidden">
-                                            <button class="btn-sm btn-primary" onclick="saveChanges()">
-                                                <i data-lucide="save" class="trend-icon"></i> 저장
-                                            </button>
                                             <button class="btn-sm btn-secondary" onclick="cancelEdit()">
                                                 <i data-lucide="x" class="trend-icon"></i> 취소
+                                            </button>
+                                            <button class="btn-sm btn-primary" onclick="saveChanges()">
+                                                <i data-lucide="save" class="trend-icon"></i> 저장
                                             </button>
                                         </div>
                                         <!-- Registration Mode Buttons -->
@@ -180,11 +186,11 @@
                                                 onclick="closeDetailPane()">
                                                 <i data-lucide="list" class="trend-icon"></i> 목록
                                             </button>
-                                            <button class="btn-sm btn-primary" onclick="processRegistration()">
-                                                <i data-lucide="save" class="trend-icon"></i> 저장
-                                            </button>
                                             <button class="btn-sm btn-secondary" onclick="cancelRegistration()">
                                                 <i data-lucide="x" class="trend-icon"></i> 취소
+                                            </button>
+                                            <button class="btn-sm btn-primary" onclick="processRegistration()">
+                                                <i data-lucide="save" class="trend-icon"></i> 저장
                                             </button>
                                         </div>
                                     </div>
@@ -292,7 +298,7 @@
                                                         class="text-error required-mark">*</span></label>
                                                 <div class="flex-gap-2">
                                                     <button id="btn-select-status" class="btn-sm btn-secondary"
-                                                        onclick="openStatusSelectModal()" disabled>변경</button>
+                                                        onclick="openStatusSelectModal()" disabled>선택</button>
                                                     <input type="text" id="user-status-text" class="form-input"
                                                         placeholder="상태" disabled>
                                                     <input type="hidden" id="user-status-value">
@@ -301,8 +307,7 @@
 
                                             <!-- Systems (Checkboxes) -->
                                             <div id="desired-systems-section" class="col-span-2">
-                                                <label class="form-label">이용 희망 시스템 <span
-                                                        class="text-error required-mark">*</span></label>
+                                                <label class="form-label">이용 희망 시스템 </label>
                                                 <div class="auth-system-box">
                                                     <label class="auth-system-item group">
                                                         <input type="checkbox" name="user-systems" value="IVMS"
@@ -399,7 +404,7 @@
     <div id="role-select-modal" class="modal-overlay">
         <div class="modal-dialog modal-wide">
             <div class="modal-header">
-                <h3 class="modal-title-left">권한 선택</h3>
+                <h3 class="modal-title-left">권한 설정</h3>
                 <i data-lucide="x" class="close-icon" onclick="closeRoleSelectModal()"></i>
             </div>
             <div class="modal-content">
@@ -421,7 +426,7 @@
     <div id="status-select-modal" class="modal-overlay">
         <div class="modal-dialog">
             <div class="modal-header">
-                <h3 class="modal-title-left">상태 변경</h3>
+                <h3 class="modal-title-left">상태 설정</h3>
                 <i data-lucide="x" class="close-icon" onclick="closeStatusSelectModal()"></i>
             </div>
             <div class="modal-content">

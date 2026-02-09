@@ -117,8 +117,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const userFilterChevron = document.getElementById('user-filter-chevron');
     const filterUserType = document.getElementById('filter-user-type');
     const filterUserKeyword = document.getElementById('filter-user-keyword');
+    const filterUserRole = document.getElementById('filter-user-role');
 
     // === Initialization ===
+
+    // Populate Role Filter logic
+    if (filterUserRole) {
+        roles.forEach(role => {
+            const option = document.createElement('option');
+            option.value = role.id;
+            option.textContent = role.name;
+            filterUserRole.appendChild(option);
+        });
+    }
+
     renderUserList();
 
     // === Functions ===
@@ -128,12 +140,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Filter Data
         let filteredUsers = users;
+        // Filter by Role
+        if (filterUserRole && filterUserRole.value !== 'all') {
+            filteredUsers = filteredUsers.filter(u => u.role === filterUserRole.value);
+        }
+
         if (filterUserType && filterUserKeyword) {
             const type = filterUserType.value;
             const keyword = filterUserKeyword.value.toLowerCase().trim();
 
             if (keyword) {
-                filteredUsers = users.filter(user => {
+                filteredUsers = filteredUsers.filter(user => {
                     if (type === 'all') {
                         return (user.id && user.id.toLowerCase().includes(keyword)) ||
                             (user.name && user.name.toLowerCase().includes(keyword)) ||
@@ -206,6 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.resetUserFilter = function () {
+        if (filterUserRole) filterUserRole.value = 'all';
         filterUserType.value = 'all';
         filterUserKeyword.value = '';
         renderUserList();

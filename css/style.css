@@ -238,13 +238,13 @@ html {
 /* Modal Internal Layout Standards */
 .modal-section-title {
   font-size: 0.875rem;
-  
+
   font-weight: 600;
-  
+
   color: #94a3b8;
-  
+
   margin-bottom: 0.5rem;
-  
+
   text-align: left;
 }
 
@@ -258,49 +258,49 @@ html {
 .modal-table th,
 .modal-table td {
   padding: 0.5rem 0.75rem;
-  
+
 }
 
 /* Modal Table Footer for Count - Removed in favor of standard .table-footer */
 
 .modal-radio-label {
   font-size: 1rem;
-  
+
   font-weight: 400;
-  
+
   color: #cbd5e1;
-  
+
 }
 
 .modal-radio-subtext {
   font-size: 0.75rem;
-  
+
   color: #64748b;
-  
+
   margin-left: 0.25rem;
-  
+
 }
 
 /* modal-table and modal-table-header removed in favor of standard .data-table */
 
 .modal-selection-list {
   border: 1px solid rgba(51, 65, 85, 0.5);
-  
+
   border-radius: 0.25rem;
-  
+
   padding: 0.75rem;
-  
+
   background-color: rgba(30, 41, 59, 0.3);
-  
+
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  
+
 }
 
 .modal-role-group {
   margin-top: 1.5rem;
-  
+
 }
 
 
@@ -315,7 +315,7 @@ html {
   display: flex;
   gap: 0.5rem;
   margin-top: 1.5rem;
-  
+
   justify-content: flex-end;
 }
 
@@ -348,15 +348,15 @@ html {
 
 .glass-card-auth {
   background-color: rgba(2, 6, 23, 0.2);
-  
+
   backdrop-filter: blur(12px);
-  
+
   border: 1px solid rgba(255, 255, 255, 0.1);
-  
+
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
   /* Custom shadow from register page */
   border-radius: 0.125rem;
-  
+
   transition: all 0.3s;
 }
 
@@ -364,7 +364,7 @@ html {
 .auth-body {
   font-family: 'Inter', sans-serif;
   color: #e2e8f0;
-  
+
   min-height: 100vh;
 }
 
@@ -398,7 +398,7 @@ html {
   flex-direction: column;
   align-items: center;
   padding-top: 5rem;
-  
+
   padding-bottom: calc(5rem + env(safe-area-inset-bottom));
   animation: fadeIn 0.4s ease-out forwards;
 
@@ -407,12 +407,12 @@ html {
 /* --- Branding / Logo Standards --- */
 .brand-container {
   margin-bottom: 2rem;
-  
+
   text-align: center;
   position: relative;
   z-index: 10;
   padding-top: 2.5rem;
-  
+
 }
 
 @media (min-width: 768px) {
@@ -427,15 +427,15 @@ html {
   font-family: sans-serif;
   font-weight: 500;
   letter-spacing: -0.025em;
-  
+
   color: transparent;
   background-clip: text;
   background-image: linear-gradient(to bottom, white, #94a3b8);
-  
+
   font-size: 2.25rem;
-  
+
   margin-bottom: 1rem;
-  
+
   display: inline-block;
 }
 
@@ -450,11 +450,11 @@ html {
   font-size: 10px;
   font-weight: 700;
   color: #14b8a6;
-  
+
   letter-spacing: 0.3em;
   text-transform: uppercase;
   margin-bottom: 0.25rem;
-  
+
 }
 
 @media (min-width: 768px) {
@@ -467,15 +467,15 @@ html {
 .brand-desc {
   font-size: 10px;
   color: #64748b;
-  
+
 }
 
 /* --- Auth Card Body --- */
 .auth-card-body {
   padding: 2.5rem;
-  
+
   padding-bottom: 2rem;
-  
+
 }
 
 /* --- Auth Card Wrappers --- */
@@ -489,7 +489,7 @@ html {
   margin-left: 1rem;
   margin-right: 1rem;
   margin-bottom: 5rem;
-  
+
 }
 
 .auth-card-wide {
@@ -513,10 +513,10 @@ html {
   width: 60%;
   height: 60%;
   background-color: rgba(30, 58, 138, 0.05);
-  
+
   filter: blur(150px);
   border-radius: 9999px;
-  
+
 }
 
 .auth-bg-blob-teal {
@@ -526,47 +526,47 @@ html {
   width: 60%;
   height: 60%;
   background-color: rgba(19, 78, 74, 0.05);
-  
+
   filter: blur(150px);
   border-radius: 9999px;
-  
+
 }
 
 /* --- Auth Actions (Links) --- */
 .auth-actions {
   margin-top: 1.5rem;
-  
+
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  
+
   font-size: 0.75rem;
-  
+
   font-weight: 700;
-  
+
 }
 
 .auth-link-primary {
   color: #2dd4bf;
-  
+
   transition: color 0.2s;
 }
 
 .auth-link-primary:hover {
   color: #5eead4;
-  
+
 }
 
 .auth-link-secondary {
   color: #64748b;
-  
+
   transition: color 0.2s;
 }
 
 .auth-link-secondary:hover {
   color: #94a3b8;
-  
+
 }
 
 /* --- Auth Footer Internals --- */
@@ -574,40 +574,40 @@ html {
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  
+
   margin-bottom: 1rem;
-  
+
 }
 
 .auth-help-icon-wrapper {
   margin-top: 0.125rem;
   /* mt-0.5 */
   color: #14b8a6;
-  
+
 }
 
 .auth-help-title {
   font-size: 0.875rem;
-  
+
   font-weight: 700;
   color: white;
   margin-bottom: 0.5rem;
-  
+
 }
 
 .auth-help-desc {
   font-size: 11px;
   color: #94a3b8;
-  
+
   line-height: 1.625;
-  
+
 }
 
 .auth-cs-row {
   border-top: 1px dashed #1e293b;
-  
+
   padding-top: 1rem;
-  
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -617,15 +617,15 @@ html {
   font-size: 10px;
   font-weight: 700;
   color: #64748b;
-  
+
 }
 
 .auth-cs-number {
   font-size: 0.75rem;
-  
+
   font-weight: 700;
   color: #cbd5e1;
-  
+
   font-family: 'JetBrains Mono', monospace;
 }
 
@@ -1014,7 +1014,7 @@ html {
 .pane-content {
   flex: 1;
   overflow-y: auto;
-  padding: 1.25rem;
+  padding: 10px;
 }
 
 /* Empty State */
@@ -1025,7 +1025,7 @@ html {
   align-items: center;
   justify-content: center;
   color: #64748b;
-  
+
   text-align: center;
 }
 
@@ -1047,7 +1047,7 @@ html {
   border-radius: 4px;
   padding: 1rem;
   margin: 0 0.5rem 1rem 0.5rem;
-  
+
   transition: all 0.2s;
 }
 
@@ -1138,7 +1138,7 @@ html {
 /* Input Guide Text */
 .input-guide-text {
   color: #94a3b8;
-  
+
   font-size: 10px;
   font-weight: 500;
   margin-top: 0.375rem;
@@ -1228,8 +1228,6 @@ input:-webkit-autofill:active {
 .registration-form-panel {
   margin-bottom: 24px;
   padding: 1rem;
-  border: 1px solid rgba(51, 65, 85, 0.5);
-  border-radius: 0.25rem;
   background-color: rgba(30, 41, 59, 0.2);
 }
 
@@ -1350,7 +1348,7 @@ input:-webkit-autofill:active {
 @media (min-width: 768px) {
   .search-input-wide {
     width: 20rem;
-    
+
   }
 }
 
@@ -1375,13 +1373,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-size: 12px;
   font-weight: 700;
   color: #94a3b8;
-  
+
   margin-bottom: 0.5rem;
 }
 
 .form-label span {
   color: #ef4444;
-  
+
 }
 
 /* Inputs */
@@ -1389,27 +1387,27 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   width: 100%;
   background-color: #050912;
   border: 1px solid #1e293b;
-  
+
   color: white;
   font-size: 12px;
   padding: 0.75rem 1rem;
-  
+
   transition: all 0.2s;
 }
 
 .form-input::placeholder {
   color: #475569;
-  
+
 }
 
 .form-input:focus {
   border-color: var(--accent-teal);
-  
+
   outline: none;
 }
 
 .form-input.error {
-  
+
   border-color: #ef4444;
 }
 
@@ -1419,20 +1417,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .auth-card-header {
   text-align: center;
   margin-bottom: 2.5rem;
-  
+
   border-bottom: 1px solid #1e293b;
-  
+
   padding-bottom: 1.5rem;
-  
+
 }
 
 .auth-card-title {
   font-size: 1.125rem;
-  
+
   font-weight: 700;
   color: white;
   letter-spacing: 0.1em;
-  
+
 }
 
 /* Inline Check Button */
@@ -1459,12 +1457,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .auth-system-box {
   background-color: #050912;
   border: 1px solid #1e293b;
-  
+
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  
+
 }
 
 .auth-system-item {
@@ -1476,36 +1474,36 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Group hover logic handling */
 .auth-system-item:hover .auth-system-desc {
   color: #cbd5e1;
-  
+
 }
 
 .auth-system-code {
   font-size: 0.75rem;
-  
+
   font-weight: 700;
   color: white;
   width: 4rem;
-  
+
 }
 
 .auth-system-desc {
   font-size: 10px;
   color: #64748b;
-  
+
   font-weight: 700;
   border-left: 1px solid #334155;
-  
+
   padding-left: 0.75rem;
-  
+
   transition: color 0.2s;
 }
 
 /* Card Body Wrapper */
 .auth-card-body {
   padding: 2.5rem;
-  
+
   padding-bottom: 2rem;
-  
+
 }
 
 
@@ -1514,11 +1512,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .btn-primary {
   width: 100%;
   background-color: #0d9488;
-  
+
   color: white;
   font-weight: 700;
   font-size: 14px;
-  
+
   padding: 0.875rem;
   /* py-3.5 */
   transition: background-color 0.2s;
@@ -1528,20 +1526,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .btn-primary:hover {
   background-color: #14b8a6;
-  
+
 }
 
 .btn-secondary {
   width: 100%;
   background-color: #1f2937;
-  
+
   border: 1px solid #374151;
-  
+
   color: #cbd5e1;
-  
+
   font-weight: 700;
   font-size: 14px;
-  
+
   padding: 0.875rem;
   /* py-3.5 */
   transition: background-color 0.2s;
@@ -1552,7 +1550,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .btn-secondary:hover {
   background-color: #334155;
-  
+
 }
 
 /* --- Standardized Components (Refactoring) --- */
@@ -1657,7 +1655,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .status-card {
   background-color: #0b101b;
   border: 1px solid #1e293b;
-  
+
   padding: 1rem;
   position: relative;
   overflow: hidden;
@@ -1698,18 +1696,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Pagination Buttons */
 .page-btn {
   width: 1.5rem;
-  
+
   height: 1.5rem;
-  
+
   font-size: 0.75rem;
-  
+
   display: flex;
   align-items: center;
   justify-content: center;
   color: #64748b;
-  
+
   border-radius: 0;
-  
+
   transition: background-color 0.2s;
   background-color: transparent;
   border: none;
@@ -1723,7 +1721,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .page-btn.active {
   background-color: #0d9488;
-  
+
   color: white;
 }
 
@@ -1731,13 +1729,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .pagination-select {
   background-color: #050912;
   border: 1px solid #334155;
-  
+
   font-size: 10px;
   color: white;
   padding: 0.25rem 2rem 0.25rem 0.5rem;
-  
+
   height: 1.5rem;
-  
+
   border-radius: 0;
 }
 
@@ -1923,7 +1921,7 @@ button:disabled {
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
-  
+
   font-weight: 700;
   white-space: nowrap;
   transition: background-color 0.2s;
@@ -1933,11 +1931,11 @@ button:disabled {
 
 .filter-btn-reset {
   padding: 0 0.75rem;
-  
+
   border: 1px solid #475569;
-  
+
   color: #cbd5e1;
-  
+
   background-color: transparent;
 }
 
@@ -1948,9 +1946,9 @@ button:disabled {
 
 .filter-btn-search {
   padding: 0 1rem;
-  
+
   background-color: #0d9488;
-  
+
   color: white;
 }
 
@@ -1963,19 +1961,19 @@ button:disabled {
 .search-panel {
   background-color: #0b101b;
   border: 1px solid #1e293b;
-  
+
 }
 
 .search-panel-header {
   padding: 1rem;
-  
+
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
   user-select: none;
   border-bottom: 1px solid rgba(30, 41, 59, 0.5);
-  
+
 }
 
 .search-panel-header:hover {
@@ -2003,9 +2001,9 @@ button:disabled {
 /* Error Text */
 .form-error {
   font-size: 11px;
-  
+
   color: #f87171;
-  
+
   margin-top: 0.375rem;
   font-weight: 700;
   min-height: 1.25em;
@@ -2040,29 +2038,29 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Dashboard Standard Layout */
 .dashboard-body {
   background-color: #050810;
-  
+
   color: #e2e8f0;
-  
+
   height: 100vh;
   font-family: 'Inter', sans-serif;
-  
+
   overflow: hidden;
   display: flex;
-  
+
   flex-direction: column;
-  
+
 }
 
 .dashboard-body ::selection {
   background-color: rgba(20, 184, 166, 0.3);
-  
+
 }
 
 /* Table Standards */
 .table-container {
   background-color: #0b101b;
   border: 1px solid #1e293b;
-  
+
   overflow-x: auto;
 }
 
@@ -2076,13 +2074,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   z-index: 10;
   background-color: #0f1623;
   border-bottom: 1px solid #1e293b;
-  
+
   padding: 0.75rem 1rem;
-  
+
   text-align: left;
   font-size: 12px;
   color: #6b7280;
-  
+
   font-weight: normal;
 }
 
@@ -2096,9 +2094,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .data-table td {
   padding: 0.75rem 1rem;
-  
+
   border-bottom: 1px solid rgba(30, 41, 59, 0.5);
-  
+
   font-size: 12px;
   text-align: left;
   /* Ensure left align even in centered containers */
@@ -2112,14 +2110,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .data-table tbody tr:hover {
   background-color: rgba(255, 255, 255, 0.05);
-  
+
 }
 
 /* Table Footer / Pagination */
 .table-footer {
   background-color: #0f1623;
   border-top: 1px solid #1e293b;
-  
+
   padding: 0.75rem 1rem;
   display: flex;
   flex-direction: column;
@@ -2128,9 +2126,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .pagination-info {
   font-size: 0.75rem;
-  
+
   color: #94a3b8;
-  
+
 }
 
 @media (min-width: 768px) {
@@ -2146,7 +2144,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   /* px-1.5 py-0.5 */
   font-size: 10px;
   border-radius: 0;
-  
+
   border: 1px solid transparent;
 }
 
@@ -2200,11 +2198,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .system-switcher-dialog {
   width: 20rem;
-  
+
   background-color: #0f172a;
-  
+
   border: 1px solid #334155;
-  
+
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
@@ -2229,22 +2227,22 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   justify-content: space-between;
   padding: 1rem;
   border-bottom: 1px solid #1e293b;
-  
+
   background-color: rgba(30, 41, 59, 0.5);
-  
+
 }
 
 .system-switcher-header .close-btn {
   padding: 0.25rem;
   color: #94a3b8;
-  
+
   background: transparent;
   transition: all 0.2s;
 }
 
 .system-switcher-header .close-btn:hover {
   background-color: #334155;
-  
+
   color: white;
 }
 
@@ -2269,36 +2267,36 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .system-switcher-item:hover {
   background-color: #1e293b;
-  
+
 }
 
 .system-switcher-item.active {
   background-color: rgba(19, 78, 74, 0.2);
-  
+
   border-color: rgba(17, 94, 89, 0.5);
-  
+
 }
 
 .system-switcher-item .link-icon {
   width: 14px;
   height: 14px;
   color: #475569;
-  
+
   margin-top: 0.25rem;
   transition: color 0.2s;
 }
 
 .system-switcher-item:hover .link-icon {
   color: #cbd5e1;
-  
+
 }
 
 .system-switcher-footer {
   padding: 1rem;
   border-top: 1px solid #1e293b;
-  
+
   background-color: rgba(2, 6, 23, 0.5);
-  
+
   display: flex;
   justify-content: center;
 }
@@ -2321,7 +2319,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   flex: 1;
   overflow-y: auto;
   padding: 1rem;
-  
+
 }
 
 @media (min-width: 768px) {
@@ -2382,7 +2380,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  
+
 }
 
 /* Status Cards Grid */
@@ -2504,28 +2502,28 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 0.5rem;
-  
+
 }
 
 .status-card-title {
   font-size: 12px;
   color: #64748b;
-  
+
   font-weight: 700;
   letter-spacing: 0.05em;
-  
+
 }
 
 .status-card-value {
   font-size: 1.5rem;
-  
+
   font-weight: 700;
   color: white;
 }
 
 .status-card-state {
   margin-top: 0.5rem;
-  
+
   font-size: 12px;
   display: flex;
   align-items: center;
@@ -2534,7 +2532,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .status-card-deco {
   position: absolute;
   inset: auto 0 0 0;
-  
+
   height: 2px;
   /* h-0.5 */
 }
@@ -2544,12 +2542,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  
+
 }
 
 .search-panel-title {
   font-size: 0.75rem;
-  
+
   font-weight: 700;
   color: white;
 }
@@ -2558,9 +2556,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.75rem;
-  
+
   margin-bottom: 1rem;
-  
+
   text-align: left;
 }
 
@@ -2606,20 +2604,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: block;
   font-size: 12px;
   color: #64748b;
-  
+
   margin-bottom: 0.25rem;
-  
+
 }
 
 .filter-date-range {
   display: flex;
   gap: 0.25rem;
-  
+
 }
 
 .filter-date-separator {
   color: #64748b;
-  
+
   align-self: center;
   font-size: 12px;
 }
@@ -2628,28 +2626,28 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
-  
+
   border-top: 1px solid rgba(30, 41, 59, 0.5);
-  
+
   padding-top: 1rem;
-  
+
 }
 
 /* Table Internals */
 .data-table-body {
   color: #cbd5e1;
-  
+
 }
 
 .data-table-row {
   border-bottom: 1px solid rgba(30, 41, 59, 0.5);
-  
+
   transition: background-color 0.2s;
 }
 
 .data-table-row:hover {
   background-color: rgba(255, 255, 255, 0.05);
-  
+
 }
 
 /* Typography Utilities */
@@ -2676,19 +2674,19 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .text-dim {
   color: #64748b !important;
-  
+
 }
 
 .text-muted {
   color: #94a3b8 !important;
-  
+
 }
 
 /* Pagination Footer Internals */
 .pagination-info {
   font-size: 11px;
   color: #14b8a6;
-  
+
   font-weight: 700;
   align-self: flex-start;
 }
@@ -2703,14 +2701,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  
+
   align-self: flex-end;
 }
 
 @media (min-width: 768px) {
   .pagination-controls {
     gap: 0.5rem;
-    
+
     align-self: auto;
   }
 }
@@ -2724,12 +2722,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   width: 1rem;
   height: 1rem;
   color: #475569;
-  
+
   transition: transform 0.2s;
 }
 
 .filter-panel-inner {
-  padding: 1rem;
+  padding: 0.2rem;
 }
 
 .dashboard-main-flex {
@@ -2854,7 +2852,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border: 1px solid var(--border-color);
   width: 100%;
   max-width: 28rem;
-  
+
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   transform: translateY(0);
 }
@@ -2871,7 +2869,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  
+
 }
 
 /* Close button - standardized icon size */
@@ -2890,9 +2888,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .close-icon-sm {
   width: 1.125rem;
-  
+
   height: 1.125rem;
-  
+
 }
 
 /* --- Standard Modal System --- */
@@ -2920,12 +2918,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .modal-dialog {
   background-color: #0b101b;
   border: 1px solid #334155;
-  
+
   padding: 2.5rem;
-  
+
   width: 100%;
   max-width: 24rem;
-  
+
   text-align: center;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 1);
   transform: translateY(20px);
@@ -2945,7 +2943,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .modal-icon {
   margin-bottom: 1.5rem;
-  
+
   display: flex;
   justify-content: center;
   margin-left: auto;
@@ -2959,16 +2957,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
-  
+
   padding-bottom: 1rem;
-  
+
   border-bottom: 1px solid rgba(30, 41, 59, 0.5);
-  
+
 }
 
 .modal-title-left {
   font-size: 1.25rem;
-  
+
   font-weight: 700;
   color: white;
   text-align: left;
@@ -2978,7 +2976,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   width: 1.5rem;
   height: 1.5rem;
   color: #94a3b8;
-  
+
   cursor: pointer;
   transition: color 0.2s;
   flex-shrink: 0;
@@ -2990,26 +2988,26 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .modal-title {
   font-size: 1.25rem;
-  
+
   font-weight: 700;
   color: white;
   margin-bottom: 1rem;
-  
+
 }
 
 /* --- Standardized Modal Variations --- */
 .modal-icon.warning {
   color: #eab308;
-  
+
   filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
 }
 
 .btn-modal-warning {
   width: 100%;
   background-color: rgba(202, 138, 4, 0.8);
-  
+
   border: 1px solid rgba(234, 179, 8, 0.3);
-  
+
   color: white;
   padding: 0.75rem 0;
   font-weight: 700;
@@ -3025,9 +3023,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .btn-modal-primary {
   background-color: rgba(37, 99, 235, 0.8);
-  
+
   border: 1px solid rgba(59, 130, 246, 0.3);
-  
+
   color: white;
   padding: 0.75rem 0;
   font-weight: 700;
@@ -3044,7 +3042,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .btn-modal-secondary {
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #cbd5e1;
-  
+
   padding: 0.75rem 0;
   font-weight: 700;
   font-size: 0.875rem;
@@ -3060,9 +3058,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .btn-modal-error {
   background-color: rgba(220, 38, 38, 0.8);
-  
+
   border: 1px solid rgba(239, 68, 68, 0.3);
-  
+
   color: white;
   padding: 0.75rem 0;
   font-weight: 700;
@@ -3079,9 +3077,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .btn-modal-success {
   background-color: rgba(13, 148, 136, 0.8);
-  
+
   border: 1px solid rgba(20, 184, 166, 0.3);
-  
+
   color: white;
   padding: 0.75rem 0;
   font-weight: 700;
@@ -3116,20 +3114,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .modal-desc {
   color: #cbd5e1;
-  
+
   margin-bottom: 2rem;
-  
+
   line-height: 1.625;
-  
+
   white-space: pre-line;
   font-size: 0.875rem;
-  
+
 }
 
 .modal-btn-group {
   display: flex;
   gap: 0.5rem;
-  
+
   justify-content: center;
   margin-top: 1.5rem;
 }
@@ -3147,9 +3145,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background-color: #0b101b;
   /* bg-[#0b101b] */
   border-right: 1px solid #1e293b;
-  
+
   border: none;
-  
+
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -3169,11 +3167,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   padding: 0.75rem 1rem;
-  
+
   color: #94a3b8;
-  
+
   font-size: 0.875rem;
-  
+
   transition: all 0.2s;
   border: none;
   background: transparent;
@@ -3190,10 +3188,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Active Navigation Button */
 .sidebar-nav-btn.active {
   color: #14b8a6;
-  
+
   font-weight: 700;
   border-left: 2px solid #14b8a6;
-  
+
   background-color: #0f1623;
   /* bg-[#0f1623] */
 }
@@ -3207,7 +3205,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   width: 1rem;
   height: 1rem;
   margin-right: 0.75rem;
-  
+
   opacity: 0.7;
 }
 
@@ -3241,14 +3239,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .sidebar-sub-btn {
   width: 100%;
   padding-left: 3rem;
-  
+
   padding-top: 0.625rem;
   /* py-2.5 */
   padding-bottom: 0.625rem;
   font-size: 0.75rem;
-  
+
   color: #64748b;
-  
+
   text-align: left;
   white-space: nowrap;
   transition: color 0.2s;
@@ -3256,12 +3254,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .sidebar-sub-btn:hover {
   color: #cbd5e1;
-  
+
 }
 
 .sidebar-sub-btn.active {
   color: #2dd4bf;
-  
+
 }
 
 /* --- Header Standardization --- */
@@ -3282,7 +3280,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .header-icon-btn {
   color: #94a3b8;
-  
+
   transition: color 0.15s;
 }
 
@@ -3333,49 +3331,49 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .header-divider-text {
   color: #334155;
-  
+
   margin: 0 0.25rem;
   font-size: 0.75rem;
 }
 
 .header-switcher-btn {
   color: #14b8a6;
-  
+
   transition: color 0.15s;
 }
 
 .header-switcher-btn:hover {
   color: #2dd4bf;
-  
+
 }
 
 /* Divider */
 .header-divider {
   height: 1rem;
-  
+
   width: 1px;
   background-color: #334155;
-  
+
   margin-left: 0.5rem;
-  
+
   margin-right: 0.5rem;
 }
 
 /* Title Section */
 .header-title-main {
   font-size: 0.875rem;
-  
+
   font-weight: 700;
   color: #94a3b8;
-  
+
   display: none;
 }
 
 .header-title-sub {
   font-size: 0.875rem;
-  
+
   color: #cbd5e1;
-  
+
 }
 
 @media (min-width: 768px) {
@@ -3389,11 +3387,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  
+
   font-size: 0.75rem;
-  
+
   color: #cbd5e1;
-  
+
 }
 
 .header-profile-btn:hover {
@@ -3402,14 +3400,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .sidebar-container {
   width: 16rem;
-  
+
   background-color: #0b101b;
   /* bg-[#0b101b] */
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   height: 100%;
-  
+
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   z-index: 50;
@@ -3423,7 +3421,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   height: 100%;
   overflow-y: auto;
   width: 16rem;
-  
+
 }
 
 /* Sidebar Submenu List */
@@ -3436,15 +3434,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   top: 100%;
   right: 0;
   margin-top: 0.5rem;
-  
+
   width: 12rem;
-  
+
   background-color: #0b101b;
   /* bg-[#0b101b] */
   border: 1px solid #334155;
-  
+
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  
+
   z-index: 100;
 }
 
@@ -3452,11 +3450,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   padding: 0.75rem 1rem;
-  
+
   font-size: 0.75rem;
-  
+
   color: #cbd5e1;
-  
+
 }
 
 .profile-dropdown-item:hover {
@@ -3466,9 +3464,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .profile-dropdown-item.danger {
   color: #f87171;
-  
+
   border-top: 1px solid #1e293b;
-  
+
 }
 
 /* Date Time Display */
@@ -3476,13 +3474,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: none;
   align-items: center;
   gap: 1rem;
-  
+
   font-size: 0.75rem;
-  
+
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  
+
   color: #64748b;
-  
+
 }
 
 @media (min-width: 768px) {
@@ -3494,37 +3492,37 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* --- System Switcher Standardization --- */
 .switcher-dot {
   width: 0.5rem;
-  
+
   height: 0.5rem;
-  
+
   background-color: #14b8a6;
-  
+
 }
 
 .switcher-title-text {
   font-size: 0.875rem;
-  
+
   font-weight: 700;
   color: #f1f5f9;
-  
+
 }
 
 .switcher-item-content {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  
+
   margin-bottom: 0.25rem;
-  
+
 }
 
 .switcher-acronym {
   font-size: 1.125rem;
-  
+
   font-weight: 900;
-  
+
   letter-spacing: -0.05em;
-  
+
 }
 
 .switcher-acronym.teal {
@@ -3559,20 +3557,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-size: 10px;
   /* text-[10px] */
   background-color: #134e4a;
-  
+
   color: #2dd4bf;
-  
+
   padding-left: 0.25rem;
-  
+
   padding-right: 0.25rem;
   font-weight: 700;
 }
 
 .switcher-desc {
   font-size: 0.75rem;
-  
+
   color: #94a3b8;
-  
+
   font-weight: 500;
 }
 
@@ -3581,10 +3579,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   /* text-[10px] */
   font-weight: 700;
   color: #475569;
-  
+
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  
+
 }
 
 /* --- Loading Spinner Standard --- */
@@ -3636,18 +3634,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Auth Footer & Help Icon Refinement */
 .auth-footer {
   padding: 2rem;
-  
+
   margin-top: 0.5rem;
-  
+
   background-color: rgba(2, 6, 23, 0.2);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .auth-help-icon-wrapper i {
   width: 1.25rem;
-  
+
   height: 1.25rem;
-  
+
 }
 
 /* Intro Page Layout */
@@ -3706,7 +3704,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .intro-brand-sub {
   font-size: 1.125rem;
   color: #14b8a6;
-  
+
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
@@ -3714,13 +3712,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .intro-brand-desc {
   font-size: 0.875rem;
   color: #94a3b8;
-  
+
 }
 
 .intro-grid {
   width: 100%;
   max-width: 32rem;
-  
+
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -3926,7 +3924,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .intro-brand-sub {
   font-size: 1.125rem;
   color: #14b8a6;
-  
+
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
@@ -3934,13 +3932,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .intro-brand-desc {
   font-size: 0.875rem;
   color: #94a3b8;
-  
+
 }
 
 .intro-grid {
   width: 100%;
   max-width: 32rem;
-  
+
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -4072,7 +4070,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-size: 0.8125rem;
   font-weight: 700;
   color: #2dd4bf;
-  
+
 }
 
 .mobile-tabs-wrapper {
@@ -4094,5 +4092,5 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .info-description {
   color: #64748b;
-  
+
 }
