@@ -45,18 +45,18 @@
                             <div class="w-full overflow-x-auto bg-slate-900/30 rounded-lg p-4">
                                 <svg viewBox="0 0 1400 900" class="w-full h-auto" style="min-height: 600px;">
                                     <defs>
-                                        <!-- Gradient definitions -->
-                                        <linearGradient id="ivsGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                            <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:0.8" />
-                                            <stop offset="100%" style="stop-color:#2E5C8A;stop-opacity:0.9" />
+                                        <!-- Monochrome Gradient definitions -->
+                                        <linearGradient id="darkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#475569;stop-opacity:0.9" />
+                                            <stop offset="100%" style="stop-color:#334155;stop-opacity:1" />
                                         </linearGradient>
-                                        <linearGradient id="vosGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                            <stop offset="0%" style="stop-color:#7CB342;stop-opacity:0.8" />
-                                            <stop offset="100%" style="stop-color:#558B2F;stop-opacity:0.9" />
+                                        <linearGradient id="mediumGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#64748b;stop-opacity:0.8" />
+                                            <stop offset="100%" style="stop-color:#475569;stop-opacity:0.9" />
                                         </linearGradient>
-                                        <linearGradient id="vos8Grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                            <stop offset="0%" style="stop-color:#FF8A65;stop-opacity:0.8" />
-                                            <stop offset="100%" style="stop-color:#D84315;stop-opacity:0.9" />
+                                        <linearGradient id="lightGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#94a3b8;stop-opacity:0.3" />
+                                            <stop offset="100%" style="stop-color:#64748b;stop-opacity:0.4" />
                                         </linearGradient>
                                     </defs>
 
@@ -66,10 +66,10 @@
 
                                     <!-- Control Room Section -->
                                     <g id="control-room">
-                                        <rect x="50" y="50" width="300" height="120" rx="8" fill="url(#ivsGrad)"
+                                        <rect x="50" y="50" width="300" height="120" rx="8" fill="url(#darkGrad)"
                                             stroke="#64748b" stroke-width="2" />
                                         <text x="200" y="75" text-anchor="middle"
-                                            class="fill-white text-sm font-bold">🏢 관제실</text>
+                                            class="fill-slate-200 text-sm font-bold">관제실</text>
 
                                         <!-- Control room devices -->
                                         <rect x="70" y="90" width="80" height="30" rx="4" fill="#1e293b"
@@ -99,7 +99,7 @@
                                         <rect x="50" y="220" width="550" height="400" rx="8" fill="none"
                                             stroke="#4A90E2" stroke-width="3" />
                                         <text x="325" y="245" text-anchor="middle"
-                                            class="fill-blue-400 text-sm font-bold">🖥️ IVS (통합운용시스템)</text>
+                                            class="fill-slate-200 text-sm font-bold">IVS (통합운용시스템)</text>
 
                                         <!-- L3 Switch -->
                                         <rect x="270" y="260" width="110" height="30" rx="4" fill="#475569"
@@ -109,8 +109,8 @@
 
                                         <!-- WAS Server with 2 VMs -->
                                         <g id="was-server">
-                                            <rect x="70" y="310" width="120" height="120" rx="6" fill="url(#ivsGrad)"
-                                                stroke="#2E5C8A" stroke-width="2" />
+                                            <rect x="70" y="310" width="120" height="120" rx="6" fill="url(#mediumGrad)"
+                                                stroke="#475569" stroke-width="2" />
                                             <text x="130" y="330" text-anchor="middle"
                                                 class="fill-white text-xs font-bold">WAS서버 (IVS)</text>
 
@@ -131,8 +131,8 @@
 
                                         <!-- WEB Server with 2 VMs -->
                                         <g id="web-server">
-                                            <rect x="210" y="310" width="120" height="120" rx="6" fill="url(#ivsGrad)"
-                                                stroke="#2E5C8A" stroke-width="2" />
+                                            <rect x="210" y="310" width="120" height="120" rx="6"
+                                                fill="url(#mediumGrad)" stroke="#475569" stroke-width="2" />
                                             <text x="270" y="330" text-anchor="middle"
                                                 class="fill-white text-xs font-bold">WEB서버 (IVS)</text>
 
@@ -153,8 +153,8 @@
 
                                         <!-- DB Server with 2 VMs -->
                                         <g id="db-server">
-                                            <rect x="350" y="310" width="120" height="120" rx="6" fill="url(#ivsGrad)"
-                                                stroke="#2E5C8A" stroke-width="2" />
+                                            <rect x="350" y="310" width="120" height="120" rx="6"
+                                                fill="url(#mediumGrad)" stroke="#475569" stroke-width="2" />
                                             <text x="410" y="330" text-anchor="middle"
                                                 class="fill-white text-xs font-bold">통합DB (IVS)</text>
 
@@ -175,8 +175,8 @@
 
                                         <!-- VCDM Server with 2 VMs -->
                                         <g id="vcdm-server">
-                                            <rect x="490" y="310" width="120" height="120" rx="6" fill="url(#ivsGrad)"
-                                                stroke="#2E5C8A" stroke-width="2" />
+                                            <rect x="490" y="310" width="120" height="120" rx="6"
+                                                fill="url(#mediumGrad)" stroke="#475569" stroke-width="2" />
                                             <text x="550" y="330" text-anchor="middle"
                                                 class="fill-white text-xs font-bold">VCDM운용서버</text>
 
@@ -233,7 +233,7 @@
                                         <rect x="650" y="50" width="350" height="300" rx="8" fill="none"
                                             stroke="#7CB342" stroke-width="3" />
                                         <text x="825" y="75" text-anchor="middle"
-                                            class="fill-green-400 text-sm font-bold">🛩️ VOS #1~#7</text>
+                                            class="fill-slate-200 text-sm font-bold">VOS #1~#7</text>
 
                                         <!-- L2 Switch -->
                                         <rect x="770" y="90" width="110" height="30" rx="4" fill="#475569"
@@ -242,29 +242,29 @@
                                             class="fill-white text-xs font-bold">L2 Switch</text>
 
                                         <!-- VOS Servers -->
-                                        <rect x="670" y="140" width="140" height="70" rx="6" fill="url(#vosGrad)"
-                                            stroke="#558B2F" stroke-width="2" />
+                                        <rect x="670" y="140" width="140" height="70" rx="6" fill="url(#mediumGrad)"
+                                            stroke="#475569" stroke-width="2" />
                                         <text x="740" y="160" text-anchor="middle"
                                             class="fill-white text-xs font-bold">VOS운용서버 #1</text>
                                         <text x="740" y="180" text-anchor="middle"
                                             class="fill-slate-300 text-xs">4C/8G/200G</text>
 
-                                        <rect x="830" y="140" width="140" height="70" rx="6" fill="url(#vosGrad)"
-                                            stroke="#558B2F" stroke-width="2" />
+                                        <rect x="830" y="140" width="140" height="70" rx="6" fill="url(#mediumGrad)"
+                                            stroke="#475569" stroke-width="2" />
                                         <text x="900" y="160" text-anchor="middle"
                                             class="fill-white text-xs font-bold">VOS운용서버 #2</text>
                                         <text x="900" y="180" text-anchor="middle"
                                             class="fill-slate-300 text-xs">4C/8G/200G</text>
 
-                                        <rect x="670" y="230" width="140" height="70" rx="6" fill="url(#vosGrad)"
-                                            stroke="#558B2F" stroke-width="2" />
+                                        <rect x="670" y="230" width="140" height="70" rx="6" fill="url(#mediumGrad)"
+                                            stroke="#475569" stroke-width="2" />
                                         <text x="740" y="250" text-anchor="middle"
                                             class="fill-white text-xs font-bold">VOS운용서버 #3</text>
                                         <text x="740" y="270" text-anchor="middle"
                                             class="fill-slate-300 text-xs">4C/8G/200G</text>
 
-                                        <rect x="830" y="230" width="140" height="70" rx="6" fill="url(#vosGrad)"
-                                            stroke="#558B2F" stroke-width="2" />
+                                        <rect x="830" y="230" width="140" height="70" rx="6" fill="url(#mediumGrad)"
+                                            stroke="#475569" stroke-width="2" />
                                         <text x="900" y="250" text-anchor="middle"
                                             class="fill-white text-xs font-bold">VOS운용서버 #4</text>
                                         <text x="900" y="270" text-anchor="middle"
@@ -303,11 +303,11 @@
                                         <rect x="1050" y="50" width="300" height="550" rx="8" fill="none"
                                             stroke="#FF8A65" stroke-width="3" />
                                         <text x="1200" y="75" text-anchor="middle"
-                                            class="fill-orange-400 text-sm font-bold">🔒 VOS #8 (단독형)</text>
+                                            class="fill-slate-200 text-sm font-bold">VOS #8 (단독형)</text>
 
                                         <!-- UTM -->
-                                        <rect x="1145" y="90" width="110" height="40" rx="6" fill="#D84315"
-                                            stroke="#BF360C" stroke-width="2" />
+                                        <rect x="1145" y="90" width="110" height="40" rx="6" fill="#475569"
+                                            stroke="#334155" stroke-width="2" />
                                         <text x="1200" y="110" text-anchor="middle"
                                             class="fill-white text-xs font-bold">UTM</text>
                                         <text x="1200" y="123" text-anchor="middle"
@@ -378,12 +378,10 @@
 
                                     <!-- WAN Cloud -->
                                     <g id="wan">
-                                        <ellipse cx="700" cy="700" rx="120" ry="80" fill="#0891b2" fill-opacity="0.2"
-                                            stroke="#06b6d4" stroke-width="3" stroke-dasharray="5,5" />
-                                        <text x="700" y="695" text-anchor="middle"
-                                            class="fill-cyan-400 text-xl font-bold">☁️</text>
-                                        <text x="700" y="720" text-anchor="middle"
-                                            class="fill-cyan-300 text-lg font-bold">WAN</text>
+                                        <ellipse cx="700" cy="700" rx="120" ry="80" fill="#475569" fill-opacity="0.2"
+                                            stroke="#64748b" stroke-width="3" stroke-dasharray="5,5" />
+                                        <text x="700" y="710" text-anchor="middle"
+                                            class="fill-slate-200 text-lg font-bold">WAN</text>
                                     </g>
 
                                     <!-- Main Connections -->
