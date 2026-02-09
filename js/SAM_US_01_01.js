@@ -51,6 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'role_vertiport', name: '버티포트 운용자' }
     ];
 
+    // Status Definition
+    const statuses = [
+        { id: 'normal', name: '정상' },
+        { id: 'locked', name: '잠김' },
+        { id: 'suspended', name: '정지' },
+        { id: 'withdrawn', name: '탈퇴' }
+    ];
+
     // === Elements ===
     const userListBody = document.getElementById('user-list-body');
     const detailPane = document.getElementById('detail-pane');
@@ -73,7 +81,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const userDeptInput = document.getElementById('user-dept');
     const userRoleNameInput = document.getElementById('user-role-name');
     const userRoleIdInput = document.getElementById('user-role-id');
-    const userStatusRadios = document.getElementsByName('user-status');
+
+    // Status Elements
+    const userStatusTextInput = document.getElementById('user-status-text');
+    const userStatusValueInput = document.getElementById('user-status-value');
+    const btnSelectStatus = document.getElementById('btn-select-status');
+
     const userSystemCheckboxes = document.getElementsByName('user-systems');
     const userRegDateInput = document.getElementById('user-reg-date');
     const userModDateInput = document.getElementById('user-mod-date');
@@ -85,6 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Modals
     const roleSelectModal = document.getElementById('role-select-modal');
     const roleSelectList = document.getElementById('role-select-list');
+    const statusSelectModal = document.getElementById('status-select-modal');
+    const statusSelectList = document.getElementById('status-select-list');
     const deleteConfirmModal = document.getElementById('delete-confirm-modal');
     const resultModal = document.getElementById('result-modal');
 
@@ -95,6 +110,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let isIdChecked = false; // For registration mock check
     let isRegistrationComplete = false; // Flag to distinguish Reg completion vs intermediate success
     let tempSelectedRole = null; // For modal selection
+    let tempSelectedStatus = null; // For status modal selection
+
+    // === Filter Elements ===
+    const userFilterContent = document.getElementById('user-filter-content');
+    const userFilterChevron = document.getElementById('user-filter-chevron');
+    const filterUserType = document.getElementById('filter-user-type');
+    const filterUserKeyword = document.getElementById('filter-user-keyword');
 
     // === Initialization ===
     renderUserList();
@@ -104,31 +126,94 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderUserList() {
         userListBody.innerHTML = '';
 
+        // Filter Data
+        let filteredUsers = users;
+        if (filterUserType && filterUserKeyword) {
+            const type = filterUserType.value;
+            const keyword = filterUserKeyword.value.toLowerCase().trim();
+
+            if (keyword) {
+                filteredUsers = users.filter(user => {
+                    if (type === 'all') {
+                        return (user.id && user.id.toLowerCase().includes(keyword)) ||
+                            (user.name && user.name.toLowerCase().includes(keyword)) ||
+                            (user.dept && user.dept.toLowerCase().includes(keyword));
+                    } else if (type === 'id') {
+                        return user.id && user.id.toLowerCase().includes(keyword);
+                    } else if (type === 'name') {
+                        return user.name && user.name.toLowerCase().includes(keyword);
+                    } else if (type === 'dept') {
+                        return user.dept && user.dept.toLowerCase().includes(keyword);
+                    }
+                    return true;
+                });
+            }
+        }
+
         // Update Total Count
         const totalCountEl = document.getElementById('user-total-count');
-        if (totalCountEl) totalCountEl.innerText = `총 ${users.length} 건`;
+        if (totalCountEl) totalCountEl.innerText = `총 ${filteredUsers.length} 건`;
 
-        users.forEach(user => {
+        // Empty State for List
+        if (filteredUsers.length === 0) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td colspan="4" class="text-center py-4">검색 결과가 없습니다.</td>`;
+            userListBody.appendChild(tr);
+            return;
+        }
+
+        filteredUsers.forEach(user => {
             const tr = document.createElement('tr');
             tr.className = 'data-table-row clickable-row';
             tr.dataset.userId = user.id;
             tr.onclick = () => selectUser(user, tr);
 
-            const badgeClass = user.role === 'unassigned' ? 'badge-gray' : 'badge-blue';
+            // Highlight if active
+            if (currentUser && currentUser.id === user.id) {
+                tr.classList.add('active');
+            }
 
             tr.innerHTML = `
                 <td>${user.id}</td>
                 <td>${user.name}</td>
                 <td>${user.dept}</td>
-                <td><span class="badge ${badgeClass}">${user.roleName}</span></td>
+                <td>${user.roleName}</td>
             `;
-            // Add mock dates if missing (for existing mock data)
+
+            // Map old 'used'/'unused' to new status if needed (migration logic)
+            if (user.status === 'used') user.status = 'normal';
+            if (user.status === 'unused') user.status = 'suspended';
+
+            // Add mock dates if missing
             if (!user.regDate) user.regDate = '2024.01.15 10:30:00';
             if (!user.modDate) user.modDate = '2024.02.01 14:20:00';
 
             userListBody.appendChild(tr);
         });
     }
+
+    // === Filter Functions ===
+    // === Filter Functions ===
+    window.toggleUserFilter = function () {
+        const chevron = document.getElementById('user-filter-chevron');
+        if (userFilterContent.classList.contains('hidden')) {
+            userFilterContent.classList.remove('hidden');
+            if (chevron) chevron.style.transform = 'rotate(180deg)';
+        } else {
+            userFilterContent.classList.add('hidden');
+            if (chevron) chevron.style.transform = 'rotate(0deg)';
+        }
+    };
+
+    window.resetUserFilter = function () {
+        filterUserType.value = 'all';
+        filterUserKeyword.value = '';
+        renderUserList();
+    };
+
+    window.applyUserFilter = function () {
+        renderUserList();
+    };
 
     function selectUser(user, rowElement) {
         currentUser = user;
@@ -156,8 +241,22 @@ document.addEventListener('DOMContentLoaded', () => {
         userRoleNameInput.value = user.roleName;
 
         // Status
-        if (user.status === 'used') userStatusRadios[0].checked = true;
-        else userStatusRadios[1].checked = true;
+        // Handle migration from old 'message' if needed, but Mock Data has 'used/unused'.
+        // I will map them for display: used->normal, unused->suspended
+        let statusId = user.status;
+        if (statusId === 'used') statusId = 'normal';
+        else if (statusId === 'unused') statusId = 'suspended';
+
+        const statusObj = statuses.find(s => s.id === statusId);
+        if (statusObj) {
+            userStatusTextInput.value = statusObj.name;
+            userStatusValueInput.value = statusObj.id;
+        } else {
+            // Fallback
+            userStatusTextInput.value = statusId;
+            userStatusValueInput.value = statusId;
+        }
+
 
         // Systems
         userSystemCheckboxes.forEach(cb => {
@@ -202,6 +301,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Hide/Disable Role Select Button
         btnSelectRole.classList.add('hidden');
         btnSelectRole.disabled = true;
+
+        // Hide/Disable Status Select Button
+        btnSelectStatus.classList.add('hidden');
+        btnSelectStatus.disabled = true;
+        userStatusTextInput.disabled = true;
+
 
         // Hide Password Section
         const passwordSection = document.getElementById('password-section');
@@ -256,15 +361,30 @@ document.addEventListener('DOMContentLoaded', () => {
         // Clear & Enable Form
         formInputs.forEach(input => {
             input.value = '';
-            input.disabled = false;
+
+            // Should not enable role/status input (must use select button)
+            if (input.id !== 'user-role-name' && input.id !== 'user-status-text') {
+                input.disabled = false;
+            }
+
             input.classList.remove('error'); // Clear error class
         });
         // Clear all error messages
         document.querySelectorAll('.form-error').forEach(el => el.innerText = '');
 
-        // Uncheck boxes and radios
+        // Uncheck boxes
         userSystemCheckboxes.forEach(cb => cb.checked = false);
-        userStatusRadios[0].checked = true; // Default 'Used'
+
+        // Status: Default to 'Normal' (Using 'used' or 'normal' as default for new?)
+        // Usually new user is normal. 
+        userStatusValueInput.value = 'normal';
+        userStatusTextInput.value = '정상';
+        // Status select should be disabled in Reg Mode? Or allowed?
+        // User request didn't specify, but usually status is fixed to Normal on creation or selectable.
+        // Assuming selectable like Role.
+        btnSelectStatus.classList.remove('hidden');
+        btnSelectStatus.disabled = false;
+
 
         // Clear Role
         userRoleIdInput.value = '';
@@ -318,7 +438,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (input.id !== 'user-id' &&
                 input.id !== 'user-reg-date' &&
                 input.id !== 'user-mod-date' &&
-                input.id !== 'user-role-name') {
+                input.id !== 'user-role-name' &&
+                input.id !== 'user-status-text') {
                 input.disabled = false;
             }
         });
@@ -326,6 +447,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Show & Enable Role Select
         btnSelectRole.classList.remove('hidden');
         btnSelectRole.disabled = false;
+
+        // Show & Enable Status Select
+        btnSelectStatus.classList.remove('hidden');
+        btnSelectStatus.disabled = false;
 
         // Show Password Section
         const passwordSection = document.getElementById('password-section');
@@ -383,7 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Collect Status
-        const status = userStatusRadios[0].checked ? 'used' : 'unused';
+        const status = userStatusValueInput.value;
 
         // Update local data mock
         if (currentUser) {
@@ -402,7 +527,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Re-select to refresh view
             selectUser(currentUser, document.querySelector(`.data-table-row[data-user-id="${currentUser.id}"]`));
 
-            showSuccessModal('저장되었습니다.');
+            showSuccessModal('회원 정보가 수정되었습니다.', '수정 완료');
         }
     };
 
@@ -490,7 +615,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 7. Role Check
         if (!userRoleIdInput.value) {
-            setError('user-role', '권한을 선택해주세요.');
+            setError('user-role-name', '권한을 선택해주세요.');
             hasError = true;
         }
 
@@ -501,7 +626,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedSystems = [];
 
         // Collect Status
-        const status = userStatusRadios[0].checked ? 'used' : 'unused';
+        const status = userStatusValueInput.value;
 
         // Simulate Save
         const newUser = {
@@ -521,7 +646,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Shows Success Modal
         isRegistrationComplete = true; // Set flag to true
-        showSuccessModal('요청 처리가 완료되었습니다.');
+        showSuccessModal('회원 정보가 등록되었습니다.', '등록 완료');
 
         // Refresh List
         renderUserList();
@@ -581,9 +706,66 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tempSelectedRole) {
             userRoleIdInput.value = tempSelectedRole.id;
             userRoleNameInput.value = tempSelectedRole.name;
+            resetError('user-role-name');
             closeRoleSelectModal();
         } else {
             showResultModal('권한을 선택해주세요.');
+        }
+    };
+
+    // === Status Select Modal ===
+    window.openStatusSelectModal = function () {
+        statusSelectModal.classList.add('active');
+        renderStatusList();
+    };
+
+    window.closeStatusSelectModal = function () {
+        statusSelectModal.classList.remove('active');
+        tempSelectedStatus = null;
+    };
+
+    function renderStatusList() {
+        statusSelectList.innerHTML = '';
+
+        statuses.forEach(status => {
+            const div = document.createElement('div');
+            div.className = 'flex items-center';
+
+            // Check if selected
+            const isChecked = userStatusValueInput.value === status.id;
+
+            div.innerHTML = `
+                <label class="perm-checkbox-group">
+                    <input type="radio" name="modal-status-select" value="${status.id}" class="custom-radio" ${isChecked ? 'checked' : ''}>
+                    <span class="perm-checkbox-label modal-radio-label">${status.name}</span>
+                </label>
+            `;
+
+            statusSelectList.appendChild(div);
+        });
+    }
+
+    window.confirmStatusSelect = function () {
+        // If user didn't click anything, check if one is checked
+        if (!tempSelectedStatus) {
+            const checked = document.querySelector('input[name="modal-status-select"]:checked');
+            if (checked) {
+                tempSelectedStatus = statuses.find(s => s.id === checked.value);
+            }
+        }
+
+        if (tempSelectedStatus) {
+            userStatusValueInput.value = tempSelectedStatus.id;
+            userStatusTextInput.value = tempSelectedStatus.name;
+            closeStatusSelectModal();
+
+            // If we are in Edit mode, we can optionally save or just update button?
+            // User requirement: "Save in modal"? 
+            // "상태 변경 누르면 권한 변경 처럼 모달에서 상태 변경 후 저장 할 수 있게 해줘."
+            // Which means 'Confirm' in modal updates the input field, and then 'Save' on the main form saves it.
+            // Just like Role Select. I implemented 'Save' button in modal as 'confirmStatusSelect'.
+        } else {
+            showResultModal('상태를 선택해주세요.');
         }
     };
 
@@ -633,7 +815,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Show Success Modal instead of Result Validator
             // showResultModal('삭제되었습니다.');
-            showSuccessModal('삭제되었습니다.');
+            showSuccessModal('삭제되었습니다.', '삭제 완료');
         }
     };
 
@@ -661,7 +843,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    function showSuccessModal(msg) {
+    function showSuccessModal(msg, title = '등록 완료') {
+        const titleEl = document.getElementById('success-modal-title');
+        if (titleEl) titleEl.innerText = title;
+
         const msgEl = document.getElementById('success-message');
         if (msgEl) msgEl.innerText = msg;
         document.getElementById('success-modal').classList.add('active');

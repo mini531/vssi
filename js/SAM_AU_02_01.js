@@ -398,7 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${user.id}</td>
                 <td>${user.name}</td>
                 <td>${user.dept}</td>
-                <td><span class="badge ${user.currentRole === '미배정' ? 'badge-gray' : 'badge-blue'}">${user.currentRole}</span></td>
+                <td>${user.currentRole}</td>
             `;
             tbody.appendChild(tr);
         });
