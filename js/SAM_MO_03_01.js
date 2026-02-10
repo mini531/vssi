@@ -86,7 +86,7 @@ function renderNetworkList() {
 
     filteredNetworkData.forEach((net, index) => {
         const row = document.createElement('tr');
-        row.className = `data-table-row animate-fade-in animate-fade-in-delay-${Math.min(index + 1, 20)}`;
+        row.className = 'data-table-row';
         row.onclick = () => selectNetwork(net);
 
         const statusBadgeClass = net.status === '정상' ? 'badge-success' :

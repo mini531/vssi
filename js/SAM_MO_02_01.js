@@ -84,7 +84,7 @@ function renderHardwareList() {
 
     filteredData.forEach((hw, index) => {
         const row = document.createElement('tr');
-        row.className = `data-table-row animate-fade-in animate-fade-in-delay-${Math.min(index + 1, 20)}`;
+        row.className = 'data-table-row';
         row.onclick = () => selectHardware(hw);
 
         const statusBadgeClass = hw.status === '정상' ? 'badge-success' :
