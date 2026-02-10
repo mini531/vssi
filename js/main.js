@@ -7,6 +7,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // Default filters
     let currentTab = 'COMMON';
 
+    // Load tab from URL hash
+    function loadTabFromURL() {
+        const hash = window.location.hash.substring(1);
+        if (hash && ['COMMON', 'IVMS', 'IFPS', 'IFRS', 'V-CDM', 'SAMS'].includes(hash)) {
+            currentTab = hash;
+            // Update active tab button
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(btn => {
+                if (btn.getAttribute('data-tab') === currentTab) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            // Update mobile select
+            const mobileSelect = document.getElementById('mobile-tabs-select');
+            if (mobileSelect) mobileSelect.value = currentTab;
+        }
+    }
+
+    // Save tab to URL hash
+    function saveTabToURL(tab) {
+        window.location.hash = tab;
+    }
+
     // Implemented Screens Whitelist
     const implementedScreens = [
         'COM_LG_01_01',
@@ -21,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     function init() {
+        loadTabFromURL();
         setupTabs();
         setupMobileSelect();
         renderTable();
@@ -37,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.classList.add('active');
 
                 currentTab = btn.getAttribute('data-tab');
+                saveTabToURL(currentTab);
                 if (mobileSelect) mobileSelect.value = currentTab;
                 renderTable();
             });
@@ -51,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         mobileSelect.addEventListener('change', (e) => {
             currentTab = e.target.value;
+            saveTabToURL(currentTab);
 
             // Sync desktop tabs
             tabButtons.forEach(btn => {
@@ -70,12 +98,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let html = date;
         // Replace 2026년 with teal span
-        html = html.replace(/2026년/g, '<span class="text-teal-400 font-mono">2026년</span>');
+        html = html.replace(/2026년/g, '<span class="year-2026">2026년</span>');
         // Replace 2027년 with amber span
-        html = html.replace(/2027년/g, '<span class="text-amber-400 font-mono">2027년</span>');
+        html = html.replace(/2027년/g, '<span class="year-2027">2027년</span>');
 
         // If it's just a range or has other chars, the base color will be slate
-        return `<span class="text-slate-500">${html}</span>`;
+        return `<span class="year-base">${html}</span>`;
     }
 
     function renderTable() {
@@ -95,19 +123,23 @@ document.addEventListener('DOMContentLoaded', () => {
         // Populate table
         data.forEach((item, index) => {
             const tr = document.createElement('tr');
-            tr.className = 'data-table-row animate-fade-in';
-            tr.style.animationDelay = `${index * 0.05}s`;
+            const delayClass = index < 20 ? `animate-fade-in-delay-${index + 1}` : 'animate-fade-in';
+            tr.className = `data-table-row ${delayClass}`;
 
             const isImplemented = implementedScreens.includes(item.id);
-            let idHtml = '';
+            let idClass = '';
+            let idOnClick = '';
+            let idTitle = '';
 
             if (isImplemented) {
-                idHtml = `<span class="text-sm font-bold text-teal-400 hover:text-teal-300 cursor-pointer underline underline-offset-4 decoration-teal-500/30" onclick="openScreen('${item.id}')">${item.id}</span>`;
+                idClass = 'screen-id-link';
+                idOnClick = `onclick="openScreen('${item.id}')"`;
             } else if (item.id === 'SAM_AU_01_02') {
                 // Special case for Included Modal - Primary Color but not a link
-                idHtml = `<span class="text-sm font-bold text-teal-400 opacity-80">${item.id}</span>`;
+                idClass = 'screen-id-modal';
             } else {
-                idHtml = `<span class="text-sm font-bold text-slate-600 cursor-not-allowed" title="Not Implemented">${item.id}</span>`;
+                idClass = 'screen-id-disabled';
+                idTitle = 'title="Not Implemented"';
             }
 
             // Grouping Logic: Dim text if same as previous row
@@ -118,20 +150,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const yearHtml = getYearHtml(item.date);
 
             tr.innerHTML = `
-                <td class="td-center ${categoryChanged ? '' : 'opacity-20'}">${item.category}</td>
-                <td class="${menu1Changed ? 'text-white' : 'opacity-20'}">${item.menu1}</td>
-                <td class="${menu2Changed ? 'text-white' : 'opacity-20'}">${item.menu2}</td>
-                <td class="whitespace-nowrap">
-                    ${idHtml}
+                <td class="${categoryChanged ? '' : 'opacity-20'}">${item.category}</td>
+                <td class="${menu1Changed ? '' : 'opacity-20'}">${item.menu1}</td>
+                <td class="${menu2Changed ? '' : 'opacity-20'}">${item.menu2}</td>
+                <td class="${idClass}" ${idOnClick} ${idTitle}>
+                    ${item.id}
                 </td>
-                <td class="text-white font-bold">${item.name}</td>
+                <td>${item.name}</td>
                 <td class="td-center">
                     <span class="badge ${getTypeClass(item.type)}">
                         ${item.type}
                     </span>
                 </td>
                 <td class="td-date">${yearHtml}</td>
-                <td class="text-xs text-slate-500">${item.remarks}</td>
+                <td class="td-remarks">${item.remarks}</td>
             `;
             tableBody.appendChild(tr);
 

@@ -3,18 +3,18 @@
     <div class="header-left">
         <!-- Hamburger -->
         <button onclick="toggleSidebar()" class="header-icon-btn">
-            <i data-lucide="menu" class="w-5 h-5"></i>
+            <i data-lucide="menu"></i>
         </button>
         <!-- System Switcher -->
         <button onclick="toggleSystemSwitcher()" class="header-switcher-btn" title="System Switcher">
-            <i data-lucide="grid" class="w-5 h-5"></i>
+            <i data-lucide="grid"></i>
         </button>
 
         <div class="header-divider"></div>
 
         <div class="header-group">
             <span id="header-system-title" class="header-title-main">관리자 시스템</span>
-            <span class="header-divider-text hidden md:inline">|</span>
+            <span class="header-divider-text hide-mobile">|</span>
             <span id="header-page-title" class="header-title-sub"></span>
         </div>
     </div>
@@ -24,17 +24,17 @@
         <!-- Profile -->
         <div class="relative">
             <button onclick="toggleProfile()" class="header-profile-btn">
-                <i data-lucide="user" class="w-3.5 h-3.5 text-slate-500"></i>
-                <span class="hidden md:inline">관제사 홍길동</span>
-                <i data-lucide="chevron-down" class="w-3 h-3 text-slate-500 hidden md:inline"></i>
+                <i data-lucide="user" class="icon-sm text-slate"></i>
+                <span class="hide-mobile">관제사 홍길동</span>
+                <i data-lucide="chevron-down" class="icon-xs text-slate hide-mobile"></i>
             </button>
             <!-- Dropdown -->
             <div id="profile-dropdown" class="profile-dropdown-menu hidden">
                 <a href="#" class="profile-dropdown-item">
-                    <i data-lucide="user" class="w-3.5 h-3.5 mr-2"></i> 회원 정보
+                    <i data-lucide="user" class="icon-sm mr-2"></i> 회원 정보
                 </a>
                 <a href="COM_LG_01_01.html" class="profile-dropdown-item danger">
-                    <i data-lucide="log-out" class="w-3.5 h-3.5 mr-2"></i> 로그아웃
+                    <i data-lucide="log-out" class="icon-sm mr-2"></i> 로그아웃
                 </a>
             </div>
         </div>
@@ -42,12 +42,12 @@
         <!-- Date/Time -->
         <div class="header-datetime">
             <div class="header-group">
-                <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+                <i data-lucide="calendar" class="icon-sm"></i>
                 <span id="server-date">2026.02.05</span>
             </div>
             <div class="header-group">
-                <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-                <span id="server-time" class="text-teal-500">00:06:57</span>
+                <i data-lucide="clock" class="icon-sm"></i>
+                <span id="server-time" class="text-teal">00:06:57</span>
             </div>
         </div>
     </div>

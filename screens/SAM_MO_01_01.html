@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko" class="dark">
 
 <head>
@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../css/style.css">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Style block moved to style.css -->
 </head>
 
 <body class="dashboard-body app-screen-height" data-system-acronym="SAMS" data-page-title="모니터링">
@@ -26,551 +27,477 @@
 
             <!-- Content Scroll Area -->
             <div class="dashboard-content dashboard-content-full custom-scrollbar">
-                <div class="dashboard-container dashboard-container-full flex flex-col gap-6">
+                <div class="dashboard-container dashboard-container-full flex flex-col">
 
-                    <!-- Top Pane: System Diagram (Accordion) -->
-                    <div class="glass-panel" id="diagram-panel">
-                        <div class="pane-header cursor-pointer select-none" onclick="toggleDiagram()">
+                    <!-- Top Pane: System Diagram (Always Open) -->
+                    <div class="glass-panel h-full flex flex-col" id="diagram-panel">
+                        <div class="pane-header select-none cursor-default">
                             <div class="search-panel-title-group">
                                 <i data-lucide="activity" class="status-card-icon text-success"></i>
                                 <span class="search-panel-title">인프라 통합 구성도</span>
                             </div>
-                            <div class="pane-header-right">
-                                <i data-lucide="chevron-up" id="diagram-chevron"
-                                    class="transition-transform duration-300"></i>
-                            </div>
                         </div>
-                        <div class="pane-content p-6 transition-all duration-300 overflow-hidden" id="diagram-content">
+                        <div class="pane-content" id="diagram-content">
                             <!-- Detailed Infrastructure Topology -->
-                            <div class="w-full overflow-x-auto bg-slate-900/30 rounded-lg p-4">
-                                <svg viewBox="0 0 1400 900" class="w-full h-auto" style="min-height: 600px;">
-                                    <defs>
-                                        <!-- Monochrome Gradient definitions -->
-                                        <linearGradient id="darkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                            <stop offset="0%" style="stop-color:#475569;stop-opacity:0.9" />
-                                            <stop offset="100%" style="stop-color:#334155;stop-opacity:1" />
-                                        </linearGradient>
-                                        <linearGradient id="mediumGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                            <stop offset="0%" style="stop-color:#64748b;stop-opacity:0.8" />
-                                            <stop offset="100%" style="stop-color:#475569;stop-opacity:0.9" />
-                                        </linearGradient>
-                                        <linearGradient id="lightGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                            <stop offset="0%" style="stop-color:#94a3b8;stop-opacity:0.3" />
-                                            <stop offset="100%" style="stop-color:#64748b;stop-opacity:0.4" />
-                                        </linearGradient>
-                                    </defs>
 
-                                    <!-- Title -->
-                                    <text x="700" y="25" text-anchor="middle"
-                                        class="fill-slate-300 text-lg font-bold">인프라 통합 구성도 - 정밀 토폴로지</text>
+                            <svg viewBox="0 0 1600 800">
+                                <defs>
+                                    <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5"
+                                        markerHeight="5">
+                                        <circle cx="5" cy="5" r="3" fill="#64748b" />
+                                    </marker>
+                                </defs>
 
-                                    <!-- Control Room Section -->
-                                    <g id="control-room">
-                                        <rect x="50" y="50" width="300" height="120" fill="url(#darkGrad)"
-                                            stroke="#64748b" stroke-width="2" />
-                                        <text x="200" y="75" text-anchor="middle"
-                                            class="fill-slate-200 text-sm font-bold">관제실</text>
+                                <!-- ==============================================
+                                         LEFT PANEL: IVS
+                                         ============================================== -->
+                                <g id="panel-ivs">
+                                    <!-- Container Box -->
+                                    <rect x="10" y="10" width="750" height="780" rx="0" fill="none" stroke="#334155"
+                                        stroke-width="1" />
+                                    <text x="30" y="40" class="fill-slate-200 text-lg font-bold">버티포트 통합운용시스템
+                                        (IVS)</text>
 
-                                        <!-- Control room devices -->
-                                        <rect x="70" y="90" width="80" height="30" fill="#1e293b" stroke="#475569"
-                                            stroke-width="1" />
-                                        <text x="110" y="110" text-anchor="middle" class="fill-slate-300 text-xs">DID
-                                            Monitor</text>
+                                    <!-- DIRECT CONNECTORS: Nodes to IVS L2 Switch -->
 
-                                        <rect x="160" y="90" width="70" height="30" fill="#1e293b" stroke="#475569"
-                                            stroke-width="1" />
-                                        <text x="195" y="110" text-anchor="middle"
-                                            class="fill-slate-300 text-xs">통합운용PC</text>
-
-                                        <rect x="240" y="90" width="90" height="30" fill="#1e293b" stroke="#475569"
-                                            stroke-width="1" />
-                                        <text x="285" y="110" text-anchor="middle" class="fill-slate-300 text-xs">Ipwall
-                                            Controller</text>
-
-                                        <!-- L2 Switch -->
-                                        <rect x="160" y="135" width="80" height="25" fill="#475569" stroke="#64748b"
-                                            stroke-width="1" />
-                                        <text x="200" y="152" text-anchor="middle"
-                                            class="fill-white text-xs font-bold">L2 Switch</text>
+                                    <!-- VOS Ops Lines -->
+                                    <g class="network-group" id="link-vos1-ivsl2"
+                                        onclick="openNetworkModal('LINK_VOS1_L2', 'VOS운용서버#1', 'IVS L2스위치')">
+                                        <path d="M190 97 L250 97 L250 340 L320 340" class="network-hit-area" />
+                                        <path d="M190 97 L250 97 L250 340 L320 340" class="line-normal status-normal" />
+                                    </g>
+                                    <g class="network-group" id="link-vos2-ivsl2"
+                                        onclick="openNetworkModal('LINK_VOS2_L2', 'VOS운용서버#2', 'IVS L2스위치')">
+                                        <path d="M190 141 L260 141 L260 342 L320 342" class="network-hit-area" />
+                                        <path d="M190 141 L260 141 L260 342 L320 342"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <g class="network-group" id="link-vos3-ivsl2"
+                                        onclick="openNetworkModal('LINK_VOS3_L2', 'VOS운용서버#3', 'IVS L2스위치')">
+                                        <path d="M190 185 L270 185 L270 344 L320 344" class="network-hit-area" />
+                                        <path d="M190 185 L270 185 L270 344 L320 344"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <g class="network-group" id="link-vos4-ivsl2"
+                                        onclick="openNetworkModal('LINK_VOS4_L2', 'VOS운용서버#4', 'IVS L2스위치')">
+                                        <path d="M190 229 L280 229 L280 346 L320 346" class="network-hit-area" />
+                                        <path d="M190 229 L280 229 L280 346 L320 346"
+                                            class="line-normal status-normal" />
                                     </g>
 
-                                    <!-- IVS System -->
-                                    <g id="ivs-system">
-                                        <rect x="50" y="220" width="550" height="400" fill="none" stroke="#64748b"
-                                            stroke-width="3" />
-                                        <text x="325" y="245" text-anchor="middle"
-                                            class="fill-slate-200 text-sm font-bold">IVS (통합운용시스템)</text>
-
-                                        <!-- L3 Switch -->
-                                        <rect x="270" y="260" width="110" height="30" rx="4" fill="#475569"
-                                            stroke="#64748b" stroke-width="2" />
-                                        <text x="325" y="280" text-anchor="middle"
-                                            class="fill-white text-xs font-bold">L3 Switch (Core)</text>
-
-                                        <!-- WAS Server with 2 VMs -->
-                                        <g id="was-server">
-                                            <rect x="70" y="310" width="120" height="120" rx="6" fill="url(#mediumGrad)"
-                                                stroke="#475569" stroke-width="2" />
-                                            <text x="130" y="330" text-anchor="middle"
-                                                class="fill-white text-xs font-bold">WAS서버 (IVS)</text>
-
-                                            <rect x="80" y="340" width="100" height="35" rx="3" fill="#1e293b"
-                                                stroke="#475569" stroke-width="1" />
-                                            <text x="130" y="355" text-anchor="middle" class="fill-slate-300 text-xs">VM
-                                                #1</text>
-                                            <text x="130" y="368" text-anchor="middle"
-                                                class="fill-slate-400 text-xs">8C/16G/500G</text>
-
-                                            <rect x="80" y="385" width="100" height="35" rx="3" fill="#1e293b"
-                                                stroke="#475569" stroke-width="1" />
-                                            <text x="130" y="400" text-anchor="middle" class="fill-slate-300 text-xs">VM
-                                                #2</text>
-                                            <text x="130" y="413" text-anchor="middle"
-                                                class="fill-slate-400 text-xs">8C/16G/500G</text>
-                                        </g>
-
-                                        <!-- WEB Server with 2 VMs -->
-                                        <g id="web-server">
-                                            <rect x="210" y="310" width="120" height="120" rx="6"
-                                                fill="url(#mediumGrad)" stroke="#475569" stroke-width="2" />
-                                            <text x="270" y="330" text-anchor="middle"
-                                                class="fill-white text-xs font-bold">WEB서버 (IVS)</text>
-
-                                            <rect x="220" y="340" width="100" height="35" rx="3" fill="#1e293b"
-                                                stroke="#475569" stroke-width="1" />
-                                            <text x="270" y="355" text-anchor="middle" class="fill-slate-300 text-xs">VM
-                                                #1</text>
-                                            <text x="270" y="368" text-anchor="middle"
-                                                class="fill-slate-400 text-xs">4C/8G/200G</text>
-
-                                            <rect x="220" y="385" width="100" height="35" rx="3" fill="#1e293b"
-                                                stroke="#475569" stroke-width="1" />
-                                            <text x="270" y="400" text-anchor="middle" class="fill-slate-300 text-xs">VM
-                                                #2</text>
-                                            <text x="270" y="413" text-anchor="middle"
-                                                class="fill-slate-400 text-xs">4C/8G/200G</text>
-                                        </g>
-
-                                        <!-- DB Server with 2 VMs -->
-                                        <g id="db-server">
-                                            <rect x="350" y="310" width="120" height="120" rx="6"
-                                                fill="url(#mediumGrad)" stroke="#475569" stroke-width="2" />
-                                            <text x="410" y="330" text-anchor="middle"
-                                                class="fill-white text-xs font-bold">통합DB (IVS)</text>
-
-                                            <rect x="360" y="340" width="100" height="35" rx="3" fill="#1e293b"
-                                                stroke="#475569" stroke-width="1" />
-                                            <text x="410" y="355" text-anchor="middle" class="fill-slate-300 text-xs">VM
-                                                #1</text>
-                                            <text x="410" y="368" text-anchor="middle"
-                                                class="fill-slate-400 text-xs">16C/64G/2T</text>
-
-                                            <rect x="360" y="385" width="100" height="35" rx="3" fill="#1e293b"
-                                                stroke="#475569" stroke-width="1" />
-                                            <text x="410" y="400" text-anchor="middle" class="fill-slate-300 text-xs">VM
-                                                #2</text>
-                                            <text x="410" y="413" text-anchor="middle"
-                                                class="fill-slate-400 text-xs">16C/64G/2T</text>
-                                        </g>
-
-                                        <!-- VCDM Server with 2 VMs -->
-                                        <g id="vcdm-server">
-                                            <rect x="490" y="310" width="120" height="120" rx="6"
-                                                fill="url(#mediumGrad)" stroke="#475569" stroke-width="2" />
-                                            <text x="550" y="330" text-anchor="middle"
-                                                class="fill-white text-xs font-bold">VCDM운용서버</text>
-
-                                            <rect x="500" y="340" width="100" height="35" rx="3" fill="#1e293b"
-                                                stroke="#475569" stroke-width="1" />
-                                            <text x="550" y="355" text-anchor="middle" class="fill-slate-300 text-xs">VM
-                                                #1</text>
-                                            <text x="550" y="368" text-anchor="middle"
-                                                class="fill-slate-400 text-xs">8C/16G/500G</text>
-
-                                            <rect x="500" y="385" width="100" height="35" rx="3" fill="#1e293b"
-                                                stroke="#475569" stroke-width="1" />
-                                            <text x="550" y="400" text-anchor="middle" class="fill-slate-300 text-xs">VM
-                                                #2</text>
-                                            <text x="550" y="413" text-anchor="middle"
-                                                class="fill-slate-400 text-xs">8C/16G/500G</text>
-                                        </g>
-
-                                        <!-- L2 Switch and other servers -->
-                                        <rect x="270" y="460" width="110" height="30" rx="4" fill="#475569"
-                                            stroke="#64748b" stroke-width="2" />
-                                        <text x="325" y="480" text-anchor="middle"
-                                            class="fill-white text-xs font-bold">L2 Switch</text>
-
-                                        <rect x="120" y="520" width="140" height="80" rx="6" fill="#1e293b"
-                                            stroke="#475569" stroke-width="2" />
-                                        <text x="190" y="540" text-anchor="middle"
-                                            class="fill-slate-300 text-xs font-bold">CEC 미들웨어</text>
-                                        <text x="190" y="560" text-anchor="middle" class="fill-slate-400 text-xs">Model:
-                                            XXX</text>
-                                        <text x="190" y="575" text-anchor="middle"
-                                            class="fill-slate-400 text-xs">8C/16G/500G</text>
-
-                                        <rect x="380" y="520" width="140" height="80" rx="6" fill="#1e293b"
-                                            stroke="#475569" stroke-width="2" />
-                                        <text x="450" y="540" text-anchor="middle"
-                                            class="fill-slate-300 text-xs font-bold">VOS운용관리서버</text>
-                                        <text x="450" y="560" text-anchor="middle" class="fill-slate-400 text-xs">Model:
-                                            XXX</text>
-                                        <text x="450" y="575" text-anchor="middle"
-                                            class="fill-slate-400 text-xs">4C/8G/200G</text>
-
-                                        <!-- Connections within IVS -->
-                                        <line x1="325" y1="290" x2="130" y2="310" stroke="#64748b" stroke-width="2" />
-                                        <line x1="325" y1="290" x2="270" y2="310" stroke="#64748b" stroke-width="2" />
-                                        <line x1="325" y1="290" x2="410" y2="310" stroke="#64748b" stroke-width="2" />
-                                        <line x1="325" y1="290" x2="550" y2="310" stroke="#64748b" stroke-width="2" />
-                                        <line x1="325" y1="460" x2="190" y2="520" stroke="#64748b" stroke-width="2" />
-                                        <line x1="325" y1="460" x2="450" y2="520" stroke="#64748b" stroke-width="2" />
+                                    <!-- IVS Servers -->
+                                    <!-- WAS#1 -->
+                                    <g class="network-group" id="link-was1-ivsl2"
+                                        onclick="openNetworkModal('LINK_WAS1_L2', 'WAS서버(IVS) VM#1', 'IVS L2스위치')">
+                                        <path d="M190 297 L290 297 L290 348 L320 348" class="network-hit-area" />
+                                        <path d="M190 297 L290 297 L290 348 L320 348"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- WAS#2 -->
+                                    <g class="network-group" id="link-was2-ivsl2"
+                                        onclick="openNetworkModal('LINK_WAS2_L2', 'WAS서버(IVS) VM#2', 'IVS L2스위치')">
+                                        <path d="M190 341 L300 341 L300 350 L320 350" class="network-hit-area" />
+                                        <path d="M190 341 L300 341 L300 350 L320 350"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- WEB#1 -->
+                                    <g class="network-group" id="link-web1-ivsl2"
+                                        onclick="openNetworkModal('LINK_WEB1_L2', 'WEB서버(IVS) VM#1', 'IVS L2스위치')">
+                                        <path d="M190 385 L300 385 L300 352 L320 352" class="network-hit-area" />
+                                        <path d="M190 385 L300 385 L300 352 L320 352"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- WEB#2 -->
+                                    <g class="network-group" id="link-web2-ivsl2"
+                                        onclick="openNetworkModal('LINK_WEB2_L2', 'WEB서버(IVS) VM#2', 'IVS L2스위치')">
+                                        <path d="M190 429 L290 429 L290 354 L320 354" class="network-hit-area" />
+                                        <path d="M190 429 L290 429 L290 354 L320 354"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- DB#1 -->
+                                    <g class="network-group" id="link-db1-ivsl2"
+                                        onclick="openNetworkModal('LINK_DB1_L2', '통합DB서버(IVS) VM#1', 'IVS L2스위치')">
+                                        <path d="M190 473 L280 473 L280 356 L320 356" class="network-hit-area" />
+                                        <path d="M190 473 L280 473 L280 356 L320 356"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- DB#2 -->
+                                    <g class="network-group" id="link-db2-ivsl2"
+                                        onclick="openNetworkModal('LINK_DB2_L2', '통합DB서버(IVS) VM#2', 'IVS L2스위치')">
+                                        <path d="M190 517 L270 517 L270 358 L320 358" class="network-hit-area" />
+                                        <path d="M190 517 L270 517 L270 358 L320 358"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- VCDM#1 -->
+                                    <g class="network-group" id="link-vcdm1-ivsl2"
+                                        onclick="openNetworkModal('LINK_VCDM1_L2', 'VCDM운용서버 VM#1', 'IVS L2스위치')">
+                                        <path d="M190 561 L260 561 L260 360 L320 360" class="network-hit-area" />
+                                        <path d="M190 561 L260 561 L260 360 L320 360"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- VCDM#2 -->
+                                    <g class="network-group" id="link-vcdm2-ivsl2"
+                                        onclick="openNetworkModal('LINK_VCDM2_L2', 'VCDM운용서버 VM#2', 'IVS L2스위치')">
+                                        <path d="M190 605 L250 605 L250 362 L320 362" class="network-hit-area" />
+                                        <path d="M190 605 L250 605 L250 362 L320 362"
+                                            class="line-normal status-normal" />
                                     </g>
 
-                                    <!-- VOS #1-7 System -->
-                                    <g id="vos-1-7">
-                                        <rect x="650" y="50" width="350" height="300" rx="8" fill="none"
-                                            stroke="#7CB342" stroke-width="3" />
-                                        <text x="825" y="75" text-anchor="middle"
-                                            class="fill-slate-200 text-sm font-bold">VOS #1~#7</text>
-
-                                        <!-- L2 Switch -->
-                                        <rect x="770" y="90" width="110" height="30" rx="4" fill="#475569"
-                                            stroke="#64748b" stroke-width="2" />
-                                        <text x="825" y="110" text-anchor="middle"
-                                            class="fill-white text-xs font-bold">L2 Switch</text>
-
-                                        <!-- VOS Servers -->
-                                        <rect x="670" y="140" width="140" height="70" rx="6" fill="url(#mediumGrad)"
-                                            stroke="#475569" stroke-width="2" />
-                                        <text x="740" y="160" text-anchor="middle"
-                                            class="fill-white text-xs font-bold">VOS운용서버 #1</text>
-                                        <text x="740" y="180" text-anchor="middle"
-                                            class="fill-slate-300 text-xs">4C/8G/200G</text>
-
-                                        <rect x="830" y="140" width="140" height="70" rx="6" fill="url(#mediumGrad)"
-                                            stroke="#475569" stroke-width="2" />
-                                        <text x="900" y="160" text-anchor="middle"
-                                            class="fill-white text-xs font-bold">VOS운용서버 #2</text>
-                                        <text x="900" y="180" text-anchor="middle"
-                                            class="fill-slate-300 text-xs">4C/8G/200G</text>
-
-                                        <rect x="670" y="230" width="140" height="70" rx="6" fill="url(#mediumGrad)"
-                                            stroke="#475569" stroke-width="2" />
-                                        <text x="740" y="250" text-anchor="middle"
-                                            class="fill-white text-xs font-bold">VOS운용서버 #3</text>
-                                        <text x="740" y="270" text-anchor="middle"
-                                            class="fill-slate-300 text-xs">4C/8G/200G</text>
-
-                                        <rect x="830" y="230" width="140" height="70" rx="6" fill="url(#mediumGrad)"
-                                            stroke="#475569" stroke-width="2" />
-                                        <text x="900" y="250" text-anchor="middle"
-                                            class="fill-white text-xs font-bold">VOS운용서버 #4</text>
-                                        <text x="900" y="270" text-anchor="middle"
-                                            class="fill-slate-300 text-xs">4C/8G/200G</text>
-
-                                        <!-- VP PCs -->
-                                        <rect x="670" y="315" width="70" height="25" rx="3" fill="#1e293b"
-                                            stroke="#475569" stroke-width="1" />
-                                        <text x="705" y="332" text-anchor="middle" class="fill-slate-300 text-xs">VP PC
-                                            #1,2</text>
-
-                                        <rect x="755" y="315" width="70" height="25" rx="3" fill="#1e293b"
-                                            stroke="#475569" stroke-width="1" />
-                                        <text x="790" y="332" text-anchor="middle" class="fill-slate-300 text-xs">VP PC
-                                            #3,4</text>
-
-                                        <rect x="840" y="315" width="70" height="25" rx="3" fill="#1e293b"
-                                            stroke="#475569" stroke-width="1" />
-                                        <text x="875" y="332" text-anchor="middle" class="fill-slate-300 text-xs">VP PC
-                                            #5,6</text>
-
-                                        <rect x="925" y="315" width="60" height="25" rx="3" fill="#1e293b"
-                                            stroke="#475569" stroke-width="1" />
-                                        <text x="955" y="332" text-anchor="middle" class="fill-slate-300 text-xs">VP PC
-                                            #7</text>
-
-                                        <!-- Connections -->
-                                        <line x1="825" y1="120" x2="740" y2="140" stroke="#64748b" stroke-width="2" />
-                                        <line x1="825" y1="120" x2="900" y2="140" stroke="#64748b" stroke-width="2" />
-                                        <line x1="825" y1="120" x2="740" y2="230" stroke="#64748b" stroke-width="2" />
-                                        <line x1="825" y1="120" x2="900" y2="230" stroke="#64748b" stroke-width="2" />
+                                    <!-- Link L2 to CEC -->
+                                    <g class="network-group" id="link-ivsl2-cec"
+                                        onclick="openNetworkModal('LINK_IVSL2_CEC', 'IVS L2스위치', 'CEC 미들웨어')">
+                                        <path d="M420 350 L460 350" class="network-hit-area" />
+                                        <path d="M420 350 L460 350" class="line-normal status-normal" />
                                     </g>
 
-                                    <!-- VOS #8 System -->
-                                    <g id="vos-8">
-                                        <rect x="1050" y="50" width="300" height="550" rx="8" fill="none"
-                                            stroke="#FF8A65" stroke-width="3" />
-                                        <text x="1200" y="75" text-anchor="middle"
-                                            class="fill-slate-200 text-sm font-bold">VOS #8 (단독형)</text>
+                                    <!-- Link CEC to L3 -->
+                                    <g class="network-group" id="link-cec-ivsl3"
+                                        onclick="openNetworkModal('LINK_CEC_L3', 'CEC 미들웨어', 'IVS L3스위치')">
+                                        <path d="M580 350 L620 350" class="network-hit-area" />
+                                        <path d="M580 350 L620 350" class="line-normal status-normal" />
+                                    </g>
 
-                                        <!-- UTM -->
-                                        <rect x="1145" y="90" width="110" height="40" rx="6" fill="#475569"
-                                            stroke="#334155" stroke-width="2" />
-                                        <text x="1200" y="110" text-anchor="middle"
-                                            class="fill-white text-xs font-bold">UTM</text>
-                                        <text x="1200" y="123" text-anchor="middle"
-                                            class="fill-slate-300 text-xs">Firewall</text>
+                                    <!-- Link L3 to WAN -->
+                                    <g class="network-group" id="link-ivsl3-wan"
+                                        onclick="openNetworkModal('LINK_IVSL3_WAN', 'IVS L3스위치', 'WAN')">
+                                        <path d="M720 350 L780 350" class="network-hit-area" />
+                                        <path d="M720 350 L780 350" class="line-normal status-normal" />
+                                    </g>
 
-                                        <!-- L2 Switches -->
-                                        <rect x="1080" y="160" width="90" height="25" rx="4" fill="#475569"
-                                            stroke="#64748b" stroke-width="1" />
-                                        <text x="1125" y="177" text-anchor="middle" class="fill-white text-xs">L2 Switch
-                                            #1</text>
+                                    <!-- Nodes (Front) -->
+                                    <g transform="translate(30, 80)">
+                                        <g class="node-interactive" onclick="openHardwareModal('VOS운용서버#1')">
+                                            <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">VOS운용서버#1</text>
+                                        </g>
+                                        <g transform="translate(0, 44)" class="node-interactive"
+                                            onclick="openHardwareModal('VOS운용서버#2')">
+                                            <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">VOS운용서버#2</text>
+                                        </g>
+                                        <g transform="translate(0, 88)" class="node-interactive"
+                                            onclick="openHardwareModal('VOS운용서버#3')">
+                                            <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">VOS운용서버#3</text>
+                                        </g>
+                                        <g transform="translate(0, 132)" class="node-interactive"
+                                            onclick="openHardwareModal('VOS운용서버#4')">
+                                            <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">VOS운용서버#4</text>
+                                        </g>
+                                    </g>
+                                    <g transform="translate(30, 280)">
+                                        <g class="node-interactive" onclick="openHardwareModal('WAS서버(IVS) VM#1')">
+                                            <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">WAS서버(IVS) VM#1</text>
+                                        </g>
+                                        <g transform="translate(0, 44)" class="node-interactive"
+                                            onclick="openHardwareModal('WAS서버(IVS) VM#2')">
+                                            <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">WAS서버(IVS) VM#2</text>
+                                        </g>
+                                        <g transform="translate(0, 88)" class="node-interactive"
+                                            onclick="openHardwareModal('WEB서버(IVS) VM#1')">
+                                            <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">WEB서버(IVS) VM#1</text>
+                                        </g>
+                                        <g transform="translate(0, 132)" class="node-interactive"
+                                            onclick="openHardwareModal('WEB서버(IVS) VM#2')">
+                                            <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">WEB서버(IVS) VM#2</text>
+                                        </g>
+                                        <g transform="translate(0, 176)" class="node-interactive"
+                                            onclick="openHardwareModal('통합DB서버(IVS) VM#1')">
+                                            <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">통합DB서버(IVS) VM#1</text>
+                                        </g>
+                                        <g transform="translate(0, 220)" class="node-interactive"
+                                            onclick="openHardwareModal('통합DB서버(IVS) VM#2')">
+                                            <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">통합DB서버(IVS) VM#2</text>
+                                        </g>
+                                        <g transform="translate(0, 264)" class="node-interactive"
+                                            onclick="openHardwareModal('VCDM운용서버 VM#1')">
+                                            <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">VCDM운용서버 VM#1</text>
+                                        </g>
+                                        <g transform="translate(0, 308)" class="node-interactive"
+                                            onclick="openHardwareModal('VCDM운용서버 VM#2')">
+                                            <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">VCDM운용서버 VM#2</text>
+                                        </g>
+                                    </g>
 
-                                        <rect x="1180" y="160" width="90" height="25" rx="4" fill="#475569"
-                                            stroke="#64748b" stroke-width="1" />
-                                        <text x="1225" y="177" text-anchor="middle" class="fill-white text-xs">L2 Switch
-                                            #2</text>
+                                    <!-- Switches -->
+                                    <g transform="translate(320, 335)" class="node-static">
+                                        <rect x="0" y="0" width="100" height="30" class="box-network" rx="0" />
+                                        <text x="50" y="20" text-anchor="middle" class="text-label">L2스위치</text>
+                                    </g>
+                                    <g transform="translate(460, 335)" class="node-interactive"
+                                        onclick="openHardwareModal('CEC 미들웨어')">
+                                        <rect x="0" y="0" width="120" height="30" class="box-fill stroke-highlight"
+                                            rx="0" />
+                                        <text x="60" y="20" text-anchor="middle" class="text-label">CEC 미들웨어</text>
+                                    </g>
+                                    <g transform="translate(620, 335)" class="node-static">
+                                        <rect x="0" y="0" width="100" height="30" class="box-network" rx="0" />
+                                        <text x="50" y="20" text-anchor="middle" class="text-label">L3스위치</text>
+                                    </g>
+                                </g>
 
-                                        <rect x="1280" y="160" width="90" height="25" rx="4" fill="#475569"
-                                            stroke="#64748b" stroke-width="1" />
-                                        <text x="1325" y="177" text-anchor="middle" class="fill-white text-xs">L2 Switch
-                                            #3</text>
 
+                                <!-- ==============================================
+                                         CENTER: WAN
+                                         ============================================== -->
+                                <g transform="translate(800, 350)">
+                                    <circle cx="0" cy="0" r="40" fill="#0f172a" stroke="#d97706" stroke-width="1" />
+                                    <text x="0" y="5" text-anchor="middle"
+                                        class="fill-slate-300 text-sm font-bold">WAN</text>
+                                </g>
+
+
+                                <!-- ==============================================
+                                         RIGHT PANEL: VOS
+                                         ============================================== -->
+                                <g id="panel-vos">
+                                    <!-- Container Box -->
+                                    <rect x="880" y="10" width="690" height="780" rx="0" fill="none" stroke="#334155"
+                                        stroke-width="1" />
+                                    <text x="900" y="40" class="fill-slate-200 text-lg font-bold">버티포트 운용시스템 #8
+                                        (VOS)</text>
+
+                                    <!-- WAN Link -->
+                                    <g class="network-group" id="link-wan-utm"
+                                        onclick="openNetworkModal('LINK_WAN_UTM', 'WAN', 'UTM')">
+                                        <path d="M840 350 L910 350" class="network-hit-area" />
+                                        <path d="M840 350 L910 350" class="line-normal status-normal" />
+                                    </g>
+
+                                    <!-- UTM: x=910. Out x=990. -->
+                                    <g transform="translate(910, 335)">
+                                        <g class="node-static">
+                                            <rect x="0" y="0" width="80" height="30" class="box-network" rx="0" />
+                                            <text x="40" y="20" text-anchor="middle" class="text-label">UTM</text>
+                                        </g>
+                                    </g>
+
+                                    <!-- UTM to L2 Split -->
+                                    <g class="network-group" id="link-utm-splittop"
+                                        onclick="openNetworkModal('LINK_UTM_L2TOP', 'UTM', 'VOS L2(Top)')">
+                                        <path d="M990 350 L1010 350 L1010 150 L1030 150" class="network-hit-area" />
+                                        <path d="M990 350 L1010 350 L1010 150 L1030 150"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <g class="network-group" id="link-utm-splitbot"
+                                        onclick="openNetworkModal('LINK_UTM_L2BOT', 'UTM', 'VOS L2(Bot)')">
+                                        <path d="M990 350 L1010 350 L1010 550 L1030 550" class="network-hit-area" />
+                                        <path d="M990 350 L1010 350 L1010 550 L1030 550"
+                                            class="line-normal status-normal" />
+                                    </g>
+
+                                    <!-- Top L2: x=1030(+120=1150), y=135 -->
+                                    <g transform="translate(1030, 135)" class="node-static">
+                                        <rect x="0" y="0" width="120" height="30" class="box-network" rx="0" />
+                                        <text x="60" y="20" text-anchor="middle" class="text-label">L2스위치</text>
+                                    </g>
+                                    <!-- Bottom L2: x=1030, y=535 -->
+                                    <g transform="translate(1030, 535)" class="node-static">
+                                        <rect x="0" y="0" width="120" height="30" class="box-network" rx="0" />
+                                        <text x="60" y="20" text-anchor="middle" class="text-label">L2스위치</text>
+                                    </g>
+
+                                    <!-- DIRECT CONNECTORS: Top L2 (x=1150, y=150) to Nodes (x=1280) -->
+
+                                    <!-- VP#1 -->
+                                    <g class="network-group" id="link-vp1-l2top"
+                                        onclick="openNetworkModal('LINK_VP1_L2', 'VP운용 단말 #1', 'VOS L2(Top)')">
+                                        <path d="M1150 150 L1220 150 L1220 97 L1280 97" class="network-hit-area" />
+                                        <path d="M1150 150 L1220 150 L1220 97 L1280 97"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- VP#2 -->
+                                    <g class="network-group" id="link-vp2-l2top"
+                                        onclick="openNetworkModal('LINK_VP2_L2', 'VP운용 단말 #2', 'VOS L2(Top)')">
+                                        <path d="M1150 150 L1230 150 L1230 141 L1280 141" class="network-hit-area" />
+                                        <path d="M1150 150 L1230 150 L1230 141 L1280 141"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- VP#3 -->
+                                    <g class="network-group" id="link-vp3-l2top"
+                                        onclick="openNetworkModal('LINK_VP3_L2', 'VP운용 단말 #3', 'VOS L2(Top)')">
+                                        <path d="M1150 150 L1230 150 L1230 185 L1280 185" class="network-hit-area" />
+                                        <path d="M1150 150 L1230 150 L1230 185 L1280 185"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- VP#4 -->
+                                    <g class="network-group" id="link-vp4-l2top"
+                                        onclick="openNetworkModal('LINK_VP4_L2', 'VP운용 단말 #4', 'VOS L2(Top)')">
+                                        <path d="M1150 150 L1220 150 L1220 229 L1280 229" class="network-hit-area" />
+                                        <path d="M1150 150 L1220 150 L1220 229 L1280 229"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- VOS Svr#1 -->
+                                    <g class="network-group" id="link-vos_svr1-l2top"
+                                        onclick="openNetworkModal('LINK_VOSSVR1_L2', 'VOS운용서버#1', 'VOS L2(Top)')">
+                                        <path d="M1150 150 L1210 150 L1210 273 L1280 273" class="network-hit-area" />
+                                        <path d="M1150 150 L1210 150 L1210 273 L1280 273"
+                                            class="line-normal status-normal" />
+                                    </g>
+
+
+                                    <!-- DIRECT CONNECTORS: Bottom L2 (x=1150, y=550) to Nodes (x=1280) -->
+
+                                    <!-- Node 1 (347) -->
+                                    <g class="network-group" id="link-console1-l2bot"
+                                        onclick="openNetworkModal('LINK_CSL1_L2', '지상 감시 콘솔', 'VOS L2(Bot)')">
+                                        <path d="M1150 550 L1210 550 L1210 347 L1280 347" class="network-hit-area" />
+                                        <path d="M1150 550 L1210 550 L1210 347 L1280 347"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- Node 2 (391) -->
+                                    <g class="network-group" id="link-console2-l2bot"
+                                        onclick="openNetworkModal('LINK_CSL2_L2', '상황 인식 콘솔', 'VOS L2(Bot)')">
+                                        <path d="M1150 550 L1220 550 L1220 391 L1280 391" class="network-hit-area" />
+                                        <path d="M1150 550 L1220 550 L1220 391 L1280 391"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- Node 3 (435) -->
+                                    <g class="network-group" id="link-console3-l2bot"
+                                        onclick="openNetworkModal('LINK_CSL3_L2', 'NWICS 콘솔', 'VOS L2(Bot)')">
+                                        <path d="M1150 550 L1230 550 L1230 435 L1280 435" class="network-hit-area" />
+                                        <path d="M1150 550 L1230 550 L1230 435 L1280 435"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- Node 4 (479) -->
+                                    <g class="network-group" id="link-console4-l2bot"
+                                        onclick="openNetworkModal('LINK_MSDP_L2', 'MSDP', 'VOS L2(Bot)')">
+                                        <path d="M1150 550 L1240 550 L1240 479 L1280 479" class="network-hit-area" />
+                                        <path d="M1150 550 L1240 550 L1240 479 L1280 479"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- Node 5 (523) -->
+                                    <g class="network-group" id="link-console5-l2bot"
+                                        onclick="openNetworkModal('LINK_SWSVR_L2', '감시SW 중앙 서버', 'VOS L2(Bot)')">
+                                        <path d="M1150 550 L1250 550 L1250 523 L1280 523" class="network-hit-area" />
+                                        <path d="M1150 550 L1250 550 L1250 523 L1280 523"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- Node 6 (567) -->
+                                    <g class="network-group" id="link-console6-l2bot"
+                                        onclick="openNetworkModal('LINK_ADSB_L2', 'ADSB 수신기', 'VOS L2(Bot)')">
+                                        <path d="M1150 550 L1250 550 L1250 567 L1280 567" class="network-hit-area" />
+                                        <path d="M1150 550 L1250 550 L1250 567 L1280 567"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- Node 7 (611) -->
+                                    <g class="network-group" id="link-console7-l2bot"
+                                        onclick="openNetworkModal('LINK_VULN_L2', '취약점 분석 장치', 'VOS L2(Bot)')">
+                                        <path d="M1150 550 L1240 550 L1240 611 L1280 611" class="network-hit-area" />
+                                        <path d="M1150 550 L1240 550 L1240 611 L1280 611"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- Node 8 (655) -->
+                                    <g class="network-group" id="link-console8-l2bot"
+                                        onclick="openNetworkModal('LINK_FIXCAM_L2', '고정카메라 영상처리 서버', 'VOS L2(Bot)')">
+                                        <path d="M1150 550 L1230 550 L1230 655 L1280 655" class="network-hit-area" />
+                                        <path d="M1150 550 L1230 550 L1230 655 L1280 655"
+                                            class="line-normal status-normal" />
+                                    </g>
+                                    <!-- Node 9 (699) -->
+                                    <g class="network-group" id="link-console9-l2bot"
+                                        onclick="openNetworkModal('LINK_PTZCAM_L2', 'PTZ카메라 영상처리 서버', 'VOS L2(Bot)')">
+                                        <path d="M1150 550 L1220 550 L1220 699 L1280 699" class="network-hit-area" />
+                                        <path d="M1150 550 L1220 550 L1220 699 L1280 699"
+                                            class="line-normal status-normal" />
+                                    </g>
+
+                                    <!-- Nodes (Front) -->
+                                    <g transform="translate(1280, 80)">
                                         <!-- VP Terminals -->
-                                        <rect x="1070" y="210" width="50" height="30" rx="3" fill="#1e293b"
-                                            stroke="#475569" stroke-width="1" />
-                                        <text x="1095" y="230" text-anchor="middle" class="fill-slate-300 text-xs">단말
-                                            #1</text>
+                                        <g class="node-interactive" onclick="openHardwareModal('VP운용 단말 #1')">
+                                            <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">VP운용 단말 #1</text>
+                                        </g>
+                                        <g transform="translate(0, 44)" class="node-interactive"
+                                            onclick="openHardwareModal('VP운용 단말 #2')">
+                                            <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">VP운용 단말 #2</text>
+                                        </g>
+                                        <g transform="translate(0, 88)" class="node-interactive"
+                                            onclick="openHardwareModal('VP운용 단말 #3')">
+                                            <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">VP운용 단말 #3</text>
+                                        </g>
+                                        <g transform="translate(0, 132)" class="node-interactive"
+                                            onclick="openHardwareModal('VP운용 단말 #4')">
+                                            <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">VP운용 단말 #4</text>
+                                        </g>
+                                        <g transform="translate(0, 176)" class="node-interactive"
+                                            onclick="openHardwareModal('VOS운용서버#1')">
+                                            <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">VOS운용서버#1</text>
+                                        </g>
+                                    </g>
 
-                                        <rect x="1130" y="210" width="50" height="30" rx="3" fill="#1e293b"
-                                            stroke="#475569" stroke-width="1" />
-                                        <text x="1155" y="230" text-anchor="middle" class="fill-slate-300 text-xs">단말
-                                            #2</text>
-
+                                    <g transform="translate(1280, 330)">
                                         <!-- Consoles -->
-                                        <rect x="1190" y="210" width="70" height="30" rx="3" fill="#1e293b"
-                                            stroke="#475569" stroke-width="1" />
-                                        <text x="1225" y="230" text-anchor="middle"
-                                            class="fill-slate-300 text-xs">지상감시콘솔</text>
+                                        <g class="node-interactive" onclick="openHardwareModal('지상 감시 콘솔')">
+                                            <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">지상 감시 콘솔</text>
+                                        </g>
 
-                                        <rect x="1270" y="210" width="70" height="30" rx="3" fill="#1e293b"
-                                            stroke="#475569" stroke-width="1" />
-                                        <text x="1305" y="230" text-anchor="middle"
-                                            class="fill-slate-300 text-xs">상황인식콘솔</text>
+                                        <g transform="translate(0, 44)" class="node-interactive"
+                                            onclick="openHardwareModal('상황 인식 콘솔')">
+                                            <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">상황 인식 콘솔</text>
+                                        </g>
 
-                                        <!-- Monitoring Systems -->
-                                        <rect x="1190" y="260" width="70" height="30" rx="3" fill="#1e293b"
-                                            stroke="#475569" stroke-width="1" />
-                                        <text x="1225" y="280" text-anchor="middle"
-                                            class="fill-slate-300 text-xs">MSDP</text>
+                                        <g transform="translate(0, 88)" class="node-interactive"
+                                            onclick="openNetworkModal('NWICS 콘솔')">
+                                            <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">NWICS 콘솔</text>
+                                        </g>
 
-                                        <rect x="1270" y="260" width="70" height="30" rx="3" fill="#1e293b"
-                                            stroke="#475569" stroke-width="1" />
-                                        <text x="1305" y="280" text-anchor="middle"
-                                            class="fill-slate-300 text-xs">ADSB수신기</text>
+                                        <g transform="translate(0, 132)" class="node-interactive"
+                                            onclick="openHardwareModal('MSDP')">
+                                            <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">MSDP</text>
+                                        </g>
 
-                                        <!-- Camera Systems -->
-                                        <rect x="1290" y="310" width="70" height="40" rx="3" fill="#1e293b"
-                                            stroke="#475569" stroke-width="1" />
-                                        <text x="1325" y="325" text-anchor="middle"
-                                            class="fill-slate-300 text-xs">고정카메라</text>
-                                        <text x="1325" y="340" text-anchor="middle"
-                                            class="fill-slate-400 text-xs">영상처리</text>
+                                        <g transform="translate(0, 176)" class="node-interactive"
+                                            onclick="openHardwareModal('감시SW 중앙 서버')">
+                                            <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">감시SW 중앙 서버</text>
+                                        </g>
 
-                                        <!-- Connections -->
-                                        <line x1="1200" y1="130" x2="1125" y2="160" stroke="#64748b" stroke-width="2" />
-                                        <line x1="1200" y1="130" x2="1225" y2="160" stroke="#64748b" stroke-width="2" />
-                                        <line x1="1200" y1="130" x2="1325" y2="160" stroke="#64748b" stroke-width="2" />
+                                        <g transform="translate(0, 220)" class="node-interactive"
+                                            onclick="openHardwareModal('ADSB 수신기')">
+                                            <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">ADSB 수신기</text>
+                                        </g>
+
+                                        <g transform="translate(0, 264)" class="node-interactive"
+                                            onclick="openHardwareModal('취약점 분석 장치')">
+                                            <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">취약점 분석 장치</text>
+                                        </g>
+
+                                        <g transform="translate(0, 308)" class="node-interactive"
+                                            onclick="openHardwareModal('고정카메라 영상처리 서버')">
+                                            <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">고정카메라 영상처리 서버</text>
+                                        </g>
+
+                                        <g transform="translate(0, 352)" class="node-interactive"
+                                            onclick="openHardwareModal('PTZ카메라 영상처리 서버')">
+                                            <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">PTZ카메라 영상처리 서버</text>
+                                        </g>
                                     </g>
+                                </g>
 
-                                    <!-- WAN Cloud -->
-                                    <g id="wan">
-                                        <ellipse cx="700" cy="700" rx="120" ry="80" fill="#475569" fill-opacity="0.2"
-                                            stroke="#64748b" stroke-width="3" stroke-dasharray="5,5" />
-                                        <text x="700" y="710" text-anchor="middle"
-                                            class="fill-slate-200 text-lg font-bold">WAN</text>
-                                    </g>
-
-                                    <!-- Main Connections -->
-                                    <!-- Control Room to IVS -->
-                                    <line x1="200" y1="170" x2="325" y2="220" stroke="#64748b" stroke-width="2"
-                                        stroke-dasharray="5,5" />
-
-                                    <!-- IVS to WAN -->
-                                    <line x1="380" y1="620" x2="600" y2="680" stroke="#4A90E2" stroke-width="3" />
-                                    <text x="450" y="650" class="fill-blue-400 text-xs">L3 Switch</text>
-
-                                    <!-- VOS 1-7 to WAN -->
-                                    <line x1="825" y1="350" x2="750" y2="640" stroke="#7CB342" stroke-width="3" />
-                                    <text x="800" y="500" class="fill-green-400 text-xs">L2 Switch</text>
-
-                                    <!-- VOS 8 to WAN -->
-                                    <line x1="1050" y1="600" x2="820" y2="700" stroke="#FF8A65" stroke-width="3" />
-                                    <text x="950" y="650" class="fill-orange-400 text-xs">UTM</text>
-
-                                    <!-- Legend -->
-                                    <g id="legend">
-                                        <rect x="50" y="850" width="200" height="35" rx="4" fill="#1e293b"
-                                            stroke="#475569" stroke-width="1" />
-                                        <rect x="60" y="860" width="15" height="15" fill="url(#ivsGrad)" />
-                                        <text x="85" y="872" class="fill-slate-300 text-xs">IVS (각 서버 VM 2개)</text>
-
-                                        <rect x="270" y="850" width="120" height="35" rx="4" fill="#1e293b"
-                                            stroke="#475569" stroke-width="1" />
-                                        <rect x="280" y="860" width="15" height="15" fill="url(#vosGrad)" />
-                                        <text x="305" y="872" class="fill-slate-300 text-xs">VOS #1~#7</text>
-
-                                        <rect x="410" y="850" width="120" height="35" rx="4" fill="#1e293b"
-                                            stroke="#475569" stroke-width="1" />
-                                        <rect x="420" y="860" width="15" height="15" fill="url(#vos8Grad)" />
-                                        <text x="445" y="872" class="fill-slate-300 text-xs">VOS #8</text>
-                                    </g>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Bottom Pane: Server List -->
-                    <div class="glass-panel flex-1 flex flex-col">
-                        <div class="pane-header flex-none">
-                            <div class="search-panel-title-group">
-                                <i data-lucide="server" class="status-card-icon text-success"></i>
-                                <span class="search-panel-title">서버 상태 목록</span>
-                            </div>
-                        </div>
-
-                        <div class="pane-content custom-scrollbar flex-1 flex flex-col">
-
-                            <!-- Table Wrapper (Unified Style from SAM_AS_10_01) -->
-                            <div class="table-main-wrapper flex-1 overflow-hidden">
-                                <div class="table-scroll-area custom-scrollbar h-full">
-                                    <div class="table-container">
-                                        <table class="data-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>시스템 구분</th>
-                                                    <th>서버 명</th>
-                                                    <th>IP 주소</th>
-                                                    <th class="text-center">상태</th>
-                                                    <th class="text-right">CPU (%)</th>
-                                                    <th class="text-right">메모리 (%)</th>
-                                                    <th class="text-right">디스크 (%)</th>
-                                                    <th class="text-center">마지막 갱신</th>
-                                                    <th class="text-center">모니터링</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="data-table-body" id="server-list-body">
-                                                <!-- Mock Data -->
-                                                <tr class="data-table-row">
-                                                    <td>IVS (통합)</td>
-                                                    <td>IVS-WEB-01</td>
-                                                    <td>192.168.10.101</td>
-                                                    <td class="td-center"><span class="badge badge-success">정상</span>
-                                                    </td>
-                                                    <td class="td-number">12.00</td>
-                                                    <td class="td-number">45.00</td>
-                                                    <td class="td-number">30.00</td>
-                                                    <td class="td-date">2024-02-09 15:30:00</td>
-                                                    <td class="td-center">
-                                                        <div class="action-btn-group justify-center">
-                                                            <button class="btn-icon-sm"
-                                                                onclick="openHardwareModal('IVS-WEB-01')"
-                                                                title="하드웨어"><i data-lucide="cpu"></i></button>
-                                                            <button class="btn-icon-sm"
-                                                                onclick="openNetworkModal('IVS-WEB-01')" title="네트워크"><i
-                                                                    data-lucide="network"></i></button>
-                                                            <button class="btn-icon-sm"
-                                                                onclick="openInterfaceModal('IVS-WEB-01')"
-                                                                title="인터페이스"><i data-lucide="activity"></i></button>
-                                                            <button class="btn-icon-sm"
-                                                                onclick="openDataModal('IVS-WEB-01')" title="데이터"><i
-                                                                    data-lucide="database"></i></button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr class="data-table-row">
-                                                    <td>IVS (통합)</td>
-                                                    <td>IVS-WAS-01</td>
-                                                    <td>192.168.10.102</td>
-                                                    <td class="td-center"><span class="badge badge-success">정상</span>
-                                                    </td>
-                                                    <td class="td-number">25.00</td>
-                                                    <td class="td-number">60.00</td>
-                                                    <td class="td-number">40.00</td>
-                                                    <td class="td-date">2024-02-09 15:30:01</td>
-                                                    <td class="td-center">
-                                                        <div class="action-btn-group justify-center">
-                                                            <button class="btn-icon-sm"
-                                                                onclick="openHardwareModal('IVS-WAS-01')"
-                                                                title="하드웨어"><i data-lucide="cpu"></i></button>
-                                                            <button class="btn-icon-sm"
-                                                                onclick="openNetworkModal('IVS-WAS-01')" title="네트워크"><i
-                                                                    data-lucide="network"></i></button>
-                                                            <button class="btn-icon-sm"
-                                                                onclick="openInterfaceModal('IVS-WAS-01')"
-                                                                title="인터페이스"><i data-lucide="activity"></i></button>
-                                                            <button class="btn-icon-sm"
-                                                                onclick="openDataModal('IVS-WAS-01')" title="데이터"><i
-                                                                    data-lucide="database"></i></button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr class="data-table-row">
-                                                    <td>VOS #1 (김포)</td>
-                                                    <td>VOS-SVR-01</td>
-                                                    <td>10.10.10.101</td>
-                                                    <td class="td-center"><span class="badge badge-success">정상</span>
-                                                    </td>
-                                                    <td class="td-number">15.00</td>
-                                                    <td class="td-number">35.00</td>
-                                                    <td class="td-number">20.00</td>
-                                                    <td class="td-date">2024-02-09 15:29:55</td>
-                                                    <td class="td-center">
-                                                        <div class="action-btn-group justify-center">
-                                                            <button class="btn-icon-sm"
-                                                                onclick="openHardwareModal('VOS-SVR-01')"
-                                                                title="하드웨어"><i data-lucide="cpu"></i></button>
-                                                            <button class="btn-icon-sm"
-                                                                onclick="openNetworkModal('VOS-SVR-01')" title="네트워크"><i
-                                                                    data-lucide="network"></i></button>
-                                                            <button class="btn-icon-sm"
-                                                                onclick="openInterfaceModal('VOS-SVR-01')"
-                                                                title="인터페이스"><i data-lucide="activity"></i></button>
-                                                            <button class="btn-icon-sm"
-                                                                onclick="openDataModal('VOS-SVR-01')" title="데이터"><i
-                                                                    data-lucide="database"></i></button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr class="data-table-row">
-                                                    <td>Single VOS</td>
-                                                    <td>S-VOS-MAIN</td>
-                                                    <td>172.16.100.10</td>
-                                                    <td class="td-center"><span class="badge badge-error">장애</span></td>
-                                                    <td class="td-number font-bold text-error">99.00</td>
-                                                    <td class="td-number font-bold text-error">99.00</td>
-                                                    <td class="td-number font-bold text-error">90.00</td>
-                                                    <td class="td-date">2024-02-09 15:25:00</td>
-                                                    <td class="td-center">
-                                                        <div class="action-btn-group justify-center">
-                                                            <button class="btn-icon-sm"
-                                                                onclick="openHardwareModal('S-VOS-MAIN')"
-                                                                title="하드웨어"><i data-lucide="cpu"></i></button>
-                                                            <button class="btn-icon-sm"
-                                                                onclick="openNetworkModal('S-VOS-MAIN')" title="네트워크"><i
-                                                                    data-lucide="network"></i></button>
-                                                            <button class="btn-icon-sm"
-                                                                onclick="openInterfaceModal('S-VOS-MAIN')"
-                                                                title="인터페이스"><i data-lucide="activity"></i></button>
-                                                            <button class="btn-icon-sm"
-                                                                onclick="openDataModal('S-VOS-MAIN')" title="데이터"><i
-                                                                    data-lucide="database"></i></button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Pagination Footer -->
-                            <div class="table-footer flex-none">
-                                <div class="pagination-info">총 4 건</div>
-                            </div>
+                            </svg>
                         </div>
                     </div>
 
@@ -584,141 +511,165 @@
 
     <script src="../js/include.js"></script>
     <script src="../js/common.js"></script>
-    <script>
-        // Inline script for now, can extract to SAM_MO_01_01.js later
-        document.addEventListener('DOMContentLoaded', () => {
-            // Any initialization
-        });
-
-        function toggleDiagram() {
-            const content = document.getElementById('diagram-content');
-            const chevron = document.getElementById('diagram-chevron');
-            const panel = document.getElementById('diagram-panel');
-
-            if (content.classList.contains('hidden')) {
-                // Open
-                content.classList.remove('hidden');
-                // Allow a small delay for the browser to register the removal of 'hidden' before animating height/opacity if we were doing that, 
-                // but with simple classes:
-                chevron.style.transform = 'rotate(0deg)';
-                // panel.classList.replace('flex-none', 'flex-1'); // Optional: if we want it to expand to fill space
-            } else {
-                // Close
-                content.classList.add('hidden');
-                chevron.style.transform = 'rotate(180deg)';
-                // panel.classList.replace('flex-1', 'flex-none'); // Optional
-            }
-        }
-
-        // Hardware Modal Functions
-        function openHardwareModal(serverName) {
-            document.getElementById('hardware-modal-title').textContent = serverName + ' 하드웨어 상세';
-            document.getElementById('modal-hardware').classList.add('active');
-        }
-        function closeHardwareModal() {
-            document.getElementById('modal-hardware').classList.remove('active');
-        }
-
-        // Network Modal Functions
-        function openNetworkModal(serverName) {
-            document.getElementById('network-modal-title').textContent = serverName + ' 네트워크 상세';
-            document.getElementById('modal-network').classList.add('active');
-        }
-        function closeNetworkModal() {
-            document.getElementById('modal-network').classList.remove('active');
-        }
-
-        // Interface Modal Functions
-        function openInterfaceModal(serverName) {
-            document.getElementById('interface-modal-title').textContent = serverName + ' 인터페이스 상세';
-            document.getElementById('modal-interface').classList.add('active');
-        }
-        function closeInterfaceModal() {
-            document.getElementById('modal-interface').classList.remove('active');
-        }
-
-        // Data Modal Functions
-        function openDataModal(serverName) {
-            document.getElementById('data-modal-title').textContent = serverName + ' 데이터 상세';
-            document.getElementById('modal-data').classList.add('active');
-        }
-        function closeDataModal() {
-            document.getElementById('modal-data').classList.remove('active');
-        }
-    </script>
+    <script src="../js/SAM_MO_01_01.js"></script>
 
     <!-- Monitoring Detail Modal -->
     <div id="monitoring-detail-modal" class="modal-overlay">
-        <div class="modal-dialog modal-wide-80">
+        <div class="modal-dialog modal-wide">
             <div class="modal-header">
                 <h3 class="modal-title-left" id="monitoring-modal-title">상세 모니터링</h3>
                 <i data-lucide="x" class="close-icon" onclick="closeMonitoringModal()"></i>
             </div>
 
-            <div class="modal-content modal-content-monitoring custom-scrollbar">
-                <div class="modal-monitoring-grid">
-
-                    <!-- Hardware Monitoring -->
-                    <div class="monitoring-card">
-                        <div class="pane-header p-0 border-none">
-                            <div class="search-panel-title-group">
-                                <i data-lucide="cpu" class="status-card-icon text-info"></i>
-                                <span class="search-panel-title">하드웨어 모니터링</span>
-                            </div>
+            <!-- Server Monitoring Content -->
+            <div class="modal-content" id="modal-view-server">
+                <div class="flex flex-col">
+                    <!-- Head Summary: Text Style -->
+                    <!-- Head Summary -->
+                    <div class="flex flex-row gap-standard mb-sm">
+                        <!-- Type -->
+                        <div class="flex-1">
+                            <h4 class="modal-section-title">구분</h4>
+                            <div class="data-value">통합</div>
                         </div>
-                        <div class="text-xs text-slate-400">2026년 CPU/Mem/Disk 시계열 차트</div>
-                        <div class="monitoring-chart-placeholder">
-                            CPU/Memory/Disk Usage Chart Area
+                        <!-- Name -->
+                        <div class="flex-1">
+                            <h4 class="modal-section-title">이름</h4>
+                            <div class="data-value" id="server-modal-name">Server Name</div>
                         </div>
-                    </div>
-
-                    <!-- Network Traffic -->
-                    <div class="monitoring-card">
-                        <div class="pane-header p-0 border-none">
-                            <div class="search-panel-title-group">
-                                <i data-lucide="network" class="status-card-icon text-success"></i>
-                                <span class="search-panel-title">네트워크 트래픽</span>
-                            </div>
-                        </div>
-                        <div class="text-xs text-slate-400">2026년 패킷 손실, 지연시간 모니터링</div>
-                        <div class="monitoring-chart-placeholder">
-                            Packet Loss / Latency Chart Area
+                        <!-- Status -->
+                        <div class="flex-1">
+                            <h4 class="modal-section-title">상태</h4>
+                            <div class="data-value"><span class="badge badge-success w-fit">정상</span></div>
                         </div>
                     </div>
 
-                    <!-- Interface Status -->
-                    <div class="monitoring-card">
-                        <div class="pane-header p-0 border-none">
-                            <div class="search-panel-title-group">
-                                <i data-lucide="activity" class="status-card-icon text-warning"></i>
-                                <span class="search-panel-title">인터페이스 현황</span>
-                            </div>
+                    <!-- CPU Section -->
+                    <!-- CPU Section -->
+                    <div class="mb-sm">
+                        <div class="section-header">
+                            <h4 class="modal-section-title">CPU 이용률</h4>
+                            <span class="text-value-sub">100%</span>
                         </div>
-                        <div class="text-xs text-slate-400">2026년 MQ 송수신, 트랜잭션 성공/실패 카운트</div>
-                        <div class="monitoring-chart-placeholder">
-                            MQ / Transaction Count Chart Area
+                        <div class="monitoring-chart-container">
+                            <canvas id="chart-cpu" class="w-full h-full block"></canvas>
+                            <div class="chart-grid-overlay"></div>
                         </div>
-                    </div>
-
-                    <!-- Data Interface Status -->
-                    <div class="monitoring-card">
-                        <div class="pane-header p-0 border-none">
-                            <div class="search-panel-title-group">
-                                <i data-lucide="database" class="status-card-icon text-purple"></i>
-                                <span class="search-panel-title">데이터 인터페이스 현황</span>
-                            </div>
-                        </div>
-                        <div class="text-xs text-slate-400">2026년 인터페이스별 메시지 콜 횟수, MQ 서버 송수신 현황, 데이터 트랜잭션 용량 정보</div>
-                        <div class="monitoring-chart-placeholder">
-                            Message Call / Data Capacity Chart Area
+                        <div class="monitoring-chart-footer">
+                            <span>60초</span>
+                            <span id="val-cpu-current">1</span>
                         </div>
                     </div>
 
+                    <!-- Memory Section -->
+                    <!-- Memory Section -->
+                    <div class="mb-sm">
+                        <div class="section-header">
+                            <h4 class="modal-section-title">메모리 사용량</h4>
+                            <span class="text-value-sub">64GB</span>
+                        </div>
+                        <div class="monitoring-chart-container">
+                            <canvas id="chart-mem" class="w-full h-full block"></canvas>
+                            <div class="chart-grid-overlay"></div>
+                        </div>
+                        <div class="monitoring-chart-footer">
+                            <span>60초</span>
+                            <span id="val-mem-current">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Disk Section -->
+                    <!-- Disk Section -->
+                    <div class="mb-sm">
+                        <div class="section-header">
+                            <h4 class="modal-section-title">디스크 활성</h4>
+                            <span class="text-value-sub">100%</span>
+                        </div>
+                        <div class="monitoring-chart-container">
+                            <canvas id="chart-disk" class="w-full h-full block"></canvas>
+                            <div class="chart-grid-overlay"></div>
+                        </div>
+                        <div class="monitoring-chart-footer">
+                            <span>60초</span>
+                            <span id="val-disk-current">0</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- Network Monitoring Content -->
+            <div class="modal-content hidden" id="modal-view-network">
+                <div class="flex flex-col">
+                    <!-- Head Summary: Text Style -->
+                    <div class="flex flex-row gap-standard mb-sm">
+                        <!-- Composition (Full Width) -->
+                        <div class="flex-1">
+                            <h4 class="modal-section-title">구성</h4>
+                            <div class="data-value" id="network-composition-input">Source - Target</div>
+                        </div>
+                        <!-- Status -->
+                        <div class="flex-1">
+                            <h4 class="modal-section-title">상태</h4>
+                            <div><span class="badge badge-success w-fit">정상</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Traffic Chart -->
+                    <div class="mb-sm">
+                        <div class="section-header">
+                            <div class="flex items-center gap-xs">
+                                <h4 class="modal-section-title">네트워크 트래픽</h4>
+                                <span class="text-value-sub" id="val-net">Send/Recv</span>
+                            </div>
+                            <span class="text-value-sub">1 Gbps</span>
+                        </div>
+                        <div class="monitoring-chart-container">
+                            <canvas id="chart-network" class="w-full h-full block"></canvas>
+                            <div class="chart-grid-overlay"></div>
+                        </div>
+                        <div class="monitoring-chart-footer">
+                            <span>60초</span>
+                            <span id="val-net-current">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Failure History Table -->
+                    <div>
+                        <div class="section-header">
+                            <h4 class="modal-section-title">네트워크 장애 이력</h4>
+                            <button class="text-xs text-blue-400 hover:text-blue-300">더 보기</button>
+                        </div>
+                        <div class="table-container modal-table-scroll custom-scrollbar">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">발생 일시</th>
+                                        <th class="text-center">상태</th>
+                                        <th>내용</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="data-table-body">
+                                    <tr class="data-table-row">
+                                        <td class="td-date">2026.02.10 09:00</td>
+                                        <td class="td-center"><span class="badge badge-error">Critical</span></td>
+                                        <td>패킷 손실율 80% 초과</td>
+                                    </tr>
+                                    <tr class="data-table-row">
+                                        <td class="td-date">2026.02.09 14:30</td>
+                                        <td class="td-center"><span class="badge badge-warning">Warning</span>
+                                        </td>
+                                        <td>응답 지연 (Lat > 200ms)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="modal-btn-group">
-                <button onclick="closeMonitoringModal()" class="btn-primary">확인</button>
+                <button onclick="closeMonitoringModal()" class="btn-md btn-primary">확인</button>
             </div>
         </div>
     </div>
