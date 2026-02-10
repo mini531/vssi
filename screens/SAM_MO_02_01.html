@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMS - Hardware Monitoring</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="dashboard-body app-screen-height" data-system-acronym="SAMS" data-page-title="하드웨어 모니터링">
+    <!-- Header (Fixed Top) -->
+    <div data-include="../components/header.html"></div>
+
+    <!-- Main Flex Container (Sidebar + Content) -->
+    <div class="dashboard-main-flex">
+
+        <!-- Sidebar -->
+        <div data-include="../components/sidebar.html"></div>
+
+        <!-- Main Content (Pushed by Sidebar) -->
+        <main class="dashboard-main" id="main-content">
+
+            <!-- Content Scroll Area -->
+            <div class="dashboard-content dashboard-content-full custom-scrollbar">
+                <div class="dashboard-container dashboard-container-full">
+
+                    <!-- Split Pane Container -->
+                    <div class="split-container">
+
+                        <!-- Left Pane: Hardware List -->
+                        <div class="split-pane-left">
+                            <div class="pane-header">
+                                <div class="search-panel-title-group">
+                                    <i data-lucide="server" class="status-card-icon text-success"></i>
+                                    <span class="search-panel-title">하드웨어 목록</span>
+                                </div>
+                            </div>
+
+                            <div class="pane-content custom-scrollbar flex-1 flex flex-col">
+                                <!-- Search Filter -->
+                                <div class="search-panel flex-none mb-4">
+                                    <div class="search-panel-header" onclick="toggleHardwareFilter()">
+                                        <div class="search-panel-title-group">
+                                            <i data-lucide="filter" class="status-card-icon text-success"></i>
+                                            <span class="search-panel-title">검색 필터</span>
+                                        </div>
+                                        <i data-lucide="chevron-down" id="hardware-filter-chevron"
+                                            class="filter-chevron"></i>
+                                    </div>
+
+                                    <div id="hardware-filter-content" class="search-panel-content hidden">
+                                        <div class="filter-panel-inner">
+                                            <div class="filter-grid">
+                                                <div>
+                                                    <label class="filter-label">구분</label>
+                                                    <select id="filter-hardware-type" class="filter-select">
+                                                        <option value="all">전체</option>
+                                                        <option value="통합">통합</option>
+                                                        <option value="연동">연동</option>
+                                                        <option value="단독">단독</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label class="filter-label">상태</label>
+                                                    <select id="filter-hardware-status" class="filter-select">
+                                                        <option value="all">전체</option>
+                                                        <option value="정상">정상</option>
+                                                        <option value="위험">위험</option>
+                                                        <option value="장애">장애</option>
+                                                    </select>
+                                                </div>
+                                                <div class="filter-grid-wide">
+                                                    <label class="filter-label">이름</label>
+                                                    <input type="text" id="filter-hardware-name" class="filter-input"
+                                                        placeholder="하드웨어 이름 입력"
+                                                        onkeyup="if(event.key === 'Enter') applyHardwareFilter()">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="filter-actions">
+                                            <button class="filter-btn-common filter-btn-reset"
+                                                onclick="resetHardwareFilter()">
+                                                <i data-lucide="rotate-ccw" class="trend-icon"></i> 초기화
+                                            </button>
+                                            <button class="filter-btn-common filter-btn-search"
+                                                onclick="applyHardwareFilter()">
+                                                <i data-lucide="search" class="trend-icon"></i> 조회
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="table-container flex-1">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>구분</th>
+                                                <th>이름</th>
+                                                <th class="text-center">상태</th>
+                                                <th class="text-center">최근 갱신일</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="hardware-list-body">
+                                            <!-- JS Rendered -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Pagination Footer -->
+                            <div class="table-footer">
+                                <span class="pagination-info" id="hardware-total-count">총 0 건</span>
+                                <div class="pagination-controls">
+                                    <button class="page-btn active">1</button>
+                                    <button class="page-btn">2</button>
+                                    <button class="page-btn">3</button>
+                                    <button class="page-btn pc-only">4</button>
+                                    <button class="page-btn pc-only">5</button>
+                                    <button class="page-btn"><i data-lucide="chevron-right"
+                                            class="pagination-icon"></i></button>
+                                    <select class="pagination-select pagination-select-margin">
+                                        <option>20개씩 보기</option>
+                                        <option>50개씩 보기</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Pane: Hardware Detail -->
+                        <div class="split-pane-right" id="detail-pane">
+                            <!-- Empty State -->
+                            <div id="empty-state" class="empty-state">
+                                <i data-lucide="server" class="empty-state-icon"></i>
+                                <p class="empty-state-text">좌측 목록에서 하드웨어를 선택해 주세요.</p>
+                            </div>
+
+                            <!-- Detail Content (Hidden initially) -->
+                            <div id="detail-content" class="hidden h-full flex flex-col">
+                                <div class="pane-header">
+                                    <div class="search-panel-title-group">
+                                        <i data-lucide="server" class="status-card-icon text-success"></i>
+                                        <span class="search-panel-title">하드웨어 정보 - <span id="selected-hardware-name"
+                                                class="text-success"></span></span>
+                                    </div>
+                                    <div class="pane-header-right">
+                                        <button class="btn-sm btn-secondary mobile-list-btn"
+                                            onclick="closeDetailPane()">
+                                            <i data-lucide="list" class="trend-icon"></i> 목록
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Hardware Detail Content -->
+                                <div class="pane-content custom-scrollbar flex-1">
+                                    <div class="registration-form-panel">
+                                        <!-- Head Summary -->
+                                        <div class="flex flex-row gap-standard mb-sm">
+                                            <!-- Type -->
+                                            <div class="flex-1">
+                                                <h4 class="modal-section-title">구분</h4>
+                                                <div class="data-value" id="hw-detail-type">-</div>
+                                            </div>
+                                            <!-- Name -->
+                                            <div class="flex-1">
+                                                <h4 class="modal-section-title">이름</h4>
+                                                <div class="data-value whitespace-nowrap" id="hw-detail-name">-</div>
+                                            </div>
+                                            <!-- Status -->
+                                            <div class="flex-1">
+                                                <h4 class="modal-section-title">상태</h4>
+                                                <div class="data-value" id="hw-detail-status">
+                                                    <span class="badge badge-success w-fit">정상</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- CPU Section -->
+                                        <div class="mb-sm">
+                                            <div class="section-header">
+                                                <h4 class="modal-section-title">CPU 이용률</h4>
+                                                <span class="text-value-sub">100%</span>
+                                            </div>
+                                            <div class="monitoring-chart-container">
+                                                <canvas id="chart-cpu" class="w-full h-full block"></canvas>
+                                                <div class="chart-grid-overlay"></div>
+                                            </div>
+                                            <div class="monitoring-chart-footer">
+                                                <span>60초</span>
+                                                <span id="val-cpu-current">0</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Memory Section -->
+                                        <div class="mb-sm">
+                                            <div class="section-header">
+                                                <h4 class="modal-section-title">메모리 사용량</h4>
+                                                <span class="text-value-sub">64GB</span>
+                                            </div>
+                                            <div class="monitoring-chart-container">
+                                                <canvas id="chart-mem" class="w-full h-full block"></canvas>
+                                                <div class="chart-grid-overlay"></div>
+                                            </div>
+                                            <div class="monitoring-chart-footer">
+                                                <span>60초</span>
+                                                <span id="val-mem-current">0</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Disk Section -->
+                                        <div class="mb-sm">
+                                            <div class="section-header">
+                                                <h4 class="modal-section-title">디스크 활성</h4>
+                                                <span class="text-value-sub">100%</span>
+                                            </div>
+                                            <div class="monitoring-chart-container">
+                                                <canvas id="chart-disk" class="w-full h-full block"></canvas>
+                                                <div class="chart-grid-overlay"></div>
+                                            </div>
+                                            <div class="monitoring-chart-footer">
+                                                <span>60초</span>
+                                                <span id="val-disk-current">0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div> <!-- End of split-pane-right -->
+                    </div> <!-- End of split-container -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Components -->
+    <div data-include="../components/system-switcher.html"></div>
+
+    <script src="../js/include.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/SAM_MO_02_01.js"></script>
+</body>
+
+</html>
