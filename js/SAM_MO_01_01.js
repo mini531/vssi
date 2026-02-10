@@ -165,9 +165,12 @@ function openNetworkModal(networkId, source, target) {
     // const nameEl = document.getElementById('network-modal-name');
     // if (nameEl) nameEl.textContent = networkId;
 
-    // Update Composition Info (Input field)
-    const compositionEl = document.getElementById('network-composition-input');
-    if (compositionEl) compositionEl.textContent = `${source} - ${target}`;
+    // Update Composition Info (Split Source/Target)
+    const sourceEl = document.getElementById('network-source');
+    if (sourceEl) sourceEl.textContent = source;
+
+    const targetEl = document.getElementById('network-target');
+    if (targetEl) targetEl.textContent = target;
 
     // Show Network Content, Hide Server Content
     document.getElementById('modal-view-network').classList.remove('hidden');

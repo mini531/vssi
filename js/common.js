@@ -66,7 +66,7 @@ function toggleSubmenu(id, btn) {
     const icon = btn.querySelector('.lucide-chevron-right, .lucide-chevron-down');
 
     // Close all OTHER submenus first, EXCEPT the current one and the Active Page's menu
-    const allSubmenus = ['security-sub', 'logs-sub', 'ops-sub', 'link-sub', 'linkops-sub'];
+    const allSubmenus = ['security-sub', 'logs-sub', 'ops-sub', 'link-sub', 'linkops-sub', 'monitoring-sub'];
 
     allSubmenus.forEach(subId => {
         if (subId === id) return; // Don't close myself

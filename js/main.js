@@ -42,7 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'SAM_AS_10_01',
         'SAM_AU_01_01',
         'SAM_AU_02_01',
-        'SAM_US_01_01'
+        'SAM_US_01_01',
+        'SAM_MO_01_01'
     ];
 
     function init() {

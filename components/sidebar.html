@@ -6,10 +6,24 @@
             <i data-lucide="layout-grid" class="sidebar-icon"></i>
             <span>대시보드</span>
         </button>
-        <button class="sidebar-nav-btn" data-system="ALL">
-            <i data-lucide="activity" class="sidebar-icon"></i>
-            <span>모니터링</span>
-        </button>
+
+        <!-- Monitoring Group -->
+        <div data-system="ALL">
+            <button onclick="toggleSubmenu('monitoring-sub', this)" class="sidebar-nav-btn group">
+                <div class="sidebar-group-label">
+                    <i data-lucide="activity" class="sidebar-icon"></i>
+                    <span>모니터링</span>
+                </div>
+                <i data-lucide="chevron-right" class="sidebar-chevron"></i>
+            </button>
+            <div id="monitoring-sub" class="hidden sidebar-submenu">
+                <button class="sidebar-sub-btn" onclick="location.href='SAM_MO_01_01.html'">인프라 통합 현황</button>
+                <button class="sidebar-sub-btn">하드웨어 모니터링</button>
+                <button class="sidebar-sub-btn">네트워크 트래픽</button>
+                <button class="sidebar-sub-btn">인터페이스 현황</button>
+                <button class="sidebar-sub-btn">데이터 인터페이스 현황</button>
+            </div>
+        </div>
         <button class="sidebar-nav-btn" data-system="SAMS" onclick="location.href='SAM_US_01_01.html'">
             <i data-lucide="users" class="sidebar-icon"></i>
             <span>사용자 관리</span>
