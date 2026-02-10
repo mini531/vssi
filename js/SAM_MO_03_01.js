@@ -1,0 +1,312 @@
+// SAM_MO_03_01.js - Network Traffic Monitoring
+
+// Sample Network Data
+const networkData = [
+    { id: 1, source: 'IVS L2 Switch', target: 'WAN', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 2, source: 'VOS L2 Switch', target: 'WAN', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 3, source: 'IVS L2 Switch', target: 'WAS서버(IVS) VM#1', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 4, source: 'IVS L2 Switch', target: 'WEB서버(IVS) VM#1', status: '위험', lastUpdate: '2026.02.10 16:38' },
+    { id: 5, source: 'IVS L2 Switch', target: '통합DB서버(IVS) VM#1', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 6, source: 'VOS L2 Switch', target: 'VOS운용서버#1', status: '장애', lastUpdate: '2026.02.10 16:30' },
+    { id: 7, source: 'VOS L2 Switch', target: 'VOS운용서버#2', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 8, source: 'VOS L2 Switch', target: 'VOS운용서버#3', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 9, source: 'IVS L2 Switch', target: 'VP운용 단말 #1', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 10, source: 'IVS L2 Switch', target: '지상 감시 콘솔', status: '위험', lastUpdate: '2026.02.10 16:35' }
+];
+
+// Sample Failure History Data
+const failureHistoryData = [
+    { date: '2026.02.10 09:00', status: 'Critical', content: '패킷 손실율 80% 초과' },
+    { date: '2026.02.09 14:30', status: 'Warning', content: '응답 지연 (Lat > 200ms)' },
+    { date: '2026.02.08 11:15', status: 'Critical', content: '연결 끊김 (Timeout)' },
+    { date: '2026.02.07 16:45', status: 'Warning', content: '대역폭 사용률 90% 초과' },
+    { date: '2026.02.06 08:20', status: 'Critical', content: '패킷 손실율 75% 초과' }
+];
+
+let filteredNetworkData = [...networkData];
+let filteredFailureData = [...failureHistoryData];
+let currentNetwork = null;
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function () {
+    renderNetworkList();
+    lucide.createIcons();
+});
+
+// Toggle Network Filter
+function toggleNetworkFilter() {
+    const content = document.getElementById('network-filter-content');
+    const chevron = document.getElementById('network-filter-chevron');
+    content.classList.toggle('hidden');
+    chevron.classList.toggle('rotate-180');
+}
+
+// Reset Network Filter
+function resetNetworkFilter() {
+    document.getElementById('filter-network-status').value = 'all';
+    document.getElementById('filter-network-type').value = 'all';
+    document.getElementById('filter-network-keyword').value = '';
+    applyNetworkFilter();
+}
+
+// Apply Network Filter
+function applyNetworkFilter() {
+    const statusFilter = document.getElementById('filter-network-status').value;
+    const typeFilter = document.getElementById('filter-network-type').value;
+    const keyword = document.getElementById('filter-network-keyword').value.toLowerCase();
+
+    filteredNetworkData = networkData.filter(net => {
+        const statusMatch = statusFilter === 'all' || net.status === statusFilter;
+
+        let keywordMatch = true;
+        if (keyword) {
+            if (typeFilter === 'all') {
+                keywordMatch = net.source.toLowerCase().includes(keyword) ||
+                    net.target.toLowerCase().includes(keyword);
+            } else if (typeFilter === 'start') {
+                keywordMatch = net.source.toLowerCase().includes(keyword);
+            } else if (typeFilter === 'end') {
+                keywordMatch = net.target.toLowerCase().includes(keyword);
+            }
+        }
+
+        return statusMatch && keywordMatch;
+    });
+
+    renderNetworkList();
+}
+
+// Render Network List
+function renderNetworkList() {
+    const tbody = document.getElementById('network-list-body');
+    const totalCount = document.getElementById('network-total-count');
+
+    tbody.innerHTML = '';
+    totalCount.textContent = `총 ${filteredNetworkData.length} 건`;
+
+    filteredNetworkData.forEach((net, index) => {
+        const row = document.createElement('tr');
+        row.className = `data-table-row animate-fade-in animate-fade-in-delay-${Math.min(index + 1, 20)}`;
+        row.onclick = () => selectNetwork(net);
+
+        const statusBadgeClass = net.status === '정상' ? 'badge-success' :
+            net.status === '위험' ? 'badge-warning' : 'badge-error';
+
+        row.innerHTML = `
+            <td>${net.source}</td>
+            <td>${net.target}</td>
+            <td class="td-center"><span class="badge ${statusBadgeClass}">${net.status}</span></td>
+            <td class="td-date">${net.lastUpdate}</td>
+        `;
+
+        tbody.appendChild(row);
+    });
+
+    lucide.createIcons();
+}
+
+// Select Network
+function selectNetwork(net) {
+    currentNetwork = net;
+
+    // Hide empty state, show detail
+    document.getElementById('empty-state').classList.add('hidden');
+    document.getElementById('detail-content').classList.remove('hidden');
+
+    // Populate detail info
+    document.getElementById('net-detail-source').textContent = net.source;
+    document.getElementById('net-detail-target').textContent = net.target;
+
+    const statusBadgeClass = net.status === '정상' ? 'badge-success' :
+        net.status === '위험' ? 'badge-warning' : 'badge-error';
+    document.getElementById('net-detail-status').innerHTML =
+        `<span class="badge ${statusBadgeClass} w-fit">${net.status}</span>`;
+
+    // Initialize Chart
+    ChartManager.stopAll();
+    ChartManager.startNetworkMonitoring();
+
+    // Render failure history
+    renderFailureHistory();
+
+    // Mobile: Show detail pane
+    const detailPane = document.getElementById('detail-pane');
+    if (window.innerWidth < 1024) {
+        detailPane.classList.add('mobile-detail-active');
+    }
+
+    lucide.createIcons();
+}
+
+// Close Detail Pane (Mobile)
+function closeDetailPane() {
+    const detailPane = document.getElementById('detail-pane');
+    detailPane.classList.remove('mobile-detail-active');
+    ChartManager.stopAll();
+}
+
+// Toggle Failure Filter
+function toggleFailureFilter() {
+    const content = document.getElementById('failure-filter-content');
+    const chevron = document.getElementById('failure-filter-chevron');
+    content.classList.toggle('hidden');
+    chevron.classList.toggle('rotate-180');
+}
+
+// Reset Failure Filter
+function resetFailureFilter() {
+    document.getElementById('filter-failure-status').value = 'all';
+    document.getElementById('filter-date-start').value = '';
+    document.getElementById('filter-date-end').value = '';
+    applyFailureFilter();
+}
+
+// Apply Failure Filter
+function applyFailureFilter() {
+    const statusFilter = document.getElementById('filter-failure-status').value;
+    const dateStart = document.getElementById('filter-date-start').value;
+    const dateEnd = document.getElementById('filter-date-end').value;
+
+    filteredFailureData = failureHistoryData.filter(item => {
+        const statusMatch = statusFilter === 'all' || item.status === statusFilter;
+
+        let dateMatch = true;
+        if (dateStart || dateEnd) {
+            const itemDate = item.date.split(' ')[0].replace(/\./g, '-');
+            if (dateStart && itemDate < dateStart) dateMatch = false;
+            if (dateEnd && itemDate > dateEnd) dateMatch = false;
+        }
+
+        return statusMatch && dateMatch;
+    });
+
+    renderFailureHistory();
+}
+
+// Render Failure History
+function renderFailureHistory() {
+    const tbody = document.getElementById('failure-history-body');
+    const totalCount = document.getElementById('failure-total-count');
+
+    tbody.innerHTML = '';
+    totalCount.textContent = `총 ${filteredFailureData.length} 건`;
+
+    filteredFailureData.forEach(item => {
+        const row = document.createElement('tr');
+        row.className = 'data-table-row';
+
+        const statusBadgeClass = item.status === 'Critical' ? 'badge-error' : 'badge-warning';
+
+        row.innerHTML = `
+            <td class="td-date">${item.date}</td>
+            <td class="td-center"><span class="badge ${statusBadgeClass}">${item.status}</span></td>
+            <td>${item.content}</td>
+        `;
+
+        tbody.appendChild(row);
+    });
+
+    lucide.createIcons();
+}
+
+// --- Real-time Chart Logic (Network Traffic) ---
+const ChartManager = {
+    intervals: [],
+    charts: {},
+
+    startNetworkMonitoring: function () {
+        this.stopAll();
+        this.runChart('chart-network', 'val-net-current', 'net');
+    },
+
+    stopAll: function () {
+        this.intervals.forEach(clearInterval);
+        this.intervals = [];
+    },
+
+    runChart: function (canvasId, valueId, type) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        let width = canvas.parentElement.clientWidth;
+        let height = canvas.parentElement.clientHeight;
+        canvas.width = width;
+        canvas.height = height;
+
+        // Data history
+        const dataPoints = 60;
+        const data = new Array(dataPoints).fill(0);
+
+        const primaryColor = '#3b82f6'; // Main blue
+        const gridColor = '#334155';
+
+        const update = () => {
+            // Generate random value
+            let newVal = 0;
+            let label = '';
+
+            if (type === 'net') {
+                newVal = Math.floor(Math.random() * 60) + 20;
+                label = `S: ${Math.floor(newVal / 2)} Kbps / R: ${newVal * 2} Kbps`;
+            }
+
+            // Shift data
+            data.push(newVal);
+            data.shift();
+
+            // Update Label
+            const valEl = document.getElementById(valueId);
+            if (valEl) valEl.textContent = label;
+
+            // Draw
+            ctx.clearRect(0, 0, width, height);
+
+            // Grid
+            ctx.beginPath();
+            ctx.strokeStyle = gridColor;
+            ctx.lineWidth = 0.5;
+            // Vertical lines
+            for (let i = 0; i < width; i += width / 10) { ctx.moveTo(i, 0); ctx.lineTo(i, height); }
+            // Horizontal lines
+            for (let i = 0; i < height; i += height / 4) { ctx.moveTo(0, i); ctx.lineTo(width, i); }
+            ctx.stroke();
+
+            // Path
+            ctx.beginPath();
+            ctx.strokeStyle = primaryColor;
+            ctx.lineWidth = 2;
+            ctx.fillStyle = 'rgba(59, 130, 246, 0.2)'; // fill blue alpha
+
+            ctx.moveTo(0, height);
+
+            const step = width / (dataPoints - 1);
+
+            for (let i = 0; i < data.length; i++) {
+                const x = i * step;
+                const normalize = (data[i] / 100) * height; // assume 0-100 scale
+                const y = height - normalize;
+                ctx.lineTo(x, y);
+            }
+
+            ctx.lineTo(width, height);
+            ctx.closePath();
+            ctx.fill();
+
+            // Stroke line on top
+            ctx.beginPath();
+            for (let i = 0; i < data.length; i++) {
+                const x = i * step;
+                const normalize = (data[i] / 100) * height;
+                const y = height - normalize;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+        };
+
+        const interval = setInterval(update, 1000); // 1 sec update
+        this.intervals.push(interval);
+        update(); // initial draw
+    }
+};

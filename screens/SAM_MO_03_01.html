@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMS - Network Traffic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="dashboard-body app-screen-height" data-system-acronym="SAMS" data-page-title="네트워크 트래픽">
+    <!-- Header (Fixed Top) -->
+    <div data-include="../components/header.html"></div>
+
+    <!-- Main Flex Container (Sidebar + Content) -->
+    <div class="dashboard-main-flex">
+
+        <!-- Sidebar -->
+        <div data-include="../components/sidebar.html"></div>
+
+        <!-- Main Content (Pushed by Sidebar) -->
+        <main class="dashboard-main" id="main-content">
+
+            <!-- Content Scroll Area -->
+            <div class="dashboard-content dashboard-content-full custom-scrollbar">
+                <div class="dashboard-container dashboard-container-full">
+
+                    <!-- Split Pane Container -->
+                    <div class="split-container">
+
+                        <!-- Left Pane: Network List -->
+                        <div class="split-pane-left">
+                            <div class="pane-header">
+                                <div class="search-panel-title-group">
+                                    <i data-lucide="network" class="status-card-icon text-success"></i>
+                                    <span class="search-panel-title">네트워크 목록</span>
+                                </div>
+                            </div>
+
+                            <div class="pane-content custom-scrollbar flex-1 flex flex-col">
+                                <!-- Search Filter -->
+                                <div class="search-panel flex-none mb-4">
+                                    <div class="search-panel-header" onclick="toggleNetworkFilter()">
+                                        <div class="search-panel-title-group">
+                                            <i data-lucide="filter" class="status-card-icon text-success"></i>
+                                            <span class="search-panel-title">검색 필터</span>
+                                        </div>
+                                        <i data-lucide="chevron-down" id="network-filter-chevron"
+                                            class="filter-chevron"></i>
+                                    </div>
+
+                                    <div id="network-filter-content" class="search-panel-content hidden">
+                                        <div class="filter-panel-inner">
+                                            <div class="filter-grid">
+                                                <div>
+                                                    <label class="filter-label">상태</label>
+                                                    <select id="filter-network-status" class="filter-select">
+                                                        <option value="all">전체</option>
+                                                        <option value="정상">정상</option>
+                                                        <option value="위험">위험</option>
+                                                        <option value="장애">장애</option>
+                                                    </select>
+                                                </div>
+                                                <div class="filter-grid-wide">
+                                                    <label class="filter-label">키워드</label>
+                                                    <div class="filter-date-range">
+                                                        <select id="filter-network-type" class="filter-select">
+                                                            <option value="all">전체</option>
+                                                            <option value="start">시작 지점</option>
+                                                            <option value="end">종료 지점</option>
+                                                        </select>
+                                                        <input type="text" id="filter-network-keyword"
+                                                            class="filter-input" placeholder="키워드 입력"
+                                                            onkeyup="if(event.key === 'Enter') applyNetworkFilter()">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="filter-actions">
+                                            <button class="filter-btn-common filter-btn-reset"
+                                                onclick="resetNetworkFilter()">
+                                                <i data-lucide="rotate-ccw" class="trend-icon"></i> 초기화
+                                            </button>
+                                            <button class="filter-btn-common filter-btn-search"
+                                                onclick="applyNetworkFilter()">
+                                                <i data-lucide="search" class="trend-icon"></i> 조회
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="table-container flex-1">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>시작 지점</th>
+                                                <th>종료 지점</th>
+                                                <th class="text-center">상태</th>
+                                                <th class="text-center">최근 갱신 일시</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="network-list-body">
+                                            <!-- JS Rendered -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Pagination Footer -->
+                            <div class="table-footer">
+                                <span class="pagination-info" id="network-total-count">총 0 건</span>
+                                <div class="pagination-controls">
+                                    <button class="page-btn active">1</button>
+                                    <button class="page-btn">2</button>
+                                    <button class="page-btn">3</button>
+                                    <button class="page-btn pc-only">4</button>
+                                    <button class="page-btn pc-only">5</button>
+                                    <button class="page-btn"><i data-lucide="chevron-right"
+                                            class="pagination-icon"></i></button>
+                                    <select class="pagination-select pagination-select-margin">
+                                        <option>20개씩 보기</option>
+                                        <option>50개씩 보기</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Pane: Network Detail -->
+                        <div class="split-pane-right" id="detail-pane">
+                            <!-- Empty State -->
+                            <div id="empty-state" class="empty-state">
+                                <i data-lucide="network" class="empty-state-icon"></i>
+                                <p class="empty-state-text">좌측 목록에서 네트워크를 선택해 주세요.</p>
+                            </div>
+
+                            <!-- Detail Content (Hidden initially) -->
+                            <div id="detail-content" class="hidden h-full flex flex-col">
+                                <div class="pane-header">
+                                    <div class="search-panel-title-group">
+                                        <i data-lucide="network" class="status-card-icon text-success"></i>
+                                        <span class="search-panel-title">네트워크 정보</span>
+                                    </div>
+                                    <div class="pane-header-right">
+                                        <button class="btn-sm btn-secondary mobile-list-btn"
+                                            onclick="closeDetailPane()">
+                                            <i data-lucide="list" class="trend-icon"></i> 목록
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Network Detail Content -->
+                                <div class="pane-content custom-scrollbar flex-1">
+                                    <div class="registration-form-panel">
+                                        <!-- Head Summary -->
+                                        <div class="flex flex-row gap-standard mb-sm">
+                                            <!-- Start Point -->
+                                            <div class="flex-1">
+                                                <h4 class="modal-section-title">시작 지점</h4>
+                                                <div class="data-value whitespace-nowrap" id="net-detail-source">-</div>
+                                            </div>
+                                            <!-- End Point -->
+                                            <div class="flex-1">
+                                                <h4 class="modal-section-title">종료 지점</h4>
+                                                <div class="data-value whitespace-nowrap" id="net-detail-target">-</div>
+                                            </div>
+                                            <!-- Status -->
+                                            <div class="flex-1">
+                                                <h4 class="modal-section-title">상태</h4>
+                                                <div class="data-value" id="net-detail-status">
+                                                    <span class="badge badge-success w-fit">정상</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Traffic Chart -->
+                                        <div class="mb-sm">
+                                            <div class="section-header">
+                                                <div class="flex items-center gap-xs">
+                                                    <h4 class="modal-section-title">네트워크 트래픽</h4>
+                                                    <span class="text-value-sub" id="val-net">Send/Recv</span>
+                                                </div>
+                                                <span class="text-value-sub">1 Gbps</span>
+                                            </div>
+                                            <div class="monitoring-chart-container">
+                                                <canvas id="chart-network" class="w-full h-full block"></canvas>
+                                                <div class="chart-grid-overlay"></div>
+                                            </div>
+                                            <div class="monitoring-chart-footer">
+                                                <span>60초</span>
+                                                <span id="val-net-current">0</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Failure History Table -->
+                                        <div>
+                                            <div class="section-header">
+                                                <h4 class="modal-section-title">네트워크 장애 이력</h4>
+                                            </div>
+
+                                            <!-- Failure History Filter -->
+                                            <div class="search-panel mb-4">
+                                                <div class="search-panel-header" onclick="toggleFailureFilter()">
+                                                    <div class="search-panel-title-group">
+                                                        <i data-lucide="filter"
+                                                            class="status-card-icon text-success"></i>
+                                                        <span class="search-panel-title">검색 필터</span>
+                                                    </div>
+                                                    <i data-lucide="chevron-down" id="failure-filter-chevron"
+                                                        class="filter-chevron"></i>
+                                                </div>
+
+                                                <div id="failure-filter-content" class="search-panel-content hidden">
+                                                    <div class="filter-panel-inner">
+                                                        <div class="filter-grid">
+                                                            <div>
+                                                                <label class="filter-label">상태</label>
+                                                                <select id="filter-failure-status"
+                                                                    class="filter-select">
+                                                                    <option value="all">전체</option>
+                                                                    <option value="Critical">Critical</option>
+                                                                    <option value="Warning">Warning</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="filter-grid-wide">
+                                                                <label class="filter-label">발생 일시</label>
+                                                                <div class="filter-date-range">
+                                                                    <input type="date" id="filter-date-start"
+                                                                        class="filter-input filter-input-flex"
+                                                                        onclick="try{this.showPicker()}catch(e){}">
+                                                                    <span class="filter-date-separator">~</span>
+                                                                    <input type="date" id="filter-date-end"
+                                                                        class="filter-input filter-input-flex"
+                                                                        onclick="try{this.showPicker()}catch(e){}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="filter-actions">
+                                                        <button class="filter-btn-common filter-btn-reset"
+                                                            onclick="resetFailureFilter()">
+                                                            <i data-lucide="rotate-ccw" class="trend-icon"></i> 초기화
+                                                        </button>
+                                                        <button class="filter-btn-common filter-btn-search"
+                                                            onclick="applyFailureFilter()">
+                                                            <i data-lucide="search" class="trend-icon"></i> 조회
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="table-container modal-table-scroll custom-scrollbar">
+                                                <table class="data-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">발생 일시</th>
+                                                            <th class="text-center">상태</th>
+                                                            <th>내용</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="data-table-body" id="failure-history-body">
+                                                        <!-- JS Rendered -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <!-- Failure History Pagination Footer -->
+                                            <div class="table-footer">
+                                                <span class="pagination-info" id="failure-total-count">총 0 건</span>
+                                                <div class="pagination-controls">
+                                                    <button class="page-btn active">1</button>
+                                                    <button class="page-btn">2</button>
+                                                    <button class="page-btn">3</button>
+                                                    <button class="page-btn pc-only">4</button>
+                                                    <button class="page-btn pc-only">5</button>
+                                                    <button class="page-btn"><i data-lucide="chevron-right"
+                                                            class="pagination-icon"></i></button>
+                                                    <select class="pagination-select pagination-select-margin">
+                                                        <option>20개씩 보기</option>
+                                                        <option>50개씩 보기</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div> <!-- End of split-pane-right -->
+                    </div> <!-- End of split-container -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Components -->
+    <div data-include="../components/system-switcher.html"></div>
+
+    <script src="../js/include.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/SAM_MO_03_01.js"></script>
+</body>
+
+</html>
