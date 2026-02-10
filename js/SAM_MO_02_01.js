@@ -84,8 +84,8 @@ function renderHardwareList() {
 
     filteredData.forEach((hw, index) => {
         const row = document.createElement('tr');
-        row.className = 'data-table-row';
-        row.onclick = () => selectHardware(hw);
+        row.className = 'data-table-row clickable-row';
+        row.onclick = () => selectHardware(hw, row);
 
         const statusBadgeClass = hw.status === '정상' ? 'badge-success' :
             hw.status === '위험' ? 'badge-warning' : 'badge-error';
@@ -103,9 +103,12 @@ function renderHardwareList() {
     lucide.createIcons();
 }
 
-// Select Hardware
-function selectHardware(hw) {
+function selectHardware(hw, element) {
     currentHardware = hw;
+
+    // Update Active Row
+    document.querySelectorAll('#hardware-list-body .data-table-row').forEach(r => r.classList.remove('active'));
+    if (element) element.classList.add('active');
 
     // Hide empty state, show detail
     document.getElementById('empty-state').classList.add('hidden');

@@ -86,8 +86,8 @@ function renderNetworkList() {
 
     filteredNetworkData.forEach((net, index) => {
         const row = document.createElement('tr');
-        row.className = 'data-table-row';
-        row.onclick = () => selectNetwork(net);
+        row.className = 'data-table-row clickable-row';
+        row.onclick = () => selectNetwork(net, row);
 
         const statusBadgeClass = net.status === '정상' ? 'badge-success' :
             net.status === '위험' ? 'badge-warning' : 'badge-error';
@@ -106,8 +106,12 @@ function renderNetworkList() {
 }
 
 // Select Network
-function selectNetwork(net) {
+function selectNetwork(net, element) {
     currentNetwork = net;
+
+    // Update Active Row
+    document.querySelectorAll('#network-list-body .data-table-row').forEach(r => r.classList.remove('active'));
+    if (element) element.classList.add('active');
 
     // Hide empty state, show detail
     document.getElementById('empty-state').classList.add('hidden');
