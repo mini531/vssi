@@ -40,8 +40,7 @@
                         <div class="pane-content" id="diagram-content">
                             <!-- Detailed Infrastructure Topology -->
 
-                            <svg viewBox="0 0 1600 800"
-                                style="max-height: 800px; width: 100%; margin: 0 auto; display: block;">
+                            <svg viewBox="0 0 1600 800" class="topology-svg">
                                 <defs>
                                     <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5"
                                         markerHeight="5">
@@ -161,8 +160,8 @@
                                     <!-- Link L3 to WAN -->
                                     <g class="network-group" id="link-ivsl3-wan"
                                         onclick="openNetworkModal('LINK_IVSL3_WAN', 'IVS L3스위치', 'WAN')">
-                                        <path d="M720 350 L780 350" class="network-hit-area" />
-                                        <path d="M720 350 L780 350" class="line-normal status-normal" />
+                                        <path d="M720 350 L760 350" class="network-hit-area" />
+                                        <path d="M720 350 L760 350" class="line-normal status-normal" />
                                     </g>
 
                                     <!-- Nodes (Front) -->
@@ -294,8 +293,8 @@
 
                                     <!-- Switches -->
                                     <g transform="translate(320, 335)" class="node-static">
-                                        <rect x="0" y="0" width="100" height="30" class="box-fill" rx="0" />
-                                        <text x="50" y="20" text-anchor="middle" class="text-label">L2스위치</text>
+                                        <rect x="0" y="0" width="100" height="30" class="box-fill static" rx="0" />
+                                        <text x="50" y="20" text-anchor="middle" class="text-label static">L2스위치</text>
                                     </g>
                                     <g transform="translate(460, 335)" class="node-interactive"
                                         onclick="openHardwareModal('CEC 미들웨어')">
@@ -309,8 +308,8 @@
                                         </g>
                                     </g>
                                     <g transform="translate(620, 335)" class="node-static">
-                                        <rect x="0" y="0" width="100" height="30" class="box-fill" rx="0" />
-                                        <text x="50" y="20" text-anchor="middle" class="text-label">L3스위치</text>
+                                        <rect x="0" y="0" width="100" height="30" class="box-fill static" rx="0" />
+                                        <text x="50" y="20" text-anchor="middle" class="text-label static">L3스위치</text>
                                     </g>
                                 </g>
 
@@ -319,9 +318,9 @@
                                          CENTER: WAN
                                          ============================================== -->
                                 <g transform="translate(800, 350)">
-                                    <circle cx="0" cy="0" r="40" class="box-fill" />
+                                    <circle cx="0" cy="0" r="40" class="box-fill static" />
                                     <text x="0" y="5" text-anchor="middle"
-                                        class="fill-slate-300 text-sm font-bold">WAN</text>
+                                        class="fill-slate-300 text-sm font-bold text-static">WAN</text>
                                 </g>
 
 
@@ -345,8 +344,9 @@
                                     <!-- UTM: x=910. Out x=990. -->
                                     <g transform="translate(910, 335)">
                                         <g class="node-static">
-                                            <rect x="0" y="0" width="80" height="30" class="box-fill" rx="0" />
-                                            <text x="40" y="20" text-anchor="middle" class="text-label">UTM</text>
+                                            <rect x="0" y="0" width="80" height="30" class="box-fill static" rx="0" />
+                                            <text x="40" y="20" text-anchor="middle"
+                                                class="text-label static">UTM</text>
                                         </g>
                                     </g>
 
@@ -366,13 +366,13 @@
 
                                     <!-- Top L2: x=1030(+120=1150), y=135 -->
                                     <g transform="translate(1030, 135)" class="node-static">
-                                        <rect x="0" y="0" width="120" height="30" class="box-fill" rx="0" />
-                                        <text x="60" y="20" text-anchor="middle" class="text-label">L2스위치</text>
+                                        <rect x="0" y="0" width="120" height="30" class="box-fill static" rx="0" />
+                                        <text x="60" y="20" text-anchor="middle" class="text-label static">L2스위치</text>
                                     </g>
                                     <!-- Bottom L2: x=1030, y=535 -->
                                     <g transform="translate(1030, 535)" class="node-static">
-                                        <rect x="0" y="0" width="120" height="30" class="box-fill" rx="0" />
-                                        <text x="60" y="20" text-anchor="middle" class="text-label">L2스위치</text>
+                                        <rect x="0" y="0" width="120" height="30" class="box-fill static" rx="0" />
+                                        <text x="60" y="20" text-anchor="middle" class="text-label static">L2스위치</text>
                                     </g>
 
                                     <!-- DIRECT CONNECTORS: Top L2 (x=1150, y=150) to Nodes (x=1280) -->
@@ -790,7 +790,7 @@
                     <div>
                         <div class="section-header">
                             <h4 class="modal-section-title">네트워크 장애 이력</h4>
-                            <button class="btn-xs btn-secondary">더 보기</button>
+                            <a href="SAM_MO_03_01.html" class="btn-xs btn-secondary">더 보기</a>
                         </div>
                         <div class="table-container modal-table-scroll custom-scrollbar">
                             <table class="data-table">

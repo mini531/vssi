@@ -93,7 +93,9 @@ You are an expert AI developer working on the VSSI project. You MUST strictly ad
 *   Styles: `c:/project/vssi/css/style.css`
 *   Scripts: `c:/project/vssi/js/`
 
-## 5. Deployment
+## 5. Deployment & Git
+*   **NEVER** push to GitHub unless the USER explicitly requests it (e.g., "푸쉬해줘", "Push this").
+*   Work and test locally first. Pushing is ONLY allowed upon request after verification.
 *   Commit prefix: "Refactor:", "Feat:", "Fix:".
 
 ## 6. CRITICAL CSS RULES (MUST READ - VIOLATION PROHIBITED)

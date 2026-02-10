@@ -1441,6 +1441,22 @@ input:-webkit-autofill:active {
   background-color: rgba(30, 41, 59, 0.4);
 }
 
+.topology-svg {
+  max-height: 800px;
+  width: 100%;
+  margin: 0 auto;
+  display: block;
+}
+
+.box-fill.static {
+  opacity: 0.4;
+}
+
+.text-label.static,
+.text-static {
+  opacity: 0.4;
+}
+
 .clickable-row {
   cursor: pointer;
   transition: all 0.2s;
