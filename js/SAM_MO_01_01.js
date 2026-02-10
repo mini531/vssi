@@ -155,6 +155,17 @@ function openHardwareModal(serverName) {
 
     // Start Charts
     setTimeout(() => ChartManager.startServerMonitoring(), 100);
+
+    // Mock Disk Usage Data (TB)
+    const totalDisk = 32.00;
+    const usedDisk = (Math.random() * 10 + 12).toFixed(2); // 12.00 ~ 22.00 TB (Typical usage for big projects)
+    const usagePercent = (usedDisk / totalDisk * 100).toFixed(1);
+
+    const usageTextEl = document.getElementById('disk-usage-text');
+    const usageBarEl = document.getElementById('disk-usage-bar');
+
+    if (usageTextEl) usageTextEl.textContent = `${usedDisk} TB / ${totalDisk.toFixed(2)} TB (${usagePercent}%)`;
+    if (usageBarEl) usageBarEl.style.width = `${usagePercent}%`;
 }
 
 function openNetworkModal(networkId, source, target) {
@@ -171,6 +182,12 @@ function openNetworkModal(networkId, source, target) {
 
     const targetEl = document.getElementById('network-target');
     if (targetEl) targetEl.textContent = target;
+
+    // Update "View More" link with parameters
+    const viewMoreBtn = document.getElementById('btn-view-more-network');
+    if (viewMoreBtn) {
+        viewMoreBtn.href = `SAM_MO_03_01.html?source=${encodeURIComponent(source)}&target=${encodeURIComponent(target)}`;
+    }
 
     // Show Network Content, Hide Server Content
     document.getElementById('modal-view-network').classList.remove('hidden');

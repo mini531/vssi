@@ -2,16 +2,21 @@
 
 // Sample Network Data
 const networkData = [
-    { id: 1, source: 'IVS L2 Switch', target: 'WAN', status: '정상', lastUpdate: '2026.02.10 16:40' },
-    { id: 2, source: 'VOS L2 Switch', target: 'WAN', status: '정상', lastUpdate: '2026.02.10 16:40' },
-    { id: 3, source: 'IVS L2 Switch', target: 'WAS서버(IVS) VM#1', status: '정상', lastUpdate: '2026.02.10 16:40' },
-    { id: 4, source: 'IVS L2 Switch', target: 'WEB서버(IVS) VM#1', status: '위험', lastUpdate: '2026.02.10 16:38' },
-    { id: 5, source: 'IVS L2 Switch', target: '통합DB서버(IVS) VM#1', status: '정상', lastUpdate: '2026.02.10 16:40' },
-    { id: 6, source: 'VOS L2 Switch', target: 'VOS운용서버#1', status: '장애', lastUpdate: '2026.02.10 16:30' },
-    { id: 7, source: 'VOS L2 Switch', target: 'VOS운용서버#2', status: '정상', lastUpdate: '2026.02.10 16:40' },
-    { id: 8, source: 'VOS L2 Switch', target: 'VOS운용서버#3', status: '정상', lastUpdate: '2026.02.10 16:40' },
-    { id: 9, source: 'IVS L2 Switch', target: 'VP운용 단말 #1', status: '정상', lastUpdate: '2026.02.10 16:40' },
-    { id: 10, source: 'IVS L2 Switch', target: '지상 감시 콘솔', status: '위험', lastUpdate: '2026.02.10 16:35' }
+    { id: 1, source: 'VOS운용서버#1', target: 'IVS L2스위치', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 2, source: 'VOS운용서버#2', target: 'IVS L2스위치', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 3, source: 'VOS운용서버#3', target: 'IVS L2스위치', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 4, source: 'VOS운용서버#4', target: 'IVS L2스위치', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 5, source: 'WAS서버(IVS) VM#1', target: 'IVS L2스위치', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 6, source: 'WAS서버(IVS) VM#2', target: 'IVS L2스위치', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 7, source: 'WEB서버(IVS) VM#1', target: 'IVS L2스위치', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 8, source: 'WEB서버(IVS) VM#2', target: 'IVS L2스위치', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 9, source: '통합DB서버(IVS) VM#1', target: 'IVS L2스위치', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 10, source: '통합DB서버(IVS) VM#2', target: 'IVS L2스위치', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 11, source: 'VCDM운용서버 VM#1', target: 'IVS L2스위치', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 12, source: 'VCDM운용서버 VM#2', target: 'IVS L2스위치', status: '위험', lastUpdate: '2026.02.10 16:40' },
+    { id: 13, source: 'IVS L2스위치', target: 'CEC 미들웨어', status: '위험', lastUpdate: '2026.02.10 16:40' },
+    { id: 14, source: 'CEC 미들웨어', target: 'IVS L3스위치', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 15, source: 'IVS L3스위치', target: 'WAN', status: '정상', lastUpdate: '2026.02.10 16:40' }
 ];
 
 // Sample Failure History Data
@@ -31,6 +36,25 @@ let currentNetwork = null;
 document.addEventListener('DOMContentLoaded', function () {
     renderNetworkList();
     lucide.createIcons();
+
+    // Check URL Parameters for auto-selection
+    const urlParams = new URLSearchParams(window.location.search);
+    const sourceParam = urlParams.get('source');
+    const targetParam = urlParams.get('target');
+
+    if (sourceParam && targetParam) {
+        const matchingNet = networkData.find(n => n.source === sourceParam && n.target === targetParam);
+        if (matchingNet) {
+            // Find the row element
+            setTimeout(() => {
+                const rows = document.querySelectorAll('#network-list-body .data-table-row');
+                const matchingRow = Array.from(rows).find(row =>
+                    row.cells[0].textContent === sourceParam && row.cells[1].textContent === targetParam
+                );
+                selectNetwork(matchingNet, matchingRow);
+            }, 100);
+        }
+    }
 });
 
 // Toggle Network Filter

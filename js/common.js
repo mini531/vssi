@@ -407,3 +407,18 @@ function closeSidebarOnMobile() {
     }
 }
 
+// Global Modal Backdrop Click Handler
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal-overlay')) {
+        // Standard practice in this project is only toggling the 'active' class.
+        // Adding 'hidden' class conflicts with many 'open' functions that don't remove it.
+        e.target.classList.remove('active');
+
+        // If the modal has specific cleanup logic (like stopping charts), 
+        // we might need to call specific functions.
+        if (typeof window.closeMonitoringModal === 'function' && e.target.id === 'monitoring-detail-modal') {
+            window.closeMonitoringModal();
+        }
+    }
+});
+

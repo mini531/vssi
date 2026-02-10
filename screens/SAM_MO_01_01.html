@@ -738,6 +738,17 @@
                             <span>60초</span>
                             <span id="val-disk-current">0</span>
                         </div>
+
+                        <!-- Disk Usage Bar -->
+                        <div class="disk-usage-container">
+                            <div class="disk-usage-header">
+                                <span class="disk-usage-label">디스크 사용량</span>
+                                <span class="disk-usage-value" id="disk-usage-text">0.00 TB / 0.00 TB</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div id="disk-usage-bar" class="progress-bar-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -790,7 +801,7 @@
                     <div>
                         <div class="section-header">
                             <h4 class="modal-section-title">네트워크 장애 이력</h4>
-                            <a href="SAM_MO_03_01.html" class="btn-xs btn-secondary">더 보기</a>
+                            <a href="SAM_MO_03_01.html" id="btn-view-more-network" class="btn-xs btn-secondary">더 보기</a>
                         </div>
                         <div class="table-container modal-table-scroll custom-scrollbar">
                             <table class="data-table">

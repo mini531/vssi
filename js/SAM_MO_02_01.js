@@ -129,6 +129,17 @@ function selectHardware(hw, element) {
     // Initialize/Update Charts
     initCharts();
 
+    // Disk Usage Data (32TB Scale)
+    const totalDisk = 32.00;
+    const usedDisk = (Math.random() * 10 + 12).toFixed(2); // 12.00 ~ 22.00 TB
+    const usagePercent = (usedDisk / totalDisk * 100).toFixed(1);
+
+    const usageTextEl = document.getElementById('disk-usage-text');
+    const usageBarEl = document.getElementById('disk-usage-bar');
+
+    if (usageTextEl) usageTextEl.textContent = `${usedDisk} TB / ${totalDisk.toFixed(2)} TB (${usagePercent}%)`;
+    if (usageBarEl) usageBarEl.style.width = `${usagePercent}%`;
+
     // Mobile: Show detail pane
     const detailPane = document.getElementById('detail-pane');
     if (window.innerWidth < 1024) {
