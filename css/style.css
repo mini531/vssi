@@ -4619,10 +4619,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   stroke: none !important;
 }
 
-.text-label.status-normal {
-  fill: var(--success);
-}
-
 .text-label.status-caution {
   fill: var(--warning);
 }
