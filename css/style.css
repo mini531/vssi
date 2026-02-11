@@ -4576,7 +4576,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /* Status Classes applied to the .line-normal element */
-.status-normal {
+.line-normal.status-normal {
   stroke: #64748b;
 }
 
@@ -4616,6 +4616,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   fill: #e2e8f0;
   font-size: 12px;
   font-family: sans-serif;
+  stroke: none !important;
 }
 
 .text-label.status-normal {
