@@ -170,7 +170,7 @@ function renderCodes(codeList) {
     listBody.innerHTML = '';
 
     if (codeList.length === 0) {
-        listBody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-500 italic">등록된 코드가 없습니다. '코드 등록' 버튼을 눌러 추가하세요.</td></tr>`;
+        listBody.innerHTML = `<tr><td colspan="7" class="text-center">등록된 코드가 없습니다. '코드 등록' 버튼을 눌러 추가하세요.</td></tr>`;
     } else {
         codeList.forEach(code => {
             const tr = document.createElement('tr');
