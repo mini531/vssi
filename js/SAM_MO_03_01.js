@@ -142,6 +142,7 @@ function selectNetwork(net, element) {
     document.getElementById('detail-content').classList.remove('hidden');
 
     // Populate detail info
+    document.getElementById('selected-network-name').textContent = `${net.source} > ${net.target}`;
     document.getElementById('net-detail-source').textContent = net.source;
     document.getElementById('net-detail-target').textContent = net.target;
 

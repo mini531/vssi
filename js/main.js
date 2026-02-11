@@ -45,7 +45,12 @@ document.addEventListener('DOMContentLoaded', () => {
         'SAM_US_01_01',
         'SAM_MO_01_01',
         'SAM_MO_02_01',
-        'SAM_MO_03_01'
+        'SAM_MO_03_01',
+        'SAM_MO_04_01',
+        'SAM_AU_03_01',
+        'SAM_LG_01_01',
+        'SAM_LG_02_01',
+        'SAM_SY_01_01'
     ];
 
     function init() {

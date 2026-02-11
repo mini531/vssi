@@ -108,6 +108,43 @@
   background-color: rgba(88, 28, 135, 0.3) !important;
 }
 
+.bg-slate-alpha {
+  background-color: rgba(148, 163, 184, 0.3) !important;
+}
+
+/* Status Dots (Single Class Components) */
+.dot-success,
+.dot-info,
+.dot-warning,
+.dot-error,
+.dot-slate {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.dot-success {
+  background-color: var(--success);
+}
+
+.dot-info {
+  background-color: var(--info);
+}
+
+.dot-warning {
+  background-color: var(--warning);
+}
+
+.dot-error {
+  background-color: var(--error);
+}
+
+.dot-slate {
+  background-color: rgba(148, 163, 184, 0.3);
+}
+
 /* SVG Status Indicators */
 .status-indicator {
   cursor: help;
@@ -278,6 +315,24 @@ html {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-blink {
+  animation: blink 1s infinite;
 }
 
 .animate-fade-in {
@@ -1721,6 +1776,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   transition: all 0.2s;
 }
 
+.form-input.form-select {
+  padding-right: 2.5rem;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.25em 1.25em;
+  cursor: pointer;
+}
+
 .form-input::placeholder {
   color: #475569;
 
@@ -2001,6 +2066,52 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-color: #334155;
   transform: translateY(-2px);
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+.status-card-stat {
+  background-color: #0b101b;
+  border: 1px solid #1e293b;
+  padding: var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.status-card-stat:hover {
+  background-color: #161e2e;
+  border-color: #334155;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+/* Stat Value Components (Single Class) */
+.stat-value-default,
+.stat-value-success,
+.stat-value-warning,
+.stat-value-error {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-value-default {
+  color: white;
+}
+
+.stat-value-success {
+  color: var(--success);
+}
+
+.stat-value-warning {
+  color: var(--warning);
+}
+
+.stat-value-error {
+  color: var(--error);
 }
 
 .status-card:active {
@@ -4691,8 +4802,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
-  /* gap-4 */
-  /* Removed border-b and padding as requested by user */
 }
 
 /* Header for small monitoring cards (e.g. CPU Usage 100%) */
@@ -4701,20 +4810,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   justify-content: space-between;
   align-items: flex-end;
   margin-bottom: 0.25rem;
-  /* mb-1 */
 }
 
 /* Container for the canvas charts */
 .monitoring-chart-container {
   width: 100%;
-  height: 8rem;
-  /* h-32 */
+  height: 4rem;
   background-color: rgba(15, 23, 42, 0.5);
-  /* bg-slate-900/50 */
   border-radius: 0.25rem;
-  /* rounded */
   border: 1px solid #334155;
-  /* border-slate-700 */
   position: relative;
   overflow: hidden;
 }
@@ -4734,11 +4838,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   justify-content: space-between;
   font-size: 0.75rem;
-  /* text-xs */
   color: #64748b;
-  /* text-slate-500 */
   margin-top: 0.25rem;
-  /* mt-1 */
 }
 
 /* Section header for larger blocks (e.g. Failure History) */

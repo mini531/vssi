@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMS - User Activity Log</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="dashboard-body app-screen-height" data-system-acronym="SAMS" data-page-title="사용자 활동 로그">
+    <!-- Header (Fixed Top) -->
+    <div data-include="../components/header.html"></div>
+
+    <!-- Main Flex Container (Sidebar + Content) -->
+    <div class="dashboard-main-flex">
+
+        <!-- Sidebar -->
+        <div data-include="../components/sidebar.html"></div>
+
+        <!-- Main Content (Pushed by Sidebar) -->
+        <main class="dashboard-main" id="main-content">
+
+            <!-- Content Scroll Area -->
+            <div class="dashboard-content dashboard-content-full custom-scrollbar">
+                <div class="dashboard-container dashboard-container-full">
+
+                    <!-- Search Filter -->
+                    <div class="search-panel flex-none">
+                        <div class="search-panel-header" onclick="toggleFilter()">
+                            <div class="search-panel-title-group">
+                                <i data-lucide="filter" class="status-card-icon text-success"></i>
+                                <span class="search-panel-title">검색 필터</span>
+                            </div>
+                            <i data-lucide="chevron-up" id="filter-chevron" class="filter-chevron"></i>
+                        </div>
+
+                        <div id="filter-content" class="search-panel-content">
+                            <div class="filter-panel-inner">
+                                <div class="filter-grid">
+                                    <div class="filter-grid-wide">
+                                        <label class="filter-label">발생 일시</label>
+                                        <div class="filter-date-range">
+                                            <input type="date" id="filter-date-start"
+                                                class="filter-input filter-input-flex"
+                                                onclick="try{this.showPicker()}catch(e){}">
+                                            <span class="filter-date-separator">~</span>
+                                            <input type="date" id="filter-date-end"
+                                                class="filter-input filter-input-flex"
+                                                onclick="try{this.showPicker()}catch(e){}">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="filter-label">아이디</label>
+                                        <input type="text" id="filter-user-id" placeholder="아이디 입력" class="filter-input"
+                                            onkeyup="if(event.key==='Enter') applyFilter()">
+                                    </div>
+                                    <div>
+                                        <label class="filter-label">이름</label>
+                                        <input type="text" id="filter-user-name" placeholder="이름 입력"
+                                            class="filter-input" onkeyup="if(event.key==='Enter') applyFilter()">
+                                    </div>
+                                    <div>
+                                        <label class="filter-label">로그 유형</label>
+                                        <select id="filter-type" class="filter-select">
+                                            <option value="all">전체</option>
+                                            <option value="로그인">로그인</option>
+                                            <option value="로그아웃">로그아웃</option>
+                                            <option value="생성">생성</option>
+                                            <option value="수정">수정</option>
+                                            <option value="삭제">삭제</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="filter-actions">
+                                    <button class="filter-btn-common filter-btn-reset" onclick="resetFilter()">
+                                        <i data-lucide="rotate-ccw" class="trend-icon"></i> 초기화
+                                    </button>
+                                    <button class="filter-btn-common filter-btn-search" onclick="applyFilter()">
+                                        <i data-lucide="search" class="trend-icon"></i> 조회
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Table Area -->
+                    <div class="table-main-wrapper flex-1 flex flex-col min-h-0">
+                        <div class="pane-header flex-none border-b-0">
+                            <div class="search-panel-title-group">
+                                <i data-lucide="list" class="status-card-icon text-success"></i>
+                                <span class="search-panel-title">활동 로그 목록</span>
+                            </div>
+                            <div class="pane-header-right">
+                                <button class="btn-sm btn-secondary" onclick="downloadLogs()">
+                                    <i data-lucide="download" class="trend-icon"></i> 다운로드
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-scroll-area custom-scrollbar flex-1">
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" style="width: 180px;">발생 일시</th>
+                                            <th style="width: 120px;">아이디</th>
+                                            <th style="width: 120px;">이름</th>
+                                            <th style="width: 120px;">로그 유형</th>
+                                            <th>메시지</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="log-body" class="data-table-body">
+                                        <!-- JS Rendered -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="table-footer flex-none">
+                            <span class="pagination-info" id="total-count">총 0 건</span>
+                            <div class="pagination-controls">
+                                <button class="page-btn active">1</button>
+                                <button class="page-btn">2</button>
+                                <button class="page-btn">3</button>
+                                <button class="page-btn"><i data-lucide="chevron-right"
+                                        class="pagination-icon"></i></button>
+                                <select class="pagination-select pagination-select-margin">
+                                    <option>20개씩 보기</option>
+                                    <option>50개씩 보기</option>
+                                    <option>100개씩 보기</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div data-include="../components/system-switcher.html"></div>
+
+    <script src="../js/include.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/SAM_LG_02_01.js"></script>
+</body>
+
+</html>

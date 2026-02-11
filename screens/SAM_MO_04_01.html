@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMS - Interface Status</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="dashboard-body app-screen-height" data-system-acronym="SAMS" data-page-title="인터페이스 현황">
+    <!-- Header (Fixed Top) -->
+    <div data-include="../components/header.html"></div>
+
+    <!-- Main Flex Container (Sidebar + Content) -->
+    <div class="dashboard-main-flex">
+
+        <!-- Sidebar -->
+        <div data-include="../components/sidebar.html"></div>
+
+        <!-- Main Content (Pushed by Sidebar) -->
+        <main class="dashboard-main" id="main-content">
+
+            <!-- Content Scroll Area -->
+            <div class="dashboard-content dashboard-content-full custom-scrollbar">
+                <div class="dashboard-container dashboard-container-full">
+
+                    <!-- Split Pane Container -->
+                    <div class="split-container">
+
+                        <!-- Left Pane: Interface List -->
+                        <div class="split-pane-left">
+                            <div class="pane-header">
+                                <div class="search-panel-title-group">
+                                    <i data-lucide="arrow-left-right" class="status-card-icon text-success"></i>
+                                    <span class="search-panel-title">인터페이스 목록</span>
+                                </div>
+                            </div>
+
+                            <div class="pane-content custom-scrollbar p-standard flex-1 flex flex-col">
+                                <!-- Search Filter -->
+                                <div class="search-panel flex-none mb-4">
+                                    <div class="search-panel-header" onclick="toggleFilter('interface-filter')">
+                                        <div class="search-panel-title-group">
+                                            <i data-lucide="filter" class="status-card-icon text-success"></i>
+                                            <span class="search-panel-title">검색 필터</span>
+                                        </div>
+                                        <i data-lucide="chevron-down" id="interface-filter-chevron"
+                                            class="filter-chevron"></i>
+                                    </div>
+
+                                    <div id="interface-filter-content" class="search-panel-content hidden">
+                                        <div class="filter-panel-inner">
+                                            <div class="filter-grid">
+                                                <div class="filter-grid-wide">
+                                                    <label class="filter-label">인터페이스 명</label>
+                                                    <input type="text" id="filter-keyword" class="filter-input"
+                                                        placeholder="인터페이스 명 검색"
+                                                        onkeyup="if(event.key === 'Enter') applyFilter()">
+                                                </div>
+                                                <div>
+                                                    <label class="filter-label">송신 노드</label>
+                                                    <select id="filter-sender" class="filter-select">
+                                                        <option value="all">전체</option>
+                                                        <option value="IVS">IVS</option>
+                                                        <option value="VOS">VOS</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label class="filter-label">수신 노드</label>
+                                                    <select id="filter-receiver" class="filter-select">
+                                                        <option value="all">전체</option>
+                                                        <option value="IVS">IVS</option>
+                                                        <option value="VOS">VOS</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label class="filter-label">유형</label>
+                                                    <select id="filter-type" class="filter-select">
+                                                        <option value="all">전체</option>
+                                                        <option value="MQ">MQ</option>
+                                                        <option value="REST">REST</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label class="filter-label">상태</label>
+                                                    <select id="filter-status" class="filter-select">
+                                                        <option value="all">전체</option>
+                                                        <option value="정상">정상</option>
+                                                        <option value="지연">지연</option>
+                                                        <option value="장애">장애</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="filter-actions">
+                                            <button class="filter-btn-common filter-btn-reset" onclick="resetFilter()">
+                                                <i data-lucide="rotate-ccw" class="trend-icon"></i> 초기화
+                                            </button>
+                                            <button class="filter-btn-common filter-btn-search" onclick="applyFilter()">
+                                                <i data-lucide="search" class="trend-icon"></i> 조회
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="table-container flex-1">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>인터페이스 명</th>
+                                                <th>송신 노드</th>
+                                                <th>수신 노드</th>
+                                                <th class="text-center">유형</th>
+                                                <th class="text-center">상태</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="list-body">
+                                            <!-- JS Rendered -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Pagination Footer -->
+                            <div class="table-footer">
+                                <span class="pagination-info" id="total-count">총 0 건</span>
+                                <div class="pagination-controls">
+                                    <button class="page-btn active">1</button>
+                                    <button class="page-btn">2</button>
+                                    <button class="page-btn pc-only">3</button>
+                                    <button class="page-btn"><i data-lucide="chevron-right"
+                                            class="pagination-icon"></i></button>
+                                    <select class="pagination-select pagination-select-margin">
+                                        <option>20개씩 보기</option>
+                                        <option>50개씩 보기</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Pane: Interface Detail -->
+                        <div class="split-pane-right" id="detail-pane">
+                            <!-- Empty State -->
+                            <div id="empty-state" class="empty-state">
+                                <i data-lucide="arrow-left-right" class="empty-state-icon"></i>
+                                <p class="empty-state-text">좌측 목록에서 인터페이스를 선택해 주세요.</p>
+                            </div>
+
+                            <!-- Detail Content (Hidden initially) -->
+                            <div id="detail-content" class="hidden h-full flex flex-col">
+                                <div class="pane-header">
+                                    <div class="search-panel-title-group">
+                                        <i data-lucide="info" class="status-card-icon text-success"></i>
+                                        <span class="search-panel-title">인터페이스 정보 - <span id="selected-interface-name"
+                                                class="text-success"></span></span>
+                                    </div>
+                                    <div class="pane-header-right">
+                                        <button class="btn-sm btn-secondary mobile-list-btn"
+                                            onclick="closeDetailPane()">
+                                            <i data-lucide="list" class="trend-icon"></i> 목록
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="pane-content custom-scrollbar p-standard flex-1 flex flex-col">
+                                    <div class="flex flex-row gap-standard mb-sm">
+                                        <div class="flex-1">
+                                            <h4 class="modal-section-title">송신 노드</h4>
+                                            <div class="data-value whitespace-nowrap" id="net-detail-source">-</div>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h4 class="modal-section-title">수신 노드</h4>
+                                            <div class="data-value whitespace-nowrap" id="net-detail-target">-</div>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h4 class="modal-section-title">유형</h4>
+                                            <div class="data-value whitespace-nowrap" id="net-detail-type">-</div>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h4 class="modal-section-title">상태</h4>
+                                            <div class="data-value" id="net-detail-status">-</div>
+                                        </div>
+                                    </div>
+                                    <!-- Metrics Charts (Vertical Stack) -->
+                                    <!-- TPS Chart -->
+                                    <div class="mb-sm">
+                                        <div class="section-header">
+                                            <h4 class="modal-section-title mb-0">TPS</h4>
+                                            <div class="flex items-center gap-sm text-xs">
+                                                <div class="flex items-center gap-xs">
+                                                    <span class="dot-success"></span>
+                                                    <span class="text-slate">현재 데이터</span>
+                                                </div>
+                                                <div class="flex items-center gap-xs">
+                                                    <span class="dot-slate"></span>
+                                                    <span class="text-slate">전일 평균</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="monitoring-chart-container">
+                                            <canvas id="chart-tps" class="w-full h-full block"></canvas>
+                                            <div class="chart-grid-overlay"></div>
+                                        </div>
+                                        <div class="monitoring-chart-footer">
+                                            <span>60초</span>
+                                            <span id="val-tps-current">0</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Latency Chart -->
+                                    <div class="mb-sm">
+                                        <div class="section-header">
+                                            <h4 class="modal-section-title mb-0">응답 시간</h4>
+                                        </div>
+                                        <div class="monitoring-chart-container">
+                                            <canvas id="chart-latency" class="w-full h-full block"></canvas>
+                                            <div class="chart-grid-overlay"></div>
+                                        </div>
+                                        <div class="monitoring-chart-footer">
+                                            <span>60초</span>
+                                            <span id="val-latency-current">0</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Data Volume Chart -->
+                                    <div class="mb-sm">
+                                        <div class="section-header">
+                                            <h4 class="modal-section-title mb-0">데이터 트랜젝션 용량</h4>
+                                            <div class="flex items-center gap-sm text-xs">
+                                                <div class="flex items-center gap-xs">
+                                                    <span class="dot-info"></span>
+                                                    <span class="text-slate">현재 전송량</span>
+                                                </div>
+                                                <div class="flex items-center gap-xs">
+                                                    <span class="dot-slate"></span>
+                                                    <span class="text-slate">전일 평균</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="monitoring-chart-container">
+                                            <canvas id="chart-volume" class="w-full h-full block"></canvas>
+                                            <div class="chart-grid-overlay"></div>
+                                        </div>
+                                        <div class="monitoring-chart-footer">
+                                            <span>60초</span>
+                                            <span id="val-volume-current">0 KB</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Processing History Table -->
+                                    <div>
+                                        <div class="section-header">
+                                            <h4 class="modal-section-title">요청 내역</h4>
+                                        </div>
+
+                                        <!-- Processing History Filter -->
+                                        <div class="search-panel mb-4">
+                                            <div class="search-panel-header" onclick="toggleFilter('log-filter')">
+                                                <div class="search-panel-title-group">
+                                                    <i data-lucide="filter" class="status-card-icon text-success"></i>
+                                                    <span class="search-panel-title">검색 필터</span>
+                                                </div>
+                                                <i data-lucide="chevron-down" id="log-filter-chevron"
+                                                    class="filter-chevron"></i>
+                                            </div>
+
+                                            <div id="log-filter-content" class="search-panel-content hidden">
+                                                <div class="filter-panel-inner">
+                                                    <div class="filter-grid">
+                                                        <div>
+                                                            <label class="filter-label">상태</label>
+                                                            <select id="filter-log-status" class="filter-select">
+                                                                <option value="all">전체</option>
+                                                                <option value="성공">성공</option>
+                                                                <option value="실패">실패</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="filter-grid-wide">
+                                                            <label class="filter-label">요청 시각</label>
+                                                            <div class="filter-date-range">
+                                                                <input type="date" id="filter-log-date-start"
+                                                                    class="filter-input filter-input-flex"
+                                                                    onclick="try{this.showPicker()}catch(e){}">
+                                                                <span class="filter-date-separator">~</span>
+                                                                <input type="date" id="filter-log-date-end"
+                                                                    class="filter-input filter-input-flex"
+                                                                    onclick="try{this.showPicker()}catch(e){}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="filter-actions">
+                                                    <button class="filter-btn-common filter-btn-reset"
+                                                        onclick="resetLogFilter()">
+                                                        <i data-lucide="rotate-ccw" class="trend-icon"></i> 초기화
+                                                    </button>
+                                                    <button class="filter-btn-common filter-btn-search"
+                                                        onclick="applyLogFilter()">
+                                                        <i data-lucide="search" class="trend-icon"></i> 조회
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="table-container modal-table-scroll custom-scrollbar">
+                                            <table class="data-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">요청 시각</th>
+                                                        <th class="text-right">용량 (KB)</th>
+                                                        <th class="text-right">응답 시간 (ms)</th>
+                                                        <th class="text-center">상태</th>
+                                                        <th class="text-center">오류 내용</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="data-table-body" id="log-body">
+                                                    <!-- JS Rendered -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <!-- Request History Pagination Footer -->
+                                        <div class="table-footer">
+                                            <span class="pagination-info" id="log-total-count">총 0 건</span>
+                                            <div class="pagination-controls">
+                                                <button class="page-btn active">1</button>
+                                                <button class="page-btn">2</button>
+                                                <button class="page-btn">3</button>
+                                                <button class="page-btn pc-only">4</button>
+                                                <button class="page-btn pc-only">5</button>
+                                                <button class="page-btn"><i data-lucide="chevron-right"
+                                                        class="pagination-icon"></i></button>
+                                                <select class="pagination-select pagination-select-margin">
+                                                    <option>20개씩 보기</option>
+                                                    <option>50개씩 보기</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div> <!-- End of split-pane-right -->
+                    </div> <!-- End of split-container -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Components -->
+    <div data-include="../components/system-switcher.html"></div>
+
+    <script src="../js/include.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/SAM_MO_04_01.js"></script>
+</body>
+
+</html>

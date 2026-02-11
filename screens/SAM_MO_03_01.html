@@ -69,8 +69,8 @@
                                                     <div class="filter-date-range">
                                                         <select id="filter-network-type" class="filter-select">
                                                             <option value="all">전체</option>
-                                                            <option value="start">시작 지점</option>
-                                                            <option value="end">종료 지점</option>
+                                                            <option value="start">송신 노드</option>
+                                                            <option value="end">수신 노드</option>
                                                         </select>
                                                         <input type="text" id="filter-network-keyword"
                                                             class="filter-input" placeholder="키워드 입력"
@@ -96,8 +96,8 @@
                                     <table class="data-table">
                                         <thead>
                                             <tr>
-                                                <th>시작 지점</th>
-                                                <th>종료 지점</th>
+                                                <th>송신 노드</th>
+                                                <th>수신 노드</th>
                                                 <th class="text-center">상태</th>
                                                 <th class="text-center">최근 갱신 일시</th>
                                             </tr>
@@ -140,7 +140,8 @@
                                 <div class="pane-header">
                                     <div class="search-panel-title-group">
                                         <i data-lucide="network" class="status-card-icon text-success"></i>
-                                        <span class="search-panel-title">네트워크 정보</span>
+                                        <span class="search-panel-title">네트워크 정보 - <span id="selected-network-name"
+                                                class="text-success"></span></span>
                                     </div>
                                     <div class="pane-header-right">
                                         <button class="btn-sm btn-secondary mobile-list-btn"
@@ -157,12 +158,12 @@
                                         <div class="flex flex-row gap-standard mb-sm">
                                             <!-- Start Point -->
                                             <div class="flex-1">
-                                                <h4 class="modal-section-title">시작 지점</h4>
+                                                <h4 class="modal-section-title">송신 노드</h4>
                                                 <div class="data-value whitespace-nowrap" id="net-detail-source">-</div>
                                             </div>
                                             <!-- End Point -->
                                             <div class="flex-1">
-                                                <h4 class="modal-section-title">종료 지점</h4>
+                                                <h4 class="modal-section-title">수신 노드</h4>
                                                 <div class="data-value whitespace-nowrap" id="net-detail-target">-</div>
                                             </div>
                                             <!-- Status -->
