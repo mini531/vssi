@@ -126,7 +126,7 @@
   fill: var(--error);
 }
 
-/* Status Border Overrides */
+/* Status Border Overrides for Boxes/Lines */
 .box-fill.status-caution {
   stroke: var(--warning);
 }
@@ -4580,17 +4580,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   stroke: #64748b;
 }
 
-.status-warning {
-  stroke: #f59e0b;
-  stroke-dasharray: 5, 5;
-  animation: dash 60s linear infinite;
-}
-
-.status-danger {
-  stroke: #ef4444;
-  stroke-width: 2;
-}
-
 /* Node Interactivity */
 .node-interactive {
   cursor: pointer;
@@ -4627,6 +4616,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   fill: #e2e8f0;
   font-size: 12px;
   font-family: sans-serif;
+}
+
+.text-label.status-normal {
+  fill: var(--success);
+}
+
+.text-label.status-caution {
+  fill: var(--warning);
+}
+
+.text-label.status-danger {
+  fill: var(--error);
 }
 
 .box-fill {
