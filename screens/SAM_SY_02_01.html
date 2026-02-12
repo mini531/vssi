@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMS - Fault Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="dashboard-body app-screen-height" data-system-acronym="SAMS" data-page-title="장애 관리">
+    <!-- Header (Fixed Top) -->
+    <div data-include="../components/header.html"></div>
+
+    <!-- Main Flex Container (Sidebar + Content) -->
+    <div class="dashboard-main-flex">
+
+        <!-- Sidebar -->
+        <div data-include="../components/sidebar.html"></div>
+
+        <!-- Main Content (Pushed by Sidebar) -->
+        <main class="dashboard-main" id="main-content">
+
+            <!-- Content Scroll Area -->
+            <div class="dashboard-content dashboard-content-full custom-scrollbar">
+                <div class="dashboard-container dashboard-container-full">
+
+                    <!-- Split Pane Container -->
+                    <div class="split-container">
+
+                        <!-- Left Pane: Fault List -->
+                        <div class="split-pane-left">
+                            <div class="pane-header">
+                                <div class="search-panel-title-group">
+                                    <i data-lucide="alert-circle" class="status-card-icon text-success"></i>
+                                    <span class="search-panel-title">장애 접수 현황</span>
+                                </div>
+                            </div>
+
+                            <div class="pane-content custom-scrollbar flex-1 flex flex-col">
+                                <!-- Search Filter -->
+                                <div class="search-panel flex-none mb-4">
+                                    <div class="search-panel-header" onclick="toggleFilter('fault-filter')">
+                                        <div class="search-panel-title-group">
+                                            <i data-lucide="filter" class="status-card-icon text-success"></i>
+                                            <span class="search-panel-title">검색 필터</span>
+                                        </div>
+                                        <i data-lucide="chevron-down" id="fault-filter-chevron"
+                                            class="filter-chevron"></i>
+                                    </div>
+
+                                    <div id="fault-filter-content" class="search-panel-content hidden">
+                                        <div class="filter-panel-inner">
+                                            <div class="filter-grid">
+                                                <div class="filter-grid-wide">
+                                                    <label class="filter-label">발생일</label>
+                                                    <div class="filter-date-range">
+                                                        <input type="date" id="filter-date-start"
+                                                            class="filter-input filter-input-flex"
+                                                            onclick="try{this.showPicker()}catch(e){}">
+                                                        <span class="filter-date-separator">~</span>
+                                                        <input type="date" id="filter-date-end"
+                                                            class="filter-input filter-input-flex"
+                                                            onclick="try{this.showPicker()}catch(e){}">
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label class="filter-label">등급</label>
+                                                    <select id="filter-fault-level" class="filter-select">
+                                                        <option value="all">전체</option>
+                                                        <option value="치명적">치명적</option>
+                                                        <option value="요주의">요주의</option>
+                                                        <option value="경미">경미</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label class="filter-label">상태</label>
+                                                    <select id="filter-fault-status" class="filter-select">
+                                                        <option value="all">전체</option>
+                                                        <option value="접수">접수</option>
+                                                        <option value="조치중">조치중</option>
+                                                        <option value="완료">완료</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="filter-actions">
+                                            <button class="filter-btn-common filter-btn-reset"
+                                                onclick="resetFaultFilter()">
+                                                <i data-lucide="rotate-ccw" class="trend-icon"></i> 초기화
+                                            </button>
+                                            <button class="filter-btn-common filter-btn-search"
+                                                onclick="applyFaultFilter()">
+                                                <i data-lucide="search" class="trend-icon"></i> 조회
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="table-container flex-1">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>발생 일시</th>
+                                                <th>시스템</th>
+                                                <th class="text-center">등급</th>
+                                                <th class="text-center">상태</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="fault-list-body" class="data-table-body">
+                                            <!-- JS Rendered -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Pagination Footer -->
+                            <div class="table-footer">
+                                <span class="pagination-info" id="fault-total-count">총 0 건</span>
+                                <div class="pagination-controls">
+                                    <button class="page-btn active">1</button>
+                                    <button class="page-btn"><i data-lucide="chevron-right"
+                                            class="pagination-icon"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Pane: Fault Detail -->
+                        <div class="split-pane-right" id="detail-pane">
+                            <!-- Empty State -->
+                            <div id="empty-state" class="empty-state">
+                                <i data-lucide="alert-octagon" class="empty-state-icon"></i>
+                                <p class="empty-state-text">좌측 목록에서 장애 항목을 선택해 주세요.</p>
+                            </div>
+
+                            <!-- Detail Content (Hidden initially) -->
+                            <div id="detail-content" class="hidden h-full flex flex-col">
+                                <div class="pane-header">
+                                    <div class="search-panel-title-group">
+                                        <i data-lucide="info" class="status-card-icon text-success"></i>
+                                        <span class="search-panel-title">장애 정보</span>
+                                    </div>
+                                    <div class="pane-header-right">
+                                        <button class="btn-sm btn-primary" onclick="openActionModal()">
+                                            <i data-lucide="plus" class="trend-icon"></i> 조치 등록
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="pane-content custom-scrollbar flex-1">
+                                    <!-- Fault Summary Card -->
+                                    <div class="grid grid-cols-2 gap-4 mb-6">
+                                        <div>
+                                            <h4 class="modal-section-title">대상 시스템</h4>
+                                            <div id="detail-system" class="data-value">System A</div>
+                                        </div>
+                                        <div>
+                                            <h4 class="modal-section-title">장애 등급</h4>
+                                            <div id="detail-level" class="data-value">Critical</div>
+                                        </div>
+                                        <div>
+                                            <h4 class="modal-section-title">발생 일시</h4>
+                                            <div id="detail-time" class="data-value">2026.02.11 14:30:22</div>
+                                        </div>
+                                        <div>
+                                            <h4 class="modal-section-title">진행 상태</h4>
+                                            <div id="detail-status" class="data-value">조치중</div>
+                                        </div>
+                                        <div class="col-span-2">
+                                            <h4 class="modal-section-title">장애 내용</h4>
+                                            <div id="detail-desc" class="data-value">DB 커넥션 풀
+                                                초과로 인한 서비스 지연 발생</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Action History Section -->
+                                    <div class="flex-1 flex flex-col">
+                                        <div class="section-header items-center justify-between mb-2">
+                                            <h4 class="modal-section-title mb-0">조치 내역</h4>
+                                        </div>
+                                        <div class="table-container flex-1">
+                                            <table class="data-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>조치 일시</th>
+                                                        <th>조치 내용</th>
+                                                        <th>담당자</th>
+                                                        <th class="text-center">결과</th>
+                                                        <th class="text-center">관리</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="action-list-body" class="data-table-body">
+                                                    <!-- JS Rendered -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- End of split-pane-right -->
+                    </div> <!-- End of split-container -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Action Registration Modal -->
+    <div id="action-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title-left">조치 등록</h3>
+                <i data-lucide="x" class="close-icon" onclick="closeActionModal()"></i>
+            </div>
+            <div class="modal-content">
+                <div class="registration-form-panel">
+                    <div class="mb-4">
+                        <label class="form-label">조치 일시 <span class="text-error required-mark">*</span></label>
+                        <div class="filter-date-range">
+                            <input type="date" id="reg-action-date" class="filter-input filter-input-flex"
+                                onclick="try{this.showPicker()}catch(e){}"
+                                oninput="resetActionError('reg-action-date')">
+                            <input type="time" id="reg-action-time" class="filter-input filter-input-flex"
+                                oninput="resetActionError('reg-action-time')">
+                        </div>
+                        <div id="error-reg-action-date" class="form-error"></div>
+                        <div id="error-reg-action-time" class="form-error"></div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">조치 내용 <span class="text-error required-mark">*</span></label>
+                        <textarea id="reg-action-content" class="form-input min-h-[100px] py-2"
+                            placeholder="조치 내용을 상세히 입력해 주세요."
+                            oninput="resetActionError('reg-action-content')"></textarea>
+                        <div id="error-reg-action-content" class="form-error"></div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">담당자 <span class="text-error required-mark">*</span></label>
+                        <input type="text" id="reg-action-actor" class="form-input" placeholder="담당자 이름"
+                            oninput="resetActionError('reg-action-actor')">
+                        <div id="error-reg-action-actor" class="form-error"></div>
+                    </div>
+                    <div>
+                        <label class="form-label">조치 결과 <span class="text-error required-mark">*</span></label>
+                        <select id="reg-action-result" class="form-input form-select">
+                            <option value="성공">성공</option>
+                            <option value="조치중">조치중</option>
+                            <option value="피드백필요">피드백 필요</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-btn-group">
+                <button onclick="closeActionModal()" class="btn-secondary">취소</button>
+                <button onclick="confirmActionRegistration()" class="btn-primary">등록</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-icon info">
+                <i data-lucide="help-circle" width="64" height="64" class="text-icon-info"></i>
+            </div>
+            <h3 class="modal-title" id="confirm-modal-title">조치 삭제</h3>
+            <p class="modal-desc" id="confirm-modal-desc">이 조치 내역을 삭제하시겠습니까?</p>
+            <div class="modal-btn-group">
+                <button onclick="closeConfirmModal()" class="btn-flex btn-modal-secondary">취소</button>
+                <button onclick="confirmDelete()" class="btn-flex btn-modal-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-icon success">
+                <i data-lucide="check-circle-2" width="64" height="64" class="text-icon-success"></i>
+            </div>
+            <h3 class="modal-title">등록 완료</h3>
+            <p class="modal-desc">조치 내역이 성공적으로 등록되었습니다.</p>
+            <div class="modal-btn-group">
+                <button onclick="closeSuccessModal()" class="btn-modal-success">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/include.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/SAM_SY_02_01.js"></script>
+</body>
+
+</html>

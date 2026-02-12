@@ -207,7 +207,7 @@
 
                                 <div class="pane-content custom-scrollbar flex-1 flex flex-col">
                                     <!-- Group Info Panel (Read-only Detail) -->
-                                    <div id="group-info-view" class="registration-form-panel mb-4">
+                                    <div id="group-info-view" class="mb-4">
                                         <div class="grid grid-cols-3 gap-4">
                                             <div>
                                                 <label class="form-label">코드 그룹 ID</label>
@@ -233,13 +233,13 @@
                                         <div class="section-header items-center justify-between mb-2">
                                             <h4 class="modal-section-title mb-0">코드 목록</h4>
                                             <div class="flex gap-2">
-                                                <button class="btn-xs btn-primary px-3"
+                                                <button class="btn-xs btn-primary"
                                                     onclick="initRegistrationMode('code')">
                                                     <i data-lucide="plus" class="w-3.5 h-3.5 mr-1"></i> 코드 등록
                                                 </button>
-                                                <button class="btn-xs btn-danger px-3" id="btn-delete-codes"
+                                                <button class="btn-xs btn-danger" id="btn-delete-codes"
                                                     onclick="deleteSelectedCodes()" disabled>
-                                                    <i data-lucide="trash-2" class="w-3.5 h-3.5 mr-1"></i> 삭제
+                                                    <i data-lucide="trash-2" class="w-3.5 h-3.5 mr-1"></i> 코드 삭제
                                                 </button>
                                             </div>
                                         </div>
@@ -254,8 +254,8 @@
                                                         <th>코드 ID</th>
                                                         <th>코드 이름</th>
                                                         <th>설명</th>
-                                                        <th class="text-center">순서</th>
                                                         <th class="text-center">사용 여부</th>
+                                                        <th class="text-center">순서</th>
                                                         <th class="text-center">관리</th>
                                                     </tr>
                                                 </thead>
@@ -270,14 +270,14 @@
                                     </div>
 
                                     <!-- Reg Mode: Group Form -->
-                                    <div id="reg-form-view" class="hidden registration-form-panel">
+                                    <div id="reg-form-view">
                                         <!-- Keep existing group form fields -->
-                                        <div class="grid gap-4">
+                                        <div class="grid grid-cols-3 gap-4">
                                             <div>
                                                 <label class="form-label">코드 그룹 ID <span id="reg-group-id-required"
                                                         class="text-error">*</span></label>
                                                 <input type="text" id="reg-group-id" class="form-input"
-                                                    placeholder="코드 그룹 ID 입력 (영문 대문자, 숫자, 언더바)"
+                                                    placeholder="코드 그룹 ID (영문 대문자, 숫자, 언더바)"
                                                     oninput="resetError('reg-group-id')">
                                                 <div id="error-reg-group-id" class="form-error"></div>
                                             </div>
@@ -285,13 +285,8 @@
                                                 <label class="form-label">코드 그룹 이름 <span
                                                         class="text-error">*</span></label>
                                                 <input type="text" id="reg-group-name" class="form-input"
-                                                    placeholder="코드 그룹 이름 입력" oninput="resetError('reg-group-name')">
+                                                    placeholder="코드 그룹 이름" oninput="resetError('reg-group-name')">
                                                 <div id="error-reg-group-name" class="form-error"></div>
-                                            </div>
-                                            <div>
-                                                <label class="form-label">설명</label>
-                                                <textarea id="reg-group-desc" class="form-input h-24 resize-none"
-                                                    placeholder="코드 그룹에 대한 설명을 입력하세요."></textarea>
                                             </div>
                                             <div>
                                                 <label class="form-label">사용 여부 <span
@@ -301,12 +296,17 @@
                                                     <option value="미사용">미사용</option>
                                                 </select>
                                             </div>
+                                            <div class="col-span-3">
+                                                <label class="form-label">설명</label>
+                                                <textarea id="reg-group-desc" class="form-input h-24 resize-none"
+                                                    placeholder="코드 그룹에 대한 설명을 입력해 주세요."></textarea>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <!-- Reg Mode: Code Form -->
                                     <div id="reg-code-form-view" class="hidden registration-form-panel">
-                                        <div class="grid gap-4">
+                                        <div class="grid grid-cols-2 gap-4">
                                             <div>
                                                 <label class="form-label">코드 ID <span id="reg-code-id-required"
                                                         class="text-error">*</span></label>
@@ -322,10 +322,6 @@
                                                 <div id="error-reg-code-name" class="form-error"></div>
                                             </div>
                                             <div>
-                                                <label class="form-label">순서</label>
-                                                <input type="number" id="reg-code-sort" class="form-input" value="10">
-                                            </div>
-                                            <div>
                                                 <label class="form-label">사용 여부 <span
                                                         class="text-error">*</span></label>
                                                 <select id="reg-code-status" class="form-input form-select">
@@ -334,6 +330,10 @@
                                                 </select>
                                             </div>
                                             <div>
+                                                <label class="form-label">순서</label>
+                                                <input type="number" id="reg-code-sort" class="form-input" value="10">
+                                            </div>
+                                            <div class="col-span-2">
                                                 <label class="form-label">설명</label>
                                                 <textarea id="reg-code-desc" class="form-input h-24 resize-none"
                                                     placeholder="코드에 대한 설명을 입력하세요."></textarea>

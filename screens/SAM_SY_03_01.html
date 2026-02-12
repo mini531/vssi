@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMS - Backup Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="dashboard-body app-screen-height" data-system-acronym="SAMS" data-page-title="백업 설정">
+    <!-- Header (Fixed Top) -->
+    <div data-include="../components/header.html"></div>
+
+    <!-- Main Flex Container (Sidebar + Content) -->
+    <div class="dashboard-main-flex">
+
+        <!-- Sidebar -->
+        <div data-include="../components/sidebar.html"></div>
+
+        <!-- Main Content -->
+        <main class="dashboard-main" id="main-content">
+
+            <!-- Content Scroll Area -->
+            <div class="dashboard-content dashboard-content-full custom-scrollbar">
+                <div class="dashboard-container dashboard-container-full">
+
+                    <!-- Single Pane Container -->
+                    <div class="glass-panel">
+
+                        <!-- Header -->
+                        <div class="pane-header">
+                            <div class="search-panel-title-group">
+                                <i data-lucide="database" class="status-card-icon text-success"></i>
+                                <span class="search-panel-title">백업 설정</span>
+                            </div>
+
+                            <!-- Buttons Group -->
+                            <div class="pane-header-right">
+                                <!-- View Mode Buttons -->
+                                <div id="view-mode-buttons" class="action-btn-group">
+                                    <button class="btn-sm btn-primary" onclick="enterEditMode()">
+                                        <i data-lucide="edit-3" class="trend-icon"></i> 수정
+                                    </button>
+                                </div>
+                                <!-- Edit Mode Buttons -->
+                                <div id="edit-mode-buttons" class="action-btn-group hidden">
+                                    <button class="btn-sm btn-secondary" onclick="cancelEdit()">
+                                        <i data-lucide="x" class="trend-icon"></i> 취소
+                                    </button>
+                                    <button class="btn-sm btn-primary" onclick="saveChanges()">
+                                        <i data-lucide="save" class="trend-icon"></i> 저장
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Content Area -->
+                        <div class="pane-content custom-scrollbar">
+
+                            <div class="spacing-y-6">
+                                <!-- Backup Settings Row (3 columns) -->
+                                <!-- Backup Settings Grid 1: Schedule -->
+                                <div class="settings-grid">
+                                    <!-- Backup Cycle -->
+                                    <div>
+                                        <label class="form-label">백업 주기</label>
+                                        <select id="backup-cycle" class="form-input form-select" disabled>
+                                            <option value="daily">매일</option>
+                                            <option value="weekly">매주</option>
+                                            <option value="monthly">매월</option>
+                                        </select>
+                                        <div id="error-backup-cycle" class="form-error"></div>
+                                        <p class="input-guide-text hidden">백업 실행 주기를 선택해 주세요</p>
+                                    </div>
+
+                                    <!-- Monthly Backup Day (hidden by default) -->
+                                    <div id="monthly-day-container" class="hidden">
+                                        <label class="form-label">백업 실행일</label>
+                                        <select id="backup-day-monthly" class="form-input form-select" disabled>
+                                            <option value="1">1일</option>
+                                            <option value="2">2일</option>
+                                            <option value="3">3일</option>
+                                            <option value="4">4일</option>
+                                            <option value="5">5일</option>
+                                            <option value="10">10일</option>
+                                            <option value="15">15일</option>
+                                            <option value="20">20일</option>
+                                            <option value="25">25일</option>
+                                            <option value="last">말일</option>
+                                        </select>
+                                        <p class="input-guide-text hidden">매월 백업을 실행할 날짜를 선택해 주세요</p>
+                                    </div>
+
+                                    <!-- Weekly Backup Days (shown only when cycle is weekly) -->
+                                    <!-- Weekly Backup Days (shown only when cycle is weekly) -->
+                                    <div id="weekly-days-container" class="hidden">
+                                        <label class="form-label">백업 요일</label>
+                                        <!-- View Mode Input -->
+                                        <input type="text" id="weekly-days-view" class="form-input" disabled
+                                            value="요일 선택" readonly>
+
+                                        <!-- Edit Mode Wrapper -->
+                                        <div id="weekly-days-edit-wrapper" class="multi-select-container hidden">
+                                            <div id="weekly-days-trigger"
+                                                class="form-input multi-select-trigger disabled"
+                                                onclick="toggleWeeklyDropdown()">
+                                                <span id="selected-days-text" class="truncate text-gray-400">요일
+                                                    선택</span>
+                                                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+                                            </div>
+
+                                            <div id="weekly-days-dropdown"
+                                                class="multi-select-dropdown custom-scrollbar">
+                                                <div class="multi-select-item"
+                                                    onclick="toggleDaySelection(event, 'day-mon')">
+                                                    <input type="checkbox" id="day-mon"
+                                                        class="custom-checkbox backup-day" disabled
+                                                        onchange="updateSelectedDaysText()">
+                                                    <label for="day-mon">월요일</label>
+                                                </div>
+                                                <div class="multi-select-item"
+                                                    onclick="toggleDaySelection(event, 'day-tue')">
+                                                    <input type="checkbox" id="day-tue"
+                                                        class="custom-checkbox backup-day" disabled
+                                                        onchange="updateSelectedDaysText()">
+                                                    <label for="day-tue">화요일</label>
+                                                </div>
+                                                <div class="multi-select-item"
+                                                    onclick="toggleDaySelection(event, 'day-wed')">
+                                                    <input type="checkbox" id="day-wed"
+                                                        class="custom-checkbox backup-day" disabled
+                                                        onchange="updateSelectedDaysText()">
+                                                    <label for="day-wed">수요일</label>
+                                                </div>
+                                                <div class="multi-select-item"
+                                                    onclick="toggleDaySelection(event, 'day-thu')">
+                                                    <input type="checkbox" id="day-thu"
+                                                        class="custom-checkbox backup-day" disabled
+                                                        onchange="updateSelectedDaysText()">
+                                                    <label for="day-thu">목요일</label>
+                                                </div>
+                                                <div class="multi-select-item"
+                                                    onclick="toggleDaySelection(event, 'day-fri')">
+                                                    <input type="checkbox" id="day-fri"
+                                                        class="custom-checkbox backup-day" disabled
+                                                        onchange="updateSelectedDaysText()">
+                                                    <label for="day-fri">금요일</label>
+                                                </div>
+                                                <div class="multi-select-item"
+                                                    onclick="toggleDaySelection(event, 'day-sat')">
+                                                    <input type="checkbox" id="day-sat"
+                                                        class="custom-checkbox backup-day" disabled
+                                                        onchange="updateSelectedDaysText()">
+                                                    <label for="day-sat">토요일</label>
+                                                </div>
+                                                <div class="multi-select-item"
+                                                    onclick="toggleDaySelection(event, 'day-sun')">
+                                                    <input type="checkbox" id="day-sun"
+                                                        class="custom-checkbox backup-day" disabled
+                                                        onchange="updateSelectedDaysText()">
+                                                    <label for="day-sun">일요일</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="error-backup-days" class="form-error"></div>
+                                        <p class="input-guide-text hidden">최소 1개 이상의 요일을 선택해 주세요</p>
+                                    </div>
+
+                                    <!-- Backup Time -->
+                                    <div>
+                                        <label class="form-label">백업 시간</label>
+                                        <input type="time" id="backup-time" class="form-input" disabled>
+                                        <div id="error-backup-time" class="form-error"></div>
+                                        <p class="input-guide-text hidden">백업이 실행될 시간을 설정해 주세요</p>
+                                    </div>
+                                </div>
+
+                                <!-- Backup Settings Grid 2: Configuration -->
+                                <div class="settings-grid">
+                                    <!-- Retention Period -->
+                                    <div>
+                                        <label class="form-label">보관 기간 (일) <span
+                                                class="text-error required-mark hidden">*</span></label>
+                                        <input type="number" id="retention-period" class="form-input" placeholder="30"
+                                            min="1" max="365" disabled oninput="resetError('retention-period')">
+                                        <div id="error-retention-period" class="form-error"></div>
+                                        <p class="input-guide-text hidden">1-365일</p>
+                                    </div>
+
+                                    <!-- Backup Format -->
+                                    <div>
+                                        <label class="form-label">백업 방식</label>
+                                        <select id="backup-format" class="form-input form-select" disabled>
+                                            <option value="full">전체 백업 (Full)</option>
+                                            <option value="incremental">증분 백업 (Incremental)</option>
+                                        </select>
+                                        <p class="input-guide-text hidden">백업 방식을 선택해 주세요</p>
+                                    </div>
+
+                                    <!-- Compression -->
+                                    <div>
+                                        <label class="form-label">압축 설정</label>
+                                        <div class="flex items-center h-10">
+                                            <label class="perm-checkbox-group">
+                                                <input type="checkbox" id="compression-enabled"
+                                                    class="custom-checkbox form-checkbox" disabled>
+                                                <span class="perm-checkbox-label">백업 파일 압축 사용</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Encryption -->
+                                    <div>
+                                        <label class="form-label">암호화 설정</label>
+                                        <div class="flex items-center h-10">
+                                            <label class="perm-checkbox-group">
+                                                <input type="checkbox" id="encryption-enabled"
+                                                    class="custom-checkbox form-checkbox" disabled
+                                                    onchange="toggleEncryptionInput()">
+                                                <span class="perm-checkbox-label">암호화 사용</span>
+                                            </label>
+                                        </div>
+                                        <input type="password" id="encryption-password" class="form-input hidden"
+                                            placeholder="암호화 키 입력" disabled oninput="resetError('encryption-password')">
+                                        <div id="error-encryption-password" class="form-error"></div>
+                                    </div>
+
+                                    <!-- Backup Path -->
+                                    <div>
+                                        <label class="form-label">백업 경로 <span
+                                                class="text-error required-mark hidden">*</span></label>
+                                        <input type="text" id="backup-path" class="form-input"
+                                            placeholder="/var/backups/sams" disabled
+                                            oninput="resetError('backup-path')">
+                                        <div id="error-backup-path" class="form-error"></div>
+                                        <p class="input-guide-text hidden">백업 파일이 저장될 경로를 입력해 주세요</p>
+                                    </div>
+
+                                    <!-- Auto Backup Enable -->
+                                    <div>
+                                        <label class="form-label">자동 백업 활성화</label>
+                                        <div class="flex items-center h-10">
+                                            <label class="perm-checkbox-group">
+                                                <input type="checkbox" id="auto-backup-enabled"
+                                                    class="custom-checkbox form-checkbox" disabled>
+                                                <span class="perm-checkbox-label">자동 백업 스케줄 활성화</span>
+                                            </label>
+                                        </div>
+                                        <p class="input-guide-text hidden">체크 해제 시 수동 백업만 가능합니다</p>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+    </div>
+    </main>
+    </div>
+
+    <!-- System Switcher Modal -->
+    <div data-include="../components/system-switcher.html"></div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-icon info">
+                <i data-lucide="help-circle" width="64" height="64" class="text-icon-info"></i>
+            </div>
+            <h3 class="modal-title">백업 설정 저장</h3>
+            <p class="modal-desc">변경된 백업 설정을 저장하시겠습니까?</p>
+            <div class="modal-btn-group">
+                <button onclick="closeConfirmModal()" class="btn-flex btn-modal-secondary">취소</button>
+                <button onclick="processSave()" class="btn-flex btn-modal-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-icon success">
+                <i data-lucide="check-circle" width="64" height="64" class="text-icon-success"></i>
+            </div>
+            <h3 class="modal-title">저장 완료</h3>
+            <p class="modal-desc">백업 설정이 성공적으로 저장되었습니다.</p>
+            <div class="modal-btn-group">
+                <button onclick="closeSuccessModal()" class="btn-modal-success">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/include.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/SAM_SY_03_01.js"></script>
+</body>
+
+</html>

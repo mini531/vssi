@@ -441,14 +441,10 @@ html {
 
 /* Modal Internal Layout Standards */
 .modal-section-title {
-  font-size: 0.875rem;
-
+  font-size: 12px;
   font-weight: 600;
-
   color: #94a3b8;
-
   margin-bottom: 0.5rem;
-
   text-align: left;
 }
 
@@ -728,7 +724,6 @@ html {
   font-size: 10px;
   font-weight: 700;
   color: #14b8a6;
-
   letter-spacing: 0.3em;
   text-transform: uppercase;
   margin-bottom: 0.25rem;
@@ -743,15 +738,13 @@ html {
 }
 
 .brand-desc {
-  font-size: 10px;
+  font-size: 11px;
   color: #64748b;
-
 }
 
 /* --- Auth Card Body --- */
 .auth-card-body {
   padding: 2.5rem;
-
   padding-bottom: 2rem;
 
 }
@@ -867,7 +860,7 @@ html {
 .auth-help-title {
   font-size: 0.875rem;
 
-  font-weight: 700;
+  font-weight: 600;
   color: white;
   margin-bottom: 0.5rem;
 
@@ -1524,6 +1517,7 @@ input:-webkit-autofill:active {
 .registration-form-panel {
   margin-bottom: 24px;
   padding: 0.5rem;
+  text-align: left;
 }
 
 
@@ -1786,6 +1780,40 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
 }
 
+.time-select {
+  width: 6rem;
+  background-color: #050912;
+  border: 1px solid #1e293b;
+  color: white;
+  font-size: 12px;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s;
+  text-align: center;
+  padding-right: 2.5rem;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.25em 1.25em;
+  cursor: pointer;
+}
+
+.time-select:focus {
+  border-color: var(--accent-teal);
+  outline: none;
+}
+
+.time-select:disabled {
+  background-color: transparent;
+  color: #ffffff;
+  cursor: not-allowed;
+  opacity: 1;
+  font-size: 14px;
+  border: 0px;
+  padding-left: 0px;
+  text-align: center;
+}
+
 .form-input::placeholder {
   color: #475569;
 
@@ -1878,7 +1906,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .auth-system-desc {
-  font-size: 10px;
+  font-size: 11px;
   color: #64748b;
 
   font-weight: 700;
@@ -2233,6 +2261,71 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.2);
 }
 
+/* Multi-Select Dropdown */
+.multi-select-container {
+  position: relative;
+  width: 100%;
+}
+
+.multi-select-trigger {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.multi-select-trigger.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  background-color: #0f172a;
+  /* Match form-input standard background */
+}
+
+.multi-select-trigger.disabled i,
+.multi-select-trigger.disabled svg {
+  display: none !important;
+}
+
+.multi-select-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  margin-top: 4px;
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  display: none;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.multi-select-dropdown.active {
+  display: block;
+}
+
+.multi-select-item {
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  color: #e2e8f0;
+}
+
+.multi-select-item:hover {
+  background-color: #1e293b;
+}
+
+.multi-select-item label {
+  cursor: pointer;
+  flex-grow: 1;
+}
+
 /* Button Standards */
 .btn-sm {
   height: 32px;
@@ -2319,6 +2412,52 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
   border-color: rgba(20, 184, 166, 0.3);
 }
+
+/* Number Input Spinner Buttons */
+input[type="number"].form-input::-webkit-inner-spin-button,
+input[type="number"].form-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"].form-input {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Custom styled number input with visible spinners */
+input[type="number"].form-input-spinner {
+  -moz-appearance: initial;
+  appearance: initial;
+}
+
+input[type="number"].form-input-spinner::-webkit-inner-spin-button,
+input[type="number"].form-input-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: inner-spin-button;
+  opacity: 1;
+  cursor: pointer;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+input[type="number"].form-input-spinner::-webkit-inner-spin-button:hover,
+input[type="number"].form-input-spinner::-webkit-outer-spin-button:hover {
+  background-color: rgba(20, 184, 166, 0.1);
+}
+
+/* Hide Select Arrow when Disabled/Readonly */
+select:disabled,
+select.readonly,
+.form-select:disabled,
+.form-select.readonly {
+  background-image: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  padding-right: 1rem !important;
+}
+
 
 .btn-primary:hover {
   background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%);
@@ -2454,6 +2593,29 @@ button:disabled {
   min-height: 0;
   margin-top: 0;
 }
+
+/* Input Error State */
+input.error,
+textarea.error,
+select.error {
+  border-color: #f87171 !important;
+}
+
+input.error:focus,
+textarea.error:focus,
+select.error:focus {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 2px rgba(248, 113, 113, 0.2) !important;
+}
+
+/* Table Text Wrap */
+.table-text-wrap {
+  max-width: 15rem;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+
 
 /* Monitoring Specifics (from SAM_AS_10_01) */
 .glass-panel-monitoring {
@@ -2626,6 +2788,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .badge-default {
   background: #1e293b;
   color: var(--text-secondary);
+  border-color: #334155;
+}
+
+
+.badge-danger {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--error);
+  border-color: #7f1d1d;
+}
+
+
+.badge-secondary {
+  background: rgba(71, 85, 105, 0.2);
+  color: #94a3b8;
   border-color: #334155;
 }
 
@@ -4516,6 +4692,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .info-text {
   color: white;
   font-weight: 700;
+  font-size: 14px;
 }
 
 .info-description {
@@ -4857,8 +5034,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 /* Generic Data Value (Replaces .info) */
 .data-value {
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   color: #e2e8f0;
   line-height: 1.5;
   text-align: left;

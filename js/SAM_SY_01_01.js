@@ -170,7 +170,7 @@ function renderCodes(codeList) {
     listBody.innerHTML = '';
 
     if (codeList.length === 0) {
-        listBody.innerHTML = `<tr><td colspan="7" class="text-center">등록된 코드가 없습니다. '코드 등록' 버튼을 눌러 추가하세요.</td></tr>`;
+        listBody.innerHTML = `<tr><td colspan="7" class="td-center">등록된 코드가 없습니다. '코드 등록' 버튼을 눌러 추가하세요.</td></tr>`;
     } else {
         codeList.forEach(code => {
             const tr = document.createElement('tr');
@@ -181,12 +181,12 @@ function renderCodes(codeList) {
                 <td class="font-medium text-slate-200">${code.code}</td>
                 <td>${code.name}</td>
                 <td class="text-slate-400 text-sm whitespace-pre-wrap">${code.desc || '-'}</td>
-                <td class="td-center">${code.sort}</td>
                 <td class="td-center">
                     <span class="badge ${code.used === '사용' ? 'badge-success' : 'badge-danger'}">
                         ${code.used}
                     </span>
                 </td>
+                <td class="td-center">${code.sort}</td>
                 <td class="td-center">
                     <div class="flex items-center justify-center gap-2">
                         <button class="text-slate-400 hover:text-teal-400 transition-colors" title="수정" onclick="editCodeInline('${code.code}')">
