@@ -161,9 +161,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const accessContainer = document.getElementById('access-log-container');
 
             const faults = [
-                { time: "2026.02.12 14:30:22", type: "치명적", node: "SAMS DB", msg: "DB 커넥션 풀 초과" },
-                { time: "2026.02.12 11:20:15", type: "요주의", node: "IVS GW", msg: "응답 지연 (>5s)" },
-                { time: "2026.02.11 17:50:00", type: "경미", node: "VOS Node 1", msg: "CPU 80% 상회" }
+                { time: "2026.02.11 14:30:22", type: "치명적", node: "SAMS DB", msg: "DB 커넥션 풀 초과" },
+                { time: "2026.02.11 11:20:15", type: "요주의", node: "IVS GW", msg: "응답 지연 (>5s)" },
+                { time: "2026.02.10 17:50:00", type: "경미", node: "VOS Node 1", msg: "CPU 80% 상회" },
+                { time: "2026.02.10 15:10:45", type: "치명적", node: "Switch A", msg: "링크 다운 감지" }
             ];
 
             const accessLogs = [
