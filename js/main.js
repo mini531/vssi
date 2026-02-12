@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'COM_CM_01_01',
         'COM_CM_01_02',
         'COM_IT_01_01',
+        'SAM_DB_01_01',
         'SAM_AS_10_01',
         'SAM_AU_01_01',
         'SAM_AU_02_01',
@@ -51,7 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'SAM_LG_01_01',
         'SAM_LG_02_01',
         'SAM_SY_01_01',
-        'SAM_SY_02_01'
+        'SAM_SY_02_01',
+        'SAM_SY_03_01',
+        'SAM_BD_01_01'
     ];
 
     function init() {
@@ -143,7 +146,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isImplemented) {
                 idClass = 'screen-id-link';
                 idOnClick = `onclick="openScreen('${item.id}')"`;
-            } else if (item.id === 'SAM_AU_01_02') {
+            } else if ([
+                'SAM_AU_01_02', 'SAM_US_01_02', 'SAM_US_01_03', 'SAM_US_01_04',
+                'SAM_US_02_01', 'SAM_SY_01_02', 'SAM_SY_02_02', 'SAM_BD_01_02', 'SAM_BD_01_03'
+            ].includes(item.id)) {
                 // Special case for Included Modal - Primary Color but not a link
                 idClass = 'screen-id-modal';
             } else {

@@ -29,10 +29,10 @@
                 <div class="dashboard-container dashboard-container-full">
 
                     <!-- Single Pane Container -->
-                    <div class="glass-panel">
+                    <div class="glass-panel h-full flex flex-col" id="diagram-panel">
 
                         <!-- Header -->
-                        <div class="pane-header">
+                        <div class="pane-header select-none cursor-default">
                             <div class="search-panel-title-group">
                                 <i data-lucide="database" class="status-card-icon text-success"></i>
                                 <span class="search-panel-title">백업 설정</span>
@@ -59,7 +59,7 @@
                         </div>
 
                         <!-- Content Area -->
-                        <div class="pane-content custom-scrollbar">
+                        <div class="pane-content" id="diagram-content">
 
                             <div class="spacing-y-6">
                                 <!-- Backup Settings Row (3 columns) -->
@@ -181,6 +181,67 @@
 
                                 <!-- Backup Settings Grid 2: Configuration -->
                                 <div class="settings-grid">
+                                    <!-- Backup Target (Multi-select) -->
+                                    <div>
+                                        <label class="form-label">백업 대상 <span
+                                                class="text-error required-mark hidden">*</span></label>
+                                        <!-- View Mode Input -->
+                                        <input type="text" id="backup-targets-view" class="form-input" disabled
+                                            value="노드 선택" readonly>
+
+                                        <!-- Edit Mode Wrapper -->
+                                        <div id="backup-targets-edit-wrapper" class="multi-select-container hidden">
+                                            <div id="backup-targets-trigger"
+                                                class="form-input multi-select-trigger disabled"
+                                                onclick="toggleTargetDropdown()">
+                                                <span id="selected-targets-text" class="truncate text-gray-400">노드
+                                                    선택</span>
+                                                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+                                            </div>
+
+                                            <div id="backup-targets-dropdown"
+                                                class="multi-select-dropdown custom-scrollbar">
+                                                <div class="multi-select-item"
+                                                    onclick="toggleTargetSelection(event, 'target-ivs')">
+                                                    <input type="checkbox" id="target-ivs"
+                                                        class="custom-checkbox backup-target" disabled
+                                                        onchange="updateSelectedTargetsText()">
+                                                    <label for="target-ivs">IVS</label>
+                                                </div>
+                                                <div class="multi-select-item"
+                                                    onclick="toggleTargetSelection(event, 'target-vos')">
+                                                    <input type="checkbox" id="target-vos"
+                                                        class="custom-checkbox backup-target" disabled
+                                                        onchange="updateSelectedTargetsText()">
+                                                    <label for="target-vos">VOS</label>
+                                                </div>
+                                                <div class="multi-select-item"
+                                                    onclick="toggleTargetSelection(event, 'target-db')">
+                                                    <input type="checkbox" id="target-db"
+                                                        class="custom-checkbox backup-target" disabled
+                                                        onchange="updateSelectedTargetsText()">
+                                                    <label for="target-db">DB</label>
+                                                </div>
+                                                <div class="multi-select-item"
+                                                    onclick="toggleTargetSelection(event, 'target-web')">
+                                                    <input type="checkbox" id="target-web"
+                                                        class="custom-checkbox backup-target" disabled
+                                                        onchange="updateSelectedTargetsText()">
+                                                    <label for="target-web">WEB</label>
+                                                </div>
+                                                <div class="multi-select-item"
+                                                    onclick="toggleTargetSelection(event, 'target-app')">
+                                                    <input type="checkbox" id="target-app"
+                                                        class="custom-checkbox backup-target" disabled
+                                                        onchange="updateSelectedTargetsText()">
+                                                    <label for="target-app">APP</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="error-backup-targets" class="form-error"></div>
+                                        <p class="input-guide-text hidden">백업할 노드를 선택해 주세요</p>
+                                    </div>
+
                                     <!-- Retention Period -->
                                     <div>
                                         <label class="form-label">보관 기간 (일) <span
@@ -189,28 +250,6 @@
                                             min="1" max="365" disabled oninput="resetError('retention-period')">
                                         <div id="error-retention-period" class="form-error"></div>
                                         <p class="input-guide-text hidden">1-365일</p>
-                                    </div>
-
-                                    <!-- Backup Format -->
-                                    <div>
-                                        <label class="form-label">백업 방식</label>
-                                        <select id="backup-format" class="form-input form-select" disabled>
-                                            <option value="full">전체 백업 (Full)</option>
-                                            <option value="incremental">증분 백업 (Incremental)</option>
-                                        </select>
-                                        <p class="input-guide-text hidden">백업 방식을 선택해 주세요</p>
-                                    </div>
-
-                                    <!-- Compression -->
-                                    <div>
-                                        <label class="form-label">압축 설정</label>
-                                        <div class="flex items-center h-10">
-                                            <label class="perm-checkbox-group">
-                                                <input type="checkbox" id="compression-enabled"
-                                                    class="custom-checkbox form-checkbox" disabled>
-                                                <span class="perm-checkbox-label">백업 파일 압축 사용</span>
-                                            </label>
-                                        </div>
                                     </div>
 
                                     <!-- Encryption -->
@@ -227,17 +266,6 @@
                                         <input type="password" id="encryption-password" class="form-input hidden"
                                             placeholder="암호화 키 입력" disabled oninput="resetError('encryption-password')">
                                         <div id="error-encryption-password" class="form-error"></div>
-                                    </div>
-
-                                    <!-- Backup Path -->
-                                    <div>
-                                        <label class="form-label">백업 경로 <span
-                                                class="text-error required-mark hidden">*</span></label>
-                                        <input type="text" id="backup-path" class="form-input"
-                                            placeholder="/var/backups/sams" disabled
-                                            oninput="resetError('backup-path')">
-                                        <div id="error-backup-path" class="form-error"></div>
-                                        <p class="input-guide-text hidden">백업 파일이 저장될 경로를 입력해 주세요</p>
                                     </div>
 
                                     <!-- Auto Backup Enable -->

@@ -281,9 +281,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const registrant = notice.registrant || registrants[index % registrants.length];
             notice.registrant = registrant;
 
-            // Date Format YYYY.MM.DD HH:mm
+            // Date Format YYYY.MM.DD HH:mm:ss
             const regDateFull = notice.regDate;
-            const regDateFormatted = regDateFull.substring(0, 16);
+            const regDateFormatted = regDateFull.substring(0, 19);
 
             tr.innerHTML = `
                 <td>

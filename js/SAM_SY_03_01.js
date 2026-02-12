@@ -8,13 +8,11 @@ document.addEventListener('DOMContentLoaded', function () {
         backupCycle: 'daily',
         backupTime: '02:00',
         retentionPeriod: 30,
-        backupFormat: 'full',
-        compressionEnabled: true,
         encryptionEnabled: false,
         encryptionPassword: '',
         backupDays: ['mon', 'wed', 'fri'], // For weekly backups
         backupDayMonthly: '1', // For monthly backups
-        backupPath: '/var/backups/sams',
+        backupTargets: ['ivs', 'vos'], // New: node selection
         autoBackupEnabled: true
     };
 
@@ -25,16 +23,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize form with default values
     function loadSettings() {
         document.getElementById('backup-cycle').value = currentSettings.backupCycle;
-        // Set Backup Time values
         document.getElementById('backup-time').value = currentSettings.backupTime;
-
         document.getElementById('retention-period').value = currentSettings.retentionPeriod;
-        document.getElementById('backup-format').value = currentSettings.backupFormat;
-        document.getElementById('compression-enabled').checked = currentSettings.compressionEnabled;
         document.getElementById('encryption-enabled').checked = currentSettings.encryptionEnabled;
         document.getElementById('encryption-password').value = currentSettings.encryptionPassword;
         document.getElementById('backup-day-monthly').value = currentSettings.backupDayMonthly;
-        document.getElementById('backup-path').value = currentSettings.backupPath;
         document.getElementById('auto-backup-enabled').checked = currentSettings.autoBackupEnabled;
 
         // Load weekly days
@@ -43,6 +36,13 @@ document.addEventListener('DOMContentLoaded', function () {
             checkbox.checked = currentSettings.backupDays.includes(day);
         });
         updateSelectedDaysText();
+
+        // Load backup targets
+        document.querySelectorAll('.backup-target').forEach(checkbox => {
+            const node = checkbox.id.replace('target-', '');
+            checkbox.checked = currentSettings.backupTargets.includes(node);
+        });
+        updateSelectedTargetsText();
 
         // Show/hide cycle specific inputs
         toggleCycleSpecificInputs();
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Clear all errors
     function clearAllErrors() {
-        ['backup-cycle', 'backup-time', 'retention-period', 'backup-days', 'backup-path', 'encryption-password', 'backup-day-monthly'].forEach(fieldId => {
+        ['backup-cycle', 'backup-time', 'retention-period', 'backup-days', 'backup-targets', 'encryption-password', 'backup-day-monthly'].forEach(fieldId => {
             resetError(fieldId);
         });
     }
@@ -112,12 +112,9 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('backup-cycle').disabled = false;
         document.getElementById('backup-time').disabled = false;
         document.getElementById('retention-period').disabled = false;
-        document.getElementById('backup-format').disabled = false;
-        document.getElementById('compression-enabled').disabled = false;
         document.getElementById('encryption-enabled').disabled = false;
         document.getElementById('encryption-password').disabled = false;
         document.getElementById('backup-day-monthly').disabled = false;
-        document.getElementById('backup-path').disabled = false;
         document.getElementById('auto-backup-enabled').disabled = false;
 
         // Refresh encryption input state
@@ -128,6 +125,12 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('weekly-days-edit-wrapper').classList.remove('hidden');
         document.getElementById('weekly-days-trigger').classList.remove('disabled');
         document.querySelectorAll('.backup-day').forEach(cb => cb.disabled = false);
+
+        // Enable backup target dropdown
+        document.getElementById('backup-targets-view').classList.add('hidden');
+        document.getElementById('backup-targets-edit-wrapper').classList.remove('hidden');
+        document.getElementById('backup-targets-trigger').classList.remove('disabled');
+        document.querySelectorAll('.backup-target').forEach(cb => cb.disabled = false);
 
         // Show guide texts
         document.querySelectorAll('.input-guide-text').forEach(el => el.classList.remove('hidden'));
@@ -151,12 +154,9 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('backup-cycle').disabled = true;
         document.getElementById('backup-time').disabled = true;
         document.getElementById('retention-period').disabled = true;
-        document.getElementById('backup-format').disabled = true;
-        document.getElementById('compression-enabled').disabled = true;
         document.getElementById('encryption-enabled').disabled = true;
         document.getElementById('encryption-password').disabled = true;
         document.getElementById('backup-day-monthly').disabled = true;
-        document.getElementById('backup-path').disabled = true;
         document.getElementById('auto-backup-enabled').disabled = true;
 
         // Refresh encryption input state
@@ -169,6 +169,14 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('weekly-days-dropdown').classList.remove('active');
         document.querySelectorAll('.backup-day').forEach(cb => cb.disabled = true);
         updateSelectedDaysText();
+
+        // Disable backup targets
+        document.getElementById('backup-targets-view').classList.remove('hidden');
+        document.getElementById('backup-targets-edit-wrapper').classList.add('hidden');
+        document.getElementById('backup-targets-trigger').classList.add('disabled');
+        document.getElementById('backup-targets-dropdown').classList.remove('active');
+        document.querySelectorAll('.backup-target').forEach(cb => cb.disabled = true);
+        updateSelectedTargetsText();
 
         // Hide guide texts
         document.querySelectorAll('.input-guide-text').forEach(el => el.classList.add('hidden'));
@@ -186,7 +194,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const backupCycle = document.getElementById('backup-cycle').value;
         const backupTime = document.getElementById('backup-time').value;
         const retentionPeriod = parseInt(document.getElementById('retention-period').value);
-        const backupPath = document.getElementById('backup-path').value.trim();
 
         // Clear previous errors
         clearAllErrors();
@@ -202,12 +209,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // Validation: Retention period
         if (!retentionPeriod || retentionPeriod < 1 || retentionPeriod > 365) {
             setError('retention-period', '보관 기간은 1-365일 사이로 설정해 주세요.');
-            hasError = true;
-        }
-
-        // Validation: Backup path
-        if (!backupPath) {
-            setError('backup-path', '백업 경로를 입력해 주세요.');
             hasError = true;
         }
 
@@ -229,6 +230,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
+        // Validation: Backup targets
+        const selectedTargets = Array.from(document.querySelectorAll('.backup-target:checked'));
+        if (selectedTargets.length === 0) {
+            setError('backup-targets', '최소 1개 이상의 백업 대상을 선택해 주세요.');
+            hasError = true;
+        }
+
         if (hasError) return;
 
         // Show confirm modal
@@ -242,30 +250,29 @@ document.addEventListener('DOMContentLoaded', function () {
         const backupCycle = document.getElementById('backup-cycle').value;
         const backupTime = document.getElementById('backup-time').value;
         const retentionPeriod = parseInt(document.getElementById('retention-period').value);
-        const backupFormat = document.getElementById('backup-format').value;
-        const compressionEnabled = document.getElementById('compression-enabled').checked;
         const encryptionEnabled = document.getElementById('encryption-enabled').checked;
         const encryptionPassword = document.getElementById('encryption-password').value;
         const backupDayMonthly = document.getElementById('backup-day-monthly').value;
-        const backupPath = document.getElementById('backup-path').value.trim();
         const autoBackupEnabled = document.getElementById('auto-backup-enabled').checked;
 
         // Get selected days for weekly backup
         const backupDays = Array.from(document.querySelectorAll('.backup-day:checked'))
             .map(cb => cb.id.replace('day-', ''));
 
+        // Get selected targets
+        const backupTargets = Array.from(document.querySelectorAll('.backup-target:checked'))
+            .map(cb => cb.id.replace('target-', ''));
+
         // Update current settings
         currentSettings = {
             backupCycle,
             backupTime,
             retentionPeriod,
-            backupFormat,
-            compressionEnabled,
             encryptionEnabled,
             encryptionPassword,
             backupDays,
             backupDayMonthly,
-            backupPath,
+            backupTargets,
             autoBackupEnabled
         };
 
@@ -273,12 +280,9 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('backup-cycle').disabled = true;
         document.getElementById('backup-time').disabled = true;
         document.getElementById('retention-period').disabled = true;
-        document.getElementById('backup-format').disabled = true;
-        document.getElementById('compression-enabled').disabled = true;
         document.getElementById('encryption-enabled').disabled = true;
         document.getElementById('encryption-password').disabled = true;
         document.getElementById('backup-day-monthly').disabled = true;
-        document.getElementById('backup-path').disabled = true;
         document.getElementById('auto-backup-enabled').disabled = true;
 
         // Disable weekly backup days
@@ -287,6 +291,13 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('weekly-days-trigger').classList.add('disabled');
         document.getElementById('weekly-days-dropdown').classList.remove('active');
         document.querySelectorAll('.backup-day').forEach(cb => cb.disabled = true);
+
+        // Disable backup targets
+        document.getElementById('backup-targets-view').classList.remove('hidden');
+        document.getElementById('backup-targets-edit-wrapper').classList.add('hidden');
+        document.getElementById('backup-targets-trigger').classList.add('disabled');
+        document.getElementById('backup-targets-dropdown').classList.remove('active');
+        document.querySelectorAll('.backup-target').forEach(cb => cb.disabled = true);
 
         // Hide guide texts
         document.querySelectorAll('.input-guide-text').forEach(el => el.classList.add('hidden'));
@@ -365,11 +376,59 @@ document.addEventListener('DOMContentLoaded', function () {
         if (viewInput) viewInput.value = text;
     };
 
+    // --- Backup Target Dropdown Logic ---
+
+    // Toggle Dropdown
+    window.toggleTargetDropdown = function () {
+        const trigger = document.getElementById('backup-targets-trigger');
+        if (trigger.classList.contains('disabled')) return;
+        document.getElementById('backup-targets-dropdown').classList.toggle('active');
+    };
+
+    // Toggle Checkbox via Row Click
+    window.toggleTargetSelection = function (event, id) {
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'LABEL') return;
+
+        const checkbox = document.getElementById(id);
+        if (!checkbox.disabled) {
+            checkbox.checked = !checkbox.checked;
+            updateSelectedTargetsText();
+        }
+    };
+
+    // Update Summary Text
+    window.updateSelectedTargetsText = function () {
+        const checked = document.querySelectorAll('.backup-target:checked');
+        const textSpan = document.getElementById('selected-targets-text');
+        const viewInput = document.getElementById('backup-targets-view');
+
+        let text = '';
+        if (checked.length === 0) {
+            text = '노드 선택';
+            textSpan.classList.add('text-gray-400');
+        } else {
+            const labels = Array.from(checked).map(cb => cb.nextElementSibling.textContent);
+            text = labels.join(', ');
+            textSpan.classList.remove('text-gray-400');
+        }
+
+        textSpan.textContent = text;
+        if (viewInput) viewInput.value = text;
+    };
+
     // Close dropdown when clicking outside
     document.addEventListener('click', function (e) {
-        const container = document.querySelector('.multi-select-container');
-        if (container && !container.contains(e.target)) {
+        // Weekly days container
+        const weeklyContainer = document.getElementById('weekly-days-edit-wrapper');
+        if (weeklyContainer && !weeklyContainer.contains(e.target)) {
             const dropdown = document.getElementById('weekly-days-dropdown');
+            if (dropdown) dropdown.classList.remove('active');
+        }
+
+        // Backup targets container
+        const targetsContainer = document.getElementById('backup-targets-edit-wrapper');
+        if (targetsContainer && !targetsContainer.contains(e.target)) {
+            const dropdown = document.getElementById('backup-targets-dropdown');
             if (dropdown) dropdown.classList.remove('active');
         }
     });

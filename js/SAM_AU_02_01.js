@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         totalUserCount.textContent = users.length;
 
         if (users.length === 0) {
-            userListBody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-slate-500">배정된 사용자가 없습니다.</td></tr>';
+            userListBody.innerHTML = '<tr><td colspan="6" class="text-center">배정된 사용자가 없습니다.</td></tr>';
             btnChangeRole.disabled = true;
             if (userSelectAllCheckbox) userSelectAllCheckbox.checked = false;
             if (userSelectAllCheckbox) userSelectAllCheckbox.disabled = true;

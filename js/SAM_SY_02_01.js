@@ -91,7 +91,7 @@ function renderFaults(list) {
         tr.onclick = () => selectFault(fault.id, tr);
 
         tr.innerHTML = `
-            <td>${fault.time}</td>
+            <td class="td-date">${fault.time}</td>
             <td>${fault.system}</td>
             <td class="td-center"><span class="badge ${getLevelClass(fault.level)}">${fault.level}</span></td>
             <td class="td-center"><span class="badge ${getStatusClass(fault.status)}">${fault.status}</span></td>
