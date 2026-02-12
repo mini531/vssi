@@ -2692,6 +2692,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .data-table th.text-center {
   text-align: center;
+  min-width: 80px;
 }
 
 .data-table td {
@@ -3471,6 +3472,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   transform: translateY(0);
+}
+
+
+
+.file-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  background-color: var(--bg-secondary);
+  border-radius: 0.25rem;
+  border: 1px solid var(--border-color);
 }
 
 .system-switcher-header {
@@ -4284,8 +4297,30 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-weight: 900;
   font-size: 1.25rem;
   letter-spacing: -0.05em;
-  color: white;
-  margin-right: 1rem;
+}
+
+/* Notice Content Area Override */
+#notice-content-view {
+  min-height: 16rem;
+  max-height: 600px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  resize: none;
+  background-color: var(--bg-dark);
+  /* or specific gray-900 equivalent */
+  border: 1px solid var(--border-color);
+  /* Add border explicitly as data-value has none */
+  padding: 0.5rem;
+  /* Add padding for better readability */
+  border-radius: 0.25rem;
+  /* Standard radius */
+}
+
+#notice-content-edit {
+  min-height: 25rem;
+  max-height: 600px;
+  overflow-y: auto;
+  resize: vertical;
 }
 
 
@@ -5035,10 +5070,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Generic Data Value (Replaces .info) */
 .data-value {
   font-size: 14px;
-  font-weight: 600;
   color: #e2e8f0;
   line-height: 1.5;
   text-align: left;
+  white-space: pre-wrap;
 }
 
 /* Section Header (Replaces flex justify-between items-end mb-xs) */
