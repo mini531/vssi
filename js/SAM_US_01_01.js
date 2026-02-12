@@ -91,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const userSystemCheckboxes = document.getElementsByName('user-systems');
     const userRegDateInput = document.getElementById('user-reg-date');
     const userModDateInput = document.getElementById('user-mod-date');
+    const userRegistrantInput = document.getElementById('user-registrant');
 
     // Buttons
     const btnCheckId = document.getElementById('btn-check-id');
@@ -225,6 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Add mock dates if missing
             if (!user.regDate) user.regDate = '2024.01.15 10:30:00';
             if (!user.modDate) user.modDate = '2024.02.01 14:20:00';
+            if (!user.registrant) user.registrant = '시스템관리자';
 
             userListBody.appendChild(tr);
         });
@@ -306,6 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Dates
         if (userRegDateInput) userRegDateInput.value = user.regDate || '-';
         if (userModDateInput) userModDateInput.value = user.modDate || '-';
+        if (userRegistrantInput) userRegistrantInput.value = user.registrant || '시스템관리자';
 
         // Show View Mode
         resetViewMode();
