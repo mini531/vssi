@@ -69,6 +69,13 @@ function init() {
     if (endInput) endInput.value = today;
 
     lucide.createIcons();
+
+    // Check for deep link (id) in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const faultId = urlParams.get('id');
+    if (faultId) {
+        selectFault(faultId);
+    }
 }
 
 function renderFaults(list) {
@@ -86,6 +93,7 @@ function renderFaults(list) {
     list.forEach(fault => {
         const tr = document.createElement('tr');
         tr.className = 'clickable-row';
+        tr.dataset.faultId = fault.id;
         if (selectedFaultId === fault.id) tr.classList.add('active');
 
         tr.onclick = () => selectFault(fault.id, tr);
@@ -107,7 +115,12 @@ function selectFault(id, row) {
 
     // UI State
     document.querySelectorAll('#fault-list-body tr').forEach(tr => tr.classList.remove('active'));
-    row.classList.add('active');
+
+    let targetRow = row;
+    if (!targetRow) {
+        targetRow = document.querySelector(`#fault-list-body tr[data-fault-id="${id}"]`);
+    }
+    if (targetRow) targetRow.classList.add('active');
 
     document.getElementById('empty-state').classList.add('hidden');
     document.getElementById('detail-content').classList.remove('hidden');

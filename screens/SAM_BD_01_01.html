@@ -59,6 +59,14 @@
                                     <div id="notice-filter-content" class="search-panel-content hidden">
                                         <div class="filter-panel-inner">
                                             <div class="filter-grid">
+                                                <div>
+                                                    <label class="filter-label">공개 여부</label>
+                                                    <select id="filter-visibility" class="filter-select">
+                                                        <option value="all">전체</option>
+                                                        <option value="true">공개</option>
+                                                        <option value="false">비공개</option>
+                                                    </select>
+                                                </div>
                                                 <div class="filter-grid-wide">
                                                     <label class="filter-label">검색어</label>
                                                     <div class="filter-date-range">
@@ -93,6 +101,7 @@
                                         <thead>
                                             <tr>
                                                 <th>제목</th>
+                                                <th class="text-center">공개 여부</th>
                                                 <th class="text-center">등록 일시</th>
                                                 <th class="text-center">등록자</th>
                                             </tr>
@@ -199,6 +208,29 @@
                                                     placeholder="제목을 입력하세요" disabled
                                                     oninput="resetError('notice-title')">
                                                 <div id="error-notice-title" class="form-error"></div>
+                                            </div>
+
+                                            <!-- Visibility -->
+                                            <div>
+                                                <label class="form-label">공개 여부 <span id="req-visibility"
+                                                        class="text-error required-mark hidden">*</span></label>
+                                                <!-- View Mode -->
+                                                <div id="notice-visibility-view" class="data-value">공개</div>
+
+                                                <!-- Edit/Reg Mode -->
+                                                <div id="notice-visibility-edit"
+                                                    class="flex items-center gap-6 py-2 hidden">
+                                                    <label class="perm-checkbox-group">
+                                                        <input type="radio" name="notice-visibility" value="true"
+                                                            checked class="custom-radio">
+                                                        <span class="perm-checkbox-label modal-radio-label">공개</span>
+                                                    </label>
+                                                    <label class="perm-checkbox-group">
+                                                        <input type="radio" name="notice-visibility" value="false"
+                                                            class="custom-radio">
+                                                        <span class="perm-checkbox-label modal-radio-label">비공개</span>
+                                                    </label>
+                                                </div>
                                             </div>
 
                                             <!-- Content -->

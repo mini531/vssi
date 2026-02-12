@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             id: '5',
             title: '[점검] 2024년 3월 정기 시스템 점검 안내',
+            isVisible: true,
             content: `안녕하세요, SAMS 시스템 관리자입니다.
 
 안정적인 서비스 제공을 위해 아래와 같이 3월 정기 시스템 점검이 진행될 예정입니다.
@@ -39,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             id: '4',
             title: '[공지] 개인정보 처리방침 및 보안 정책 변경 안내',
+            isVisible: true,
             content: `SAMS 이용자 여러분, 안녕하십니까.
 
 개인정보보호법 개정 및 내부 보안 강화 정책에 따라 개인정보 처리방침과 보안 정책이 일부 변경되었습니다.
@@ -70,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             id: '3',
             title: 'SAMS v2.1 기능 업데이트 릴리즈 노트',
+            isVisible: true,
             content: `SAMS 시스템이 v2.1로 업데이트되었습니다.
 이번 업데이트에서는 사용자 피드백을 반영하여 대시보드 시인성을 개선하고 리포팅 기능을 대폭 강화했습니다.
 
@@ -105,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             id: '2',
             title: '[사과문] 2월 2일 서비스 접속 장애에 대한 보상 안내',
+            isVisible: false,
             content: `안녕하십니까, SAMS 운영팀입니다.
 
 지난 2월 2일(금) 14:30부터 15:15까지 약 45분간 발생한 데이터센터 네트워크 불안정으로 인해
@@ -133,6 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             id: '1',
             title: '설 연휴 기간 시스템 운영 및 비상 연락망 안내',
+            isVisible: true,
             content: `민족 대명절 설을 맞이하여 임직원 여러분의 가정에 행복이 가득하시길 기원합니다.
 연휴 기간 중 시스템 운영 정책 및 비상 대응 체계를 아래와 같이 안내해 드립니다.
 
@@ -186,9 +191,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const noticeRegDateInput = document.getElementById('notice-reg-date');
     const noticeModDateInput = document.getElementById('notice-mod-date');
     const noticeDatesSection = document.getElementById('notice-dates-section');
+    const noticeVisibilityView = document.getElementById('notice-visibility-view');
+    const noticeVisibilityEdit = document.getElementById('notice-visibility-edit');
     const noticeRegistrantInput = document.getElementById('notice-registrant');
 
     const reqTitleMark = document.getElementById('req-title');
+    const reqVisibilityMark = document.getElementById('req-visibility');
     const reqContentMark = document.getElementById('req-content');
 
     // File Elements
@@ -208,6 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentAttachments = [];
 
     // Filter Elements
+    const filterVisibility = document.getElementById('filter-visibility');
     const filterType = document.getElementById('filter-type');
     const filterKeyword = document.getElementById('filter-keyword');
     const noticeFilterContent = document.getElementById('notice-filter-content');
@@ -217,6 +226,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // === Initialization ===
     renderNoticeList();
 
+    // Check for deep link (id) in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const noticeId = urlParams.get('id');
+    if (noticeId) {
+        const targetNotice = notices.find(n => n.id === noticeId);
+        if (targetNotice) {
+            selectNotice(targetNotice);
+        }
+    }
+
     // === Functions ===
 
     function renderNoticeList() {
@@ -224,8 +243,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Filter Data
         let filteredNotices = notices;
+        const visStatus = filterVisibility ? filterVisibility.value : 'all';
         const type = filterType ? filterType.value : 'all';
         const keyword = filterKeyword ? filterKeyword.value.toLowerCase().trim() : '';
+
+        if (visStatus !== 'all') {
+            filteredNotices = filteredNotices.filter(notice => String(notice.isVisible) === visStatus);
+        }
 
         // Pre-assign registrants if missing to make search work accurately
         filteredNotices.forEach((notice, index) => {
@@ -292,6 +316,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${notice.attachments.length > 0 ? '<i data-lucide="paperclip" class="w-3 h-3 text-gray-400"></i>' : ''}
                     </div>
                 </td>
+                <td class="td-center">
+                    <span class="badge ${notice.isVisible ? 'badge-success' : 'badge-secondary'}">
+                        ${notice.isVisible ? '공개' : '비공개'}
+                    </span>
+                </td>
                 <td class="td-date">${regDateFormatted}</td>
                 <td class="td-center">${registrant}</td>
             `;
@@ -312,6 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.resetNoticeFilter = function () {
+        if (filterVisibility) filterVisibility.value = 'all';
         filterType.value = 'all';
         filterKeyword.value = '';
         renderNoticeList();
@@ -351,6 +381,15 @@ document.addEventListener('DOMContentLoaded', () => {
         noticeRegDateInput.value = notice.regDate;
         noticeModDateInput.value = notice.modDate;
 
+        // Populate Visibility
+        if (noticeVisibilityView) noticeVisibilityView.textContent = notice.isVisible ? '공개' : '비공개';
+        const visRadios = document.getElementsByName('notice-visibility');
+        visRadios.forEach(radio => {
+            if (radio.value === String(notice.isVisible)) {
+                radio.checked = true;
+            }
+        });
+
         // Render Files
         renderFileList();
 
@@ -381,6 +420,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Inputs
         noticeTitleInput.disabled = true;
+        if (noticeVisibilityView) noticeVisibilityView.classList.remove('hidden');
+        if (noticeVisibilityEdit) noticeVisibilityEdit.classList.add('hidden');
 
         // Toggle Content View/Edit
         noticeContentView.classList.remove('hidden');
@@ -388,6 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Hide Required Marks
         reqTitleMark.classList.add('hidden');
+        reqVisibilityMark.classList.add('hidden');
         reqContentMark.classList.add('hidden');
 
         // Hide File Upload Area
@@ -494,12 +536,19 @@ document.addEventListener('DOMContentLoaded', () => {
         noticeContentView.textContent = '';
 
         noticeTitleInput.disabled = false;
+        if (noticeVisibilityView) noticeVisibilityView.classList.add('hidden');
+        if (noticeVisibilityEdit) noticeVisibilityEdit.classList.remove('hidden');
+        const visRadios = document.getElementsByName('notice-visibility');
+        visRadios.forEach(r => {
+            if (r.value === 'true') r.checked = true;
+        });
 
         noticeContentView.classList.add('hidden');
         noticeContentEdit.classList.remove('hidden');
         noticeContentEdit.disabled = false;
 
         reqTitleMark.classList.remove('hidden');
+        reqVisibilityMark.classList.remove('hidden');
         reqContentMark.classList.remove('hidden');
 
         fileUploadArea.classList.remove('hidden');
@@ -532,12 +581,15 @@ document.addEventListener('DOMContentLoaded', () => {
         editModeButtons.classList.remove('hidden');
 
         noticeTitleInput.disabled = false;
+        if (noticeVisibilityView) noticeVisibilityView.classList.add('hidden');
+        if (noticeVisibilityEdit) noticeVisibilityEdit.classList.remove('hidden');
 
         noticeContentView.classList.add('hidden');
         noticeContentEdit.classList.remove('hidden');
         noticeContentEdit.disabled = false;
 
         reqTitleMark.classList.remove('hidden');
+        reqVisibilityMark.classList.remove('hidden');
         reqContentMark.classList.remove('hidden');
 
         fileUploadArea.classList.remove('hidden');
@@ -564,6 +616,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         currentNotice.title = noticeTitleInput.value;
         currentNotice.content = noticeContentEdit.value;
+        const visRadios = document.getElementsByName('notice-visibility');
+        currentNotice.isVisible = Array.from(visRadios).find(r => r.checked).value === 'true';
         currentNotice.attachments = [...currentAttachments];
         currentNotice.modDate = getCurrentTime();
 
@@ -580,10 +634,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.confirmSaveAction = function () {
         const newId = (parseInt(notices[0]?.id || 0) + 1).toString();
+        const visRadios = document.getElementsByName('notice-visibility');
+        const isVisible = Array.from(visRadios).find(r => r.checked).value === 'true';
+
         const newNotice = {
             id: newId,
             title: noticeTitleInput.value,
             content: noticeContentEdit.value,
+            isVisible: isVisible,
             attachments: [...currentAttachments],
             regDate: getCurrentTime(),
             modDate: getCurrentTime(),

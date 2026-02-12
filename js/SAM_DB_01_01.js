@@ -33,7 +33,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const notices = [
         { id: '5', title: '[점검] 2024년 3월 정기 시스템 점검 안내', regDate: '2024.03.10' },
         { id: '4', title: '[공지] 개인정보 처리방침 및 보안 정책 변경 안내', regDate: '2024.03.01' },
-        { id: '3', title: 'SAMS v2.1 기능 업데이트 릴리즈 노트', regDate: '2024.02.20' }
+        { id: '3', title: 'SAMS v2.1 기능 업데이트 릴리즈 노트', regDate: '2024.02.20' },
+        { id: '2', title: '[안내] 시스템 보안 강화를 위한 패스워드 변경 주기 단축 안내', regDate: '2024.02.10' }
+    ];
+
+    // Real Activity Logs (Integrated from SAM_LG_02_01.js)
+    const activityLogs = [
+        { time: '2026.02.11 14:20:12', type: '로그인', userId: 'admin.kim', userName: '김민수', message: 'Interactive session established via 192.168.1.50 using WebClient. User-Agent: Chrome/121.0.0.0.' },
+        { time: '2026.02.11 13:45:30', type: '수정', userId: 'op.song', userName: '송지은', message: 'Security policy change: [SESSION_EXPIRY] updated from [1800s] to [3600s]. Scope: GLOBAL.' },
+        { time: '2026.02.11 13:10:05', type: '생성', userId: 'admin.lee', userName: '이지원', message: 'New administrative role [VCDM_VIEWER] registered. Permissions: [vcdm:read]. Target system: VCDM.' },
+        { time: '2026.02.11 12:30:45', type: '로그아웃', userId: 'air.kim', userName: '김동하', message: 'User requested termination of session [SID-99120]. Duration: 02:45:12.' },
+        { time: '2026.02.11 11:50:22', type: '삭제', userId: 'admin.park', userName: '박준호', message: 'Permanent deletion of inactive account [temp_user] (Last Login: 2025-12-01). Associated role mappings cleared.' },
+        { time: '2026.02.11 10:15:10', type: '로그인', userId: 'op.yoon', userName: '윤서진', message: 'Authorization success via SAML 2.0 Provider. Subject: op.yoon@vssi.local. IP: 192.168.1.124.' }
     ];
 
     const Dashboard = {
@@ -161,40 +172,38 @@ document.addEventListener('DOMContentLoaded', () => {
             const accessContainer = document.getElementById('access-log-container');
 
             const faults = [
-                { time: "2026.02.11 14:30:22", type: "치명적", node: "SAMS DB", msg: "DB 커넥션 풀 초과" },
-                { time: "2026.02.11 11:20:15", type: "요주의", node: "IVS GW", msg: "응답 지연 (>5s)" },
-                { time: "2026.02.10 17:50:00", type: "경미", node: "VOS Node 1", msg: "CPU 80% 상회" },
-                { time: "2026.02.10 15:10:45", type: "치명적", node: "Switch A", msg: "링크 다운 감지" }
+                { id: 'FLT-001', time: '2026.02.11 14:30:22', system: 'SAMS DB', level: '치명적', desc: '데이터베이스 커넥션 풀 초과로 인한 지연 발생. 특정 쿼리의 락(Lock) 경합 의심.' },
+                { id: 'FLT-002', time: '2026.02.11 11:20:15', system: 'IVS GW', level: '요주의', desc: 'IVS 게이트웨이 인터페이스 응답 속도 저하 (Response time > 5s)' },
+                { id: 'FLT-003', time: '2026.02.10 17:50:00', system: 'VOS Node 1', level: '경미', desc: '노드 1번 CPU 사용률 80% 상회 알림' },
+                { id: 'FLT-004', time: '2026.02.10 15:10:45', system: 'Network Switch A', level: '치명적', desc: '스위치 포트 05번 링크 다운 감지' }
             ];
 
-            const accessLogs = [
-                { time: "15:34:12", user: "admin", action: "관리자 로그인", ip: "192.168.1.10" },
-                { time: "15:30:55", user: "oper_01", action: "공지사항 수정", ip: "10.0.5.22" },
-                { time: "15:25:20", user: "manager_sy", action: "환경설정 변경", ip: "172.16.50.4" }
-            ];
 
             if (faultContainer) {
-                faultContainer.innerHTML = faults.map(f => `
-                    <div class="db-feed-item" onclick="location.href='SAM_SY_02_01.html'">
+                faultContainer.innerHTML = faults.slice(0, 3).map(f => `
+                    <div class="db-feed-item" onclick="location.href='SAM_SY_02_01.html?id=${f.id}'">
                         <div class="flex-between-center mb-1">
-                            <span class="db-item-title ${f.type === '치명적' ? 'text-error' : (f.type === '요주의' ? 'text-warning' : '')}">${f.type}</span>
+                            <span class="db-item-title ${f.level === '치명적' ? 'text-error' : (f.level === '요주의' ? 'text-warning' : '')}">${f.level}</span>
                             <span class="db-notice-date">${f.time}</span>
                         </div>
-                        <div class="db-notice-link text-white">${f.node}: ${f.msg}</div>
+                        <div class="db-notice-link text-white">${f.system}: ${f.desc}</div>
                     </div>
                 `).join('');
             }
 
             if (accessContainer) {
-                accessContainer.innerHTML = accessLogs.map(l => `
-                    <div class="db-feed-item" onclick="location.href='SAM_LG_02_01.html'">
-                        <div class="flex-between-center mb-1">
-                            <span class="db-item-title text-info">${l.user}</span>
-                            <span class="db-notice-date">${l.time}</span>
+                accessContainer.innerHTML = activityLogs.slice(0, 6).map(l => {
+                    const timeOnly = l.time.split(' ')[1];
+
+                    return `
+                        <div class="db-feed-item non-clickable">
+                            <div class="flex-between-center">
+                                <span class="db-notice-link text-white">[${l.type}] ${l.userName} (${l.userId})</span>
+                                <span class="db-notice-date">${timeOnly}</span>
+                            </div>
                         </div>
-                        <div class="db-notice-link">${l.action} <span class="db-rank-group ml-1">${l.ip}</span></div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             }
         },
 
@@ -202,8 +211,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const container = document.getElementById('dashboard-notice-list');
             if (!container) return;
 
-            container.innerHTML = notices.slice(0, 3).map(n => `
-                <div class="db-feed-item" onclick="location.href='SAM_BD_01_01.html'">
+            container.innerHTML = notices.slice(0, 4).map(n => `
+                <div class="db-feed-item" onclick="location.href='SAM_BD_01_01.html?id=${n.id}'">
                     <div class="db-notice-link text-white mb-1">${n.title}</div>
                     <div class="db-notice-date">${n.regDate}</div>
                 </div>
