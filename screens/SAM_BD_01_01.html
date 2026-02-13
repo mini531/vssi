@@ -210,26 +210,96 @@
                                                 <div id="error-notice-title" class="form-error"></div>
                                             </div>
 
-                                            <!-- Visibility -->
-                                            <div>
-                                                <label class="form-label">공개 여부 <span id="req-visibility"
-                                                        class="text-error required-mark hidden">*</span></label>
-                                                <!-- View Mode -->
-                                                <div id="notice-visibility-view" class="data-value">공개</div>
+                                            <!-- Visibility & Public System -->
+                                            <div class="grid grid-cols-2 gap-4">
+                                                <!-- Visibility -->
+                                                <div>
+                                                    <label class="form-label">공개 여부 <span id="req-visibility"
+                                                            class="text-error required-mark hidden">*</span></label>
+                                                    <!-- View Mode -->
+                                                    <div id="notice-visibility-view" class="data-value">공개</div>
 
-                                                <!-- Edit/Reg Mode -->
-                                                <div id="notice-visibility-edit"
-                                                    class="flex items-center gap-6 py-2 hidden">
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="radio" name="notice-visibility" value="true"
-                                                            checked class="custom-radio">
-                                                        <span class="perm-checkbox-label modal-radio-label">공개</span>
-                                                    </label>
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="radio" name="notice-visibility" value="false"
-                                                            class="custom-radio">
-                                                        <span class="perm-checkbox-label modal-radio-label">비공개</span>
-                                                    </label>
+                                                    <!-- Edit/Reg Mode -->
+                                                    <div id="notice-visibility-edit"
+                                                        class="flex items-center gap-6 py-2 hidden">
+                                                        <label class="perm-checkbox-group">
+                                                            <input type="radio" name="notice-visibility" value="true"
+                                                                checked class="custom-radio">
+                                                            <span
+                                                                class="perm-checkbox-label modal-radio-label">공개</span>
+                                                        </label>
+                                                        <label class="perm-checkbox-group">
+                                                            <input type="radio" name="notice-visibility" value="false"
+                                                                class="custom-radio">
+                                                            <span
+                                                                class="perm-checkbox-label modal-radio-label">비공개</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Public System -->
+                                                <div>
+                                                    <label class="form-label">공개 시스템 <span id="req-systems"
+                                                            class="text-error required-mark hidden">*</span></label>
+                                                    <!-- View Mode -->
+                                                    <div id="notice-systems-view" class="data-value">선택한 시스템 없음</div>
+
+                                                    <!-- Edit Mode Wrapper -->
+                                                    <div id="notice-systems-edit-wrapper" class="multi-select hidden">
+                                                        <div id="notice-systems-trigger" class="trigger"
+                                                            onclick="toggleSystemDropdown()">
+                                                            <span id="selected-systems-text"
+                                                                class="trigger-text placeholder">시스템 선택</span>
+                                                            <i data-lucide="chevron-down"
+                                                                class="w-4 h-4 text-gray-400"></i>
+                                                        </div>
+                                                        <div id="notice-systems-dropdown"
+                                                            class="dropdown custom-scrollbar">
+                                                            <!-- Select All -->
+                                                            <div class="item all-selection"
+                                                                onclick="toggleAllSystemsSelection(event)">
+                                                                <input type="checkbox" id="sys-all"
+                                                                    class="custom-checkbox all-systems-check">
+                                                                <label for="sys-all">전체 선택</label>
+                                                            </div>
+                                                            <div class="item"
+                                                                onclick="toggleSystemSelection(event, 'sys-ivms')">
+                                                                <input type="checkbox" id="sys-ivms"
+                                                                    class="custom-checkbox notice-system"
+                                                                    onchange="updateSelectedSystemsText()">
+                                                                <label for="sys-ivms">IVMS (버티포트 통합 관리)</label>
+                                                            </div>
+                                                            <div class="item"
+                                                                onclick="toggleSystemSelection(event, 'sys-ifps')">
+                                                                <input type="checkbox" id="sys-ifps"
+                                                                    class="custom-checkbox notice-system"
+                                                                    onchange="updateSelectedSystemsText()">
+                                                                <label for="sys-ifps">IFPS (통합 비행 계획 관리)</label>
+                                                            </div>
+                                                            <div class="item"
+                                                                onclick="toggleSystemSelection(event, 'sys-ifrs')">
+                                                                <input type="checkbox" id="sys-ifrs"
+                                                                    class="custom-checkbox notice-system"
+                                                                    onchange="updateSelectedSystemsText()">
+                                                                <label for="sys-ifrs">IFRS (통합 운항 예약)</label>
+                                                            </div>
+                                                            <div class="item"
+                                                                onclick="toggleSystemSelection(event, 'sys-v-cdm')">
+                                                                <input type="checkbox" id="sys-v-cdm"
+                                                                    class="custom-checkbox notice-system"
+                                                                    onchange="updateSelectedSystemsText()">
+                                                                <label for="sys-v-cdm">V-CDM (협동적 의사 결정 지원)</label>
+                                                            </div>
+                                                            <div class="item"
+                                                                onclick="toggleSystemSelection(event, 'sys-sams')">
+                                                                <input type="checkbox" id="sys-sams"
+                                                                    class="custom-checkbox notice-system"
+                                                                    onchange="updateSelectedSystemsText()">
+                                                                <label for="sys-sams">SAMS (관리자 시스템)</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div id="error-notice-systems" class="form-error"></div>
                                                 </div>
                                             </div>
 
@@ -309,8 +379,8 @@
             <div class="modal-icon info">
                 <i data-lucide="help-circle" width="64" height="64" class="text-icon-info"></i>
             </div>
-            <h3 class="modal-title">공지사항 등록</h3>
-            <p class="modal-desc">공지사항을 등록하시겠습니까?</p>
+            <h3 class="modal-title" id="confirm-modal-title">공지사항 등록</h3>
+            <p class="modal-desc" id="confirm-modal-desc">공지사항을 등록하시겠습니까?</p>
             <div class="modal-btn-group">
                 <button onclick="closeConfirmModal()" class="btn-flex btn-modal-secondary">취소</button>
                 <button onclick="confirmSaveAction()" class="btn-flex btn-modal-primary">확인</button>

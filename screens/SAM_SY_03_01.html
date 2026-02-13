@@ -104,61 +104,57 @@
                                             value="요일 선택" readonly>
 
                                         <!-- Edit Mode Wrapper -->
-                                        <div id="weekly-days-edit-wrapper" class="multi-select-container hidden">
-                                            <div id="weekly-days-trigger"
-                                                class="form-input multi-select-trigger disabled"
+                                        <div id="weekly-days-edit-wrapper" class="multi-select hidden">
+                                            <div id="weekly-days-trigger" class="trigger disabled"
                                                 onclick="toggleWeeklyDropdown()">
-                                                <span id="selected-days-text" class="truncate text-gray-400">요일
+                                                <span id="selected-days-text" class="trigger-text placeholder">요일
                                                     선택</span>
                                                 <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
                                             </div>
 
-                                            <div id="weekly-days-dropdown"
-                                                class="multi-select-dropdown custom-scrollbar">
-                                                <div class="multi-select-item"
-                                                    onclick="toggleDaySelection(event, 'day-mon')">
+                                            <div id="weekly-days-dropdown" class="dropdown custom-scrollbar">
+                                                <div class="item all-selection" onclick="toggleAllDaysSelection(event)">
+                                                    <input type="checkbox" id="day-all"
+                                                        class="custom-checkbox all-checkbox" disabled>
+                                                    <label for="day-all">전체 선택</label>
+                                                </div>
+                                                <div class="item" onclick="toggleDaySelection(event, 'day-mon')">
                                                     <input type="checkbox" id="day-mon"
                                                         class="custom-checkbox backup-day" disabled
                                                         onchange="updateSelectedDaysText()">
                                                     <label for="day-mon">월요일</label>
                                                 </div>
-                                                <div class="multi-select-item"
-                                                    onclick="toggleDaySelection(event, 'day-tue')">
+                                                <div class="item" onclick="toggleDaySelection(event, 'day-tue')">
                                                     <input type="checkbox" id="day-tue"
                                                         class="custom-checkbox backup-day" disabled
                                                         onchange="updateSelectedDaysText()">
                                                     <label for="day-tue">화요일</label>
                                                 </div>
-                                                <div class="multi-select-item"
-                                                    onclick="toggleDaySelection(event, 'day-wed')">
+                                                <div class="item" onclick="toggleDaySelection(event, 'day-wed')">
                                                     <input type="checkbox" id="day-wed"
                                                         class="custom-checkbox backup-day" disabled
                                                         onchange="updateSelectedDaysText()">
                                                     <label for="day-wed">수요일</label>
                                                 </div>
-                                                <div class="multi-select-item"
-                                                    onclick="toggleDaySelection(event, 'day-thu')">
+                                                <div class="item" onclick="toggleDaySelection(event, 'day-thu')">
                                                     <input type="checkbox" id="day-thu"
                                                         class="custom-checkbox backup-day" disabled
                                                         onchange="updateSelectedDaysText()">
                                                     <label for="day-thu">목요일</label>
                                                 </div>
-                                                <div class="multi-select-item"
-                                                    onclick="toggleDaySelection(event, 'day-fri')">
+                                                <div class="item" onclick="toggleDaySelection(event, 'day-fri')">
                                                     <input type="checkbox" id="day-fri"
                                                         class="custom-checkbox backup-day" disabled
                                                         onchange="updateSelectedDaysText()">
                                                     <label for="day-fri">금요일</label>
                                                 </div>
-                                                <div class="multi-select-item"
-                                                    onclick="toggleDaySelection(event, 'day-sat')">
+                                                <div class="item" onclick="toggleDaySelection(event, 'day-sat')">
                                                     <input type="checkbox" id="day-sat"
                                                         class="custom-checkbox backup-day" disabled
                                                         onchange="updateSelectedDaysText()">
                                                     <label for="day-sat">토요일</label>
                                                 </div>
-                                                <div class="multi-select-item"
-                                                    onclick="toggleDaySelection(event, 'day-sun')">
+                                                <div class="item" onclick="toggleDaySelection(event, 'day-sun')">
                                                     <input type="checkbox" id="day-sun"
                                                         class="custom-checkbox backup-day" disabled
                                                         onchange="updateSelectedDaysText()">
@@ -190,47 +186,46 @@
                                             value="노드 선택" readonly>
 
                                         <!-- Edit Mode Wrapper -->
-                                        <div id="backup-targets-edit-wrapper" class="multi-select-container hidden">
-                                            <div id="backup-targets-trigger"
-                                                class="form-input multi-select-trigger disabled"
+                                        <div id="backup-targets-edit-wrapper" class="multi-select hidden">
+                                            <div id="backup-targets-trigger" class="trigger disabled"
                                                 onclick="toggleTargetDropdown()">
-                                                <span id="selected-targets-text" class="truncate text-gray-400">노드
+                                                <span id="selected-targets-text" class="trigger-text placeholder">노드
                                                     선택</span>
                                                 <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
                                             </div>
 
-                                            <div id="backup-targets-dropdown"
-                                                class="multi-select-dropdown custom-scrollbar">
-                                                <div class="multi-select-item"
-                                                    onclick="toggleTargetSelection(event, 'target-ivs')">
+                                            <div id="backup-targets-dropdown" class="dropdown custom-scrollbar">
+                                                <div class="item all-selection"
+                                                    onclick="toggleAllTargetsSelection(event)">
+                                                    <input type="checkbox" id="target-all"
+                                                        class="custom-checkbox all-checkbox" disabled>
+                                                    <label for="target-all">전체 선택</label>
+                                                </div>
+                                                <div class="item" onclick="toggleTargetSelection(event, 'target-ivs')">
                                                     <input type="checkbox" id="target-ivs"
                                                         class="custom-checkbox backup-target" disabled
                                                         onchange="updateSelectedTargetsText()">
                                                     <label for="target-ivs">IVS</label>
                                                 </div>
-                                                <div class="multi-select-item"
-                                                    onclick="toggleTargetSelection(event, 'target-vos')">
+                                                <div class="item" onclick="toggleTargetSelection(event, 'target-vos')">
                                                     <input type="checkbox" id="target-vos"
                                                         class="custom-checkbox backup-target" disabled
                                                         onchange="updateSelectedTargetsText()">
                                                     <label for="target-vos">VOS</label>
                                                 </div>
-                                                <div class="multi-select-item"
-                                                    onclick="toggleTargetSelection(event, 'target-db')">
+                                                <div class="item" onclick="toggleTargetSelection(event, 'target-db')">
                                                     <input type="checkbox" id="target-db"
                                                         class="custom-checkbox backup-target" disabled
                                                         onchange="updateSelectedTargetsText()">
                                                     <label for="target-db">DB</label>
                                                 </div>
-                                                <div class="multi-select-item"
-                                                    onclick="toggleTargetSelection(event, 'target-web')">
+                                                <div class="item" onclick="toggleTargetSelection(event, 'target-web')">
                                                     <input type="checkbox" id="target-web"
                                                         class="custom-checkbox backup-target" disabled
                                                         onchange="updateSelectedTargetsText()">
                                                     <label for="target-web">WEB</label>
                                                 </div>
-                                                <div class="multi-select-item"
-                                                    onclick="toggleTargetSelection(event, 'target-app')">
+                                                <div class="item" onclick="toggleTargetSelection(event, 'target-app')">
                                                     <input type="checkbox" id="target-app"
                                                         class="custom-checkbox backup-target" disabled
                                                         onchange="updateSelectedTargetsText()">

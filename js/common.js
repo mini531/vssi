@@ -196,6 +196,9 @@ function initSystemTitle() {
 
     if (acronym && systemMap[acronym]) {
         systemName = systemMap[acronym];
+        // Sync localStorage with body attribute
+        localStorage.setItem('vssi-system-acronym', acronym);
+        localStorage.setItem('vssi-system-name', systemName);
     } else {
         // Fallback or localStorage
         const savedName = localStorage.getItem('vssi-system-name');
@@ -206,6 +209,9 @@ function initSystemTitle() {
             updateSwitcherUI(savedAcronym);
         } else {
             systemName = 'VSSI';
+            // Set defaults if nothing exists
+            localStorage.setItem('vssi-system-acronym', 'VSSI');
+            localStorage.setItem('vssi-system-name', 'VSSI');
         }
     }
 

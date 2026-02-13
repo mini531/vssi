@@ -125,12 +125,14 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('weekly-days-edit-wrapper').classList.remove('hidden');
         document.getElementById('weekly-days-trigger').classList.remove('disabled');
         document.querySelectorAll('.backup-day').forEach(cb => cb.disabled = false);
+        document.getElementById('day-all').disabled = false;
 
         // Enable backup target dropdown
         document.getElementById('backup-targets-view').classList.add('hidden');
         document.getElementById('backup-targets-edit-wrapper').classList.remove('hidden');
         document.getElementById('backup-targets-trigger').classList.remove('disabled');
         document.querySelectorAll('.backup-target').forEach(cb => cb.disabled = false);
+        document.getElementById('target-all').disabled = false;
 
         // Show guide texts
         document.querySelectorAll('.input-guide-text').forEach(el => el.classList.remove('hidden'));
@@ -140,6 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Toggle buttons
         document.getElementById('view-mode-buttons').classList.add('hidden');
         document.getElementById('edit-mode-buttons').classList.remove('hidden');
+        lucide.createIcons();
     };
 
     // Cancel Edit
@@ -167,7 +170,9 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('weekly-days-edit-wrapper').classList.add('hidden');
         document.getElementById('weekly-days-trigger').classList.add('disabled');
         document.getElementById('weekly-days-dropdown').classList.remove('active');
+        document.getElementById('weekly-days-trigger').classList.remove('active');
         document.querySelectorAll('.backup-day').forEach(cb => cb.disabled = true);
+        document.getElementById('day-all').disabled = true;
         updateSelectedDaysText();
 
         // Disable backup targets
@@ -175,7 +180,9 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('backup-targets-edit-wrapper').classList.add('hidden');
         document.getElementById('backup-targets-trigger').classList.add('disabled');
         document.getElementById('backup-targets-dropdown').classList.remove('active');
+        document.getElementById('backup-targets-trigger').classList.remove('active');
         document.querySelectorAll('.backup-target').forEach(cb => cb.disabled = true);
+        document.getElementById('target-all').disabled = true;
         updateSelectedTargetsText();
 
         // Hide guide texts
@@ -290,14 +297,18 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('weekly-days-edit-wrapper').classList.add('hidden');
         document.getElementById('weekly-days-trigger').classList.add('disabled');
         document.getElementById('weekly-days-dropdown').classList.remove('active');
+        document.getElementById('weekly-days-trigger').classList.remove('active');
         document.querySelectorAll('.backup-day').forEach(cb => cb.disabled = true);
+        document.getElementById('day-all').disabled = true;
 
         // Disable backup targets
         document.getElementById('backup-targets-view').classList.remove('hidden');
         document.getElementById('backup-targets-edit-wrapper').classList.add('hidden');
         document.getElementById('backup-targets-trigger').classList.add('disabled');
         document.getElementById('backup-targets-dropdown').classList.remove('active');
+        document.getElementById('backup-targets-trigger').classList.remove('active');
         document.querySelectorAll('.backup-target').forEach(cb => cb.disabled = true);
+        document.getElementById('target-all').disabled = true;
 
         // Hide guide texts
         document.querySelectorAll('.input-guide-text').forEach(el => el.classList.add('hidden'));
@@ -340,6 +351,25 @@ document.addEventListener('DOMContentLoaded', function () {
         const trigger = document.getElementById('weekly-days-trigger');
         if (trigger.classList.contains('disabled')) return;
         document.getElementById('weekly-days-dropdown').classList.toggle('active');
+        trigger.classList.toggle('active');
+    };
+
+    // Toggle All Days
+    window.toggleAllDaysSelection = function (event) {
+        const allCheckbox = document.getElementById('day-all');
+        const dayCheckboxes = document.querySelectorAll('.backup-day');
+
+        if (allCheckbox.disabled) return;
+
+        if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'LABEL') {
+            allCheckbox.checked = !allCheckbox.checked;
+        }
+
+        const isChecked = allCheckbox.checked;
+        dayCheckboxes.forEach(cb => {
+            cb.checked = isChecked;
+        });
+        updateSelectedDaysText();
     };
 
     // Toggle Checkbox via Row Click
@@ -357,19 +387,29 @@ document.addEventListener('DOMContentLoaded', function () {
     // Update Summary Text
     window.updateSelectedDaysText = function () {
         const checked = document.querySelectorAll('.backup-day:checked');
+        const allCheckboxes = document.querySelectorAll('.backup-day');
+        const allCheckbox = document.getElementById('day-all');
         const textSpan = document.getElementById('selected-days-text');
         const viewInput = document.getElementById('weekly-days-view');
+
+        // Update "Select All" checkbox state
+        if (allCheckbox) {
+            allCheckbox.checked = checked.length === allCheckboxes.length && allCheckboxes.length > 0;
+        }
 
         let text = '';
         if (checked.length === 0) {
             text = '요일 선택';
-            textSpan.classList.add('text-gray-400');
+            textSpan.classList.add('placeholder');
+        } else if (checked.length === allCheckboxes.length) {
+            text = '매일';
+            textSpan.classList.remove('placeholder');
         } else {
             const labels = Array.from(checked).map(cb => {
                 return cb.nextElementSibling.textContent.replace('요일', ''); // Shorten for summary
             });
             text = labels.join(', ');
-            textSpan.classList.remove('text-gray-400');
+            textSpan.classList.remove('placeholder');
         }
 
         textSpan.textContent = text;
@@ -383,6 +423,25 @@ document.addEventListener('DOMContentLoaded', function () {
         const trigger = document.getElementById('backup-targets-trigger');
         if (trigger.classList.contains('disabled')) return;
         document.getElementById('backup-targets-dropdown').classList.toggle('active');
+        trigger.classList.toggle('active');
+    };
+
+    // Toggle All Targets
+    window.toggleAllTargetsSelection = function (event) {
+        const allCheckbox = document.getElementById('target-all');
+        const targetCheckboxes = document.querySelectorAll('.backup-target');
+
+        if (allCheckbox.disabled) return;
+
+        if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'LABEL') {
+            allCheckbox.checked = !allCheckbox.checked;
+        }
+
+        const isChecked = allCheckbox.checked;
+        targetCheckboxes.forEach(cb => {
+            cb.checked = isChecked;
+        });
+        updateSelectedTargetsText();
     };
 
     // Toggle Checkbox via Row Click
@@ -399,17 +458,27 @@ document.addEventListener('DOMContentLoaded', function () {
     // Update Summary Text
     window.updateSelectedTargetsText = function () {
         const checked = document.querySelectorAll('.backup-target:checked');
+        const allCheckboxes = document.querySelectorAll('.backup-target');
+        const allCheckbox = document.getElementById('target-all');
         const textSpan = document.getElementById('selected-targets-text');
         const viewInput = document.getElementById('backup-targets-view');
+
+        // Update "Select All" checkbox state
+        if (allCheckbox) {
+            allCheckbox.checked = checked.length === allCheckboxes.length && allCheckboxes.length > 0;
+        }
 
         let text = '';
         if (checked.length === 0) {
             text = '노드 선택';
-            textSpan.classList.add('text-gray-400');
+            textSpan.classList.add('placeholder');
+        } else if (checked.length === allCheckboxes.length) {
+            text = '전체';
+            textSpan.classList.remove('placeholder');
         } else {
             const labels = Array.from(checked).map(cb => cb.nextElementSibling.textContent);
             text = labels.join(', ');
-            textSpan.classList.remove('text-gray-400');
+            textSpan.classList.remove('placeholder');
         }
 
         textSpan.textContent = text;
@@ -423,6 +492,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (weeklyContainer && !weeklyContainer.contains(e.target)) {
             const dropdown = document.getElementById('weekly-days-dropdown');
             if (dropdown) dropdown.classList.remove('active');
+            const trigger = document.getElementById('weekly-days-trigger');
+            if (trigger) trigger.classList.remove('active');
         }
 
         // Backup targets container
@@ -430,6 +501,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (targetsContainer && !targetsContainer.contains(e.target)) {
             const dropdown = document.getElementById('backup-targets-dropdown');
             if (dropdown) dropdown.classList.remove('active');
+            const trigger = document.getElementById('backup-targets-trigger');
+            if (trigger) trigger.classList.remove('active');
         }
     });
 

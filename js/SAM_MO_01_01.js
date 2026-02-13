@@ -165,7 +165,7 @@ function openHardwareModal(serverName) {
     const usageBarEl = document.getElementById('disk-usage-bar');
 
     if (usageTextEl) usageTextEl.textContent = `${usedDisk} TB / ${totalDisk.toFixed(2)} TB (${usagePercent}%)`;
-    if (usageBarEl) usageBarEl.style.width = `${usagePercent}%`;
+    if (usageBarEl) usageBarEl.style.setProperty('--progress-width', `${usagePercent}%`);
 }
 
 function openNetworkModal(networkId, source, target) {

@@ -669,24 +669,22 @@
             <div class="modal-content" id="modal-view-server">
                 <div class="flex flex-col">
                     <!-- Head Summary -->
-                    <div class="flex flex-row gap-standard mb-sm">
+                    <div class="modal-summary-panel">
                         <!-- Type -->
-                        <div class="flex-1">
-                            <h4 class="modal-section-title">구분</h4>
+                        <div class="summary-item">
+                            <h4 class="modal-section-title mb-0">구분</h4>
                             <div class="data-value">통합</div>
                         </div>
                         <!-- Name -->
-                        <div class="flex-1">
-                            <h4 class="modal-section-title">이름</h4>
-                            <div class="data-value whitespace-nowrap" id="server-modal-name">Server Name</div>
+                        <div class="summary-item">
+                            <h4 class="modal-section-title mb-0">이름</h4>
+                            <div class="data-value font-bold" id="server-modal-name">Server Name</div>
                         </div>
                         <!-- Status -->
-                        <div class="flex-1">
-                            <h4 class="modal-section-title">상태</h4>
-                            <div class="data-value">
-                                <span class="badge badge-success w-fit">정상</span>
-                                <!-- <span class="badge badge-error w-fit">장애</span> -->
-                                <!-- <span class="badge badge-warning w-fit">위험</span> -->
+                        <div class="summary-item">
+                            <h4 class="modal-section-title mb-0">상태</h4>
+                            <div class="flex items-center">
+                                <span class="badge badge-success">정상</span>
                             </div>
                         </div>
                     </div>
@@ -747,7 +745,7 @@
                                 <span class="disk-usage-value" id="disk-usage-text">0.00 TB / 0.00 TB</span>
                             </div>
                             <div class="progress-bar-bg">
-                                <div id="disk-usage-bar" class="progress-bar-fill" style="width: 0%"></div>
+                                <div id="disk-usage-bar" class="progress-bar-fill"></div>
                             </div>
                         </div>
                     </div>

@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 감사합니다.`,
             regDate: '2024.03.10 09:00:00',
             modDate: '2024.03.10 09:00:00',
+            publicSystems: ['ivms', 'ifps', 'ifrs', 'v-cdm', 'sams'],
             attachments: [
                 { name: '2024년_3월_정기점검_계획서.pdf', size: '1.2MB' },
                 { name: '작업_영향도_평가.xlsx', size: '45KB' }
@@ -64,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
 안전한 시스템 사용을 위해 여러분의 적극적인 협조 부탁드립니다.`,
             regDate: '2024.03.01 14:00:00',
             modDate: '2024.03.01 14:00:00',
+            publicSystems: ['ivms', 'ifps'],
             attachments: [
                 { name: '개인정보처리방침_개정안_신구대조표.hwp', size: '256KB' },
                 { name: 'SAMS_보안정책_가이드_v2.0.pdf', size: '3.5MB' }
@@ -101,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
 시스템 사용 중 오류가 발견되면 '장애 관리 > 장애 신고' 메뉴를 이용해 주십시오.`,
             regDate: '2024.02.20 10:30:00',
             modDate: '2024.02.21 11:00:00',
+            publicSystems: ['sams'],
             attachments: [
                 { name: 'SAMS_v2.1_User_Manual.pdf', size: '8.2MB' }
             ]
@@ -132,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 동일한 문제가 발생하지 않도록 인프라 관리에 만전을 기하겠습니다.`,
             regDate: '2024.02.05 09:00:00',
             modDate: '2024.02.05 09:00:00',
+            publicSystems: ['ivms'],
             attachments: []
         },
         {
@@ -162,6 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
 새해 복 많이 받으십시오.`,
             regDate: '2024.02.01 17:00:00',
             modDate: '2024.02.01 17:00:00',
+            publicSystems: ['ivms', 'ifps', 'ifrs', 'v-cdm', 'sams'],
             attachments: [
                 { name: '2024_설연휴_비상근무편성표.xlsx', size: '15KB' }
             ]
@@ -195,8 +200,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const noticeVisibilityEdit = document.getElementById('notice-visibility-edit');
     const noticeRegistrantInput = document.getElementById('notice-registrant');
 
+    const noticeSystemsView = document.getElementById('notice-systems-view');
+    const noticeSystemsEditWrapper = document.getElementById('notice-systems-edit-wrapper');
+    const noticeSystemsTrigger = document.getElementById('notice-systems-trigger');
+    const noticeSystemsDropdown = document.getElementById('notice-systems-dropdown');
+    const selectedSystemsText = document.getElementById('selected-systems-text');
+
     const reqTitleMark = document.getElementById('req-title');
     const reqVisibilityMark = document.getElementById('req-visibility');
+    const reqSystemsMark = document.getElementById('req-systems');
     const reqContentMark = document.getElementById('req-content');
 
     // File Elements
@@ -228,11 +240,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Check for deep link (id) in URL
     const urlParams = new URLSearchParams(window.location.search);
-    const noticeId = urlParams.get('id');
-    if (noticeId) {
-        const targetNotice = notices.find(n => n.id === noticeId);
+    const deepNoticeId = urlParams.get('id');
+    if (deepNoticeId) {
+        const targetNotice = notices.find(n => n.id === deepNoticeId);
         if (targetNotice) {
-            selectNotice(targetNotice);
+            // Select and scroll into view after a short delay to ensure rendering is complete
+            setTimeout(() => {
+                selectNotice(targetNotice);
+                const row = document.querySelector(`.data-table-row[data-id="${deepNoticeId}"]`);
+                if (row) {
+                    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 100);
         }
     }
 
@@ -390,6 +409,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // Populate Public Systems
+        const systems = notice.publicSystems || [];
+        document.querySelectorAll('.notice-system').forEach(checkbox => {
+            const systemId = checkbox.id.replace('sys-', '');
+            checkbox.checked = systems.includes(systemId);
+        });
+        updateSelectedSystemsText();
+
         // Render Files
         renderFileList();
 
@@ -434,6 +461,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Hide File Upload Area
         fileUploadArea.classList.add('hidden');
+
+        // Reset Public Systems View
+        noticeSystemsView.classList.remove('hidden');
+        noticeSystemsEditWrapper.classList.add('hidden');
+        noticeSystemsDropdown.classList.remove('active');
+        document.querySelectorAll('.notice-system').forEach(cb => cb.disabled = true);
 
         // Dates
         noticeDatesSection.classList.remove('hidden');
@@ -490,6 +523,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 actionBtn = `<button onclick="removeFile(${index})" class="text-gray-400 hover:text-red-500"><i data-lucide="x" class="w-4 h-4"></i></button>`;
             } else {
                 actionBtn = `<button class="text-gray-400 hover:text-primary"><i data-lucide="download" class="w-4 h-4"></i></button>`;
+                div.onclick = () => downloadFile(index);
             }
 
             div.innerHTML = `
@@ -504,6 +538,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         lucide.createIcons();
     }
+
+    window.downloadFile = function (index) {
+        if (isEditMode || isRegMode) return;
+        const file = currentAttachments[index];
+        if (file) {
+            // Create a dummy blob for simulation
+            const dummyContent = `This is a simulated download for: ${file.name}\nSize: ${file.size || 'Unknown'}`;
+            const blob = new Blob([dummyContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+
+            // Trigger actual download
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = file.name;
+            document.body.appendChild(a);
+            a.click();
+
+            // Cleanup
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+    };
 
     function formatBytes(bytes, decimals = 2) {
         if (!+bytes) return '0 Bytes';
@@ -552,6 +608,17 @@ document.addEventListener('DOMContentLoaded', () => {
         reqContentMark.classList.remove('hidden');
 
         fileUploadArea.classList.remove('hidden');
+
+        // Setup Public Systems for Reg Mode
+        noticeSystemsView.classList.add('hidden');
+        noticeSystemsEditWrapper.classList.remove('hidden');
+        noticeSystemsTrigger.classList.remove('disabled');
+        document.querySelectorAll('.notice-system').forEach(cb => {
+            cb.disabled = false;
+            cb.checked = true; // All checked for new reg
+        });
+        updateSelectedSystemsText();
+
         renderFileList();
 
         noticeDatesSection.classList.add('hidden');
@@ -593,6 +660,14 @@ document.addEventListener('DOMContentLoaded', () => {
         reqContentMark.classList.remove('hidden');
 
         fileUploadArea.classList.remove('hidden');
+
+        // Setup Public Systems for Edit Mode
+        noticeSystemsView.classList.add('hidden');
+        noticeSystemsEditWrapper.classList.remove('hidden');
+        noticeSystemsTrigger.classList.remove('disabled');
+        document.querySelectorAll('.notice-system').forEach(cb => cb.disabled = false);
+        updateSelectedSystemsText();
+
         renderFileList();
 
         if (noticeDatesSection) noticeDatesSection.classList.add('hidden');
@@ -613,51 +688,67 @@ document.addEventListener('DOMContentLoaded', () => {
     // === Save Logic ===
     window.saveChanges = function () {
         if (!validateForm()) return;
-
-        currentNotice.title = noticeTitleInput.value;
-        currentNotice.content = noticeContentEdit.value;
-        const visRadios = document.getElementsByName('notice-visibility');
-        currentNotice.isVisible = Array.from(visRadios).find(r => r.checked).value === 'true';
-        currentNotice.attachments = [...currentAttachments];
-        currentNotice.modDate = getCurrentTime();
-
-        renderNoticeList();
-        selectNotice(currentNotice, document.querySelector(`.data-table-row[data-id="${currentNotice.id}"]`));
-
-        showSuccessModal('공지사항이 수정되었습니다.');
+        showConfirmModal('공지사항 수정', '공지사항을 수정하시겠습니까?');
     };
 
     window.processRegistration = function () {
         if (!validateForm()) return;
-        showConfirmModal();
+        showConfirmModal('공지사항 등록', '공지사항을 등록하시겠습니까?');
     };
 
     window.confirmSaveAction = function () {
-        const newId = (parseInt(notices[0]?.id || 0) + 1).toString();
-        const visRadios = document.getElementsByName('notice-visibility');
-        const isVisible = Array.from(visRadios).find(r => r.checked).value === 'true';
+        if (isEditMode) {
+            // Modification Logic
+            currentNotice.title = noticeTitleInput.value;
+            currentNotice.content = noticeContentEdit.value;
+            const visRadios = document.getElementsByName('notice-visibility');
+            currentNotice.isVisible = Array.from(visRadios).find(r => r.checked).value === 'true';
 
-        const newNotice = {
-            id: newId,
-            title: noticeTitleInput.value,
-            content: noticeContentEdit.value,
-            isVisible: isVisible,
-            attachments: [...currentAttachments],
-            regDate: getCurrentTime(),
-            modDate: getCurrentTime(),
-            registrant: '홍길동'
-        };
+            // Save Public Systems
+            currentNotice.publicSystems = Array.from(document.querySelectorAll('.notice-system:checked'))
+                .map(cb => cb.id.replace('sys-', ''));
 
-        notices.unshift(newNotice);
+            currentNotice.attachments = [...currentAttachments];
+            currentNotice.modDate = getCurrentTime();
 
-        renderNoticeList();
-        selectNotice(newNotice);
+            renderNoticeList();
+            selectNotice(currentNotice, document.querySelector(`.data-table-row[data-id="${currentNotice.id}"]`));
 
-        closeConfirmModal();
-        showSuccessModal('공지사항이 등록되었습니다.');
+            closeConfirmModal();
+            showSuccessModal('공지사항이 수정되었습니다.');
+
+        } else if (isRegMode) {
+            // Registration Logic
+            const newId = (parseInt(notices[0]?.id || 0) + 1).toString();
+            const visRadios = document.getElementsByName('notice-visibility');
+            const isVisible = Array.from(visRadios).find(r => r.checked).value === 'true';
+
+            const newNotice = {
+                id: newId,
+                title: noticeTitleInput.value,
+                content: noticeContentEdit.value,
+                isVisible: isVisible,
+                attachments: [...currentAttachments],
+                regDate: getCurrentTime(),
+                modDate: getCurrentTime(),
+                registrant: '홍길동',
+                publicSystems: Array.from(document.querySelectorAll('.notice-system:checked'))
+                    .map(cb => cb.id.replace('sys-', ''))
+            };
+
+            notices.unshift(newNotice);
+
+            renderNoticeList();
+            selectNotice(newNotice);
+
+            closeConfirmModal();
+            showSuccessModal('공지사항이 등록되었습니다.');
+        }
     };
 
-    window.showConfirmModal = function () {
+    window.showConfirmModal = function (title, desc) {
+        if (title) document.getElementById('confirm-modal-title').innerText = title;
+        if (desc) document.getElementById('confirm-modal-desc').innerHTML = desc;
         confirmModal.classList.add('active');
         lucide.createIcons();
     };
@@ -747,5 +838,82 @@ document.addEventListener('DOMContentLoaded', () => {
         emptyState.classList.remove('hidden');
         detailContent.classList.add('hidden');
     };
+
+    // === Multi-Select Helpers ===
+    window.toggleSystemDropdown = function () {
+        if (isEditMode || isRegMode) {
+            noticeSystemsDropdown.classList.toggle('active');
+            noticeSystemsTrigger.classList.toggle('active');
+        }
+    };
+
+    window.toggleSystemSelection = function (event, id) {
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'LABEL') return;
+        const checkbox = document.getElementById(id);
+        if (!checkbox.disabled) {
+            checkbox.checked = !checkbox.checked;
+            updateSelectedSystemsText();
+        }
+    };
+
+    window.toggleAllSystemsSelection = function (event) {
+        const allCheckbox = document.getElementById('sys-all');
+        const systemCheckboxes = document.querySelectorAll('.notice-system');
+
+        if (allCheckbox.disabled) return;
+
+        // If clicking the div (not input or label), toggle the primary checkbox manually first
+        if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'LABEL') {
+            allCheckbox.checked = !allCheckbox.checked;
+        }
+
+        // At this point, allCheckbox.checked is correctly set (either by browser or by the manual toggle above)
+        // Now sync all other checkboxes
+        const isChecked = allCheckbox.checked;
+        systemCheckboxes.forEach(cb => {
+            cb.checked = isChecked;
+        });
+        updateSelectedSystemsText();
+    };
+
+    window.updateSelectedSystemsText = function () {
+        const checked = document.querySelectorAll('.notice-system:checked');
+        const allCheckboxes = document.querySelectorAll('.notice-system');
+        const allCheckbox = document.getElementById('sys-all');
+
+        // Update "Select All" checkbox state
+        if (allCheckbox) {
+            allCheckbox.checked = checked.length === allCheckboxes.length && allCheckboxes.length > 0;
+        }
+
+        let text = '';
+        if (checked.length === 0) {
+            text = '선택한 시스템 없음';
+            selectedSystemsText.classList.add('placeholder');
+            selectedSystemsText.classList.remove('text-gray-400');
+        } else if (checked.length === allCheckboxes.length) {
+            text = '전체';
+            selectedSystemsText.classList.remove('placeholder');
+            selectedSystemsText.classList.remove('text-gray-400');
+        } else {
+            const labels = Array.from(checked).map(cb => {
+                const fullText = cb.nextElementSibling.textContent;
+                return fullText.includes(' (') ? fullText.split(' (')[0] : fullText;
+            });
+            text = labels.join(', ');
+            selectedSystemsText.classList.remove('placeholder');
+            selectedSystemsText.classList.remove('text-gray-400');
+        }
+        selectedSystemsText.textContent = (checked.length === 0) ? '시스템 선택' : text;
+        if (noticeSystemsView) noticeSystemsView.textContent = text;
+    };
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function (e) {
+        if (noticeSystemsEditWrapper && !noticeSystemsEditWrapper.contains(e.target)) {
+            if (noticeSystemsDropdown) noticeSystemsDropdown.classList.remove('active');
+            if (noticeSystemsTrigger) noticeSystemsTrigger.classList.remove('active');
+        }
+    });
 
 });

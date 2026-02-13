@@ -33,13 +33,19 @@
                         <!-- Global Health Pulse -->
                         <div class="db-health-gauge-card col-side">
                             <div class="flex-1">
-                                <h3 class="db-card-label">시스템 종합 건전성</h3>
+                                <h3 class="db-card-label flex items-center gap-1">
+                                    시스템 종합 건전성
+                                    <button type="button" class="text-gray-400 hover:text-white transition-colors"
+                                        onclick="openHealthInfoModal()">
+                                        <i data-lucide="info" class="w-3.5 h-3.5"></i>
+                                    </button>
+                                </h3>
                                 <div class="flex items-baseline">
                                     <span class="db-health-score" id="health-score">98</span>
                                     <span class="db-health-total">/100</span>
                                 </div>
                                 <div class="db-status-text">
-                                    <span class="pulse-dot success"></span> 안정성 최적화 상태 (2026.02.12)
+                                    <span class="pulse-dot success"></span> 안정성 최적화 (2026.02.12 12:10)
                                 </div>
                             </div>
                             <div class="flex-none">
@@ -49,7 +55,7 @@
 
 
                         <!-- Quick KPIs -->
-                        <div class="kpi-grid-container">
+                        <div class="kpi-grid-container col-main">
                             <article class="db-stat-card" onclick="location.href='SAM_US_01_01.html'">
                                 <span class="db-card-label">활성 사용자</span>
                                 <span class="db-card-value">1,240</span>
@@ -59,20 +65,21 @@
                             </article>
                             <article class="db-stat-card" onclick="location.href='SAM_US_01_01.html'">
                                 <span class="db-card-label">가입 승인 요청</span>
-                                <span class="db-card-value text-info">8</span>
+                                <span class="db-card-value">8</span>
                                 <div class="db-sub-label text-info">
                                     <i data-lucide="clock" class="w-3 h-3"></i> 승인 대기 중
                                 </div>
                             </article>
                             <article class="db-stat-card" onclick="location.href='SAM_AU_01_01.html'">
                                 <span class="db-card-label">시스템 권한 그룹</span>
-                                <span class="db-card-value text-purple-400">12</span>
+                                <span class="db-card-value">5</span>
                                 <div class="db-sub-label">RBAC 설정 완료</div>
                             </article>
                             <article class="db-stat-card" onclick="location.href='SAM_SY_03_01.html'">
-                                <span class="db-card-label">백업 정합성</span>
-                                <span class="db-card-value text-success">100%</span>
-                                <div class="db-sub-label text-success">동기화 완료</div>
+                                <span class="db-card-label">최근 백업 일시</span>
+                                <span class="db-card-value">2026.02.12 <span
+                                        class="db-card-value-sm">02:00:00</span></span>
+                                <div class="db-sub-label text-success">1일 전 백업 성공</div>
                             </article>
                         </div>
                     </section>
@@ -87,119 +94,77 @@
                                 <header class="db-card-header">
                                     <div class="search-panel-title-group">
                                         <i data-lucide="layout-grid" class="w-5 h-5 text-success"></i>
-                                        <h2 class="db-section-title">인프라 그룹별 상태 매트릭스</h2>
+                                        <h2 class="db-section-title">인프라 상태 매트릭스</h2>
                                     </div>
-                                    <button class="text-xs text-teal-400 hover:underline flex items-center gap-1"
-                                        onclick="location.href='SAM_MO_01_01.html'">
-                                        구성도 보기 <i data-lucide="external-link" class="w-3 h-3"></i>
+                                    <button class="btn-xs btn-secondary" onclick="location.href='SAM_MO_01_01.html'">
+                                        인프라 통합 현황 보기
                                     </button>
                                 </header>
-                                <div class="health-matrix">
-                                    <div class="db-matrix-tile warning" onclick="location.href='SAM_MO_01_01.html'">
-                                        <div class="flex-between-start mb-2">
-                                            <span class="db-item-title">IVS 서버군 (CORE)</span>
-                                            <span class="pulse-dot warning"></span>
-                                        </div>
-                                        <div class="db-item-value text-warning">상태 주의</div>
+                                <div class="infra-status-grid">
+                                    <!-- Column Headers -->
+                                    <div></div>
+                                    <div class="infra-grid-header">정상 (Normal)</div>
+                                    <div class="infra-grid-header">위험 (Danger)</div>
+                                    <div class="infra-grid-header">장애 (Fault)</div>
+
+                                    <!-- CPU Row -->
+                                    <div class="infra-resource-label">CPU</div>
+                                    <div class="infra-status-card success" onclick="location.href='SAM_MO_01_01.html'">
+                                        <span class="infra-status-count">23</span>
                                     </div>
-                                    <div class="db-matrix-tile success" onclick="location.href='SAM_MO_01_01.html'">
-                                        <div class="flex-between-start mb-2">
-                                            <span class="db-item-title">VOS 서버군 (ENGINE)</span>
-                                            <span class="pulse-dot success"></span>
-                                        </div>
-                                        <div class="db-item-value">정상 운영</div>
+                                    <div class="infra-status-card warning" onclick="location.href='SAM_MO_01_01.html'">
+                                        <span class="infra-status-count">2</span>
                                     </div>
-                                    <div class="db-matrix-tile warning" onclick="location.href='SAM_MO_01_01.html'">
-                                        <div class="flex-between-start mb-2">
-                                            <span class="db-item-title">WAS 클러스터</span>
-                                            <span class="pulse-dot warning"></span>
-                                        </div>
-                                        <div class="db-item-value text-warning">부하 주의</div>
+                                    <div class="infra-status-card error" onclick="location.href='SAM_MO_01_01.html'">
+                                        <span class="infra-status-count">1</span>
                                     </div>
-                                    <div class="db-matrix-tile success" onclick="location.href='SAM_MO_01_01.html'">
-                                        <div class="flex-between-start mb-2">
-                                            <span class="db-item-title">WEB 포탈</span>
-                                            <span class="pulse-dot success"></span>
-                                        </div>
-                                        <div class="db-item-value">정상 운영</div>
+
+                                    <!-- MEM Row -->
+                                    <div class="infra-resource-label">메모리</div>
+                                    <div class="infra-status-card success" onclick="location.href='SAM_MO_01_01.html'">
+                                        <span class="infra-status-count">25</span>
                                     </div>
-                                    <div class="db-matrix-tile error" onclick="location.href='SAM_MO_01_01.html'">
-                                        <div class="flex-between-start mb-2">
-                                            <span class="db-item-title">통합 DB</span>
-                                            <span class="pulse-dot error"></span>
-                                        </div>
-                                        <div class="db-item-value text-error">심각 장애</div>
+                                    <div class="infra-status-card warning" onclick="location.href='SAM_MO_01_01.html'">
+                                        <span class="infra-status-count">1</span>
                                     </div>
-                                    <div class="db-matrix-tile error" onclick="location.href='SAM_MO_01_01.html'">
-                                        <div class="flex-between-start mb-2">
-                                            <span class="db-item-title">VCDM 연계</span>
-                                            <span class="pulse-dot error"></span>
-                                        </div>
-                                        <div class="db-item-value text-error">연계 장애</div>
+                                    <div class="infra-status-card error" onclick="location.href='SAM_MO_01_01.html'">
+                                        <span class="infra-status-count">0</span>
+                                    </div>
+
+                                    <!-- NET Row -->
+                                    <div class="infra-resource-label">네트워크</div>
+                                    <div class="infra-status-card success" onclick="location.href='SAM_MO_01_01.html'">
+                                        <span class="infra-status-count">14</span>
+                                    </div>
+                                    <div class="infra-status-card warning" onclick="location.href='SAM_MO_01_01.html'">
+                                        <span class="infra-status-count">0</span>
+                                    </div>
+                                    <div class="infra-status-card error" onclick="location.href='SAM_MO_01_01.html'">
+                                        <span class="infra-status-count">1</span>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Matrix Bottom: Resource Charts (Multi-Device) -->
-                            <div class="db-chart-row">
-                                <article class="glass-panel p-6">
-                                    <div class="section-header">
-                                        <div class="flex items-center gap-2">
-                                            <i data-lucide="cpu" class="w-4 h-4 text-success"></i>
-                                            <span class="db-item-title">인프라 그룹별 최대 CPU 부하 추이</span>
-                                        </div>
+                            <!-- Ranking Widget -->
+                            <section class="db-card-p6">
+                                <header class="db-card-header border-b border-slate-700/50 pb-4">
+                                    <div class="search-panel-title-group">
+                                        <i data-lucide="trending-up" class="w-5 h-5 text-error"></i>
+                                        <h2 class="db-section-title">노드별 주요 부하/지연 순위 (Worst 5)</h2>
                                     </div>
-                                    <div class="sparkline-container">
-                                        <canvas id="chart-cpu"></canvas>
+                                    <span class="db-card-label">최근 갱신: 2026.02.12 <span
+                                            class="db-card-value-sm">12:10:00</span></span>
+                                </header>
+                                <div class="db-chart-row gap-12">
+                                    <div class="dashboard-section gap-2">
+                                        <h4 class="db-item-title mb-2">CPU 부하 상위 노드</h4>
+                                        <div id="cpu-rank-container" class="dashboard-section gap-1"></div>
                                     </div>
-                                    <div class="chart-legend">
-                                        <div class="legend-item">
-                                            <div class="legend-color" style="background:#14b8a6"></div><span>IVS
-                                                그룹</span>
-                                        </div>
-                                        <div class="legend-item">
-                                            <div class="legend-color" style="background:#3b82f6"></div><span>VOS
-                                                그룹</span>
-                                        </div>
-                                        <div class="legend-item">
-                                            <div class="legend-color" style="background:#a855f7"></div><span>WAS
-                                                그룹</span>
-                                        </div>
-                                        <div class="legend-item">
-                                            <div class="legend-color" style="background:#f59e0b"></div><span>통합
-                                                DB</span>
-                                        </div>
+                                    <div class="dashboard-section gap-2">
+                                        <h4 class="db-item-title mb-2">지연 시간 상위 노드</h4>
+                                        <div id="latency-rank-container" class="dashboard-section gap-1"></div>
                                     </div>
-                                </article>
-                                <article class="glass-panel p-6">
-                                    <div class="section-header">
-                                        <div class="flex items-center gap-2">
-                                            <i data-lucide="activity" class="w-4 h-4 text-success"></i>
-                                            <span class="db-item-title">그룹별 지연 시간 임계점 추이</span>
-                                        </div>
-                                    </div>
-                                    <div class="sparkline-container">
-                                        <canvas id="chart-latency"></canvas>
-                                    </div>
-                                    <div class="chart-legend">
-                                        <div class="legend-item">
-                                            <div class="legend-color" style="background:#14b8a6"></div><span>IVS
-                                                그룹</span>
-                                        </div>
-                                        <div class="legend-item">
-                                            <div class="legend-color" style="background:#3b82f6"></div><span>VOS
-                                                그룹</span>
-                                        </div>
-                                        <div class="legend-item">
-                                            <div class="legend-color" style="background:#a855f7"></div><span>WAS
-                                                그룹</span>
-                                        </div>
-                                        <div class="legend-item">
-                                            <div class="legend-color" style="background:#f59e0b"></div><span>통합
-                                                DB</span>
-                                        </div>
-                                    </div>
-                                </article>
-                            </div>
+                                </div>
+                            </section>
                         </section>
 
                         <!-- Right: Intelligent Feeds (Faults & Security) -->
@@ -211,9 +176,8 @@
                                         <i data-lucide="zap" class="w-5 h-5 text-success"></i>
                                         <span class="db-section-title">실시간 장애 스트림</span>
                                     </div>
-                                    <button class="btn-sm btn-secondary p-1 h-auto"
-                                        onclick="location.href='SAM_SY_02_01.html'">
-                                        <i data-lucide="maximize-2" class="w-3 h-3"></i>
+                                    <button class="btn-xs btn-secondary" onclick="location.href='SAM_SY_02_01.html'">
+                                        더 보기
                                     </button>
                                 </header>
                                 <div class="pane-content custom-scrollbar" id="fault-feed-container">
@@ -228,9 +192,8 @@
                                         <i data-lucide="shield-check" class="w-5 h-5 text-success"></i>
                                         <span class="db-section-title">최근 사용자 활동 로그</span>
                                     </div>
-                                    <button class="btn-sm btn-secondary p-1 h-auto"
-                                        onclick="location.href='SAM_LG_02_01.html'">
-                                        <i data-lucide="maximize-2" class="w-3 h-3"></i>
+                                    <button class="btn-xs btn-secondary" onclick="location.href='SAM_LG_02_01.html'">
+                                        더 보기
                                     </button>
                                 </header>
                                 <div class="pane-content custom-scrollbar" id="access-log-container">
@@ -243,26 +206,71 @@
                     <!-- Bottom Widget Wrapper (Ranking + Notices) -->
                     <div class="dashboard-layout-grid pb-12">
                         <div class="col-main dashboard-section">
-                            <!-- Ranking Widget -->
-                            <section class="db-card-p6">
-                                <header class="db-card-header border-b border-slate-700/50 pb-4">
-                                    <div class="search-panel-title-group">
-                                        <i data-lucide="trending-up" class="w-5 h-5 text-error"></i>
-                                        <h2 class="db-section-title">노드별 주요 부하/지연 순위 (Worst 5)</h2>
+                            <!-- Matrix Bottom: Resource Charts (Multi-Device) -->
+                            <div class="db-chart-row">
+                                <div class="db-card-p6">
+                                    <header class="db-card-header">
+                                        <div class="search-panel-title-group">
+                                            <i data-lucide="cpu" class="w-5 h-5 text-success"></i>
+                                            <h2 class="db-section-title">인프라 그룹별 최대 CPU 부하 추이</h2>
+                                        </div>
+                                    </header>
+                                    <div class="sparkline-container">
+                                        <canvas id="chart-cpu"></canvas>
                                     </div>
-                                    <span class="db-card-label">최종 갱신: 2026.02.12</span>
-                                </header>
-                                <div class="db-chart-row gap-12">
-                                    <div class="dashboard-section gap-2">
-                                        <h4 class="db-item-title mb-2">CPU 부하 상위 노드</h4>
-                                        <div id="cpu-rank-container" class="dashboard-section gap-1"></div>
-                                    </div>
-                                    <div class="dashboard-section gap-2">
-                                        <h4 class="db-item-title mb-2">지연 시간 상위 노드</h4>
-                                        <div id="latency-rank-container" class="dashboard-section gap-1"></div>
+                                    <div class="chart-legend-container">
+                                        <button type="button" class="btn-chart-nav"
+                                            onclick="scrollLegend('chart-cpu-legend', -100)">
+                                            <i data-lucide="chevron-left" class="w-3 h-3"></i>
+                                        </button>
+                                        <div class="chart-legend-scroll" id="chart-cpu-legend">
+                                            <div class="chart-legend-item">
+                                                <div class="legend-dot" style="background:#14b8a6"></div>
+                                                <span>VOS운용서버</span>
+                                            </div>
+                                            <div class="chart-legend-item">
+                                                <div class="legend-dot" style="background:#3b82f6"></div>
+                                                <span>WAS서버</span>
+                                            </div>
+                                            <div class="chart-legend-item">
+                                                <div class="legend-dot" style="background:#a855f7"></div>
+                                                <span>WEB서버</span>
+                                            </div>
+                                            <div class="chart-legend-item">
+                                                <div class="legend-dot" style="background:#f59e0b"></div>
+                                                <span>통합DB</span>
+                                            </div>
+                                            <div class="chart-legend-item">
+                                                <div class="legend-dot" style="background:#ef4444"></div>
+                                                <span>VCDM운용서버</span>
+                                            </div>
+                                            <div class="chart-legend-item">
+                                                <div class="legend-dot" style="background:#10b981"></div>
+                                                <span>VP운용 단말</span>
+                                            </div>
+                                            <div class="chart-legend-item">
+                                                <div class="legend-dot" style="background:#6366f1"></div>
+                                                <span>단독 서버</span>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn-chart-nav"
+                                            onclick="scrollLegend('chart-cpu-legend', 100)">
+                                            <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                                        </button>
                                     </div>
                                 </div>
-                            </section>
+                                <div class="db-card-p6">
+                                    <header class="db-card-header">
+                                        <div class="search-panel-title-group">
+                                            <i data-lucide="user-plus" class="w-5 h-5 text-success"></i>
+                                            <h2 class="db-section-title">사용자 등록 현황</h2>
+                                        </div>
+                                    </header>
+                                    <div class="sparkline-container">
+                                        <canvas id="chart-signup"></canvas>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Right: Notice Feed -->
@@ -273,9 +281,8 @@
                                         <i data-lucide="megaphone" class="w-5 h-5 text-success"></i>
                                         <span class="db-section-title">공지사항</span>
                                     </div>
-                                    <button class="btn-sm btn-secondary p-1 h-auto"
-                                        onclick="location.href='SAM_BD_01_01.html'">
-                                        <i data-lucide="maximize-2" class="w-3 h-3"></i>
+                                    <button class="btn-xs btn-secondary" onclick="location.href='SAM_BD_01_01.html'">
+                                        더 보기
                                     </button>
                                 </header>
                                 <div class="pane-content custom-scrollbar" id="dashboard-notice-list">
@@ -290,6 +297,63 @@
 
     <!-- System Switcher Modal -->
     <div data-include="../components/system-switcher.html"></div>
+
+    <!-- Health Info Modal -->
+    <div id="health-info-modal" class="modal-overlay">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-header">
+                <h3 class="modal-title-left">시스템 종합 건전성</h3>
+                <i data-lucide="x" class="close-icon" onclick="closeHealthInfoModal()"></i>
+            </div>
+
+            <div class="modal-body py-4">
+                <p class="modal-info-text mb-4">
+                    본 지표는 플랫폼의 하드웨어 상태, 장애 발생 빈도, 데이터 보호 상태를 종합하여 시스템의 안정성을 100점 만점으로 수치화한 것입니다.
+                </p>
+
+                <section class="mb-4">
+                    <h4 class="modal-section-title">1. 산출 공식</h4>
+                    <div class="modal-formula-box">
+                        종합 점수 = (인프라 상태 점수 x 0.5) + (장애 대응 점수 x 0.3) + (백업 신뢰 점수 x 0.2)
+                    </div>
+                </section>
+
+                <section class="mb-4">
+                    <h4 class="modal-section-title">2. 세부 지표 산출 기준</h4>
+                    <ul class="modal-bullet-list">
+                        <li><strong>인프라 상태(50%):</strong> 전체 노드 대비 정상 가동 중인 노드의 비율</li>
+                        <li><strong>장애 대응(30%):</strong> 최근 24시간 이내 발생한 '치명적' 등급 장애 개수에 따른 감점 처리
+                        </li>
+                        <li><strong>백업 신뢰(20%):</strong> 최근 24시간 이내 전체 시스템 백업 성공 여부</li>
+                    </ul>
+                </section>
+
+                <section class="mb-4">
+                    <h4 class="modal-section-title">3. 점수별 상태 안내</h4>
+                    <div class="space-y-1">
+                        <div class="modal-status-item">
+                            <span class="badge badge-success">90점 이상</span>
+                            <span class="modal-status-desc">안정 (시스템이 최적의 상태로 운영되고 있습니다)</span>
+                        </div>
+                        <div class="modal-status-item">
+                            <span class="badge badge-warning">70 - 89점</span>
+                            <span class="modal-status-desc">주의 (일부 노드 부하 또는 비핵심 장애 감지)</span>
+                        </div>
+                        <div class="modal-status-item">
+                            <span class="badge badge-error">70점 미만</span>
+                            <span class="modal-status-desc">위험 (핵심 서비스 장애 또는 백업 미이행)</span>
+                        </div>
+                    </div>
+                </section>
+
+                <p class="modal-note">* 본 지표는 5분 주기로 업데이트됩니다.</p>
+            </div>
+
+            <div class="modal-btn-group">
+                <button type="button" class="btn-md btn-primary" onclick="closeHealthInfoModal()">확인</button>
+            </div>
+        </div>
+    </div>
 
     <script src="../js/include.js"></script>
     <script src="../js/common.js"></script>

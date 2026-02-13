@@ -6,27 +6,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Monitoring Groups & Node Pool
     const groups = [
-        { id: 'IVS', name: 'IVS 그룹', color: '#14b8a6' },
-        { id: 'VOS', name: 'VOS 그룹', color: '#3b82f6' },
-        { id: 'WAS', name: 'WAS 그룹', color: '#a855f7' },
-        { id: 'DB', name: '통합 DB', color: '#f59e0b' }
+        { id: 'VOS_RUN', name: 'VOS운용서버', color: '#14b8a6' },
+        { id: 'WAS_RUN', name: 'WAS서버', color: '#3b82f6' },
+        { id: 'WEB_RUN', name: 'WEB서버', color: '#a855f7' },
+        { id: 'DB_TOTAL', name: '통합DB', color: '#f59e0b' },
+        { id: 'VCDM_RUN', name: 'VCDM운용서버', color: '#ef4444' },
+        { id: 'VP_RUN', name: 'VP운용 단말', color: '#10b981' },
+        { id: 'ALONE_SRV', name: '단독 서버', color: '#6366f1' }
     ];
 
     const nodePool = [
-        { id: 'IVS-VOS-01', name: 'VOS운용서버#1', group: 'IVS', baseLoad: 20 },
-        { id: 'IVS-VOS-02', name: 'VOS운용서버#2', group: 'IVS', baseLoad: 85 },
-        { id: 'IVS-VOS-03', name: 'VOS운용서버#3', group: 'IVS', baseLoad: 25 },
-        { id: 'IVS-DB-01', name: '통합DB VM#1', group: 'IVS', baseLoad: 88 },
-        { id: 'IVS-L2-SW', name: 'IVS L2 스위치', group: 'IVS', baseLoad: 15 },
-        { id: 'VOS-VP-01', name: 'VP운용 단말#1', group: 'VOS', baseLoad: 15 },
-        { id: 'VOS-VP-03', name: 'VP운용 단말#3', group: 'VOS', baseLoad: 65 },
-        { id: 'VOS-GW-01', name: 'IVS 게이트웨이', group: 'VOS', baseLoad: 75 },
-        { id: 'VOS-CONS-01', name: '지상 감시 콘솔', group: 'VOS', baseLoad: 60 },
-        { id: 'VOS-NWICS', name: 'NWICS 콘솔', group: 'VOS', baseLoad: 82 },
-        { id: 'IVS-WAS-01', name: 'WAS서버 VM#1', group: 'WAS', baseLoad: 70 },
-        { id: 'IVS-WAS-02', name: 'WAS서버 VM#2', group: 'WAS', baseLoad: 30 },
-        { id: 'WEB-01', name: 'WEB서버 VM#1', group: 'WAS', baseLoad: 20 },
-        { id: 'SAMS-DB-PRM', name: 'SAMS DB (Main)', group: 'DB', baseLoad: 92 }
+        { id: 'VOS-01', name: 'VOS운용서버#1', group: 'VOS_RUN', baseLoad: 20 },
+        { id: 'WAS-01', name: 'WAS서버#1', group: 'WAS_RUN', baseLoad: 35 },
+        { id: 'WEB-01', name: 'WEB서버#1', group: 'WEB_RUN', baseLoad: 25 },
+        { id: 'DB-01', name: '통합DB#1', group: 'DB_TOTAL', baseLoad: 90 },
+        { id: 'VCDM-01', name: 'VCDM운용서버#1', group: 'VCDM_RUN', baseLoad: 15 },
+        { id: 'VP-01', name: 'VP운용 단말#1', group: 'VP_RUN', baseLoad: 10 },
+        { id: 'SRV-01', name: '단독 서버#1', group: 'ALONE_SRV', baseLoad: 50 }
     ];
 
     // Real Notice Data (Integrated from SAM_BD_01_01 source logic)
@@ -105,13 +101,71 @@ document.addEventListener('DOMContentLoaded', () => {
                             display: true,
                             min: 0, max: 100,
                             grid: { color: 'rgba(51, 65, 85, 0.2)' },
-                            ticks: { color: '#475569', font: { size: 8 } }
+                            ticks: {
+                                color: '#94a3b8',
+                                font: { size: 8 },
+                                mirror: true,
+                                padding: -10
+                            }
                         }
+                    },
+                    layout: {
+                        padding: { left: -5, right: 0, top: 0, bottom: 0 }
                     }
                 }
             };
             this.charts.cpu = new Chart(document.getElementById('chart-cpu').getContext('2d'), JSON.parse(JSON.stringify(chartOptions)));
-            this.charts.latency = new Chart(document.getElementById('chart-latency').getContext('2d'), JSON.parse(JSON.stringify(chartOptions)));
+
+            // 2.2 Registration Status Chart (7 Days Bar Chart)
+            const signupCtx = document.getElementById('chart-signup').getContext('2d');
+            const last7Days = Array.from({ length: 7 }, (_, i) => {
+                const d = new Date();
+                d.setDate(d.getDate() - (6 - i));
+                return `${d.getMonth() + 1}/${d.getDate()}`;
+            });
+
+            this.charts.signup = new Chart(signupCtx, {
+                type: 'bar',
+                data: {
+                    labels: last7Days,
+                    datasets: [{
+                        label: '등록 건 수',
+                        data: [12, 18, 15, 22, 19, 25, 14], // Simulated dynamic data
+                        backgroundColor: 'rgba(20, 184, 166, 0.6)',
+                        borderColor: '#14b8a6',
+                        borderWidth: 1,
+                        borderRadius: 2,
+                        maxBarThickness: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: true }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#475569', font: { size: 10 } }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(51, 65, 85, 0.2)' },
+                            ticks: {
+                                color: '#94a3b8',
+                                font: { size: 10 },
+                                mirror: true,
+                                padding: -10
+                            }
+                        }
+                    },
+                    layout: {
+                        padding: { left: -5, right: 0, top: 10, bottom: 0 }
+                    }
+                }
+            });
         },
 
         updateMetrics() {
@@ -120,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 node.currentLat = Math.min(100, Math.max(0, (node.baseLoad / 1.5) + (Math.random() * 8 - 4)));
             });
             this.updateEnvelopeChart(this.charts.cpu, 'currentCPU');
-            this.updateEnvelopeChart(this.charts.latency, 'currentLat');
+            // this.updateEnvelopeChart(this.charts.signup, 'currentLat'); // Not needed for bar chart
             this.updateRankingList();
         },
 
@@ -211,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const container = document.getElementById('dashboard-notice-list');
             if (!container) return;
 
-            container.innerHTML = notices.slice(0, 4).map(n => `
+            container.innerHTML = notices.slice(0, 3).map(n => `
                 <div class="db-feed-item" onclick="location.href='SAM_BD_01_01.html?id=${n.id}'">
                     <div class="db-notice-link text-white mb-1">${n.title}</div>
                     <div class="db-notice-date">${n.regDate}</div>
@@ -234,4 +288,40 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     Dashboard.init();
+
+    // Health Info Modal Logic
+    window.openHealthInfoModal = function () {
+        const modal = document.getElementById('health-info-modal');
+        if (modal) {
+            modal.classList.add('active');
+            if (window.lucide) {
+                window.lucide.createIcons({
+                    nameAttr: 'data-lucide',
+                    root: modal
+                });
+            }
+        }
+    };
+
+    window.closeHealthInfoModal = function () {
+        const modal = document.getElementById('health-info-modal');
+        if (modal) {
+            modal.classList.remove('active');
+        }
+    };
+
+    /**
+     * Chart Legend Horizontal Scroll
+     * @param {string} id - Legend container ID
+     * @param {number} distance - Scroll distance
+     */
+    window.scrollLegend = function (id, distance) {
+        const container = document.getElementById(id);
+        if (container) {
+            container.scrollBy({
+                left: distance,
+                behavior: 'smooth'
+            });
+        }
+    };
 });
