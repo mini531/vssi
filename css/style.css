@@ -348,7 +348,7 @@ html {
    Custom Scrollbar (Global)
    ========================= */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
   height: 8px;
 }
 
@@ -1208,8 +1208,6 @@ html {
 .search-panel-content {
   padding: 0.75rem 1rem;
   background: rgba(15, 23, 42, 0.4);
-  border: 1px solid rgba(30, 41, 59, 0.5);
-  border-radius: 4px;
 }
 
 .search-row {
@@ -1288,7 +1286,6 @@ html {
   flex-direction: column;
   background: #0b101b;
   border: 1px solid #1e293b;
-  border-radius: 4px;
 }
 
 .split-pane-right {
@@ -1297,7 +1294,6 @@ html {
   flex-direction: column;
   background: #0b101b;
   border: 1px solid #1e293b;
-  border-radius: 4px;
   overflow: hidden;
   position: relative;
 }
