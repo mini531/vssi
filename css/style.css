@@ -146,8 +146,9 @@
 }
 
 /* Sidebar Width Utilities */
-.w-56 {
-  width: 14rem !important;
+.collapsed {
+  width: 0 !important;
+  border-right-color: transparent !important;
 }
 
 .w-0 {
@@ -160,16 +161,17 @@
 
 /* --- Sidebar Standardization --- */
 .sidebar-container {
-  position: relative;
-  z-index: 40;
+  width: 14rem;
   height: 100%;
   background-color: #0b101b;
   border-right: 1px solid #1e293b;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  transition: all 0.3s;
+  position: relative;
+  z-index: 40;
+  overflow: hidden;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Base Navigation Button */
@@ -4037,23 +4039,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 
 /* --- Sidebar Standardization --- */
-.sidebar-container {
-  position: relative;
-  z-index: 40;
-  height: 100%;
-  background-color: #0b101b;
-  /* bg-[#0b101b] */
-  border-right: 1px solid #1e293b;
-
-  border: none;
-
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  transition: all 0.3s;
-  /* width: 0; REMOVED to allow utility classes to control width */
-}
+/* Sidebar Standardization - Consolidated to line 162 */
 
 /* Base Navigation Button */
 .sidebar-group-label {
@@ -4297,20 +4283,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: #ffffff;
 }
 
-.sidebar-container {
-  width: 14rem;
-
-  background-color: #0b101b;
-  /* bg-[#0b101b] */
-  border-right: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-  z-index: 50;
-}
+/* Sidebar Container - Consolidated to line 162 */
 
 .sidebar-nav {
   padding-top: 1rem;
