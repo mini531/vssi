@@ -4298,7 +4298,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .sidebar-container {
-  width: 16rem;
+  width: 14rem;
 
   background-color: #0b101b;
   /* bg-[#0b101b] */
@@ -5771,7 +5771,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   gap: 1.5rem;
 }
 
-.dashboard-layout-grid>.col-main {
+.dashboard-layout-grid>.col-main,
+.dashboard-layout-grid>.col-side {
   grid-column: span 12 / span 12;
 }
 
