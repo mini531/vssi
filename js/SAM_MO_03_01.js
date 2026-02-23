@@ -245,7 +245,7 @@ const ChartManager = {
 
     startNetworkMonitoring: function () {
         this.stopAll();
-        this.runChart('chart-network', 'val-net-current', 'net');
+        this.runChart('chart-network', 'val-net', 'net');
     },
 
     stopAll: function () {

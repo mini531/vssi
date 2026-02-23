@@ -42,7 +42,7 @@ const screenData = {
     ],
     "SAMS": [
         { category: "메인 메뉴", menu1: "대시보드", menu2: "-", id: "SAM_DB_01_01", name: "SAMS 대시보드", type: "일반", date: "2026년", remarks: "" },
-        { category: "메인 메뉴", menu1: "대시보드", menu2: "-", id: "SAM_DB_01_02", name: "시스템 종합 건전성 안내", type: "모달", date: "2026년", remarks: "" },
+        { category: "메인 메뉴", menu1: "대시보드", menu2: "-", id: "SAM_DB_01_02", name: "시스템 종합 건전성 안내(SAM_DB_01_01에 포함)", type: "모달", date: "2026년", remarks: "" },
         { category: "메인 메뉴", menu1: "모니터링", menu2: "-", id: "SAM_MO_01_01", name: "인프라 통합 현황", type: "일반", date: "2026년", remarks: "통합/연동/단독 서버 리스트 및 상태 값" },
         { category: "메인 메뉴", menu1: "모니터링", menu2: "-", id: "SAM_MO_01_02", name: "하드웨어 현황 (SAM_MO_01_01에 포함)", type: "모달", date: "2026년", remarks: "" },
         { category: "메인 메뉴", menu1: "모니터링", menu2: "-", id: "SAM_MO_01_03", name: "네트워크 현황 (SAM_MO_01_01에 포함)", type: "모달", date: "2026년", remarks: "" },
@@ -63,7 +63,7 @@ const screenData = {
         { category: "메인 메뉴", menu1: "로그 조회", menu2: "사용자 활동 로그", id: "SAM_LG_02_01", name: "사용자 활동 로그", type: "일반", date: "2026년~2027년", remarks: "2026년 로그인/로그아웃 로그 구현 | 2027년 C/U/D 행위 이력 추적 (로그인, 설정변경, 데이터 수정 등), 로그 조회, 다운로드" },
         { category: "메인 메뉴", menu1: "시스템 운영", menu2: "코드 관리", id: "SAM_SY_01_01", name: "공통 코드 관리", type: "일반", date: "2026년", remarks: "시스템 공통 코드 그룹 관리" },
         { category: "메인 메뉴", menu1: "시스템 운영", menu2: "코드 관리", id: "SAM_SY_01_02", name: "코드 등록 (SAM_SY_01_01에 포함)", type: "모달", date: "2026년", remarks: "좌측: 코드 목록 / 우측: 코드 정보" },
-        { category: "메인 메뉴", menu1: "시스템 운영", menu2: "장애 관리", id: "SAM_SY_02_01", name: "장애 이벤트 목록", type: "일반", date: "2026년", remarks: "실시간 장애 접수 현황" },
+        { category: "메인 메뉴", menu1: "시스템 운영", menu2: "장애 관리", id: "SAM_SY_02_01", name: "장애 관리", type: "일반", date: "2026년", remarks: "실시간 장애 접수 현황" },
         { category: "메인 메뉴", menu1: "시스템 운영", menu2: "장애 관리", id: "SAM_SY_02_02", name: "장애 조치 등록 (SAM_SY_02_01에 포함)", type: "모달", date: "2026년", remarks: "조치 내용 및 결과 입력" },
         { category: "메인 메뉴", menu1: "시스템 운영", menu2: "장애 관리", id: "SAM_SY_02_03", name: "알림/통지 설정", type: "일반", date: "2027년", remarks: "등급별 SMS/Email 수신자 설정" },
         { category: "메인 메뉴", menu1: "시스템 운영", menu2: "백업 설정", id: "SAM_SY_03_01", name: "백업 설정", type: "일반", date: "2026년", remarks: "데이터 백업 정책 설정 : 백업 주기(일/주), 보관 기간 설정, 백업 스케줄 설정" },
