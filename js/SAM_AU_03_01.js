@@ -34,6 +34,12 @@ document.addEventListener('DOMContentLoaded', function () {
         // Toggle buttons
         document.getElementById('view-mode-buttons').classList.add('hidden');
         document.getElementById('edit-mode-buttons').classList.remove('hidden');
+
+        // Update Title
+        document.getElementById('pane-title').textContent = '보안 정책 설정 수정';
+
+        // Show required marks
+        document.querySelectorAll('.required-mark').forEach(el => el.classList.remove('hidden'));
     };
 
     // Cancel Edit
@@ -59,6 +65,12 @@ document.addEventListener('DOMContentLoaded', function () {
         // Toggle buttons
         document.getElementById('edit-mode-buttons').classList.add('hidden');
         document.getElementById('view-mode-buttons').classList.remove('hidden');
+
+        // Update Title
+        document.getElementById('pane-title').textContent = '보안 정책 정보';
+
+        // Hide required marks
+        document.querySelectorAll('.required-mark').forEach(el => el.classList.add('hidden'));
     };
 
     // Save Changes (Validation and Show Confirm)
@@ -129,6 +141,12 @@ document.addEventListener('DOMContentLoaded', function () {
         // Toggle buttons
         document.getElementById('edit-mode-buttons').classList.add('hidden');
         document.getElementById('view-mode-buttons').classList.remove('hidden');
+
+        // Update Title
+        document.getElementById('pane-title').textContent = '보안 정책 정보';
+
+        // Hide required marks
+        document.querySelectorAll('.required-mark').forEach(el => el.classList.add('hidden'));
 
         // Close confirm modal
         document.getElementById('confirm-modal').classList.remove('active');

@@ -35,7 +35,7 @@
                         <div class="pane-header select-none cursor-default">
                             <div class="search-panel-title-group">
                                 <i data-lucide="shield" class="status-card-icon text-success"></i>
-                                <span class="search-panel-title">보안 정책 설정</span>
+                                <span class="search-panel-title" id="pane-title">보안 정책 정보</span>
                             </div>
 
                             <!-- Buttons Group -->
@@ -66,7 +66,8 @@
                                 <div class="settings-grid">
                                     <!-- Session Timeout Setting -->
                                     <div>
-                                        <label class="form-label">세션 타임아웃 시간 (분)</label>
+                                        <label class="form-label">세션 타임아웃 시간 (분)<span
+                                                class="text-error required-mark hidden"> *</span></label>
                                         <input type="number" id="session-timeout" class="form-input" placeholder="30"
                                             min="1" max="1440" disabled>
                                         <div id="error-session-timeout" class="form-error"></div>
@@ -75,7 +76,8 @@
 
                                     <!-- Password Expiry Period -->
                                     <div>
-                                        <label class="form-label">비밀번호 만료 기간 (일)</label>
+                                        <label class="form-label">비밀번호 만료 기간 (일)<span
+                                                class="text-error required-mark hidden"> *</span></label>
                                         <input type="number" id="password-expiry" class="form-input" placeholder="90"
                                             min="0" max="365" disabled>
                                         <div id="error-password-expiry" class="form-error"></div>
@@ -84,7 +86,8 @@
 
                                     <!-- Login Failure Limit -->
                                     <div>
-                                        <label class="form-label">로그인 실패 허용 횟수</label>
+                                        <label class="form-label">로그인 실패 허용 횟수<span
+                                                class="text-error required-mark hidden"> *</span></label>
                                         <input type="number" id="login-failure-limit" class="form-input" placeholder="5"
                                             min="3" max="10" disabled>
                                         <div id="error-login-failure-limit" class="form-error"></div>
