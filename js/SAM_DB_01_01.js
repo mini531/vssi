@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="db-progress-container">
                             <div class="db-progress-fill ${barColorClass}" style="width: ${val}%"></div>
                         </div>
-                        <span class="db-rank-value ${textColorClass}">${Math.round(val)}${type === 'CPU' ? '%' : ''}</span>
+                        <span class="db-rank-value ${textColorClass}">${Math.round(val)}${type === 'CPU' ? '%' : 's'}</span>
                     </div>
                 </div>
             `;

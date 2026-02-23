@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if ([
                 'SAM_AU_01_02', 'SAM_US_01_02', 'SAM_US_01_03', 'SAM_US_01_04',
                 'SAM_US_02_01', 'SAM_SY_01_02', 'SAM_SY_02_02', 'SAM_BD_01_02', 'SAM_BD_01_03',
-                'SAM_MO_01_02', 'SAM_MO_01_03'
+                'SAM_DB_01_02', 'SAM_MO_01_02', 'SAM_MO_01_03'
             ].includes(item.id)) {
                 // Special case for Included Modal - Primary Color but not a link
                 idClass = 'screen-id-modal';

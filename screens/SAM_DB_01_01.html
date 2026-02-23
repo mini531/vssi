@@ -150,8 +150,7 @@
                                         <i data-lucide="trending-up" class="w-5 h-5 text-error"></i>
                                         <h2 class="db-section-title">노드별 주요 부하/지연 순위 (Worst 5)</h2>
                                     </div>
-                                    <span class="db-card-label">최근 갱신: 2026.02.12 <span
-                                            class="db-card-value-sm">12:10:00</span></span>
+                                    <span class="db-card-label">최근 갱신: 2026.02.12 12:10:00</span>
                                 </header>
                                 <div class="db-chart-row gap-4 xl:gap-12">
                                     <div class="dashboard-section gap-2">
@@ -213,6 +212,10 @@
                                             <i data-lucide="cpu" class="w-5 h-5 text-success"></i>
                                             <h2 class="db-section-title">인프라 그룹별 최대 CPU 부하 추이</h2>
                                         </div>
+                                        <button class="btn-xs btn-secondary"
+                                            onclick="location.href='SAM_MO_01_01.html'">
+                                            더 보기
+                                        </button>
                                     </header>
                                     <div class="sparkline-container">
                                         <canvas id="chart-cpu"></canvas>
@@ -264,6 +267,10 @@
                                             <i data-lucide="user-plus" class="w-5 h-5 text-success"></i>
                                             <h2 class="db-section-title">사용자 등록 현황</h2>
                                         </div>
+                                        <button class="btn-xs btn-secondary"
+                                            onclick="location.href='SAM_US_01_01.html'">
+                                            더 보기
+                                        </button>
                                     </header>
                                     <div class="sparkline-container">
                                         <canvas id="chart-signup"></canvas>
