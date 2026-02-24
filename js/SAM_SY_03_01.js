@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function () {
         backupTime: '02:00',
         retentionPeriod: 30,
         encryptionEnabled: false,
-        encryptionPassword: '',
         backupDays: ['mon', 'wed', 'fri'], // For weekly backups
         backupDayMonthly: '1', // For monthly backups
         backupTargets: ['ivs', 'vos'], // New: node selection
@@ -26,7 +25,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('backup-time').value = currentSettings.backupTime;
         document.getElementById('retention-period').value = currentSettings.retentionPeriod;
         document.getElementById('encryption-enabled').checked = currentSettings.encryptionEnabled;
-        document.getElementById('encryption-password').value = currentSettings.encryptionPassword;
         document.getElementById('backup-day-monthly').value = currentSettings.backupDayMonthly;
         document.getElementById('auto-backup-enabled').checked = currentSettings.autoBackupEnabled;
 
@@ -47,21 +45,10 @@ document.addEventListener('DOMContentLoaded', function () {
         // Show/hide cycle specific inputs
         toggleCycleSpecificInputs();
 
-        // Show/hide encryption input
-        toggleEncryptionInput();
+
     }
 
-    // Toggle encryption password input visibility
-    window.toggleEncryptionInput = function () {
-        const enabled = document.getElementById('encryption-enabled').checked;
-        const passwordInput = document.getElementById('encryption-password');
 
-        if (enabled && !document.getElementById('encryption-enabled').disabled) {
-            passwordInput.classList.remove('hidden');
-        } else {
-            passwordInput.classList.add('hidden');
-        }
-    };
 
     // Toggle inputs based on backup cycle
     function toggleCycleSpecificInputs() {
@@ -101,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Clear all errors
     function clearAllErrors() {
-        ['backup-cycle', 'backup-time', 'retention-period', 'backup-days', 'backup-targets', 'encryption-password', 'backup-day-monthly'].forEach(fieldId => {
+        ['backup-cycle', 'backup-time', 'retention-period', 'backup-days', 'backup-targets', 'backup-day-monthly'].forEach(fieldId => {
             resetError(fieldId);
         });
     }
@@ -113,12 +100,11 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('backup-time').disabled = false;
         document.getElementById('retention-period').disabled = false;
         document.getElementById('encryption-enabled').disabled = false;
-        document.getElementById('encryption-password').disabled = false;
+
         document.getElementById('backup-day-monthly').disabled = false;
         document.getElementById('auto-backup-enabled').disabled = false;
 
-        // Refresh encryption input state
-        toggleEncryptionInput();
+
 
         // Enable weekly day dropdown
         document.getElementById('weekly-days-view').classList.add('hidden');
@@ -142,6 +128,10 @@ document.addEventListener('DOMContentLoaded', function () {
         // Toggle buttons
         document.getElementById('view-mode-buttons').classList.add('hidden');
         document.getElementById('edit-mode-buttons').classList.remove('hidden');
+
+        // Update Title
+        document.getElementById('card-title').innerText = '백업 설정 수정';
+
         lucide.createIcons();
     };
 
@@ -158,12 +148,11 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('backup-time').disabled = true;
         document.getElementById('retention-period').disabled = true;
         document.getElementById('encryption-enabled').disabled = true;
-        document.getElementById('encryption-password').disabled = true;
+
         document.getElementById('backup-day-monthly').disabled = true;
         document.getElementById('auto-backup-enabled').disabled = true;
 
-        // Refresh encryption input state
-        toggleEncryptionInput();
+
 
         // Disable weekly backup days
         document.getElementById('weekly-days-view').classList.remove('hidden');
@@ -193,6 +182,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // Toggle buttons
         document.getElementById('edit-mode-buttons').classList.add('hidden');
         document.getElementById('view-mode-buttons').classList.remove('hidden');
+
+        // Update Title
+        document.getElementById('card-title').innerText = '백업 설정 정보';
     };
 
     // Save Changes (Validation and Show Confirm)
@@ -219,14 +211,7 @@ document.addEventListener('DOMContentLoaded', function () {
             hasError = true;
         }
 
-        // Validation: Encryption Password
-        if (document.getElementById('encryption-enabled').checked) {
-            const password = document.getElementById('encryption-password').value;
-            if (!password) {
-                setError('encryption-password', '암호화 키를 입력해 주세요.');
-                hasError = true;
-            }
-        }
+
 
         // Validation: Weekly days (only if cycle is weekly)
         if (backupCycle === 'weekly') {
@@ -258,7 +243,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const backupTime = document.getElementById('backup-time').value;
         const retentionPeriod = parseInt(document.getElementById('retention-period').value);
         const encryptionEnabled = document.getElementById('encryption-enabled').checked;
-        const encryptionPassword = document.getElementById('encryption-password').value;
         const backupDayMonthly = document.getElementById('backup-day-monthly').value;
         const autoBackupEnabled = document.getElementById('auto-backup-enabled').checked;
 
@@ -276,7 +260,6 @@ document.addEventListener('DOMContentLoaded', function () {
             backupTime,
             retentionPeriod,
             encryptionEnabled,
-            encryptionPassword,
             backupDays,
             backupDayMonthly,
             backupTargets,
@@ -288,7 +271,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('backup-time').disabled = true;
         document.getElementById('retention-period').disabled = true;
         document.getElementById('encryption-enabled').disabled = true;
-        document.getElementById('encryption-password').disabled = true;
         document.getElementById('backup-day-monthly').disabled = true;
         document.getElementById('auto-backup-enabled').disabled = true;
 
@@ -318,6 +300,11 @@ document.addEventListener('DOMContentLoaded', function () {
         // Toggle buttons
         document.getElementById('edit-mode-buttons').classList.add('hidden');
         document.getElementById('view-mode-buttons').classList.remove('hidden');
+
+        // Update Title
+        document.getElementById('card-title').innerText = '백업 설정 정보';
+
+
 
         // Close confirm modal
         document.getElementById('confirm-modal').classList.remove('active');

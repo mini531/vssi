@@ -35,7 +35,7 @@
                         <div class="pane-header select-none cursor-default">
                             <div class="search-panel-title-group">
                                 <i data-lucide="database" class="status-card-icon text-success"></i>
-                                <span class="search-panel-title">백업 설정</span>
+                                <span class="search-panel-title" id="card-title">백업 설정 정보</span>
                             </div>
 
                             <!-- Buttons Group -->
@@ -253,14 +253,10 @@
                                         <div class="flex items-center h-10">
                                             <label class="perm-checkbox-group">
                                                 <input type="checkbox" id="encryption-enabled"
-                                                    class="custom-checkbox form-checkbox" disabled
-                                                    onchange="toggleEncryptionInput()">
+                                                    class="custom-checkbox form-checkbox" disabled>
                                                 <span class="perm-checkbox-label">암호화 사용</span>
                                             </label>
                                         </div>
-                                        <input type="password" id="encryption-password" class="form-input hidden"
-                                            placeholder="암호화 키 입력" disabled oninput="resetError('encryption-password')">
-                                        <div id="error-encryption-password" class="form-error"></div>
                                     </div>
 
                                     <!-- Auto Backup Enable -->
@@ -315,7 +311,7 @@
                 <i data-lucide="check-circle" width="64" height="64" class="text-icon-success"></i>
             </div>
             <h3 class="modal-title">저장 완료</h3>
-            <p class="modal-desc">백업 설정이 성공적으로 저장되었습니다.</p>
+            <p class="modal-desc">저장 완료되었습니다.</p>
             <div class="modal-btn-group">
                 <button onclick="closeSuccessModal()" class="btn-modal-success">확인</button>
             </div>
