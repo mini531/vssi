@@ -3892,6 +3892,22 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   }
 }
 
+/* Dashboard: Full-width buttons on mobile */
+@media (max-width: 768px) {
+
+  .db-card-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+  }
+
+  .db-card-header .btn-xs,
+  .pane-header .btn-xs {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
 
 /* Table Utilities (Atomic) */
 .text-left {
