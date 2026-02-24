@@ -58,7 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'SAM_SY_03_01',
         'SAM_BD_01_01',
         'SAM_US_03_01',
-        'COM_LG_03_02'
+        'COM_LG_03_01',
+        'COM_LG_03_02',
+        'COM_LG_03_03'
     ];
 
     function init() {
@@ -138,6 +140,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Populate table
         data.forEach((item, index) => {
+            // Grouping Logic: Check if hierarchy changed
+            const categoryChanged = item.category !== prevCategory;
+            const menu1Changed = categoryChanged || item.menu1 !== prevMenu1;
+            const menu2Changed = menu1Changed || item.menu2 !== prevMenu2;
+
+            // 1. Insert Category Header (Level 1) - Only if it actually changed
+            if (categoryChanged) {
+                const catTr = document.createElement('tr');
+                catTr.className = 'table-group-header level-1';
+                catTr.innerHTML = `<td colspan="8"><div class="group-header-content">${item.category}</div></td>`;
+                tableBody.appendChild(catTr);
+            }
+
+            // 2. Insert Menu 1 Header (Level 2) - Only if changed and not a hyphen
+            if (menu1Changed && item.menu1 !== '-') {
+                const m1Tr = document.createElement('tr');
+                m1Tr.className = 'table-group-header level-2';
+                m1Tr.innerHTML = `<td colspan="8"><div class="group-header-content">${item.menu1}</div></td>`;
+                tableBody.appendChild(m1Tr);
+            }
+
+            // 3. Insert Menu 2 Header (Level 3) - Only if changed and not a hyphen
+            if (menu2Changed && item.menu2 !== '-') {
+                const m2Tr = document.createElement('tr');
+                m2Tr.className = 'table-group-header level-3';
+                m2Tr.innerHTML = `<td colspan="8"><div class="group-header-content">${item.menu2}</div></td>`;
+                tableBody.appendChild(m2Tr);
+            }
+
             const tr = document.createElement('tr');
             const delayClass = index < 20 ? `animate-fade-in-delay-${index + 1}` : 'animate-fade-in';
             tr.className = `data-table-row ${delayClass}`;
@@ -164,28 +195,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 idTitle = 'title="Not Implemented"';
             }
 
-            // Grouping Logic: Dim text if same as previous row
-            const categoryChanged = item.category !== prevCategory;
-            const menu1Changed = categoryChanged || item.menu1 !== prevMenu1;
-            const menu2Changed = menu1Changed || item.menu2 !== prevMenu2;
-
             const yearHtml = getYearHtml(item.date);
 
+            // Hyphen Removal for mobile display
+            const displayRemarks = item.remarks === '-' ? '' : item.remarks;
+            const remarksClass = displayRemarks ? '' : 'hidden-mobile-val';
+
             tr.innerHTML = `
-                <td class="${categoryChanged ? '' : 'opacity-20'}">${item.category}</td>
-                <td class="${menu1Changed ? '' : 'opacity-20'}">${item.menu1}</td>
-                <td class="${menu2Changed ? '' : 'opacity-20'}">${item.menu2}</td>
-                <td class="${idClass}" ${idOnClick} ${idTitle}>
+                <td class="col-group col-category ${categoryChanged ? '' : 'opacity-20'}">${item.category}</td>
+                <td class="col-group col-menu1 ${menu1Changed ? '' : 'opacity-20'}">${item.menu1}</td>
+                <td class="col-group col-menu2 ${menu2Changed ? '' : 'opacity-20'}">${item.menu2}</td>
+                <td class="col-screen-id ${idClass}" ${idOnClick} ${idTitle}>
                     ${item.id}
                 </td>
-                <td>${item.name}</td>
-                <td class="td-center">
+                <td class="col-screen-name">${item.name}</td>
+                <td class="col-type td-center">
                     <span class="badge ${getTypeClass(item.type)}">
                         ${item.type}
                     </span>
                 </td>
-                <td class="td-date">${yearHtml}</td>
-                <td class="td-remarks">${item.remarks}</td>
+                <td class="col-date td-date">${yearHtml}</td>
+                <td class="col-remarks td-remarks ${remarksClass}">${displayRemarks}</td>
             `;
             tableBody.appendChild(tr);
 
@@ -194,6 +224,11 @@ document.addEventListener('DOMContentLoaded', () => {
             prevMenu1 = item.menu1;
             prevMenu2 = item.menu2;
         });
+
+        // Re-init icons for newly added group headers
+        if (window.lucide) {
+            window.lucide.createIcons();
+        }
     }
 
     function getTypeClass(type) {

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSSI - Password Reset</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="auth-body auth-page-scroll app-bg scrollbar-hide">
+    <div class="auth-scroll-view">
+
+        <!-- Upper Branding Section -->
+        <div class="brand-container">
+            <h1 class="brand-text">VSSI</h1>
+            <p class="brand-sub">Vertiport Standards and Safety Infrastructure</p>
+            <p class="brand-desc">K-UAM 상용화를 위한 버티포트 표준 및 통합운용 플랫폼</p>
+        </div>
+
+        <!-- Password Reset Card -->
+        <div class="glass-card-auth auth-card-container">
+
+            <div class="auth-card-body">
+                <!-- Header -->
+                <div class="auth-card-header">
+                    <h2 class="auth-card-title">비밀번호 재설정</h2>
+                </div>
+
+                <!-- Form Fields -->
+                <div class="spacing-y-6">
+
+                    <!-- Password -->
+                    <div>
+                        <label class="form-label">비밀번호 <span>*</span></label>
+                        <input type="password" id="password" placeholder="비밀번호를 입력해 주세요." class="form-input"
+                            oninput="resetError('password')">
+                        <p class="input-guide-text">영문 대소문자, 숫자, 특수문자를 혼용하여 8자 이상</p>
+                        <div id="error-password" class="form-error"></div>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div>
+                        <label class="form-label">비밀번호 확인 <span>*</span></label>
+                        <input type="password" id="password-confirm" placeholder="비밀번호를 다시 입력해 주세요." class="form-input"
+                            oninput="resetError('password-confirm')">
+                        <div id="error-password-confirm" class="form-error"></div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="pt-standard spacing-y-3">
+                        <button onclick="handleReset()" class="btn-primary">
+                            확인
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Background Elements -->
+    <div class="auth-bg-decoration">
+        <div class="auth-bg-blob-blue"></div>
+        <div class="auth-bg-blob-teal"></div>
+    </div>
+
+    <!-- Modal Component -->
+    <div id="modal-backdrop" class="modal-overlay">
+        <div class="modal-dialog">
+            <!-- Icon -->
+            <div id="modal-icon" class="modal-icon"></div>
+
+            <h3 id="modal-title" class="modal-title"></h3>
+            <p id="modal-desc" class="modal-desc"></p>
+
+            <!-- Buttons -->
+            <div id="modal-buttons" class="modal-btn-group"></div>
+        </div>
+    </div>
+
+    <script>
+        // Init Icons
+        lucide.createIcons();
+
+        // Helpers
+        const getVal = (id) => document.getElementById(id).value.trim();
+        const setErr = (id, msg) => {
+            const errDiv = document.getElementById(`error-${id}`);
+            if (errDiv) errDiv.innerText = msg;
+            const input = document.getElementById(id);
+            if (input) input.classList.add('error');
+        };
+        const resetError = (id) => {
+            const errDiv = document.getElementById(`error-${id}`);
+            if (errDiv) errDiv.innerText = '';
+            const input = document.getElementById(id);
+            if (input) input.classList.remove('error');
+        };
+
+        // Modal Logic
+        function showModal(type, callback) {
+            const backdrop = document.getElementById('modal-backdrop');
+            const iconEl = document.getElementById('modal-icon');
+            const titleEl = document.getElementById('modal-title');
+            const descEl = document.getElementById('modal-desc');
+            const btnsEl = document.getElementById('modal-buttons');
+
+            let content = {};
+
+            if (type === 'confirm') {
+                content = {
+                    icon: '<div class="modal-icon info"><i data-lucide="help-circle" width="64" height="64" class="text-icon-info"></i></div>',
+                    title: '설정 확인',
+                    desc: '입력하신 비밀번호로 설정 하시겠습니까?',
+                    btns: `
+                        <button onclick="closeModal()" class="btn-flex btn-modal-secondary">취소</button>
+                        <button onclick="confirmAction()" class="btn-flex btn-modal-primary">확인</button>
+                    `
+                };
+                window.confirmAction = () => {
+                    closeModal();
+                    if (callback) callback();
+                };
+            } else if (type === 'success') {
+                content = {
+                    icon: '<div class="modal-icon success"><i data-lucide="check-circle" width="64" height="64" class="text-icon-success"></i></div>',
+                    title: '설정 완료',
+                    desc: '비밀번호 설정이 완료되었습니다. 로그인 후 이용해 주세요.',
+                    btns: `<button onclick="goToLogin()" class="btn-modal-success">확인</button>`
+                };
+            }
+
+            iconEl.innerHTML = content.icon;
+            titleEl.innerText = content.title;
+            descEl.innerText = content.desc;
+            btnsEl.innerHTML = content.btns;
+
+            backdrop.classList.add('active');
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            document.getElementById('modal-backdrop').classList.remove('active');
+        }
+
+        function goToLogin() {
+            window.location.href = 'COM_LG_01_01.html';
+        }
+
+        // Action Logic
+        function handleReset() {
+            const pw = getVal('password');
+            const pwConfirm = getVal('password-confirm');
+
+            let hasError = false;
+
+            // Validation Password
+            if (!pw) {
+                setErr('password', '비밀번호를 입력해 주세요.');
+                hasError = true;
+            } else {
+                // Basic format check (8 chars min) - based on guide text
+                if (pw.length < 8) {
+                    setErr('password', '영문 대소문자, 숫자, 특수문자를 혼용하여 8자 이상 입력해 주세요');
+                    hasError = true;
+                }
+            }
+
+            // Validation Confirm
+            if (!pwConfirm) {
+                setErr('password-confirm', '비밀번호를 한 번 더 입력해 주세요.');
+                hasError = true;
+            } else if (pw && pw !== pwConfirm) {
+                setErr('password-confirm', '비밀번호를 확인해 주세요.');
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            showModal('confirm', () => {
+                setTimeout(() => {
+                    showModal('success');
+                }, 300);
+            });
+        }
+    </script>
+</body>
+
+</html>
