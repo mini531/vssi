@@ -130,7 +130,17 @@ function selectCodeGroup(group, row) {
     // Populate Group Info
     document.getElementById('info-group-id').value = group.id;
     document.getElementById('info-group-name').value = group.name;
-    document.getElementById('info-group-status').value = group.status;
+
+    // Render Status as Badge
+    const statusContainer = document.getElementById('info-group-status-container');
+    if (statusContainer) {
+        statusContainer.innerHTML = `
+            <span class="badge ${group.status === '사용' ? 'badge-success' : 'badge-default'}">
+                ${group.status}
+            </span>
+        `;
+    }
+
     document.getElementById('info-group-desc').value = group.desc || '-';
 
     const viewHeader = document.getElementById('view-header-group');
@@ -450,7 +460,7 @@ window.deleteGroup = function (groupId) {
     const desc = document.getElementById('confirm-modal-desc');
 
     title.innerText = '코드 그룹 삭제';
-    desc.innerText = `코드 그룹 [${groupId}]을(를) 삭제하시겠습니까?\n내부의 모든 코드도 함께 삭제됩니다.`;
+    desc.innerText = `코드 그룹 [${groupId}]을 삭제하시겠습니까?\n내부의 모든 코드도 함께 삭제됩니다.`;
 
     modal.classList.add('active');
     lucide.createIcons();
@@ -690,7 +700,7 @@ window.confirmSaveRegistration = function () {
             //     document.getElementById('detail-content').classList.add('hidden');
             // }
         }
-        document.getElementById('success-message').innerText = '코드 그룹 삭제가 완료되었습니다.';
+        document.getElementById('success-message').innerText = '삭제되었습니다.';
     } else if (currentAction === 'DELETE_MULTIPLE') {
         const checkboxes = document.querySelectorAll('.code-checkbox:checked');
         const selected = Array.from(checkboxes).map(cb => cb.value);
