@@ -329,19 +329,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const regDateFormatted = regDateFull.substring(0, 19);
 
             tr.innerHTML = `
-                <td>
+                <td data-label="Title">
                     <div class="flex items-center gap-1">
                         ${notice.title}
                         ${notice.attachments.length > 0 ? '<i data-lucide="paperclip" class="w-3 h-3 text-gray-400"></i>' : ''}
                     </div>
                 </td>
-                <td class="td-center">
+                <td class="td-center" data-label="Visibility">
                     <span class="badge ${notice.isVisible ? 'badge-success' : 'badge-secondary'}">
                         ${notice.isVisible ? '공개' : '비공개'}
                     </span>
                 </td>
-                <td class="td-date">${regDateFormatted}</td>
-                <td class="td-center">${registrant}</td>
+                <td class="td-date" data-label="Date">${regDateFormatted}</td>
+                <td class="td-center" data-label="Registrant">${registrant}</td>
             `;
             noticeListBody.appendChild(tr);
         });

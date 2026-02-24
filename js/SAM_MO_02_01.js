@@ -91,10 +91,10 @@ function renderHardwareList() {
             hw.status === '위험' ? 'badge-warning' : 'badge-error';
 
         row.innerHTML = `
-            <td>${hw.type}</td>
-            <td>${hw.name}</td>
-            <td class="td-center"><span class="badge ${statusBadgeClass}">${hw.status}</span></td>
-            <td class="td-date">${hw.lastUpdate}</td>
+            <td data-label="Type">${hw.type}</td>
+            <td data-label="System">${hw.name}</td>
+            <td class="td-center" data-label="Status"><span class="badge ${statusBadgeClass}">${hw.status}</span></td>
+            <td class="td-date" data-label="Date">${hw.lastUpdate}</td>
         `;
 
         tbody.appendChild(row);

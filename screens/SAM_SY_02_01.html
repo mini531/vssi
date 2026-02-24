@@ -143,6 +143,10 @@
                                         <span class="search-panel-title">장애 정보</span>
                                     </div>
                                     <div class="pane-header-right">
+                                        <button class="btn-sm btn-secondary mobile-list-btn"
+                                            onclick="closeDetailPane()">
+                                            <i data-lucide="list" class="trend-icon"></i> 목록
+                                        </button>
                                         <button class="btn-sm btn-primary" onclick="openActionModal()">
                                             <i data-lucide="plus" class="trend-icon"></i> 조치 등록
                                         </button>
@@ -151,7 +155,7 @@
 
                                 <div class="pane-content custom-scrollbar flex-1 flex flex-col">
                                     <!-- Fault Summary Card -->
-                                    <div class="grid grid-cols-2 gap-4 mb-6">
+                                    <div class="flex flex-col lg:grid lg:grid-cols-2 gap-4 mb-6">
                                         <div>
                                             <h4 class="modal-section-title">대상 시스템</h4>
                                             <div id="detail-system" class="data-value">System A</div>
@@ -168,7 +172,7 @@
                                             <h4 class="modal-section-title">진행 상태</h4>
                                             <div id="detail-status" class="data-value">조치중</div>
                                         </div>
-                                        <div class="col-span-2">
+                                        <div class="lg:col-span-2">
                                             <h4 class="modal-section-title">장애 내용</h4>
                                             <div id="detail-desc" class="data-value">DB 커넥션 풀
                                                 초과로 인한 서비스 지연 발생</div>

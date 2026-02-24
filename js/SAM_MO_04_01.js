@@ -88,11 +88,11 @@ function renderInterfaceList() {
             item.status === '지연' ? 'badge-warning' : 'badge-error';
 
         row.innerHTML = `
-            <td>${item.name}</td>
-            <td>${item.sender}</td>
-            <td>${item.receiver}</td>
-            <td class="td-center">${item.type}</td>
-            <td class="td-center"><span class="badge ${statusBadgeClass}">${item.status}</span></td>
+            <td data-label="Name">${item.name}</td>
+            <td data-label="Sender">${item.sender}</td>
+            <td data-label="Receiver">${item.receiver}</td>
+            <td class="td-center" data-label="Type">${item.type}</td>
+            <td class="td-center" data-label="Status"><span class="badge ${statusBadgeClass}">${item.status}</span></td>
         `;
 
         tbody.appendChild(row);
@@ -191,11 +191,11 @@ function renderLogs() {
         const volumeFormatted = parseFloat(log.volume).toFixed(2);
 
         row.innerHTML = `
-            <td class="td-date td-center">${log.time}</td>
-            <td class="td-number">${volumeFormatted}</td>
-            <td class="td-number">${log.latency}</td>
-            <td class="td-center"><span class="badge ${statusBadgeClass}">${log.status}</span></td>
-            <td>${log.error}</td>
+            <td class="td-date td-center" data-label="Time">${log.time}</td>
+            <td class="td-number" data-label="Volume">${volumeFormatted}</td>
+            <td class="td-number" data-label="Latency">${log.latency}</td>
+            <td class="td-center" data-label="Status"><span class="badge ${statusBadgeClass}">${log.status}</span></td>
+            <td data-label="Error">${log.error}</td>
         `;
 
         tbody.appendChild(row);

@@ -202,20 +202,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const remarksClass = displayRemarks ? '' : 'hidden-mobile-val';
 
             tr.innerHTML = `
-                <td class="col-group col-category ${categoryChanged ? '' : 'opacity-20'}">${item.category}</td>
-                <td class="col-group col-menu1 ${menu1Changed ? '' : 'opacity-20'}">${item.menu1}</td>
-                <td class="col-group col-menu2 ${menu2Changed ? '' : 'opacity-20'}">${item.menu2}</td>
-                <td class="col-screen-id ${idClass}" ${idOnClick} ${idTitle}>
+                <td class="col-group col-category ${categoryChanged ? '' : 'opacity-20'}" data-label="Category">${item.category}</td>
+                <td class="col-group col-menu1 ${menu1Changed ? '' : 'opacity-20'}" data-label="Depth 1">${item.menu1}</td>
+                <td class="col-group col-menu2 ${menu2Changed ? '' : 'opacity-20'}" data-label="Depth 2">${item.menu2}</td>
+                <td class="col-screen-id ${idClass}" ${idOnClick} ${idTitle} data-label="ID">
                     ${item.id}
                 </td>
-                <td class="col-screen-name">${item.name}</td>
-                <td class="col-type td-center">
+                <td class="col-screen-name" data-label="Screen Name">${item.name}</td>
+                <td class="col-type td-center" data-label="Type">
                     <span class="badge ${getTypeClass(item.type)}">
                         ${item.type}
                     </span>
                 </td>
-                <td class="col-date td-date">${yearHtml}</td>
-                <td class="col-remarks td-remarks ${remarksClass}">${displayRemarks}</td>
+                <td class="col-date td-date" data-label="Date">${yearHtml}</td>
+                <td class="col-remarks td-remarks ${remarksClass}" data-label="Remarks">${displayRemarks}</td>
             `;
             tableBody.appendChild(tr);
 

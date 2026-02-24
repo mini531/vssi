@@ -118,11 +118,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         <input type="checkbox" class="custom-checkbox form-checkbox user-select-checkbox" data-user-id="${user.id}">
                     </label>
                 </td>
-                <td>${user.id}</td>
-                <td>${user.name}</td>
-                <td>${user.dept}</td>
-                <td>${user.email}</td>
-                <td>${user.phone}</td>
+                <td data-label="ID">${user.id}</td>
+                <td data-label="Name">${user.name}</td>
+                <td data-label="Dept">${user.dept}</td>
+                <td data-label="Email">${user.email}</td>
+                <td data-label="Phone">${user.phone}</td>
             `;
             userListBody.appendChild(tr);
         });
@@ -395,10 +395,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         <input type="checkbox" class="custom-checkbox form-checkbox assign-user-checkbox" value="${user.id}">
                     </label>
                 </td>
-                <td>${user.id}</td>
-                <td>${user.name}</td>
-                <td>${user.dept}</td>
-                <td>${user.currentRole}</td>
+                <td data-label="ID">${user.id}</td>
+                <td data-label="Name">${user.name}</td>
+                <td data-label="Dept">${user.dept}</td>
+                <td data-label="Role">${user.currentRole}</td>
             `;
             tbody.appendChild(tr);
         });

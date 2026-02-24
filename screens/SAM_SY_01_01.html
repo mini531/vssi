@@ -38,11 +38,9 @@
                                     <i data-lucide="folder-tree" class="status-card-icon text-success"></i>
                                     <span class="search-panel-title">코드 그룹 목록</span>
                                 </div>
-                                <div class="action-btn-group">
-                                    <button class="btn-sm btn-primary" onclick="initRegistrationMode('group')">
-                                        <i data-lucide="plus" class="trend-icon"></i> 코드 그룹 등록
-                                    </button>
-                                </div>
+                                <button class="btn-sm btn-primary" onclick="initRegistrationMode('group')">
+                                    <i data-lucide="plus" class="trend-icon"></i> 코드 그룹 등록
+                                </button>
                             </div>
 
                             <div class="pane-content custom-scrollbar flex-1 flex flex-col">
@@ -179,6 +177,10 @@
                                     <div class="pane-header-right pr-2">
                                         <!-- View Mode: Group Management Buttons -->
                                         <div id="view-mode-buttons" class="action-btn-group">
+                                            <button class="btn-sm btn-secondary mobile-list-btn"
+                                                onclick="closeDetailPane()">
+                                                <i data-lucide="list" class="trend-icon"></i> 목록
+                                            </button>
                                             <button class="btn-sm btn-secondary"
                                                 onclick="editGroupInline(selectedGroup.id)">
                                                 <i data-lucide="edit-3" class="trend-icon"></i> 수정
@@ -190,6 +192,10 @@
 
                                         <!-- Reg Mode Buttons -->
                                         <div id="reg-mode-buttons" class="action-btn-group hidden">
+                                            <button class="btn-sm btn-secondary mobile-list-btn"
+                                                onclick="closeDetailPane()">
+                                                <i data-lucide="list" class="trend-icon"></i> 목록
+                                            </button>
                                             <button class="btn-sm btn-secondary" onclick="cancelRegistration()">
                                                 <i data-lucide="x" class="trend-icon"></i> 취소
                                             </button>
@@ -208,7 +214,7 @@
                                 <div class="pane-content custom-scrollbar flex-1 flex flex-col">
                                     <!-- Group Info Panel (Read-only Detail) -->
                                     <div id="group-info-view" class="mb-4">
-                                        <div class="grid grid-cols-3 gap-4">
+                                        <div class="flex flex-col lg:grid lg:grid-cols-3 gap-4">
                                             <div>
                                                 <label class="form-label">코드 그룹 ID</label>
                                                 <input type="text" id="info-group-id" class="form-input" disabled>
@@ -221,7 +227,7 @@
                                                 <label class="form-label">사용 여부</label>
                                                 <div id="info-group-status-container" class="form-status-wrap"></div>
                                             </div>
-                                            <div id="info-group-desc-container" class="col-span-3">
+                                            <div id="info-group-desc-container" class="lg:col-span-3">
                                                 <label class="form-label">설명</label>
                                                 <input type="text" id="info-group-desc" class="form-input" disabled>
                                             </div>
@@ -272,7 +278,7 @@
                                     <!-- Reg Mode: Group Form -->
                                     <div id="reg-form-view">
                                         <!-- Keep existing group form fields -->
-                                        <div class="grid grid-cols-3 gap-4">
+                                        <div class="flex flex-col lg:grid lg:grid-cols-3 gap-4">
                                             <div>
                                                 <label class="form-label">코드 그룹 ID <span id="reg-group-id-required"
                                                         class="text-error">*</span></label>
@@ -295,7 +301,7 @@
                                                     <option value="미사용">미사용</option>
                                                 </select>
                                             </div>
-                                            <div class="col-span-3">
+                                            <div class="lg:col-span-3">
                                                 <label class="form-label">설명</label>
                                                 <textarea id="reg-group-desc" class="form-input h-24 resize-none"
                                                     placeholder="코드 그룹에 대한 설명을 입력해 주세요."></textarea>
@@ -305,7 +311,7 @@
 
                                     <!-- Reg Mode: Code Form -->
                                     <div id="reg-code-form-view" class="hidden registration-form-panel">
-                                        <div class="grid grid-cols-2 gap-4">
+                                        <div class="flex flex-col lg:grid lg:grid-cols-2 gap-4">
                                             <div>
                                                 <label class="form-label">코드 ID <span id="reg-code-id-required"
                                                         class="text-error">*</span></label>
@@ -334,7 +340,7 @@
                                                     oninput="resetError('reg-code-sort')">
                                                 <div id="error-reg-code-sort" class="form-error"></div>
                                             </div>
-                                            <div class="col-span-2">
+                                            <div class="lg:col-span-2">
                                                 <label class="form-label">설명</label>
                                                 <textarea id="reg-code-desc" class="form-input h-24 resize-none"
                                                     placeholder="코드에 대한 설명을 입력하세요."></textarea>

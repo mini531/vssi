@@ -212,11 +212,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const statusName = statusObj ? statusObj.name : displayStatus;
 
             tr.innerHTML = `
-                <td>${user.id}</td>
-                <td>${user.name}</td>
-                <td>${user.dept}</td>
-                <td>${user.roleName}</td>
-                <td>${statusName}</td>
+                <td data-label="ID">${user.id}</td>
+                <td data-label="Name">${user.name}</td>
+                <td data-label="Dept">${user.dept}</td>
+                <td data-label="Role">${user.roleName}</td>
+                <td data-label="Status">${statusName}</td>
             `;
 
             // Map old 'used'/'unused' to new status if needed (migration logic)

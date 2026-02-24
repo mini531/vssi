@@ -91,14 +91,14 @@ function renderCodeGroups(groups) {
         tr.onclick = () => selectCodeGroup(group, tr);
 
         tr.innerHTML = `
-            <td>${group.id}</td>
-            <td>${group.name}</td>
-            <td class="td-center">
+            <td data-label="ID">${group.id}</td>
+            <td data-label="Name">${group.name}</td>
+            <td class="td-center" data-label="Status">
                 <span class="badge ${group.status === '사용' ? 'badge-success' : 'badge-default'}">
                     ${group.status}
                 </span>
             </td>
-            <td class="td-date">${group.updatedAt}</td>
+            <td class="td-date" data-label="Date">${group.updatedAt}</td>
         `;
         listBody.appendChild(tr);
     });
@@ -181,6 +181,9 @@ function selectCodeGroup(group, row) {
     }
 
     renderCodes(codesData[group.id] || []);
+
+    // Mobile View Toggle
+    openDetailPane();
 }
 
 // Render Codes (Right Pane)
@@ -422,9 +425,7 @@ window.initRegistrationMode = function (type) {
     document.querySelectorAll('.form-input').forEach(el => el.classList.remove('error'));
 
     // Mobile View Toggle
-    if (splitContainer && window.innerWidth < 1024) {
-        splitContainer.classList.add('show-detail');
-    }
+    openDetailPane();
 };
 
 window.editCodeInline = function (codeId) {
@@ -515,6 +516,12 @@ window.cancelRegistration = function () {
         document.getElementById('edit-header-group').classList.add('hidden');
         document.getElementById('reg-mode-buttons').classList.add('hidden');
     }
+
+    // Refresh Icons for newly added buttons
+    lucide.createIcons();
+
+    // Mobile View Toggle
+    closeDetailPane();
 };
 
 // Validation Helpers
@@ -780,10 +787,23 @@ window.closeSuccessModal = function () {
 };
 
 
-function editSelectedCode() {
-    alert('코드 수정 모달 오픈 예정입니다.');
-}
-
 function deleteSelectedCode() {
     alert('선택한 코드를 삭제하시겠습니까?');
+}
+
+// Mobile Split Pane Functions
+window.openDetailPane = function () {
+    const splitContainer = document.querySelector('.split-container');
+    if (splitContainer) splitContainer.classList.add('show-detail');
+}
+
+window.closeDetailPane = function () {
+    const splitContainer = document.querySelector('.split-container');
+    if (splitContainer) splitContainer.classList.remove('show-detail');
+
+    // If we cancel from registration without selecting a group, reset to empty
+    if (!selectedGroup) {
+        document.getElementById('empty-state').classList.remove('hidden');
+        document.getElementById('detail-content').classList.add('hidden');
+    }
 }

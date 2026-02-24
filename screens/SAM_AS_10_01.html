@@ -88,10 +88,10 @@
                                 <i data-lucide="filter" class="status-card-icon text-success"></i>
                                 <span class="search-panel-title">검색 필터</span>
                             </div>
-                            <i data-lucide="chevron-up" id="filter-chevron" class="filter-chevron"></i>
+                            <i data-lucide="chevron-up" id="filter-chevron" class="filter-chevron rotate-180"></i>
                         </div>
 
-                        <div id="filter-content" class="search-panel-content">
+                        <div id="filter-content" class="search-panel-content hidden">
                             <div class="filter-panel-inner">
                                 <!-- Filter Fields: Responsive Columns -->
                                 <div class="filter-grid">
@@ -194,283 +194,323 @@
                                     <tbody class="data-table-body">
                                         <!-- Row 1 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
-                                            <td>버티포트</td>
-                                            <td>VP-강남</td>
-                                            <td>v1.gangnam.batt</td>
-                                            <td>q.infra.batt.v1</td>
-                                            <td class="td-center">CLASSIC</td>
-                                            <td class="td-number font-bold text-error">1,450</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-number font-bold text-warning">12</td>
-                                            <td class="td-date">2026.02.05 10:45:12</td>
-                                            <td class="td-center"><span class="badge badge-error">장애</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-purple">수신</span></td>
+                                            <td data-label="시스템 유형">버티포트</td>
+                                            <td data-label="시스템 이름">VP-강남</td>
+                                            <td data-label="라우팅 키">v1.gangnam.batt</td>
+                                            <td data-label="큐 명칭">q.infra.batt.v1</td>
+                                            <td class="td-center" data-label="타입">CLASSIC</td>
+                                            <td class="td-number font-bold text-error" data-label="대기">1,450</td>
+                                            <td class="td-number" data-label="처리 중">0</td>
+                                            <td class="td-number font-bold text-warning" data-label="실패">12</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.05 10:45:12</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-error">장애</span></td>
                                         </tr>
                                         <!-- Row 2 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-info">송신</span></td>
-                                            <td>운항사</td>
-                                            <td>A 운항사</td>
-                                            <td>v1.airline_a.auth</td>
-                                            <td>q.status.auth.v1</td>
-                                            <td class="td-center">QUORUM</td>
-                                            <td class="td-number font-bold text-white">120</td>
-                                            <td class="td-number">2</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-date">2026.02.04 15:44:55</td>
-                                            <td class="td-center"><span class="badge badge-warning">지연</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-info">송신</span></td>
+                                            <td data-label="시스템 유형">운항사</td>
+                                            <td data-label="시스템 이름">A 운항사</td>
+                                            <td data-label="라우팅 키">v1.airline_a.auth</td>
+                                            <td data-label="큐 명칭">q.status.auth.v1</td>
+                                            <td class="td-center" data-label="타입">QUORUM</td>
+                                            <td class="td-number font-bold text-white" data-label="대기">120</td>
+                                            <td class="td-number" data-label="처리 중">2</td>
+                                            <td class="td-number" data-label="실패">0</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:44:55</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-warning">지연</span></td>
                                         </tr>
                                         <!-- Row 3 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
-                                            <td>버티포트</td>
-                                            <td>VP-강남</td>
-                                            <td>v1.gangnam.status</td>
-                                            <td>q.infra.status.v1</td>
-                                            <td class="td-center">CLASSIC</td>
-                                            <td class="td-number font-bold text-white">15</td>
-                                            <td class="td-number">2</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-date">2026.02.04 15:44:30</td>
-                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-purple">수신</span></td>
+                                            <td data-label="시스템 유형">버티포트</td>
+                                            <td data-label="시스템 이름">VP-강남</td>
+                                            <td data-label="라우팅 키">v1.gangnam.status</td>
+                                            <td data-label="큐 명칭">q.infra.status.v1</td>
+                                            <td class="td-center" data-label="타입">CLASSIC</td>
+                                            <td class="td-number font-bold text-white" data-label="대기">15</td>
+                                            <td class="td-number" data-label="처리 중">2</td>
+                                            <td class="td-number" data-label="실패">0</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:44:30</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 4 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-info">송신</span></td>
-                                            <td>운항사</td>
-                                            <td>B 운항사</td>
-                                            <td>v1.airline_b.plan</td>
-                                            <td>q.status.plan.v1</td>
-                                            <td class="td-center">QUORUM</td>
-                                            <td class="td-number">5</td>
-                                            <td class="td-number">1</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-date">2026.02.04 15:43:10</td>
-                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-info">송신</span></td>
+                                            <td data-label="시스템 유형">운항사</td>
+                                            <td data-label="시스템 이름">B 운항사</td>
+                                            <td data-label="라우팅 키">v1.airline_b.plan</td>
+                                            <td data-label="큐 명칭">q.status.plan.v1</td>
+                                            <td class="td-center" data-label="타입">QUORUM</td>
+                                            <td class="td-number" data-label="대기">5</td>
+                                            <td class="td-number" data-label="처리 중">1</td>
+                                            <td class="td-number" data-label="실패">0</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:43:10</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 5 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
-                                            <td>버티포트</td>
-                                            <td>VP-김포</td>
-                                            <td>v1.gimpo.pos</td>
-                                            <td>q.flight.pos.v1</td>
-                                            <td class="td-center">CLASSIC</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-number">5</td>
-                                            <td class="td-number">2</td>
-                                            <td class="td-date">2026.02.04 15:42:05</td>
-                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-purple">수신</span></td>
+                                            <td data-label="시스템 유형">버티포트</td>
+                                            <td data-label="시스템 이름">VP-김포</td>
+                                            <td data-label="라우팅 키">v1.gimpo.pos</td>
+                                            <td data-label="큐 명칭">q.flight.pos.v1</td>
+                                            <td class="td-center" data-label="타입">CLASSIC</td>
+                                            <td class="td-number" data-label="대기">0</td>
+                                            <td class="td-number" data-label="처리 중">5</td>
+                                            <td class="td-number" data-label="실패">2</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:42:05</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 6 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
-                                            <td>도심항공 교통 정보 시스템</td>
-                                            <td>K-UAM Core</td>
-                                            <td>v1.core.weather</td>
-                                            <td>q.data.weather.v1</td>
-                                            <td class="td-center">STREAM</td>
-                                            <td class="td-number">45</td>
-                                            <td class="td-number">120</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-date">2026.02.04 15:41:55</td>
-                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-purple">수신</span></td>
+                                            <td data-label="시스템 유형">도심항공 교통 정보 시스템</td>
+                                            <td data-label="시스템 이름">K-UAM Core</td>
+                                            <td data-label="라우팅 키">v1.core.weather</td>
+                                            <td data-label="큐 명칭">q.data.weather.v1</td>
+                                            <td class="td-center" data-label="타입">STREAM</td>
+                                            <td class="td-number" data-label="대기">45</td>
+                                            <td class="td-number" data-label="처리 중">120</td>
+                                            <td class="td-number" data-label="실패">0</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:41:55</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 7 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-info">송신</span></td>
-                                            <td>버티포트</td>
-                                            <td>VP-미래</td>
-                                            <td>v1.mirae.vertiport</td>
-                                            <td>q.infra.vertiport.v1</td>
-                                            <td class="td-center">CLASSIC</td>
-                                            <td class="td-number">2</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-date">2026.02.04 15:40:12</td>
-                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-info">송신</span></td>
+                                            <td data-label="시스템 유형">버티포트</td>
+                                            <td data-label="시스템 이름">VP-미래</td>
+                                            <td data-label="라우팅 키">v1.mirae.vertiport</td>
+                                            <td data-label="큐 명칭">q.infra.vertiport.v1</td>
+                                            <td class="td-center" data-label="타입">CLASSIC</td>
+                                            <td class="td-number" data-label="대기">2</td>
+                                            <td class="td-number" data-label="처리 중">0</td>
+                                            <td class="td-number" data-label="실패">0</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:40:12</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 8 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
-                                            <td>도심항공 교통 정보 시스템</td>
-                                            <td>K-UAM Core</td>
-                                            <td>v1.core.flight</td>
-                                            <td>q.flight.update.v1</td>
-                                            <td class="td-center">CLASSIC</td>
-                                            <td class="td-number font-bold text-error">2,103</td>
-                                            <td class="td-number">15</td>
-                                            <td class="td-number font-bold text-warning">55</td>
-                                            <td class="td-date">2026.02.04 15:39:45</td>
-                                            <td class="td-center"><span class="badge badge-error">장애</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-purple">수신</span></td>
+                                            <td data-label="시스템 유형">도심항공 교통 정보 시스템</td>
+                                            <td data-label="시스템 이름">K-UAM Core</td>
+                                            <td data-label="라우팅 키">v1.core.flight</td>
+                                            <td data-label="큐 명칭">q.flight.update.v1</td>
+                                            <td class="td-center" data-label="타입">CLASSIC</td>
+                                            <td class="td-number font-bold text-error" data-label="대기">2,103</td>
+                                            <td class="td-number" data-label="처리 중">15</td>
+                                            <td class="td-number font-bold text-warning" data-label="실패">55</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:39:45</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-error">장애</span></td>
                                         </tr>
                                         <!-- Row 9 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-info">송신</span></td>
-                                            <td>운항사</td>
-                                            <td>C 운항사</td>
-                                            <td>v1.airline_c.auth</td>
-                                            <td>q.auth.req.v1</td>
-                                            <td class="td-center">QUORUM</td>
-                                            <td class="td-number">12</td>
-                                            <td class="td-number">3</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-date">2026.02.04 15:38:20</td>
-                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-info">송신</span></td>
+                                            <td data-label="시스템 유형">운항사</td>
+                                            <td data-label="시스템 이름">C 운항사</td>
+                                            <td data-label="라우팅 키">v1.airline_c.auth</td>
+                                            <td data-label="큐 명칭">q.auth.req.v1</td>
+                                            <td class="td-center" data-label="타입">QUORUM</td>
+                                            <td class="td-number" data-label="대기">12</td>
+                                            <td class="td-number" data-label="처리 중">3</td>
+                                            <td class="td-number" data-label="실패">0</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:38:20</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 10 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
-                                            <td>버티포트</td>
-                                            <td>VP-잠실</td>
-                                            <td>v1.jamsil.noise</td>
-                                            <td>q.env.noise.v1</td>
-                                            <td class="td-center">STREAM</td>
-                                            <td class="td-number">89</td>
-                                            <td class="td-number">89</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-date">2026.02.04 15:37:55</td>
-                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-purple">수신</span></td>
+                                            <td data-label="시스템 유형">버티포트</td>
+                                            <td data-label="시스템 이름">VP-잠실</td>
+                                            <td data-label="라우팅 키">v1.jamsil.noise</td>
+                                            <td data-label="큐 명칭">q.env.noise.v1</td>
+                                            <td class="td-center" data-label="타입">STREAM</td>
+                                            <td class="td-number" data-label="대기">89</td>
+                                            <td class="td-number" data-label="처리 중">89</td>
+                                            <td class="td-number" data-label="실패">0</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:37:55</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 11 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
-                                            <td>버티포트</td>
-                                            <td>VP-수서</td>
-                                            <td>v1.suseo.batt</td>
-                                            <td>q.infra.batt.v1</td>
-                                            <td class="td-center">CLASSIC</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-date">2026.02.04 15:36:40</td>
-                                            <td class="td-center"><span class="badge badge-default">대기</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-purple">수신</span></td>
+                                            <td data-label="시스템 유형">버티포트</td>
+                                            <td data-label="시스템 이름">VP-수서</td>
+                                            <td data-label="라우팅 키">v1.suseo.batt</td>
+                                            <td data-label="큐 명칭">q.infra.batt.v1</td>
+                                            <td class="td-center" data-label="타입">CLASSIC</td>
+                                            <td class="td-number" data-label="대기">0</td>
+                                            <td class="td-number" data-label="처리 중">0</td>
+                                            <td class="td-number" data-label="실패">0</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:36:40</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-default">대기</span></td>
                                         </tr>
                                         <!-- Row 12 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-info">송신</span></td>
-                                            <td>운항사</td>
-                                            <td>A 운항사</td>
-                                            <td>v1.airline_a.logs</td>
-                                            <td>q.sys.logs.v1</td>
-                                            <td class="td-center">CLASSIC</td>
-                                            <td class="td-number">560</td>
-                                            <td class="td-number">12</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-date">2026.02.04 15:35:15</td>
-                                            <td class="td-center"><span class="badge badge-warning">지연</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-info">송신</span></td>
+                                            <td data-label="시스템 유형">운항사</td>
+                                            <td data-label="시스템 이름">A 운항사</td>
+                                            <td data-label="라우팅 키">v1.airline_a.logs</td>
+                                            <td data-label="큐 명칭">q.sys.logs.v1</td>
+                                            <td class="td-center" data-label="타입">CLASSIC</td>
+                                            <td class="td-number" data-label="대기">560</td>
+                                            <td class="td-number" data-label="처리 중">12</td>
+                                            <td class="td-number" data-label="실패">0</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:35:15</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-warning">지연</span></td>
                                         </tr>
                                         <!-- Row 13 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
-                                            <td>버티포트</td>
-                                            <td>VP-코엑스</td>
-                                            <td>v1.coex.gate</td>
-                                            <td>q.infra.gate.v1</td>
-                                            <td class="td-center">CLASSIC</td>
-                                            <td class="td-number">3</td>
-                                            <td class="td-number">3</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-date">2026.02.04 15:34:22</td>
-                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-purple">수신</span></td>
+                                            <td data-label="시스템 유형">버티포트</td>
+                                            <td data-label="시스템 이름">VP-코엑스</td>
+                                            <td data-label="라우팅 키">v1.coex.gate</td>
+                                            <td data-label="큐 명칭">q.infra.gate.v1</td>
+                                            <td class="td-center" data-label="타입">CLASSIC</td>
+                                            <td class="td-number" data-label="대기">3</td>
+                                            <td class="td-number" data-label="처리 중">3</td>
+                                            <td class="td-number" data-label="실패">0</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:34:22</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 14 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-info">송신</span></td>
-                                            <td class="text-cell-meta">교통 관리자</td>
-                                            <td>Emergency Center</td>
-                                            <td>v1.emergency.alert</td>
-                                            <td>q.priority.alert.v1</td>
-                                            <td class="td-center">PRIORITY</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-date">2026.02.04 15:33:05</td>
-                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-info">송신</span></td>
+                                            <td class="text-cell-meta" data-label="시스템 유형">교통 관리자</td>
+                                            <td data-label="시스템 이름">Emergency Center</td>
+                                            <td data-label="라우팅 키">v1.emergency.alert</td>
+                                            <td data-label="큐 명칭">q.priority.alert.v1</td>
+                                            <td class="td-center" data-label="타입">PRIORITY</td>
+                                            <td class="td-number" data-label="대기">0</td>
+                                            <td class="td-number" data-label="처리 중">0</td>
+                                            <td class="td-number" data-label="실패">0</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:33:05</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 15 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
-                                            <td>버티포트</td>
-                                            <td>VP-여의도</td>
-                                            <td>v1.yeouido.wind</td>
-                                            <td>q.env.wind.v1</td>
-                                            <td class="td-center">STREAM</td>
-                                            <td class="td-number font-bold text-error">5,002</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-number font-bold text-warning">105</td>
-                                            <td class="td-date">2026.02.04 15:32:10</td>
-                                            <td class="td-center"><span class="badge badge-error">장애</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-purple">수신</span></td>
+                                            <td data-label="시스템 유형">버티포트</td>
+                                            <td data-label="시스템 이름">VP-여의도</td>
+                                            <td data-label="라우팅 키">v1.yeouido.wind</td>
+                                            <td data-label="큐 명칭">q.env.wind.v1</td>
+                                            <td class="td-center" data-label="타입">STREAM</td>
+                                            <td class="td-number font-bold text-error" data-label="대기">5,002</td>
+                                            <td class="td-number" data-label="처리 중">0</td>
+                                            <td class="td-number font-bold text-warning" data-label="실패">105</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:32:10</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-error">장애</span></td>
                                         </tr>
                                         <!-- Row 16 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-info">송신</span></td>
-                                            <td>운항사</td>
-                                            <td>D 운항사</td>
-                                            <td>v1.airline_d.plan</td>
-                                            <td>q.status.plan.v1</td>
-                                            <td class="td-center">QUORUM</td>
-                                            <td class="td-number">7</td>
-                                            <td class="td-number">1</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-date">2026.02.04 15:30:55</td>
-                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-info">송신</span></td>
+                                            <td data-label="시스템 유형">운항사</td>
+                                            <td data-label="시스템 이름">D 운항사</td>
+                                            <td data-label="라우팅 키">v1.airline_d.plan</td>
+                                            <td data-label="큐 명칭">q.status.plan.v1</td>
+                                            <td class="td-center" data-label="타입">QUORUM</td>
+                                            <td class="td-number" data-label="대기">7</td>
+                                            <td class="td-number" data-label="처리 중">1</td>
+                                            <td class="td-number" data-label="실패">0</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:30:55</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 17 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
-                                            <td>도심항공 교통 정보 시스템</td>
-                                            <td>K-UAM Core</td>
-                                            <td>v1.core.billing</td>
-                                            <td>q.biz.billing.v1</td>
-                                            <td class="td-center">CLASSIC</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-date">2026.02.04 15:29:40</td>
-                                            <td class="td-center"><span class="badge badge-default">대기</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-purple">수신</span></td>
+                                            <td data-label="시스템 유형">도심항공 교통 정보 시스템</td>
+                                            <td data-label="시스템 이름">K-UAM Core</td>
+                                            <td data-label="라우팅 키">v1.core.billing</td>
+                                            <td data-label="큐 명칭">q.biz.billing.v1</td>
+                                            <td class="td-center" data-label="타입">CLASSIC</td>
+                                            <td class="td-number" data-label="대기">0</td>
+                                            <td class="td-number" data-label="처리 중">0</td>
+                                            <td class="td-number" data-label="실패">0</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:29:40</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-default">대기</span></td>
                                         </tr>
                                         <!-- Row 18 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-info">송신</span></td>
-                                            <td class="text-cell-meta">교통 관리자</td>
-                                            <td>Traffic Control</td>
-                                            <td>v1.tcs.route</td>
-                                            <td>q.flight.route.v1</td>
-                                            <td class="td-center">CLASSIC</td>
-                                            <td class="td-number">1,024</td>
-                                            <td class="td-number">50</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-date">2026.02.04 15:28:15</td>
-                                            <td class="td-center"><span class="badge badge-warning">지연</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-info">송신</span></td>
+                                            <td class="text-cell-meta" data-label="시스템 유형">교통 관리자</td>
+                                            <td data-label="시스템 이름">Traffic Control</td>
+                                            <td data-label="라우팅 키">v1.tcs.route</td>
+                                            <td data-label="큐 명칭">q.flight.route.v1</td>
+                                            <td class="td-center" data-label="타입">CLASSIC</td>
+                                            <td class="td-number" data-label="대기">1,024</td>
+                                            <td class="td-number" data-label="처리 중">50</td>
+                                            <td class="td-number" data-label="실패">0</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:28:15</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-warning">지연</span></td>
                                         </tr>
                                         <!-- Row 19 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-purple">수신</span></td>
-                                            <td>버티포트</td>
-                                            <td>VP-인천</td>
-                                            <td>v1.incheon.pax</td>
-                                            <td>q.biz.pax.v1</td>
-                                            <td class="td-center">CLASSIC</td>
-                                            <td class="td-number">25</td>
-                                            <td class="td-number">2</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-date">2026.02.04 15:27:00</td>
-                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-purple">수신</span></td>
+                                            <td data-label="시스템 유형">버티포트</td>
+                                            <td data-label="시스템 이름">VP-인천</td>
+                                            <td data-label="라우팅 키">v1.incheon.pax</td>
+                                            <td data-label="큐 명칭">q.biz.pax.v1</td>
+                                            <td class="td-center" data-label="타입">CLASSIC</td>
+                                            <td class="td-number" data-label="대기">25</td>
+                                            <td class="td-number" data-label="처리 중">2</td>
+                                            <td class="td-number" data-label="실패">0</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:27:00</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-success">정상</span></td>
                                         </tr>
                                         <!-- Row 20 -->
                                         <tr class="data-table-row">
-                                            <td class="td-center"><span class="badge badge-info">송신</span></td>
-                                            <td>운항사</td>
-                                            <td>E 운항사</td>
-                                            <td>v1.airline_e.info</td>
-                                            <td>q.info.gen.v1</td>
-                                            <td class="td-center">QUORUM</td>
-                                            <td class="td-number">8</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-number">0</td>
-                                            <td class="td-date">2026.02.04 15:42:05</td>
-                                            <td class="td-center"><span class="badge badge-success">정상</span></td>
+                                            <td class="td-center" data-label="유형"><span
+                                                    class="badge badge-info">송신</span></td>
+                                            <td data-label="시스템 유형">운항사</td>
+                                            <td data-label="시스템 이름">E 운항사</td>
+                                            <td data-label="라우팅 키">v1.airline_e.info</td>
+                                            <td data-label="큐 명칭">q.info.gen.v1</td>
+                                            <td class="td-center" data-label="타입">QUORUM</td>
+                                            <td class="td-number" data-label="대기">8</td>
+                                            <td class="td-number" data-label="처리 중">0</td>
+                                            <td class="td-number" data-label="실패">0</td>
+                                            <td class="td-date" data-label="최근 갱신일">2026.02.04 15:42:05</td>
+                                            <td class="td-center" data-label="상태"><span
+                                                    class="badge badge-success">정상</span></td>
                                         </tr>
                                     </tbody>
                                 </table>

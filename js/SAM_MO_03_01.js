@@ -117,10 +117,10 @@ function renderNetworkList() {
             net.status === '위험' ? 'badge-warning' : 'badge-error';
 
         row.innerHTML = `
-            <td>${net.source}</td>
-            <td>${net.target}</td>
-            <td class="td-center"><span class="badge ${statusBadgeClass}">${net.status}</span></td>
-            <td class="td-date">${net.lastUpdate}</td>
+            <td data-label="Source">${net.source}</td>
+            <td data-label="Target">${net.target}</td>
+            <td class="td-center" data-label="Status"><span class="badge ${statusBadgeClass}">${net.status}</span></td>
+            <td class="td-date" data-label="Date">${net.lastUpdate}</td>
         `;
 
         tbody.appendChild(row);
@@ -227,9 +227,9 @@ function renderFailureHistory() {
         const statusBadgeClass = item.status === 'Critical' ? 'badge-error' : 'badge-warning';
 
         row.innerHTML = `
-            <td class="td-date">${item.date}</td>
-            <td class="td-center"><span class="badge ${statusBadgeClass}">${item.status}</span></td>
-            <td>${item.content}</td>
+            <td class="td-date" data-label="Date">${item.date}</td>
+            <td class="td-center" data-label="Level"><span class="badge ${statusBadgeClass}">${item.status}</span></td>
+            <td data-label="Content">${item.content}</td>
         `;
 
         tbody.appendChild(row);

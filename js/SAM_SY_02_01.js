@@ -99,10 +99,10 @@ function renderFaults(list) {
         tr.onclick = () => selectFault(fault.id, tr);
 
         tr.innerHTML = `
-            <td class="td-date">${fault.time}</td>
-            <td>${fault.system}</td>
-            <td class="td-center"><span class="badge ${getLevelClass(fault.level)}">${fault.level}</span></td>
-            <td class="td-center"><span class="badge ${getStatusClass(fault.status)}">${fault.status}</span></td>
+            <td class="td-date" data-label="Time">${fault.time}</td>
+            <td data-label="System">${fault.system}</td>
+            <td class="td-center" data-label="Level"><span class="badge ${getLevelClass(fault.level)}">${fault.level}</span></td>
+            <td class="td-center" data-label="Status"><span class="badge ${getStatusClass(fault.status)}">${fault.status}</span></td>
         `;
         listBody.appendChild(tr);
     });
@@ -133,6 +133,9 @@ function selectFault(id, row) {
     document.getElementById('detail-desc').innerText = fault.desc;
 
     renderActions(fault.actions);
+
+    // Mobile View Toggle
+    openDetailPane();
 }
 
 function renderActions(actions) {
@@ -392,3 +395,15 @@ window.confirmDelete = function () {
 
     successModal.classList.add('active');
 };
+
+// Mobile Split Pane Functions
+window.openDetailPane = function () {
+    const splitContainer = document.querySelector('.split-container');
+    if (splitContainer) splitContainer.classList.add('show-detail');
+}
+
+window.closeDetailPane = function () {
+    const splitContainer = document.querySelector('.split-container');
+    if (splitContainer) splitContainer.classList.remove('rotate-0'); // Just checking for potential class issues
+    if (splitContainer) splitContainer.classList.remove('show-detail');
+}
