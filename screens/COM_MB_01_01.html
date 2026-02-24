@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSSI - 회원 정보</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="dashboard-body app-screen-height" data-page-title="회원 정보">
+    <!-- Header (Fixed Top) -->
+    <div data-include="../components/header.html"></div>
+
+    <!-- Main Flex Container (Sidebar + Content) -->
+    <div class="dashboard-main-flex">
+        <!-- Sidebar -->
+        <div data-include="../components/sidebar.html"></div>
+
+        <!-- Main Content (Pushed by Sidebar) -->
+        <main class="dashboard-main intro-main glass-bg" id="main-content">
+
+            <div class="intro-grid max-w-md">
+                <!-- Member Info Card (Semantic Refactoring) -->
+                <div class="glass-card-auth auth-card-container">
+                    <div class="auth-card-body">
+                        <!-- Header -->
+                        <div class="auth-card-header">
+                            <h2 class="auth-card-title">회원 정보</h2>
+                        </div>
+
+                        <!-- Member Info Content -->
+                        <div class="spacing-y-6">
+                            <div>
+                                <label class="form-label">아이디</label>
+                                <input type="text" id="info-member-id" class="form-input" value="gildong_hong" disabled>
+                            </div>
+                            <div>
+                                <label class="form-label">이름</label>
+                                <input type="text" id="info-member-name" class="form-input" value="홍길동" disabled>
+                            </div>
+                            <div>
+                                <label class="form-label">소속</label>
+                                <input type="text" id="info-member-affiliation" class="form-input" value="관제사" disabled>
+                            </div>
+                            <div>
+                                <label class="form-label">이메일</label>
+                                <input type="text" id="info-member-email" class="form-input" value="hong@airport.co.kr"
+                                    disabled>
+                            </div>
+                            <div>
+                                <label class="form-label">휴대폰 번호</label>
+                                <input type="text" id="info-member-phone" class="form-input" value="010-1234-1234"
+                                    disabled>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="pt-standard spacing-y-3">
+                            <button class="btn-primary" onclick="location.href='COM_MB_01_02.html'">
+                                회원 정보 수정
+                            </button>
+
+                            <div class="auth-form-separator">
+                                <p class="auth-help-desc text-center mb-4">
+                                    소중한 개인정보 보호를 위해 비밀번호를<br>주기적으로 변경해 주세요.
+                                </p>
+                                <button id="btn-pw-change" class="btn-secondary">
+                                    비밀번호 변경
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- System Switcher Modal -->
+    <div data-include="../components/system-switcher.html"></div>
+
+    <!-- Password Change Modal (COM_MB_01_03) -->
+    <div id="pw-change-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title-left">비밀번호 변경</h3>
+                <i data-lucide="x" class="close-icon" onclick="closePwModal()"></i>
+            </div>
+            <div class="modal-content">
+                <div class="spacing-y-4">
+                    <div>
+                        <label class="form-label">현재 비밀번호 <span class="text-error required-mark">*</span></label>
+                        <input type="password" id="current-pw" class="form-input" placeholder="비밀번호를 입력해 주세요."
+                            oninput="resetError('current-pw')">
+                        <div id="error-current-pw" class="form-error"></div>
+                    </div>
+                    <div>
+                        <label class="form-label">새 비밀번호 <span class="text-error required-mark">*</span></label>
+                        <input type="password" id="new-pw" class="form-input" placeholder="비밀번호를 입력해 주세요."
+                            oninput="resetError('new-pw')">
+                        <p class="input-guide-text">영문 대소문자, 숫자, 특수문자를 혼용하여 8자 이상</p>
+                        <div id="error-new-pw" class="form-error"></div>
+                    </div>
+                    <div>
+                        <label class="form-label">새 비밀번호 확인 <span class="text-error required-mark">*</span></label>
+                        <input type="password" id="confirm-pw" class="form-input" placeholder="비밀번호를 다시 입력해 주세요."
+                            oninput="resetError('confirm-pw')">
+                        <div id="error-confirm-pw" class="form-error"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-btn-group">
+                <button onclick="closePwModal()" class="btn-secondary">취소</button>
+                <button onclick="processPwChange()" class="btn-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-icon info">
+                <i data-lucide="help-circle" width="64" height="64" class="text-icon-info"></i>
+            </div>
+            <h3 class="modal-title" id="confirm-modal-title">변경 확인</h3>
+            <p id="confirm-modal-desc" class="modal-desc">입력하신 비밀번호로 변경 하시겠습니까?</p>
+            <div class="modal-btn-group">
+                <button onclick="closeConfirmModal()" class="btn-flex btn-modal-secondary">취소</button>
+                <button onclick="executePwChange()" class="btn-flex btn-modal-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-icon success">
+                <i data-lucide="check-circle-2" width="64" height="64" class="text-icon-success"></i>
+            </div>
+            <h3 class="modal-title" id="success-modal-title">변경 완료</h3>
+            <p id="success-message" class="modal-desc">비밀번호 변경이 완료되었습니다.</p>
+            <div class="modal-btn-group">
+                <button onclick="closeSuccessModal()" class="btn-modal-success">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/include.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/COM_MB_01_01.js"></script>
+</body>
+
+</html>

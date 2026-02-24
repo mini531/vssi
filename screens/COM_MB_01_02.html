@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSSI - 회원 정보 수정</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="dashboard-body app-screen-height" data-page-title="회원 정보 수정">
+    <!-- Header (Fixed Top) -->
+    <div data-include="../components/header.html"></div>
+
+    <!-- Main Flex Container (Sidebar + Content) -->
+    <div class="dashboard-main-flex">
+        <!-- Sidebar -->
+        <div data-include="../components/sidebar.html"></div>
+
+        <!-- Main Content (Pushed by Sidebar) -->
+        <main class="dashboard-main intro-main glass-bg" id="main-content">
+
+            <div class="intro-grid max-w-md">
+                <!-- Member Info Edit Card -->
+                <div class="glass-card-auth auth-card-container">
+                    <div class="auth-card-body">
+                        <!-- Header -->
+                        <div class="auth-card-header">
+                            <h2 class="auth-card-title">회원 정보 수정</h2>
+                        </div>
+
+                        <!-- Member Info Form -->
+                        <div class="spacing-y-4">
+                            <div>
+                                <label class="form-label">이름 <span class="text-error required-mark">*</span></label>
+                                <input type="text" id="edit-member-name" class="form-input" value="홍길동"
+                                    placeholder="이름을 입력해 주세요." oninput="resetError('edit-member-name')">
+                                <div id="error-edit-member-name" class="form-error"></div>
+                            </div>
+                            <div>
+                                <label class="form-label">소속 <span class="text-error required-mark">*</span></label>
+                                <input type="text" id="edit-member-affiliation" class="form-input" value="관제사"
+                                    placeholder="소속을 입력해 주세요." oninput="resetError('edit-member-affiliation')">
+                                <div id="error-edit-member-affiliation" class="form-error"></div>
+                            </div>
+                            <div>
+                                <label class="form-label">이메일 <span class="text-error required-mark">*</span></label>
+                                <input type="text" id="edit-member-email" class="form-input" value="hong@airport.co.kr"
+                                    placeholder="이메일을 입력해 주세요." oninput="resetError('edit-member-email')">
+                                <div id="error-edit-member-email" class="form-error"></div>
+                            </div>
+                            <div>
+                                <label class="form-label">휴대폰 번호 <span class="text-error required-mark">*</span></label>
+                                <input type="text" id="edit-member-phone" class="form-input" value="010-1234-1234"
+                                    placeholder="휴대폰 번호를 입력해 주세요." oninput="resetError('edit-member-phone')">
+                                <div id="error-edit-member-phone" class="form-error"></div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="pt-standard spacing-y-3">
+                            <button id="btn-update-complete" class="btn-primary">
+                                수정 완료
+                            </button>
+                            <button onclick="location.href='COM_MB_01_01.html'" class="btn-secondary">
+                                취소
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- System Switcher Modal -->
+    <div data-include="../components/system-switcher.html"></div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-icon info">
+                <i data-lucide="help-circle" width="64" height="64" class="text-icon-info"></i>
+            </div>
+            <h3 class="modal-title">회원 정보 수정</h3>
+            <p class="modal-desc">입력하신 정보로 회원 정보를 수정 하시겠습니까?</p>
+            <div class="modal-btn-group">
+                <button onclick="closeConfirmModal()" class="btn-flex btn-modal-secondary">취소</button>
+                <button onclick="executeEdit()" class="btn-flex btn-modal-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-icon success">
+                <i data-lucide="check-circle-2" width="64" height="64" class="text-icon-success"></i>
+            </div>
+            <h3 class="modal-title">수정 완료</h3>
+            <p class="modal-desc">회원정보 수정이 완료되었습니다.</p>
+            <div class="modal-btn-group">
+                <button onclick="closeSuccessModal()" class="btn-modal-success">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/include.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/COM_MB_01_02.js"></script>
+</body>
+
+</html>

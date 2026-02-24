@@ -10,7 +10,7 @@ const screenData = {
         { category: "인트로", menu1: "-", menu2: "-", id: "COM_IT_01_01", name: "인트로", type: "일반", date: "2026년", remarks: "" },
         { category: "인트로", menu1: "-", menu2: "-", id: "COM_MB_01_01", name: "회원 정보", type: "일반", date: "2026년", remarks: "" },
         { category: "인트로", menu1: "-", menu2: "-", id: "COM_MB_01_02", name: "회원 정보 수정", type: "일반", date: "2026년", remarks: "" },
-        { category: "인트로", menu1: "-", menu2: "-", id: "COM_MB_01_03", name: "비밀번호 변경", type: "모달", date: "2026년", remarks: "" },
+        { category: "인트로", menu1: "-", menu2: "-", id: "COM_MB_01_03", name: "비밀번호 변경 (COM_MB_01_01에 포함)", type: "모달", date: "2026년", remarks: "" },
     ],
     "IVMS": [
         { category: "메인 메뉴", menu1: "대시보드", menu2: "-", id: "IVM_DB_01_01", name: "IVMS 대시보드", type: "일반", date: "2026년", remarks: "" },

@@ -39,6 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'COM_CM_01_01',
         'COM_CM_01_02',
         'COM_IT_01_01',
+        'COM_MB_01_01',
+        'COM_MB_01_02',
         'SAM_DB_01_01',
         'SAM_AS_10_01',
         'SAM_AU_01_01',
@@ -149,6 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 idClass = 'screen-id-link';
                 idOnClick = `onclick="openScreen('${item.id}')"`;
             } else if ([
+                'COM_MB_01_03',
                 'SAM_AU_01_02', 'SAM_AU_01_03', 'SAM_US_01_02', 'SAM_US_01_03', 'SAM_US_01_04',
                 'SAM_US_02_01', 'SAM_AU_02_02', 'SAM_AU_02_03', 'SAM_AU_03_02',
                 'SAM_SY_01_02', 'SAM_SY_02_02', 'SAM_BD_01_02', 'SAM_BD_01_03',
@@ -202,6 +205,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Global function for onclick
     window.openScreen = function (id) {
         if (!implementedScreens.includes(id)) return;
+
+        // Force VSSI context for Intro category screens (Member Info)
+        if (id === 'COM_MB_01_01' || id === 'COM_MB_01_02') {
+            localStorage.setItem('vssi-system-acronym', 'VSSI');
+            localStorage.setItem('vssi-system-name', 'VSSI');
+        }
 
         const url = `./screens/${id}.html`;
         window.open(url, '_blank');

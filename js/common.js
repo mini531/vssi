@@ -45,6 +45,15 @@ function restoreSidebarState() {
     const sidebar = document.getElementById('sidebar');
     if (!sidebar) return;
 
+    // Check if current page is Member Info (should be closed by default)
+    const url = window.location.pathname;
+    const isMemberInfo = url.includes('COM_MB_01_01') || url.includes('COM_MB_01_02');
+
+    if (isMemberInfo) {
+        sidebar.classList.add('collapsed');
+        return;
+    }
+
     const savedState = localStorage.getItem('vssi-sidebar-state');
     if (savedState === 'open') {
         sidebar.classList.remove('collapsed');
@@ -218,6 +227,14 @@ function initSystemTitle() {
 
     if (acronym) {
         updateSwitcherUI(acronym);
+    }
+
+    // Dynamic Header Style (Intro vs Admin)
+    const activeAcronym = acronym || localStorage.getItem('vssi-system-acronym');
+    if (activeAcronym === 'VSSI') {
+        document.body.classList.add('intro-page');
+    } else {
+        document.body.classList.remove('intro-page');
     }
 }
 

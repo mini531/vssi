@@ -713,6 +713,10 @@ html {
   margin-top: 1.5rem;
 }
 
+.spacing-y-4>*+* {
+  margin-top: 1rem;
+}
+
 .spacing-y-3>*+* {
   margin-top: 0.75rem;
 }
@@ -1795,7 +1799,7 @@ input:-webkit-autofill:active {
   font-size: 0.875rem;
   font-weight: 700;
   color: var(--accent-teal);
-  opacity: 0.8;
+  opacity: 0.5;
 }
 
 .screen-id-disabled {
@@ -3656,12 +3660,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   text-align: left;
 }
 
-.text-center {
-  text-align: center;
-}
-
 .text-right {
   text-align: right;
+}
+
+.auth-form-separator {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .btn-w-md {
@@ -4523,7 +4529,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Intro Page Layout */
 .intro-page .header-icon-btn,
 .intro-page .header-switcher-btn,
-.intro-page .header-divider {
+.intro-page .header-divider,
+.intro-page .header-divider-text,
+.intro-page #header-page-title,
+.intro-page .sidebar-container {
   display: none !important;
 }
 
@@ -4792,15 +4801,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-bottom: 1px solid var(--border-color);
 }
 
-.intro-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  overflow-y: auto;
-}
+
 
 .intro-brand {
   text-align: center;
@@ -5098,6 +5099,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .modal-content {
   max-height: 80vh;
   overflow-y: auto;
+  text-align: left;
 }
 
 /* Icon Button Small */
