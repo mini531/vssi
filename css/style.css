@@ -675,13 +675,23 @@ html {
   }
 }
 
-.header-system-title {
+.header-title-main {
   font-size: 1.125rem;
   font-weight: 700;
   color: white;
+  text-decoration: none;
+  transition: opacity 0.2s;
   line-height: 1;
-  /* More compact */
 }
+
+.header-title-main:hover {
+  opacity: 0.8;
+}
+
+.intro-page .header-title-main {
+  font-weight: 800;
+}
+
 
 .header-page-title {
   font-size: 11px;

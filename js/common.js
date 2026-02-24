@@ -221,16 +221,23 @@ function initSystemTitle() {
 
     // Update Header
     const headerTitle = document.getElementById('header-system-title');
+    const activeAcronym = acronym || localStorage.getItem('vssi-system-acronym');
+
     if (headerTitle) {
         headerTitle.innerText = systemName;
+        // Dynamic Link: VSSI -> Intro, Others -> Dashboard
+        if (activeAcronym === 'VSSI') {
+            headerTitle.href = 'COM_IT_01_01.html';
+        } else {
+            headerTitle.href = 'SAM_DB_01_01.html';
+        }
     }
 
-    if (acronym) {
-        updateSwitcherUI(acronym);
+    if (activeAcronym) {
+        updateSwitcherUI(activeAcronym);
     }
 
     // Dynamic Header Style (Intro vs Admin)
-    const activeAcronym = acronym || localStorage.getItem('vssi-system-acronym');
     if (activeAcronym === 'VSSI') {
         document.body.classList.add('intro-page');
     } else {
@@ -247,6 +254,12 @@ function switchSystem(name, acronym) {
     const headerTitle = document.getElementById('header-system-title');
     if (headerTitle) {
         headerTitle.innerText = name;
+        // Dynamic Link Update
+        if (acronym === 'VSSI') {
+            headerTitle.href = 'COM_IT_01_01.html';
+        } else {
+            headerTitle.href = 'SAM_DB_01_01.html';
+        }
     }
 
     // Update Switcher UI
