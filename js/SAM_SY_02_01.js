@@ -127,9 +127,9 @@ function selectFault(id, row) {
 
     // Content
     document.getElementById('detail-system').innerText = fault.system;
-    document.getElementById('detail-level').innerText = fault.level;
+    document.getElementById('detail-level').innerHTML = `<span class="badge ${getLevelClass(fault.level)}">${fault.level}</span>`;
     document.getElementById('detail-time').innerText = fault.time;
-    document.getElementById('detail-status').innerText = fault.status;
+    document.getElementById('detail-status').innerHTML = `<span class="badge ${getStatusClass(fault.status)}">${fault.status}</span>`;
     document.getElementById('detail-desc').innerText = fault.desc;
 
     renderActions(fault.actions);
@@ -137,7 +137,9 @@ function selectFault(id, row) {
 
 function renderActions(actions) {
     const actionBody = document.getElementById('action-list-body');
+    const totalCount = document.getElementById('action-total-count');
     actionBody.innerHTML = '';
+    if (totalCount) totalCount.innerText = `총 ${actions ? actions.length : 0} 건`;
 
     if (!actions || actions.length === 0) {
         actionBody.innerHTML = `<tr><td colspan="5" class="td-center">등록된 조치 내역이 없습니다.</td></tr>`;

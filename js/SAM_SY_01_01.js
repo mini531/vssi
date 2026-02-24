@@ -6,9 +6,9 @@
 const codeGroups = [
     { id: 'SYS_LEVEL', name: '시스템 레벨', desc: '시스템의 중요도 및 로그 레벨을 정의합니다.', status: '사용', updatedAt: '2026.02.11 09:30:12' },
     { id: 'LOG_TYPE', name: '로그 유형', desc: '시스템에서 발생하는 각종 이벤트의 성격을 구분합니다.', status: '사용', updatedAt: '2026.02.11 08:15:45' },
-    { id: 'ERR_CODE', name: '오류 코드', desc: '전역적으로 사용되는 표준 오류 코드 체계입니다.', status: '사용', updatedAt: '2026.02.10 17:50:00' },
+    { id: 'ERR_CODE', name: '오류 코드', desc: '', status: '사용', updatedAt: '2026.02.10 17:50:00' },
     { id: 'ROLE_TYPE', name: '역할 유형', desc: '시스템 기능 접근을 제어하기 위한 사용자 역할 정의입니다.', status: '사용', updatedAt: '2026.02.10 16:20:30' },
-    { id: 'SYS_ACRONYM', name: '시스템 약어', desc: '대내외 연동 시스템 및 주요 모듈의 표준 약어를 정의합니다.', status: '사용', updatedAt: '2026.02.10 14:10:15' },
+    { id: 'SYS_ACRONYM', name: '시스템 약어', desc: '', status: '사용', updatedAt: '2026.02.10 14:10:15' },
     { id: 'USER_STATUS', name: '사용자 상태', desc: '계정의 정상여부 및 잠금 등 상태 정보를 관리합니다.', status: '사용', updatedAt: '2026.02.09 11:45:00' },
     { id: 'CONN_TYPE', name: '연결 방식', desc: '장비 및 인터페이스 간의 통신 프로토콜 방식을 관리합니다.', status: '미사용', updatedAt: '2026.02.09 10:05:22' }
 ];
@@ -141,7 +141,16 @@ function selectCodeGroup(group, row) {
         `;
     }
 
-    document.getElementById('info-group-desc').value = group.desc || '-';
+    // Toggle description area visibility
+    const descContainer = document.getElementById('info-group-desc-container');
+    if (descContainer) {
+        if (group.desc && group.desc.trim() !== '') {
+            descContainer.classList.remove('hidden');
+            document.getElementById('info-group-desc').value = group.desc;
+        } else {
+            descContainer.classList.add('hidden');
+        }
+    }
 
     const viewHeader = document.getElementById('view-header-group');
     const regHeaderGroup = document.getElementById('reg-header-group');
@@ -395,6 +404,7 @@ window.initRegistrationMode = function (type) {
             document.getElementById('reg-code-desc').value = '';
             document.getElementById('reg-code-sort').value = '10';
             document.getElementById('reg-code-status').value = '사용';
+            resetError('reg-code-sort');
         } else {
             // Edit Mode
             document.getElementById('reg-header-code').classList.add('hidden');
@@ -547,9 +557,11 @@ window.saveRegistration = function (type) {
     } else { // This block now handles both 'code' (new) and 'edit' (existing)
         const codeId = document.getElementById('reg-code-id');
         const codeName = document.getElementById('reg-code-name');
+        const codeSort = document.getElementById('reg-code-sort');
 
         resetError('reg-code-id');
         resetError('reg-code-name');
+        resetError('reg-code-sort');
 
         if (!codeId.value.trim()) {
             setError('reg-code-id', '코드 ID를 입력해주세요.');
@@ -557,6 +569,10 @@ window.saveRegistration = function (type) {
         }
         if (!codeName.value.trim()) {
             setError('reg-code-name', '코드 이름을 입력해주세요.');
+            hasError = true;
+        }
+        if (!codeSort.value.trim()) {
+            setError('reg-code-sort', '순서를 입력해주세요.');
             hasError = true;
         }
     }
@@ -619,7 +635,7 @@ window.confirmSaveRegistration = function () {
             updatedAt: timestamp
         });
 
-        document.getElementById('success-message').innerText = '코드 그룹 등록이 완료되었습니다.';
+        document.getElementById('success-message').innerText = '등록 완료되었습니다.';
     } else if (currentAction === 'EDIT_GROUP') {
         // Group Update Logic
         const groupId = document.getElementById('reg-group-id').value.trim();
@@ -638,7 +654,7 @@ window.confirmSaveRegistration = function () {
             };
         }
 
-        document.getElementById('success-message').innerText = '코드 그룹 수정이 완료되었습니다.';
+        document.getElementById('success-message').innerText = '수정 완료되었습니다.';
     } else if (currentAction === 'SAVE_CODE') {
         // Code Saving Logic
         const codeId = document.getElementById('reg-code-id').value.trim();
@@ -658,7 +674,7 @@ window.confirmSaveRegistration = function () {
             });
         }
 
-        document.getElementById('success-message').innerText = '코드 등록이 완료되었습니다.';
+        document.getElementById('success-message').innerText = '등록 완료되었습니다.';
     } else if (currentAction === 'EDIT_CODE') {
         // Code Update Logic
         const codeId = document.getElementById('reg-code-id').value.trim();
@@ -680,11 +696,11 @@ window.confirmSaveRegistration = function () {
             }
         }
 
-        document.getElementById('success-message').innerText = '코드 수정이 완료되었습니다.';
+        document.getElementById('success-message').innerText = '수정 완료되었습니다.';
     } else if (currentAction === 'DELETE_SINGLE') {
         if (selectedGroup && codesData[selectedGroup.id]) {
             codesData[selectedGroup.id] = codesData[selectedGroup.id].filter(c => c.code !== pendingDeleteId);
-            document.getElementById('success-message').innerText = '삭제가 완료되었습니다.';
+            document.getElementById('success-message').innerText = '삭제되었습니다.';
         }
     } else if (currentAction === 'DELETE_GROUP') {
         const groupId = pendingDeleteId;
@@ -707,7 +723,7 @@ window.confirmSaveRegistration = function () {
 
         if (selectedGroup && codesData[selectedGroup.id]) {
             codesData[selectedGroup.id] = codesData[selectedGroup.id].filter(c => !selected.includes(c.code));
-            document.getElementById('success-message').innerText = '삭제가 완료되었습니다.';
+            document.getElementById('success-message').innerText = '삭제되었습니다.';
         }
     }
 

@@ -35,7 +35,7 @@
                         <div class="split-pane-left">
                             <div class="pane-header">
                                 <div class="search-panel-title-group">
-                                    <i data-lucide="alert-circle" class="status-card-icon text-success"></i>
+                                    <i data-lucide="alert-triangle" class="status-card-icon text-success"></i>
                                     <span class="search-panel-title">장애 접수 현황</span>
                                 </div>
                             </div>
@@ -131,7 +131,7 @@
                         <div class="split-pane-right" id="detail-pane">
                             <!-- Empty State -->
                             <div id="empty-state" class="empty-state">
-                                <i data-lucide="alert-octagon" class="empty-state-icon"></i>
+                                <i data-lucide="alert-triangle" class="empty-state-icon"></i>
                                 <p class="empty-state-text">좌측 목록에서 장애 항목을 선택해 주세요.</p>
                             </div>
 
@@ -139,7 +139,7 @@
                             <div id="detail-content" class="hidden h-full flex flex-col">
                                 <div class="pane-header">
                                     <div class="search-panel-title-group">
-                                        <i data-lucide="info" class="status-card-icon text-success"></i>
+                                        <i data-lucide="alert-triangle" class="status-card-icon text-success"></i>
                                         <span class="search-panel-title">장애 정보</span>
                                     </div>
                                     <div class="pane-header-right">
@@ -149,7 +149,7 @@
                                     </div>
                                 </div>
 
-                                <div class="pane-content custom-scrollbar flex-1">
+                                <div class="pane-content custom-scrollbar flex-1 flex flex-col">
                                     <!-- Fault Summary Card -->
                                     <div class="grid grid-cols-2 gap-4 mb-6">
                                         <div>
@@ -195,6 +195,9 @@
                                                     <!-- JS Rendered -->
                                                 </tbody>
                                             </table>
+                                        </div>
+                                        <div class="table-footer flex-none mt-auto pt-4 border-t border-slate-700/50">
+                                            <span class="pagination-info" id="action-total-count">총 0 건</span>
                                         </div>
                                     </div>
                                 </div>
