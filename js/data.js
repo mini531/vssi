@@ -82,5 +82,7 @@ const screenData = {
         { category: "메인 메뉴", menu1: "공지사항 관리", menu2: "-", id: "SAM_BD_01_01", name: "공지사항 관리", type: "일반", date: "2026년", remarks: "" },
         { category: "메인 메뉴", menu1: "공지사항 관리", menu2: "-", id: "SAM_BD_01_02", name: "공지사항 등록 (SAM_BD_01_01에 포함)", type: "일반", date: "2026년", remarks: "" },
         { category: "메인 메뉴", menu1: "공지사항 관리", menu2: "-", id: "SAM_BD_01_03", name: "공지사항 수정 (SAM_BD_01_01에 포함)", type: "일반", date: "2026년", remarks: "" },
+        { category: "보조 메뉴", menu1: "장애 접수", menu2: "-", id: "SAM_ER_01_01", name: "장애 접수 관리", type: "일반", date: "2026년", remarks: "본인이 등록한 장애 접수 내역 관리" },
+        { category: "보조 메뉴", menu1: "장애 접수", menu2: "-", id: "SAM_ER_01_02", name: "장애 접수 등록 (SAM_ER_01_01에 포함)", type: "일반", date: "2026년", remarks: "" },
     ]
 };

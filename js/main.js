@@ -59,7 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'SAM_US_03_01',
         'COM_LG_03_01',
         'COM_LG_03_02',
-        'COM_LG_03_03'
+        'COM_LG_03_03',
+        'SAM_ER_01_01'
     ];
 
     function init() {
@@ -185,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 'SAM_AU_01_02', 'SAM_AU_01_03', 'SAM_US_01_02', 'SAM_US_01_03', 'SAM_US_01_04',
                 'SAM_US_02_01', 'SAM_AU_02_02', 'SAM_AU_02_03', 'SAM_AU_03_02',
                 'SAM_SY_01_02', 'SAM_SY_02_02', 'SAM_BD_01_02', 'SAM_BD_01_03',
-                'SAM_DB_01_02', 'SAM_MO_01_02'
+                'SAM_DB_01_02', 'SAM_MO_01_02', 'SAM_ER_01_02'
             ].includes(item.id)) {
                 // Special case for Included Modal - Primary Color but not a link
                 idClass = 'screen-id-modal';
