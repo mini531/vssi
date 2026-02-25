@@ -58,8 +58,8 @@
                             <article class="db-stat-card" onclick="location.href='SAM_US_01_01.html'">
                                 <span class="db-card-label">활성 사용자</span>
                                 <span class="db-card-value">1,240</span>
-                                <div class="db-sub-label text-success">
-                                    <i data-lucide="trending-up" class="w-3 h-3"></i> +12.5% 지난주 대비
+                                <div class="db-sub-label text-success flex items-center gap-1">
+                                    <i data-lucide="users" class="w-3 h-3"></i> 전체 가입자 중 활성 상태
                                 </div>
                             </article>
                             <article class="db-stat-card" onclick="location.href='SAM_US_01_01.html'">
@@ -103,12 +103,16 @@
                                     <!-- Column Headers -->
                                     <div></div>
                                     <div class="infra-grid-header">정상 (Normal)</div>
+                                    <div class="infra-grid-header">위험 (Critical)</div>
                                     <div class="infra-grid-header">장애 (Failure)</div>
 
                                     <!-- CPU Row -->
                                     <div class="infra-resource-label">CPU</div>
                                     <div class="infra-status-card success" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">25</span>
+                                        <span class="infra-status-count">23</span>
+                                    </div>
+                                    <div class="infra-status-card warning" onclick="location.href='SAM_MO_01_01.html'">
+                                        <span class="infra-status-count">2</span>
                                     </div>
                                     <div class="infra-status-card error" onclick="location.href='SAM_MO_01_01.html'">
                                         <span class="infra-status-count">1</span>
@@ -117,7 +121,10 @@
                                     <!-- MEM Row -->
                                     <div class="infra-resource-label">메모리</div>
                                     <div class="infra-status-card success" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">26</span>
+                                        <span class="infra-status-count">25</span>
+                                    </div>
+                                    <div class="infra-status-card warning" onclick="location.href='SAM_MO_01_01.html'">
+                                        <span class="infra-status-count">1</span>
                                     </div>
                                     <div class="infra-status-card error" onclick="location.href='SAM_MO_01_01.html'">
                                         <span class="infra-status-count">0</span>
@@ -127,6 +134,9 @@
                                     <div class="infra-resource-label">네트워크</div>
                                     <div class="infra-status-card success" onclick="location.href='SAM_MO_01_01.html'">
                                         <span class="infra-status-count">14</span>
+                                    </div>
+                                    <div class="infra-status-card warning" onclick="location.href='SAM_MO_01_01.html'">
+                                        <span class="infra-status-count">0</span>
                                     </div>
                                     <div class="infra-status-card error" onclick="location.href='SAM_MO_01_01.html'">
                                         <span class="infra-status-count">1</span>
@@ -148,7 +158,7 @@
                                         <div id="cpu-rank-container" class="dashboard-section gap-1"></div>
                                     </div>
                                     <div class="dashboard-section gap-2">
-                                        <h4 class="db-item-title mb-2">지연 시간 상위 노드</h4>
+                                        <h4 class="db-item-title mb-2">메모리 부하 상위 노드</h4>
                                         <div id="latency-rank-container" class="dashboard-section gap-1"></div>
                                     </div>
                                 </div>

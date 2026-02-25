@@ -183,15 +183,6 @@ window.initRegistrationMode = function () {
     document.getElementById('reg-content').classList.remove('hidden');
 
     // Set current datetime
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-
-    document.getElementById('reg-fault-date').value = `${year}-${month}-${day}`;
-    document.getElementById('reg-fault-time').value = `${hours}:${minutes}`;
     document.getElementById('reg-fault-system').value = 'SAMS';
     document.getElementById('reg-fault-desc').value = '';
 
@@ -231,15 +222,13 @@ function setFaultError(id, msg) {
 }
 
 function clearAllFaultErrors() {
-    ['reg-fault-system', 'reg-fault-date', 'reg-fault-time', 'reg-fault-desc'].forEach(id => {
+    ['reg-fault-system', 'reg-fault-desc'].forEach(id => {
         resetFaultError(id);
     });
 }
 
-window.confirmFaultRegistration = function () {
+window.handleFaultRegistration = function () {
     const system = document.getElementById('reg-fault-system').value;
-    const date = document.getElementById('reg-fault-date').value;
-    const time = document.getElementById('reg-fault-time').value;
     const desc = document.getElementById('reg-fault-desc').value;
 
     let hasError = false;
@@ -249,14 +238,6 @@ window.confirmFaultRegistration = function () {
         setFaultError('reg-fault-system', '시스템을 선택해주세요.');
         hasError = true;
     }
-    if (!date) {
-        setFaultError('reg-fault-date', '날짜를 선택해주세요.');
-        hasError = true;
-    }
-    if (!time) {
-        setFaultError('reg-fault-time', '시간을 입력해주세요.');
-        hasError = true;
-    }
     if (!desc.trim()) {
         setFaultError('reg-fault-desc', '장애 내용을 입력해주세요.');
         hasError = true;
@@ -264,13 +245,27 @@ window.confirmFaultRegistration = function () {
 
     if (hasError) return;
 
+    // Show Confirm Modal
+    if (typeof showConfirmModal === 'function') {
+        showConfirmModal('장애 접수 등록', '장애 접수 내용을 저장하시겠습니까?');
+    }
+};
+
+window.confirmSaveRegistration = function () {
+    // Hide registration UI
+    isRegMode = false;
+    const regContent = document.getElementById('reg-content');
+    if (regContent) regContent.classList.add('hidden');
+
     // Simulation: Success
-    showSuccessModal('장애 접수가 성공적으로 완료되었습니다.', '등록 완료');
+    showSuccessModal('등록 완료되었습니다.', '등록 완료');
 
     // On mobile, return to list view after saving
     if (typeof closeDetailPane === 'function') {
         closeDetailPane();
     }
+
+    closeConfirmModal();
 };
 
 window.closeSuccessModal = function () {
@@ -281,7 +276,13 @@ window.closeSuccessModal = function () {
 // Deletion Logic
 window.showDeleteWarning = function () {
     if (!selectedFaultId) return;
-    showConfirmModal('장애 내역 삭제', '선택한 장애 신고 내역을 삭제하시겠습니까?\n삭제 후 복구할 수 없습니다.');
+    const modal = document.getElementById('delete-confirm-modal');
+    if (modal) modal.classList.add('active');
+};
+
+window.closeDeleteConfirm = function () {
+    const modal = document.getElementById('delete-confirm-modal');
+    if (modal) modal.classList.remove('active');
 };
 
 window.confirmDeleteAction = function () {
@@ -304,8 +305,8 @@ window.confirmDeleteAction = function () {
         closeDetailPane();
     }
 
-    closeConfirmModal();
-    showSuccessModal('장애 신고 내역이 성공적으로 삭제되었습니다.', '삭제 완료');
+    closeDeleteConfirm();
+    showSuccessModal('삭제되었습니다.', '삭제 완료');
 };
 
 // Common Utilities

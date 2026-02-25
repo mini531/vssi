@@ -35,12 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Real Activity Logs (Integrated from SAM_LG_02_01.js)
     const activityLogs = [
-        { time: '2026.02.11 14:20:12', type: '로그인', userId: 'admin.kim', userName: '김민수', message: 'Interactive session established via 192.168.1.50 using WebClient. User-Agent: Chrome/121.0.0.0.' },
-        { time: '2026.02.11 13:45:30', type: '수정', userId: 'op.song', userName: '송지은', message: 'Security policy change: [SESSION_EXPIRY] updated from [1800s] to [3600s]. Scope: GLOBAL.' },
-        { time: '2026.02.11 13:10:05', type: '생성', userId: 'admin.lee', userName: '이지원', message: 'New administrative role [VCDM_VIEWER] registered. Permissions: [vcdm:read]. Target system: VCDM.' },
-        { time: '2026.02.11 12:30:45', type: '로그아웃', userId: 'air.kim', userName: '김동하', message: 'User requested termination of session [SID-99120]. Duration: 02:45:12.' },
-        { time: '2026.02.11 11:50:22', type: '삭제', userId: 'admin.park', userName: '박준호', message: 'Permanent deletion of inactive account [temp_user] (Last Login: 2025-12-01). Associated role mappings cleared.' },
-        { time: '2026.02.11 10:15:10', type: '로그인', userId: 'op.yoon', userName: '윤서진', message: 'Authorization success via SAML 2.0 Provider. Subject: op.yoon@vssi.local. IP: 192.168.1.124.' }
+        { time: '2026.02.11 14:20:12', type: '로그인', userId: 'admin.kim', userName: '김민수' },
+        { time: '2026.02.11 12:30:45', type: '로그아웃', userId: 'air.kim', userName: '김동하' },
+        { time: '2026.02.11 10:15:10', type: '로그인', userId: 'op.yoon', userName: '윤서진' },
+        { time: '2026.02.10 18:20:15', type: '로그아웃', userId: 'vp.song', userName: '송태태' },
+        { time: '2026.02.10 14:10:00', type: '로그인', userId: 'admin.jung', userName: '정우성' },
+        { time: '2026.02.10 09:30:45', type: '로그아웃', userId: 'op.song', userName: '송지은' }
     ];
 
     const Dashboard = {
@@ -171,10 +171,9 @@ document.addEventListener('DOMContentLoaded', () => {
         updateMetrics() {
             nodePool.forEach(node => {
                 node.currentCPU = Math.min(100, Math.max(0, node.baseLoad + (Math.random() * 10 - 5)));
-                node.currentLat = Math.min(100, Math.max(0, (node.baseLoad / 1.5) + (Math.random() * 8 - 4)));
+                node.currentMem = Math.min(100, Math.max(0, (node.baseLoad / 1.2) + (Math.random() * 8 - 4)));
             });
             this.updateEnvelopeChart(this.charts.cpu, 'currentCPU');
-            // this.updateEnvelopeChart(this.charts.signup, 'currentLat'); // Not needed for bar chart
             this.updateRankingList();
         },
 
@@ -191,18 +190,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateRankingList() {
             const cpuRank = document.getElementById('cpu-rank-container');
-            const latRank = document.getElementById('latency-rank-container');
-            if (!cpuRank || !latRank) return;
+            const memRank = document.getElementById('latency-rank-container');
+            if (!cpuRank || !memRank) return;
 
             const topCPU = [...nodePool].sort((a, b) => b.currentCPU - a.currentCPU).slice(0, 5);
-            const topLat = [...nodePool].sort((a, b) => b.currentLat - a.currentLat).slice(0, 5);
+            const topMem = [...nodePool].sort((a, b) => b.currentMem - a.currentMem).slice(0, 5);
 
             cpuRank.innerHTML = topCPU.map((n, i) => this.renderRankItem(n, n.currentCPU, 'CPU', i)).join('');
-            latRank.innerHTML = topLat.map((n, i) => this.renderRankItem(n, n.currentLat, 'LAT', i)).join('');
+            memRank.innerHTML = topMem.map((n, i) => this.renderRankItem(n, n.currentMem, 'MEM', i)).join('');
         },
 
         renderRankItem(node, val, type, idx) {
-            const barColorClass = val > 80 ? 'bg-error' : (val > 60 ? 'bg-warning' : 'bg-teal-500');
+            const barColorClass = val > 80 ? 'bg-error' : (val > 60 ? 'bg-warning' : 'bg-success');
             const textColorClass = val > 80 ? 'text-error' : (val > 60 ? 'text-warning' : '');
             return `
                 <div class="db-rank-item">
@@ -215,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="db-progress-container">
                             <div class="db-progress-fill ${barColorClass}" style="width: ${val}%"></div>
                         </div>
-                        <span class="db-rank-value ${textColorClass}">${Math.round(val)}${type === 'CPU' ? '%' : 's'}</span>
+                        <span class="db-rank-value ${textColorClass}">${Math.round(val)}%</span>
                     </div>
                 </div>
             `;
@@ -226,23 +225,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const accessContainer = document.getElementById('access-log-container');
 
             const faults = [
-                { id: 'FLT-001', time: '2026.02.11 14:30:22', system: 'SAMS DB', level: '치명적', desc: '데이터베이스 커넥션 풀 초과로 인한 지연 발생. 특정 쿼리의 락(Lock) 경합 의심.' },
-                { id: 'FLT-002', time: '2026.02.11 11:20:15', system: 'IVS GW', level: '요주의', desc: 'IVS 게이트웨이 인터페이스 응답 속도 저하 (Response time > 5s)' },
-                { id: 'FLT-003', time: '2026.02.10 17:50:00', system: 'VOS Node 1', level: '경미', desc: '노드 1번 CPU 사용률 80% 상회 알림' },
-                { id: 'FLT-004', time: '2026.02.10 15:10:45', system: 'Network Switch A', level: '치명적', desc: '스위치 포트 05번 링크 다운 감지' }
+                { id: 'FLT-001', time: '2026.02.11 14:30:22', system: 'IVMS (버티포트 통합 관리 시스템)', status: '조치중' },
+                { id: 'FLT-002', time: '2026.02.11 11:20:15', system: 'IFPS (통합 비행 계획 관리 시스템)', status: '접수' },
+                { id: 'FLT-003', time: '2026.02.10 17:50:00', system: 'IFRS (통합 운항 예약 시스템)', status: '완료' },
+                { id: 'FLT-004', time: '2026.02.10 15:10:45', system: 'V-CDM (협동적 의사 결정 지원 시스템)', status: '완료' }
             ];
 
 
             if (faultContainer) {
-                faultContainer.innerHTML = faults.slice(0, 3).map(f => `
-                    <div class="db-feed-item" onclick="location.href='SAM_SY_02_01.html?id=${f.id}'">
-                        <div class="flex-between-center mb-1">
-                            <span class="db-item-title ${f.level === '치명적' ? 'text-error' : (f.level === '요주의' ? 'text-warning' : '')}">${f.level}</span>
-                            <span class="db-notice-date">${f.time}</span>
+                faultContainer.innerHTML = faults.slice(0, 3).map(f => {
+                    const statusClass = f.status === '완료' ? 'text-success' : (f.status === '조치중' ? 'text-info' : 'text-secondary');
+                    return `
+                        <div class="db-feed-item" onclick="location.href='SAM_SY_02_01.html?id=${f.id}'">
+                            <div class="flex-between-center mb-1">
+                                <span class="db-item-title ${statusClass}">${f.status}</span>
+                                <span class="db-notice-date">${f.time}</span>
+                            </div>
+                            <div class="db-notice-link text-white">${f.system}</div>
                         </div>
-                        <div class="db-notice-link text-white">${f.system}: ${f.desc}</div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             }
 
             if (accessContainer) {

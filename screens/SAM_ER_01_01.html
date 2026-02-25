@@ -114,8 +114,16 @@
                                 <span class="pagination-info" id="fault-total-count">총 0 건</span>
                                 <div class="pagination-controls">
                                     <button class="page-btn active">1</button>
+                                    <button class="page-btn">2</button>
+                                    <button class="page-btn">3</button>
+                                    <button class="page-btn pc-only">4</button>
+                                    <button class="page-btn pc-only">5</button>
                                     <button class="page-btn"><i data-lucide="chevron-right"
                                             class="pagination-icon"></i></button>
+                                    <select class="pagination-select pagination-select-margin">
+                                        <option>20개씩 보기</option>
+                                        <option>50개씩 보기</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -152,7 +160,7 @@
                                     <!-- Fault Summary Card -->
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                                         <div class="sm:col-span-2">
-                                            <h4 class="modal-section-title">대상 시스템</h4>
+                                            <h4 class="modal-section-title">시스템</h4>
                                             <div id="detail-system" class="data-value font-semibold">System A</div>
                                         </div>
                                         <div>
@@ -209,7 +217,7 @@
                                             <button class="btn-sm btn-secondary" onclick="cancelRegistration()">
                                                 <i data-lucide="x" class="trend-icon"></i> 취소
                                             </button>
-                                            <button class="btn-sm btn-primary" onclick="confirmFaultRegistration()">
+                                            <button class="btn-sm btn-primary" onclick="handleFaultRegistration()">
                                                 <i data-lucide="save" class="trend-icon"></i> 저장
                                             </button>
                                         </div>
@@ -218,9 +226,10 @@
                                 <div class="pane-content custom-scrollbar flex-1">
                                     <div class="registration-form-panel">
                                         <div class="mb-4">
-                                            <label class="form-label">대상 시스템 <span
+                                            <label class="form-label">시스템 <span
                                                     class="text-error required-mark">*</span></label>
-                                            <select id="reg-fault-system" class="form-input form-select">
+                                            <select id="reg-fault-system" class="form-input form-select"
+                                                onchange="resetFaultError('reg-fault-system')">
                                                 <option value="">시스템 선택</option>
                                                 <option value="IVMS">IVMS (버티포트 통합 관리 시스템)</option>
                                                 <option value="IFPS">IFPS (통합 비행 계획 관리 시스템)</option>
@@ -230,21 +239,6 @@
                                             </select>
                                             <div id="error-reg-fault-system" class="form-error"></div>
                                         </div>
-                                        <div class="mb-4">
-                                            <label class="form-label">장애 발생 일시 <span
-                                                    class="text-error required-mark">*</span></label>
-                                            <div class="filter-date-range">
-                                                <input type="date" id="reg-fault-date"
-                                                    class="filter-input filter-input-flex"
-                                                    onclick="try{this.showPicker()}catch(e){}"
-                                                    oninput="resetFaultError('reg-fault-date')">
-                                                <input type="time" id="reg-fault-time"
-                                                    class="filter-input filter-input-flex"
-                                                    oninput="resetFaultError('reg-fault-time')">
-                                            </div>
-                                            <div id="error-reg-fault-date" class="form-error"></div>
-                                            <div id="error-reg-fault-time" class="form-error"></div>
-                                        </div>
                                         <div>
                                             <label class="form-label">장애 내용 <span
                                                     class="text-error required-mark">*</span></label>
@@ -252,12 +246,6 @@
                                                 placeholder="발생한 장애 내용을 상세히 입력해 주세요."
                                                 oninput="resetFaultError('reg-fault-desc')"></textarea>
                                             <div id="error-reg-fault-desc" class="form-error"></div>
-                                        </div>
-                                        <div class="mt-6 p-4 bg-slate-800/30 rounded-lg border border-slate-700/50">
-                                            <div class="flex items-center gap-2 text-slate-400 text-sm">
-                                                <i data-lucide="info" class="w-4 h-4"></i>
-                                                <span>등록자는 자동으로 '홍길동'으로 설정됩니다.</span>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -269,16 +257,31 @@
         </main>
     </div>
 
-    <!-- Confirm Modal (Common) -->
+    <!-- Save Confirm Modal -->
     <div id="confirm-modal" class="modal-overlay">
         <div class="modal-dialog">
             <div class="modal-icon info">
                 <i data-lucide="help-circle" width="64" height="64" class="text-icon-info"></i>
             </div>
-            <h3 class="modal-title" id="confirm-modal-title">장애 내역 삭제</h3>
-            <p class="modal-desc" id="confirm-modal-desc">선택한 장애 신고 내역을 삭제하시겠습니까?<br>삭제 후 복구할 수 없습니다.</p>
+            <h3 class="modal-title" id="confirm-modal-title">장애 접수 등록</h3>
+            <p class="modal-desc" id="confirm-modal-desc">장애 접수 내용을 저장하시겠습니까?</p>
             <div class="modal-btn-group">
                 <button onclick="closeConfirmModal()" class="btn-flex btn-modal-secondary">취소</button>
+                <button onclick="confirmSaveRegistration()" class="btn-flex btn-modal-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirm Modal -->
+    <div id="delete-confirm-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-icon info">
+                <i data-lucide="help-circle" width="64" height="64" class="text-icon-info"></i>
+            </div>
+            <h3 class="modal-title">장애 내역 삭제</h3>
+            <p class="modal-desc">선택한 장애 신고 내역을 삭제하시겠습니까?<br>삭제 후 복구할 수 없습니다.</p>
+            <div class="modal-btn-group">
+                <button onclick="closeDeleteConfirm()" class="btn-flex btn-modal-secondary">취소</button>
                 <button onclick="confirmDeleteAction()" class="btn-flex btn-modal-primary">확인</button>
             </div>
         </div>
@@ -291,7 +294,7 @@
                 <i data-lucide="check-circle-2" width="64" height="64" class="text-icon-success"></i>
             </div>
             <h3 class="modal-title" id="success-modal-title">등록 완료</h3>
-            <p class="modal-desc" id="success-message">장애 접수가 성공적으로 완료되었습니다.</p>
+            <p class="modal-desc" id="success-message">등록 완료되었습니다.</p>
             <div class="modal-btn-group">
                 <button onclick="closeSuccessModal()" class="btn-modal-success">확인</button>
             </div>
