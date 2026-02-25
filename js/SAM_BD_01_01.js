@@ -329,19 +329,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const regDateFormatted = regDateFull.substring(0, 19);
 
             tr.innerHTML = `
-                <td data-label="Title">
+                <td data-label="제목">
                     <div class="flex items-center gap-1">
                         ${notice.title}
                         ${notice.attachments.length > 0 ? '<i data-lucide="paperclip" class="w-3 h-3 text-gray-400"></i>' : ''}
                     </div>
                 </td>
-                <td class="td-center" data-label="Visibility">
+                <td class="td-center" data-label="공개 여부">
                     <span class="badge ${notice.isVisible ? 'badge-success' : 'badge-secondary'}">
                         ${notice.isVisible ? '공개' : '비공개'}
                     </span>
                 </td>
-                <td class="td-date" data-label="Date">${regDateFormatted}</td>
-                <td class="td-center" data-label="Registrant">${registrant}</td>
+                <td class="td-date" data-label="등록 일시">${regDateFormatted}</td>
+                <td class="td-center" data-label="등록자">${registrant}</td>
             `;
             noticeListBody.appendChild(tr);
         });
@@ -429,6 +429,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Show Content
         emptyState.classList.add('hidden');
         detailContent.classList.remove('hidden');
+
+        // Mobile Split Pane View
+        openDetailPane();
+    }
+
+    function openDetailPane() {
+        const splitContainer = document.querySelector('.split-container');
+        if (splitContainer) splitContainer.classList.add('show-detail');
     }
 
     function resetViewMode() {
@@ -837,6 +845,9 @@ document.addEventListener('DOMContentLoaded', () => {
     window.closeDetailPane = function () {
         emptyState.classList.remove('hidden');
         detailContent.classList.add('hidden');
+
+        const splitContainer = document.querySelector('.split-container');
+        if (splitContainer) splitContainer.classList.remove('show-detail');
     };
 
     // === Multi-Select Helpers ===

@@ -143,19 +143,21 @@
                                         <span class="search-panel-title">장애 정보</span>
                                     </div>
                                     <div class="pane-header-right">
-                                        <button class="btn-sm btn-secondary mobile-list-btn"
-                                            onclick="closeDetailPane()">
-                                            <i data-lucide="list" class="trend-icon"></i> 목록
-                                        </button>
-                                        <button class="btn-sm btn-primary" onclick="openActionModal()">
-                                            <i data-lucide="plus" class="trend-icon"></i> 조치 등록
-                                        </button>
+                                        <div class="action-btn-group">
+                                            <button class="btn-sm btn-secondary mobile-list-btn"
+                                                onclick="closeDetailPane()">
+                                                <i data-lucide="list" class="trend-icon"></i> 목록
+                                            </button>
+                                            <button class="btn-sm btn-primary" onclick="openActionModal()">
+                                                <i data-lucide="plus" class="trend-icon"></i> 조치 등록
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="pane-content custom-scrollbar flex-1 flex flex-col">
                                     <!-- Fault Summary Card -->
-                                    <div class="flex flex-col lg:grid lg:grid-cols-2 gap-4 mb-6">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                                         <div>
                                             <h4 class="modal-section-title">대상 시스템</h4>
                                             <div id="detail-system" class="data-value">System A</div>

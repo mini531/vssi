@@ -117,10 +117,10 @@ function renderNetworkList() {
             net.status === '위험' ? 'badge-warning' : 'badge-error';
 
         row.innerHTML = `
-            <td data-label="Source">${net.source}</td>
-            <td data-label="Target">${net.target}</td>
-            <td class="td-center" data-label="Status"><span class="badge ${statusBadgeClass}">${net.status}</span></td>
-            <td class="td-date" data-label="Date">${net.lastUpdate}</td>
+            <td data-label="송신 노드">${net.source}</td>
+            <td data-label="수신 노드">${net.target}</td>
+            <td class="td-center" data-label="상태"><span class="badge ${statusBadgeClass}">${net.status}</span></td>
+            <td class="td-date" data-label="최근 갱신 일시">${net.lastUpdate}</td>
         `;
 
         tbody.appendChild(row);
@@ -159,9 +159,8 @@ function selectNetwork(net, element) {
     renderFailureHistory();
 
     // Mobile: Show detail pane
-    const detailPane = document.getElementById('detail-pane');
     if (window.innerWidth < 1024) {
-        detailPane.classList.add('mobile-detail-active');
+        document.querySelector('.split-container').classList.add('show-detail');
     }
 
     lucide.createIcons();
@@ -169,8 +168,7 @@ function selectNetwork(net, element) {
 
 // Close Detail Pane (Mobile)
 function closeDetailPane() {
-    const detailPane = document.getElementById('detail-pane');
-    detailPane.classList.remove('mobile-detail-active');
+    document.querySelector('.split-container').classList.remove('show-detail');
     ChartManager.stopAll();
 }
 
@@ -227,9 +225,9 @@ function renderFailureHistory() {
         const statusBadgeClass = item.status === 'Critical' ? 'badge-error' : 'badge-warning';
 
         row.innerHTML = `
-            <td class="td-date" data-label="Date">${item.date}</td>
-            <td class="td-center" data-label="Level"><span class="badge ${statusBadgeClass}">${item.status}</span></td>
-            <td data-label="Content">${item.content}</td>
+            <td class="td-date" data-label="발생 일시">${item.date}</td>
+            <td class="td-center" data-label="상태"><span class="badge ${statusBadgeClass}">${item.status}</span></td>
+            <td data-label="내용">${item.content}</td>
         `;
 
         tbody.appendChild(row);

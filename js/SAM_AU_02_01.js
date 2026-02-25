@@ -113,16 +113,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const tr = document.createElement('tr');
             tr.className = 'data-table-row';
             tr.innerHTML = `
-                <td class="text-center">
-                    <label class="perm-checkbox-group justify-center">
+                <td class="text-left" data-label="선택">
+                    <label class="perm-checkbox-group justify-start">
                         <input type="checkbox" class="custom-checkbox form-checkbox user-select-checkbox" data-user-id="${user.id}">
                     </label>
                 </td>
-                <td data-label="ID">${user.id}</td>
-                <td data-label="Name">${user.name}</td>
-                <td data-label="Dept">${user.dept}</td>
-                <td data-label="Email">${user.email}</td>
-                <td data-label="Phone">${user.phone}</td>
+                <td data-label="아이디">${user.id}</td>
+                <td data-label="이름">${user.name}</td>
+                <td data-label="소속">${user.dept}</td>
+                <td data-label="이메일">${user.email}</td>
+                <td data-label="휴대폰 번호">${user.phone}</td>
             `;
             userListBody.appendChild(tr);
         });
@@ -190,10 +190,10 @@ document.addEventListener('DOMContentLoaded', () => {
         userListBody.innerHTML = '';
         selectedUsers.forEach(user => {
             userListBody.innerHTML += `
-                <tr>
-                    <td>${user.id}</td>
-                    <td>${user.name}</td>
-                    <td>${user.dept}</td>
+                <tr class="data-table-row">
+                    <td data-label="아이디">${user.id}</td>
+                    <td data-label="이름">${user.name}</td>
+                    <td data-label="소속">${user.dept}</td>
                 </tr>
             `;
         });
@@ -390,15 +390,15 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             tr.innerHTML = `
-                <td class="text-center">
-                    <label class="perm-checkbox-group justify-center">
+                <td class="text-left" data-label="선택">
+                    <label class="perm-checkbox-group justify-start">
                         <input type="checkbox" class="custom-checkbox form-checkbox assign-user-checkbox" value="${user.id}">
                     </label>
                 </td>
-                <td data-label="ID">${user.id}</td>
-                <td data-label="Name">${user.name}</td>
-                <td data-label="Dept">${user.dept}</td>
-                <td data-label="Role">${user.currentRole}</td>
+                <td data-label="아이디">${user.id}</td>
+                <td data-label="이름">${user.name}</td>
+                <td data-label="소속">${user.dept}</td>
+                <td data-label="현재 권한">${user.currentRole}</td>
             `;
             tbody.appendChild(tr);
         });

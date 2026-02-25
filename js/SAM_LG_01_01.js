@@ -50,11 +50,11 @@ function renderLogs(logs) {
         const errorCodeDisplay = log.level === 'ERROR' ? log.errorCode : '-';
 
         row.innerHTML = `
-            <td class="td-date">${log.time}</td>
-            <td class="td-center"><span class="badge ${badgeClass}">${log.level}</span></td>
-            <td class="td-center">${log.module}</td>
-            <td>${errorCodeDisplay}</td>
-            <td>${log.message}</td>
+            <td class="td-date" data-label="발생 일시">${log.time}</td>
+            <td class="td-center" data-label="로그 레벨"><span class="badge ${badgeClass}">${log.level}</span></td>
+            <td class="td-center" data-label="모듈">${log.module}</td>
+            <td data-label="오류 코드">${errorCodeDisplay}</td>
+            <td class="td-message" data-label="메시지">${log.message}</td>
         `;
         body.appendChild(row);
     });

@@ -92,17 +92,17 @@ function renderFaults(list) {
 
     list.forEach(fault => {
         const tr = document.createElement('tr');
-        tr.className = 'clickable-row';
+        tr.className = 'data-table-row clickable-row';
         tr.dataset.faultId = fault.id;
         if (selectedFaultId === fault.id) tr.classList.add('active');
 
         tr.onclick = () => selectFault(fault.id, tr);
 
         tr.innerHTML = `
-            <td class="td-date" data-label="Time">${fault.time}</td>
-            <td data-label="System">${fault.system}</td>
-            <td class="td-center" data-label="Level"><span class="badge ${getLevelClass(fault.level)}">${fault.level}</span></td>
-            <td class="td-center" data-label="Status"><span class="badge ${getStatusClass(fault.status)}">${fault.status}</span></td>
+            <td class="td-date" data-label="발생 일시">${fault.time}</td>
+            <td data-label="시스템">${fault.system}</td>
+            <td class="td-center" data-label="등급"><span class="badge ${getLevelClass(fault.level)}">${fault.level}</span></td>
+            <td class="td-center" data-label="상태"><span class="badge ${getStatusClass(fault.status)}">${fault.status}</span></td>
         `;
         listBody.appendChild(tr);
     });
@@ -153,11 +153,11 @@ function renderActions(actions) {
         const tr = document.createElement('tr');
         tr.className = 'data-table-row';
         tr.innerHTML = `
-            <td>${action.time}</td>
-            <td class="table-text-wrap">${action.content}</td>
-            <td>${action.actor}</td>
-            <td class="td-center"><span class="badge ${getResultClass(action.result)}">${action.result}</span></td>
-            <td class="td-center">
+            <td data-label="조치 일시">${action.time}</td>
+            <td class="td-message table-text-wrap" data-label="조치 내용">${action.content}</td>
+            <td data-label="담당자">${action.actor}</td>
+            <td class="td-center" data-label="결과"><span class="badge ${getResultClass(action.result)}">${action.result}</span></td>
+            <td class="td-center" data-label="관리">
                 <div class="flex items-center justify-center gap-2">
                     <button class="text-slate-400 hover:text-red-400 transition-colors" title="삭제" onclick="deleteAction('${action.id}')">
                         <i data-lucide="trash-2" class="w-4 h-4"></i>

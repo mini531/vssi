@@ -41,11 +41,11 @@ function renderLogs(logs) {
         row.className = 'data-table-row';
 
         row.innerHTML = `
-            <td class="td-date">${log.time}</td>
-            <td>${log.userId}</td>
-            <td>${log.userName}</td>
-            <td>${log.type}</td>
-            <td>${log.message}</td>
+            <td class="td-date" data-label="발생 일시">${log.time}</td>
+            <td data-label="아이디">${log.userId}</td>
+            <td data-label="이름">${log.userName}</td>
+            <td data-label="로그 유형">${log.type}</td>
+            <td class="td-message" data-label="메시지">${log.message}</td>
         `;
         body.appendChild(row);
     });

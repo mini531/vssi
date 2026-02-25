@@ -88,11 +88,11 @@ function renderInterfaceList() {
             item.status === '지연' ? 'badge-warning' : 'badge-error';
 
         row.innerHTML = `
-            <td data-label="Name">${item.name}</td>
-            <td data-label="Sender">${item.sender}</td>
-            <td data-label="Receiver">${item.receiver}</td>
-            <td class="td-center" data-label="Type">${item.type}</td>
-            <td class="td-center" data-label="Status"><span class="badge ${statusBadgeClass}">${item.status}</span></td>
+            <td data-label="인터페이스 명">${item.name}</td>
+            <td data-label="송신 노드">${item.sender}</td>
+            <td data-label="수신 노드">${item.receiver}</td>
+            <td class="td-center" data-label="유형">${item.type}</td>
+            <td class="td-center" data-label="상태"><span class="badge ${statusBadgeClass}">${item.status}</span></td>
         `;
 
         tbody.appendChild(row);
@@ -129,9 +129,8 @@ function selectInterface(item, element) {
     resetLogFilter();
 
     // Mobile scroll
-    const detailPane = document.getElementById('detail-pane');
     if (window.innerWidth < 1024) {
-        detailPane.classList.add('mobile-detail-active');
+        document.querySelector('.split-container').classList.add('show-detail');
     }
 
     lucide.createIcons();
@@ -139,8 +138,7 @@ function selectInterface(item, element) {
 
 // Close Detail Pane (Mobile)
 function closeDetailPane() {
-    const detailPane = document.getElementById('detail-pane');
-    detailPane.classList.remove('mobile-detail-active');
+    document.querySelector('.split-container').classList.remove('show-detail');
     ChartManager.stopAll();
 }
 
@@ -191,11 +189,11 @@ function renderLogs() {
         const volumeFormatted = parseFloat(log.volume).toFixed(2);
 
         row.innerHTML = `
-            <td class="td-date td-center" data-label="Time">${log.time}</td>
-            <td class="td-number" data-label="Volume">${volumeFormatted}</td>
-            <td class="td-number" data-label="Latency">${log.latency}</td>
-            <td class="td-center" data-label="Status"><span class="badge ${statusBadgeClass}">${log.status}</span></td>
-            <td data-label="Error">${log.error}</td>
+            <td class="td-date td-center" data-label="요청 일시">${log.time}</td>
+            <td class="td-number" data-label="용량 (KB)">${volumeFormatted}</td>
+            <td class="td-number" data-label="응답 시간 (ms)">${log.latency}</td>
+            <td class="td-center" data-label="상태"><span class="badge ${statusBadgeClass}">${log.status}</span></td>
+            <td data-label="오류 내용">${log.error}</td>
         `;
 
         tbody.appendChild(row);

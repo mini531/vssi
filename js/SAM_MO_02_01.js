@@ -91,10 +91,10 @@ function renderHardwareList() {
             hw.status === '위험' ? 'badge-warning' : 'badge-error';
 
         row.innerHTML = `
-            <td data-label="Type">${hw.type}</td>
-            <td data-label="System">${hw.name}</td>
-            <td class="td-center" data-label="Status"><span class="badge ${statusBadgeClass}">${hw.status}</span></td>
-            <td class="td-date" data-label="Date">${hw.lastUpdate}</td>
+            <td data-label="구분">${hw.type}</td>
+            <td data-label="이름">${hw.name}</td>
+            <td class="td-center" data-label="상태"><span class="badge ${statusBadgeClass}">${hw.status}</span></td>
+            <td class="td-date" data-label="최근 갱신 일시">${hw.lastUpdate}</td>
         `;
 
         tbody.appendChild(row);
@@ -141,9 +141,8 @@ function selectHardware(hw, element) {
     if (usageBarEl) usageBarEl.style.width = `${usagePercent}%`;
 
     // Mobile: Show detail pane
-    const detailPane = document.getElementById('detail-pane');
     if (window.innerWidth < 1024) {
-        detailPane.classList.add('mobile-detail-active');
+        document.querySelector('.split-container').classList.add('show-detail');
     }
 
     lucide.createIcons();
@@ -151,8 +150,7 @@ function selectHardware(hw, element) {
 
 // Close Detail Pane (Mobile)
 function closeDetailPane() {
-    const detailPane = document.getElementById('detail-pane');
-    detailPane.classList.remove('mobile-detail-active');
+    document.querySelector('.split-container').classList.remove('show-detail');
 }
 
 // Initialize Charts

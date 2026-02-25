@@ -87,18 +87,18 @@ function renderCodeGroups(groups) {
 
     groups.forEach((group, index) => {
         const tr = document.createElement('tr');
-        tr.className = 'clickable-row';
+        tr.className = 'data-table-row clickable-row';
         tr.onclick = () => selectCodeGroup(group, tr);
 
         tr.innerHTML = `
-            <td data-label="ID">${group.id}</td>
-            <td data-label="Name">${group.name}</td>
-            <td class="td-center" data-label="Status">
+            <td data-label="코드 그룹 ID">${group.id}</td>
+            <td data-label="코드 그룹 이름">${group.name}</td>
+            <td class="td-center" data-label="사용 여부">
                 <span class="badge ${group.status === '사용' ? 'badge-success' : 'badge-default'}">
                     ${group.status}
                 </span>
             </td>
-            <td class="td-date" data-label="Date">${group.updatedAt}</td>
+            <td class="td-date" data-label="최근 갱신 일시">${group.updatedAt}</td>
         `;
         listBody.appendChild(tr);
     });
@@ -196,20 +196,21 @@ function renderCodes(codeList) {
     } else {
         codeList.forEach(code => {
             const tr = document.createElement('tr');
+            tr.className = 'data-table-row';
             tr.innerHTML = `
-                <td class="td-center">
+                <td class="td-center" data-label="선택">
                     <input type="checkbox" class="custom-checkbox code-checkbox" value="${code.code}" onchange="updateDeleteButtonState()">
                 </td>
-                <td class="font-medium text-slate-200">${code.code}</td>
-                <td>${code.name}</td>
-                <td class="text-slate-400 text-sm whitespace-pre-wrap">${code.desc || '-'}</td>
-                <td class="td-center">
+                <td class="font-medium text-slate-200" data-label="코드 ID">${code.code}</td>
+                <td data-label="코드 이름">${code.name}</td>
+                <td class="td-message text-slate-400 text-sm whitespace-pre-wrap" data-label="설명">${code.desc || '-'}</td>
+                <td class="td-center" data-label="사용 여부">
                     <span class="badge ${code.used === '사용' ? 'badge-success' : 'badge-danger'}">
                         ${code.used}
                     </span>
                 </td>
-                <td class="td-center">${code.sort}</td>
-                <td class="td-center">
+                <td class="td-center" data-label="순서">${code.sort}</td>
+                <td class="td-center" data-label="관리">
                     <div class="flex items-center justify-center gap-2">
                         <button class="text-slate-400 hover:text-teal-400 transition-colors" title="수정" onclick="editCodeInline('${code.code}')">
                             <i data-lucide="edit-3" class="w-4 h-4"></i>

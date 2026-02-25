@@ -1426,6 +1426,30 @@ html {
 
   .pane-header-right {
     justify-content: flex-end;
+    width: 100%;
+  }
+
+  .action-btn-group {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .action-btn-group button {
+    width: 100%;
+    margin: 0 !important;
+  }
+
+  /* Priority layout for mobile List button */
+  .mobile-list-btn {
+    grid-column: span 2;
+  }
+
+  /* Handle subsequent buttons wrap in 2 columns */
+  .action-btn-group button:only-child,
+  .mobile-list-btn+button:last-child {
+    grid-column: span 2;
   }
 }
 
@@ -2837,7 +2861,7 @@ button:disabled {
 .search-panel {
   background-color: #0b101b;
   border: 1px solid #1e293b;
-
+  width: 100%;
 }
 
 .search-panel-header {
@@ -3515,7 +3539,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     display: grid !important;
     grid-template-columns: 1fr 1fr;
     background: rgba(30, 41, 59, 0.4);
-    border: 1px solid rgba(51, 65, 85, 0.5);
     padding: 0.75rem;
     gap: 0.5rem 0.75rem;
     margin: 0 0 0.5rem;
@@ -3548,6 +3571,19 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     text-align: left !important;
   }
 
+  .data-table-row .td-message {
+    grid-column: span 2;
+    word-break: break-all;
+    white-space: normal;
+    padding-top: 0.5rem !important;
+    border-top: 1px dashed rgba(51, 65, 85, 0.3) !important;
+    margin-top: 0.4rem;
+  }
+
+  .data-table-row td .flex {
+    justify-content: flex-start !important;
+  }
+
   .col-group {
     display: none !important;
   }
@@ -3576,6 +3612,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
   .col-type {
     display: flex !important;
+    flex-direction: column;
     justify-content: flex-start !important;
     margin-top: 0.25rem;
   }
@@ -3584,7 +3621,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-size: 11px;
     color: #64748b;
     display: flex !important;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-end;
     justify-content: flex-end;
     margin-top: 0.25rem;
   }
@@ -3614,6 +3652,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     z-index: 500 !important;
     box-shadow: 20px 0 25px -5px rgba(0, 0, 0, 0.5);
     background-color: #0b101b !important;
+  }
+
+  /* Force Form Grid Stacking on Mobile */
+  .registration-form-panel .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .registration-form-panel .grid>div {
+    grid-column: span 1 !important;
   }
 }
 
@@ -3689,23 +3736,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 @media (min-width: 480px) {
   .filter-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
   }
 
   .filter-grid>.filter-grid-wide {
-    grid-column: span 2;
+    grid-column: span 1;
   }
 }
 
-@media (min-width: 768px) {
-  .filter-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .filter-grid>.filter-grid-wide {
-    grid-column: span 2;
-  }
-}
 
 @media (min-width: 1024px) {
   .filter-grid {
@@ -3737,7 +3775,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .filter-date-range {
   display: flex;
   gap: 0.25rem;
+  width: 100%;
+}
 
+.filter-date-range .filter-select {
+  flex: none;
+  width: 100px;
+}
+
+.filter-date-range .filter-input {
+  flex: 1;
+  min-width: 0;
 }
 
 .filter-date-separator {
@@ -3886,7 +3934,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Hide date columns on mobile */
 @media (max-width: 768px) {
 
-  .td-date,
+  .td-date:not(.data-table-row .td-date),
   th:last-child {
     display: none !important;
   }
@@ -4979,6 +5027,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .action-btn-group.hidden {
@@ -5169,12 +5218,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   filter: grayscale(0.5);
 }
 
-/* Semantic Classes for Role Definition Header */
-.pane-header-right {
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-}
 
 .bulk-select-group {
   display: flex;
