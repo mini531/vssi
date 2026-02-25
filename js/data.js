@@ -42,7 +42,6 @@ const screenData = {
     ],
     "SAMS": [
         { category: "메인 메뉴", menu1: "대시보드", menu2: "-", id: "SAM_DB_01_01", name: "SAMS 대시보드", type: "일반", date: "2026년", remarks: "" },
-        { category: "메인 메뉴", menu1: "대시보드", menu2: "-", id: "SAM_DB_01_02", name: "시스템 종합 건전성 안내(SAM_DB_01_01에 포함)", type: "모달", date: "2026년", remarks: "" },
         { category: "메인 메뉴", menu1: "모니터링", menu2: "-", id: "SAM_MO_01_01", name: "인프라 통합 현황", type: "일반", date: "2026년", remarks: "통합/연동/단독 서버 리스트 및 상태 값" },
         { category: "메인 메뉴", menu1: "모니터링", menu2: "-", id: "SAM_MO_01_02", name: "하드웨어 현황 (SAM_MO_01_01에 포함)", type: "모달", date: "2026년", remarks: "" },
         { category: "메인 메뉴", menu1: "모니터링", menu2: "-", id: "SAM_MO_02_01", name: "하드웨어 모니터링", type: "일반", date: "2026년", remarks: "CPU/Mem/Disk 시계열 차트" },
