@@ -23,6 +23,17 @@ document.addEventListener('includes-loaded', () => {
 
     // Highlight Active Sidebar Menu
     highlightActiveMenu();
+
+    // Auto-close sidebar on mobile menu click
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) {
+        sidebar.addEventListener('click', (e) => {
+            const btn = e.target.closest('.sidebar-nav-btn:not(.group), .sidebar-sub-btn');
+            if (btn) {
+                closeSidebarOnMobile();
+            }
+        });
+    }
 });
 
 // Sidebar Toggle
@@ -428,11 +439,12 @@ window.vssi = {
 
 // Close sidebar on mobile after menu click
 function closeSidebarOnMobile() {
-    // Check if mobile (window width < 1024px)
-    if (window.innerWidth < 1024) {
+    // Check if mobile (window width <= 768px)
+    if (window.innerWidth <= 768) {
         const sidebar = document.getElementById('sidebar');
         if (sidebar && !sidebar.classList.contains('collapsed')) {
             sidebar.classList.add('collapsed');
+            localStorage.setItem('vssi-sidebar-state', 'closed');
         }
     }
 }
