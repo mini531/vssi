@@ -113,3 +113,33 @@
     color: #2dd4bf;
     /* text-teal-400 */
 }
+
+/* Sidebar Footer */
+.sidebar-footer {
+    border-top: 1px solid rgba(30, 41, 59, 0.5);
+    padding: 0.5rem 0;
+    background-color: #0b101b;
+}
+
+.sidebar-footer-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    font-size: 11px;
+    color: #64748b;
+    transition: color 0.2s, background-color 0.2s;
+    white-space: nowrap;
+}
+
+.sidebar-footer-btn:hover {
+    color: #94a3b8;
+    background-color: rgba(30, 41, 59, 0.3);
+}
+
+.sidebar-footer-icon {
+    width: 0.875rem;
+    height: 0.875rem;
+    margin-right: 0.75rem;
+    opacity: 0.5;
+}

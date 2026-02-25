@@ -2,19 +2,18 @@
  * System Log Page Logic (SAM_LG_01_01)
  */
 
-// Sample Log Data
+// Sample Log Data (Comprehensive Error List)
 const systemLogs = [
-    { time: '2026.02.11 14:05:12', level: 'INFO', module: 'AUTH', errorCode: '-', message: 'Authentication provider [AzureAD] initialization started. Loading metadata from https://login.microsoftonline.com/vssi-tenant/.well-known/openid-configuration.' },
-    { time: '2026.02.11 13:58:45', level: 'ERROR', module: 'DB', errorCode: 'DB_CONN_001', message: 'Unexpected rollback during transaction [TID-58291]. Caused by: resource deadlock detected while waiting for resource in session 48. LOCK_WAIT_TIMEOUT exceeded.' },
-    { time: '2026.02.11 13:42:10', level: 'WARN', module: 'SERVER', errorCode: '-', message: 'High volatile memory usage detected on Node VM#2 (85.4%). Background garbage collection triggered. Threshold for auto-scaling not yet met.' },
-    { time: '2026.02.11 13:30:05', level: 'INFO', module: 'API', errorCode: '-', message: 'Successfully synchronized 45 flight plan updates with K-UAM Core API. Response payload size: 1.2MB. Processing time: 340ms.' },
-    { time: '2026.02.11 12:45:22', level: 'ERROR', module: 'NETWORK', errorCode: 'NET_LOSS_802', message: 'Critical packet loss (3.5%) detected between Gateway [GW-SEOUL-01] and IVS WAN. Latency spikes exceeding 500ms observed in last 5 minutes.' },
-    { time: '2026.02.11 12:15:10', level: 'INFO', module: 'AUTH', errorCode: '-', message: 'System configuration policy [SECURITY_LEVEL_HIGH] applied to all instances in cluster [CL-PROD-01] by user [admin].' },
-    { time: '2026.02.11 11:30:55', level: 'DEBUG', module: 'SERVER', errorCode: '-', message: 'Internal state dump: active_sessions=1240, thread_pool_utilization=0.42, gc_count_total=582, last_checkpoint_time=2026-02-11T11:25:00Z.' },
-    { time: '2026.02.11 10:20:15', level: 'WARN', module: 'DB', errorCode: '-', message: 'Performance Warning: Slow query detected in transaction log indexing task. Execution time [2.8s] exceeds threshold [2.5s]. Query: SELECT * FROM trans_logs WHERE timestamp > ...' },
-    { time: '2026.02.11 09:15:30', level: 'INFO', module: 'SERVER', errorCode: '-', message: 'Daily integrity check for system binaries completed. 4,520 files verified. No unauthorized modifications detected.' },
-    { time: '2026.02.11 08:45:12', level: 'ERROR', module: 'API', errorCode: 'AUTH_FAIL_403', message: 'Inbound request security handshake failed. SSL Exception: Peer certificate for 203.0.113.44 has expired or is not yet valid (NotBefore: 2026-01-01, NotAfter: 2026-02-10).' },
-    { time: '2026.02.10 23:30:00', level: 'INFO', module: 'SERVER', errorCode: '-', message: 'Automated full system backup archive [backup_PROD_20260210.tar.gz] successfully uploaded to secondary storage [S3-SEOUL-LOGS]. Size: 14.5GB.' }
+    { time: '2026.02.11 15:30:12', severity: '높음', errorCode: '500', message: '내부 서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.' },
+    { time: '2026.02.11 14:55:05', severity: '높음', errorCode: '503', message: '현재 서비스 이용이 불가능합니다. (서버 과부하)' },
+    { time: '2026.02.11 14:20:45', severity: '보통', errorCode: '401', message: '인증 정보가 유효하지 않습니다. 다시 로그인해 주세요.' },
+    { time: '2026.02.11 13:10:22', severity: '낮음', errorCode: '404', message: '요청하신 페이지를 찾을 수 없습니다. (URL 오류)' },
+    { time: '2026.02.11 12:05:18', severity: '높음', errorCode: '504', message: '서버 응답 시간이 초과되었습니다. 네트워크 상태를 확인하세요.' },
+    { time: '2026.02.11 11:40:30', severity: '보통', errorCode: '403', message: '접근 권한이 없습니다. 관리자에게 문의하세요.' },
+    { time: '2026.02.11 10:15:12', severity: '낮음', errorCode: '400', message: '잘못된 요청 형식입니다. 입력값을 확인해 주세요.' },
+    { time: '2026.02.11 09:50:45', severity: '높음', errorCode: '502', message: '배드 게이트웨이 오류: 상위 서버로부터 잘못된 응답을 받았습니다.' },
+    { time: '2026.02.10 23:45:10', severity: '낮음', errorCode: '408', message: '클라이언트 요청 시간 초과: 연결이 끊겼습니다.' },
+    { time: '2026.02.10 22:30:00', severity: '보통', errorCode: '429', message: '너무 많은 요청이 발생했습니다. 잠시 대기 후 이용해 주세요.' }
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -39,21 +38,16 @@ function renderLogs(logs) {
         const row = document.createElement('tr');
         row.className = 'data-table-row';
 
-        // Level Badge Class
+        // Severity Badge Class
         let badgeClass = 'badge-default';
-        if (log.level === 'ERROR') badgeClass = 'badge-error';
-        else if (log.level === 'WARN') badgeClass = 'badge-warning';
-        else if (log.level === 'INFO') badgeClass = 'badge-info';
-        else if (log.level === 'DEBUG') badgeClass = 'badge-purple';
-
-        // Conditional Error Code: Only show if Level is ERROR
-        const errorCodeDisplay = log.level === 'ERROR' ? log.errorCode : '-';
+        if (log.severity === '높음') badgeClass = 'badge-error';
+        else if (log.severity === '보통') badgeClass = 'badge-warning';
+        else if (log.severity === '낮음') badgeClass = 'badge-info';
 
         row.innerHTML = `
             <td class="td-date" data-label="발생 일시">${log.time}</td>
-            <td class="td-center" data-label="로그 레벨"><span class="badge ${badgeClass}">${log.level}</span></td>
-            <td class="td-center" data-label="모듈">${log.module}</td>
-            <td data-label="오류 코드">${errorCodeDisplay}</td>
+            <td class="td-center" data-label="심각도"><span class="badge ${badgeClass}">${log.severity}</span></td>
+            <td data-label="오류 코드">${log.errorCode}</td>
             <td class="td-message" data-label="메시지">${log.message}</td>
         `;
         body.appendChild(row);
@@ -62,7 +56,7 @@ function renderLogs(logs) {
     if (logs.length === 0) {
         body.innerHTML = `
             <tr>
-                <td colspan="5" class="py-20 text-center text-slate-500">
+                <td colspan="4" class="py-20 text-center text-slate-500">
                     <div class="flex flex-col items-center gap-2">
                         <i data-lucide="search-x" class="w-8 h-8 opacity-20"></i>
                         <span>조건에 맞는 로그 데이터가 없습니다.</span>
@@ -77,16 +71,14 @@ function renderLogs(logs) {
 
 // Apply Filters
 function applyFilter() {
-    const level = document.getElementById('filter-level').value;
-    const module = document.getElementById('filter-module').value;
+    const severity = document.getElementById('filter-severity').value;
     const errorCode = document.getElementById('filter-error-code').value.trim().toUpperCase();
 
     const filtered = systemLogs.filter(log => {
-        const matchLevel = level === 'all' || log.level === level;
-        const matchModule = module === 'all' || log.module === module;
+        const matchSeverity = severity === 'all' || log.severity === severity;
         const matchErrorCode = !errorCode || log.errorCode.toUpperCase().includes(errorCode);
 
-        return matchLevel && matchModule && matchErrorCode;
+        return matchSeverity && matchErrorCode;
     });
 
     renderLogs(filtered);
@@ -95,8 +87,7 @@ function applyFilter() {
 
 // Reset Filters
 function resetFilter() {
-    document.getElementById('filter-level').value = 'all';
-    document.getElementById('filter-module').value = 'all';
+    document.getElementById('filter-severity').value = 'all';
     document.getElementById('filter-error-code').value = '';
 
     const today = new Date().toISOString().split('T')[0];
@@ -124,14 +115,13 @@ function downloadLogs() {
 
 function generateAndDownloadCSV() {
     // CSV Headers
-    const headers = ['발생 일시', '로그 레벨', '모듈', '오류 코드', '메시지'];
+    const headers = ['발생 일시', '심각도', '오류 코드', '메시지'];
 
     // Convert data to CSV rows
     const rows = systemLogs.map(log => [
         log.time,
-        log.level,
-        log.module,
-        log.level === 'ERROR' ? log.errorCode : '-',
+        log.severity,
+        log.errorCode,
         `"${log.message.replace(/"/g, '""')}"` // Wrap message in quotes & escape internal quotes
     ]);
 

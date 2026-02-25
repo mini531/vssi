@@ -406,6 +406,7 @@ window.initRegistrationMode = function (type) {
             codeIdInput.value = '';
             document.getElementById('reg-code-name').value = '';
             document.getElementById('reg-code-desc').value = '';
+            document.getElementById('reg-parent-code-id').value = '';
             document.getElementById('reg-code-sort').value = '10';
             document.getElementById('reg-code-status').value = '사용';
             resetError('reg-code-sort');
@@ -443,6 +444,7 @@ window.editCodeInline = function (codeId) {
     document.getElementById('reg-code-id').value = codeData.code;
     document.getElementById('reg-code-name').value = codeData.name;
     document.getElementById('reg-code-desc').value = codeData.desc || '';
+    document.getElementById('reg-parent-code-id').value = codeData.parentCodeId || '';
     document.getElementById('reg-code-sort').value = codeData.sort;
     document.getElementById('reg-code-status').value = codeData.used;
 };
@@ -659,6 +661,7 @@ window.confirmSaveRegistration = function () {
         const codeId = document.getElementById('reg-code-id').value.trim();
         const codeName = document.getElementById('reg-code-name').value.trim();
         const codeDesc = document.getElementById('reg-code-desc').value.trim();
+        const parentCodeId = document.getElementById('reg-parent-code-id').value.trim();
         const codeSort = document.getElementById('reg-code-sort').value;
         const codeStatus = document.getElementById('reg-code-status').value;
 
@@ -668,6 +671,7 @@ window.confirmSaveRegistration = function () {
                 code: codeId,
                 name: codeName,
                 desc: codeDesc,
+                parentCodeId: parentCodeId,
                 sort: parseInt(codeSort),
                 used: codeStatus
             });
@@ -689,6 +693,7 @@ window.confirmSaveRegistration = function () {
                     code: codeId,
                     name: codeName,
                     desc: codeDesc,
+                    parentCodeId: parentCodeId,
                     sort: parseInt(codeSort),
                     used: codeStatus
                 };

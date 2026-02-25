@@ -104,35 +104,12 @@
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="filter-label">시스템 유형</label>
-                                        <select class="filter-select">
-                                            <option>전체</option>
-                                            <option>버티포트</option>
-                                            <option>운항사</option>
-                                            <option>기체</option>
-                                            <option>교통 관리자</option>
-                                            <option>도심항공 교통 정보 시스템</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="filter-label">시스템 이름</label>
-                                        <select class="filter-select">
-                                            <option>전체</option>
-                                            <option>VP-강남</option>
-                                            <option>VP-김포</option>
-                                            <option>VP-잠실</option>
-                                            <option>A 운항사</option>
-                                            <option>B 운항사</option>
-                                            <option>K-UAM Core</option>
-                                        </select>
-                                    </div>
-                                    <div>
                                         <label class="filter-label">라우팅 키</label>
-                                        <input type="text" placeholder="Routing Key" class="filter-input">
+                                        <input type="text" placeholder="라우팅 키" class="filter-input">
                                     </div>
                                     <div>
                                         <label class="filter-label">큐 명칭</label>
-                                        <input type="text" placeholder="Queue Name" class="filter-input">
+                                        <input type="text" placeholder="큐 명칭" class="filter-input">
                                     </div>
                                     <div>
                                         <label class="filter-label">상태</label>
@@ -179,8 +156,6 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">유형</th>
-                                            <th>시스템 유형</th>
-                                            <th>시스템 이름</th>
                                             <th>라우팅 키</th>
                                             <th>큐 명칭</th>
                                             <th class="text-center">타입</th>
@@ -195,9 +170,8 @@
                                         <!-- Row 1 -->
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
-                                                    class="badge badge-purple">수신</span></td>
-                                            <td data-label="시스템 유형">버티포트</td>
-                                            <td data-label="시스템 이름">VP-강남</td>
+                                                    class="badge badge-purple">수신</span>
+                                            </td>
                                             <td data-label="라우팅 키">v1.gangnam.batt</td>
                                             <td data-label="큐 명칭">q.infra.batt.v1</td>
                                             <td class="td-center" data-label="타입">CLASSIC</td>
@@ -206,14 +180,13 @@
                                             <td class="td-number font-bold text-warning" data-label="실패">12</td>
                                             <td class="td-date" data-label="최근 갱신일">2026.02.05 10:45:12</td>
                                             <td class="td-center" data-label="상태"><span
-                                                    class="badge badge-error">장애</span></td>
+                                                    class="badge badge-error">장애</span>
+                                            </td>
                                         </tr>
                                         <!-- Row 2 -->
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-info">송신</span></td>
-                                            <td data-label="시스템 유형">운항사</td>
-                                            <td data-label="시스템 이름">A 운항사</td>
                                             <td data-label="라우팅 키">v1.airline_a.auth</td>
                                             <td data-label="큐 명칭">q.status.auth.v1</td>
                                             <td class="td-center" data-label="타입">QUORUM</td>
@@ -228,8 +201,6 @@
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-purple">수신</span></td>
-                                            <td data-label="시스템 유형">버티포트</td>
-                                            <td data-label="시스템 이름">VP-강남</td>
                                             <td data-label="라우팅 키">v1.gangnam.status</td>
                                             <td data-label="큐 명칭">q.infra.status.v1</td>
                                             <td class="td-center" data-label="타입">CLASSIC</td>
@@ -244,8 +215,6 @@
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-info">송신</span></td>
-                                            <td data-label="시스템 유형">운항사</td>
-                                            <td data-label="시스템 이름">B 운항사</td>
                                             <td data-label="라우팅 키">v1.airline_b.plan</td>
                                             <td data-label="큐 명칭">q.status.plan.v1</td>
                                             <td class="td-center" data-label="타입">QUORUM</td>
@@ -260,8 +229,6 @@
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-purple">수신</span></td>
-                                            <td data-label="시스템 유형">버티포트</td>
-                                            <td data-label="시스템 이름">VP-김포</td>
                                             <td data-label="라우팅 키">v1.gimpo.pos</td>
                                             <td data-label="큐 명칭">q.flight.pos.v1</td>
                                             <td class="td-center" data-label="타입">CLASSIC</td>
@@ -276,8 +243,6 @@
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-purple">수신</span></td>
-                                            <td data-label="시스템 유형">도심항공 교통 정보 시스템</td>
-                                            <td data-label="시스템 이름">K-UAM Core</td>
                                             <td data-label="라우팅 키">v1.core.weather</td>
                                             <td data-label="큐 명칭">q.data.weather.v1</td>
                                             <td class="td-center" data-label="타입">STREAM</td>
@@ -292,8 +257,6 @@
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-info">송신</span></td>
-                                            <td data-label="시스템 유형">버티포트</td>
-                                            <td data-label="시스템 이름">VP-미래</td>
                                             <td data-label="라우팅 키">v1.mirae.vertiport</td>
                                             <td data-label="큐 명칭">q.infra.vertiport.v1</td>
                                             <td class="td-center" data-label="타입">CLASSIC</td>
@@ -308,8 +271,6 @@
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-purple">수신</span></td>
-                                            <td data-label="시스템 유형">도심항공 교통 정보 시스템</td>
-                                            <td data-label="시스템 이름">K-UAM Core</td>
                                             <td data-label="라우팅 키">v1.core.flight</td>
                                             <td data-label="큐 명칭">q.flight.update.v1</td>
                                             <td class="td-center" data-label="타입">CLASSIC</td>
@@ -324,8 +285,6 @@
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-info">송신</span></td>
-                                            <td data-label="시스템 유형">운항사</td>
-                                            <td data-label="시스템 이름">C 운항사</td>
                                             <td data-label="라우팅 키">v1.airline_c.auth</td>
                                             <td data-label="큐 명칭">q.auth.req.v1</td>
                                             <td class="td-center" data-label="타입">QUORUM</td>
@@ -340,8 +299,6 @@
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-purple">수신</span></td>
-                                            <td data-label="시스템 유형">버티포트</td>
-                                            <td data-label="시스템 이름">VP-잠실</td>
                                             <td data-label="라우팅 키">v1.jamsil.noise</td>
                                             <td data-label="큐 명칭">q.env.noise.v1</td>
                                             <td class="td-center" data-label="타입">STREAM</td>
@@ -356,8 +313,6 @@
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-purple">수신</span></td>
-                                            <td data-label="시스템 유형">버티포트</td>
-                                            <td data-label="시스템 이름">VP-수서</td>
                                             <td data-label="라우팅 키">v1.suseo.batt</td>
                                             <td data-label="큐 명칭">q.infra.batt.v1</td>
                                             <td class="td-center" data-label="타입">CLASSIC</td>
@@ -372,8 +327,6 @@
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-info">송신</span></td>
-                                            <td data-label="시스템 유형">운항사</td>
-                                            <td data-label="시스템 이름">A 운항사</td>
                                             <td data-label="라우팅 키">v1.airline_a.logs</td>
                                             <td data-label="큐 명칭">q.sys.logs.v1</td>
                                             <td class="td-center" data-label="타입">CLASSIC</td>
@@ -388,8 +341,6 @@
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-purple">수신</span></td>
-                                            <td data-label="시스템 유형">버티포트</td>
-                                            <td data-label="시스템 이름">VP-코엑스</td>
                                             <td data-label="라우팅 키">v1.coex.gate</td>
                                             <td data-label="큐 명칭">q.infra.gate.v1</td>
                                             <td class="td-center" data-label="타입">CLASSIC</td>
@@ -404,8 +355,6 @@
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-info">송신</span></td>
-                                            <td class="text-cell-meta" data-label="시스템 유형">교통 관리자</td>
-                                            <td data-label="시스템 이름">Emergency Center</td>
                                             <td data-label="라우팅 키">v1.emergency.alert</td>
                                             <td data-label="큐 명칭">q.priority.alert.v1</td>
                                             <td class="td-center" data-label="타입">PRIORITY</td>
@@ -420,8 +369,6 @@
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-purple">수신</span></td>
-                                            <td data-label="시스템 유형">버티포트</td>
-                                            <td data-label="시스템 이름">VP-여의도</td>
                                             <td data-label="라우팅 키">v1.yeouido.wind</td>
                                             <td data-label="큐 명칭">q.env.wind.v1</td>
                                             <td class="td-center" data-label="타입">STREAM</td>
@@ -436,8 +383,6 @@
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-info">송신</span></td>
-                                            <td data-label="시스템 유형">운항사</td>
-                                            <td data-label="시스템 이름">D 운항사</td>
                                             <td data-label="라우팅 키">v1.airline_d.plan</td>
                                             <td data-label="큐 명칭">q.status.plan.v1</td>
                                             <td class="td-center" data-label="타입">QUORUM</td>
@@ -452,8 +397,6 @@
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-purple">수신</span></td>
-                                            <td data-label="시스템 유형">도심항공 교통 정보 시스템</td>
-                                            <td data-label="시스템 이름">K-UAM Core</td>
                                             <td data-label="라우팅 키">v1.core.billing</td>
                                             <td data-label="큐 명칭">q.biz.billing.v1</td>
                                             <td class="td-center" data-label="타입">CLASSIC</td>
@@ -468,8 +411,6 @@
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-info">송신</span></td>
-                                            <td class="text-cell-meta" data-label="시스템 유형">교통 관리자</td>
-                                            <td data-label="시스템 이름">Traffic Control</td>
                                             <td data-label="라우팅 키">v1.tcs.route</td>
                                             <td data-label="큐 명칭">q.flight.route.v1</td>
                                             <td class="td-center" data-label="타입">CLASSIC</td>
@@ -484,8 +425,6 @@
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-purple">수신</span></td>
-                                            <td data-label="시스템 유형">버티포트</td>
-                                            <td data-label="시스템 이름">VP-인천</td>
                                             <td data-label="라우팅 키">v1.incheon.pax</td>
                                             <td data-label="큐 명칭">q.biz.pax.v1</td>
                                             <td class="td-center" data-label="타입">CLASSIC</td>
@@ -500,8 +439,6 @@
                                         <tr class="data-table-row">
                                             <td class="td-center" data-label="유형"><span
                                                     class="badge badge-info">송신</span></td>
-                                            <td data-label="시스템 유형">운항사</td>
-                                            <td data-label="시스템 이름">E 운항사</td>
                                             <td data-label="라우팅 키">v1.airline_e.info</td>
                                             <td data-label="큐 명칭">q.info.gen.v1</td>
                                             <td class="td-center" data-label="타입">QUORUM</td>

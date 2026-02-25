@@ -254,6 +254,36 @@
   color: #2dd4bf;
 }
 
+/* Sidebar Footer */
+.sidebar-footer {
+  border-top: 1px solid rgba(30, 41, 59, 0.5);
+  padding: 0.5rem 0;
+  background-color: #0b101b;
+}
+
+.sidebar-footer-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  font-size: 11px;
+  color: #64748b;
+  transition: color 0.2s, background-color 0.2s;
+  white-space: nowrap;
+}
+
+.sidebar-footer-btn:hover {
+  color: #94a3b8;
+  background-color: rgba(30, 41, 59, 0.3);
+}
+
+.sidebar-footer-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  margin-right: 0.75rem;
+  opacity: 0.5;
+}
+
 /* SVG Status Indicators */
 .status-indicator {
   cursor: help;
@@ -5622,6 +5652,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   text-overflow: ellipsis;
 }
 
+/* Multiline Data Value (Semantic) */
+.data-value-description {
+  font-size: 14px;
+  color: #e2e8f0;
+  line-height: 1.6;
+  text-align: left;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
 /* Section Header (Replaces flex justify-between items-end mb-xs) */
 .section-header {
   display: flex;
@@ -6562,4 +6602,45 @@ input:checked+.slider:before {
 
 .status-allowed {
   color: var(--accent-teal);
+}
+
+/* --- Sidebar Footer --- */
+.sidebar-footer {
+  border-top: 1px solid rgba(30, 41, 59, 0.5);
+  padding: 0.5rem 0;
+  background-color: #0b101b;
+}
+
+.sidebar-footer-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  font-size: 11px;
+  color: #64748b;
+  transition: color 0.2s, background-color 0.2s;
+  white-space: nowrap;
+}
+
+.sidebar-footer-btn:hover {
+  color: #94a3b8;
+  background-color: rgba(30, 41, 59, 0.3);
+}
+
+.sidebar-footer-btn.active {
+  color: #14b8a6;
+  font-weight: 700;
+  background-color: #0f1623;
+}
+
+.sidebar-footer-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  margin-right: 0.75rem;
+  opacity: 0.5;
+}
+
+.sidebar-footer-btn.active .sidebar-footer-icon {
+  opacity: 1;
+  color: #14b8a6;
 }

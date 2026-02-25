@@ -5,17 +5,12 @@
 // Sample Activity Log Data
 // Sample Activity Log Data
 const activityLogs = [
-    { time: '2026.02.11 14:20:12', type: '로그인', userId: 'admin.kim', userName: '김민수', message: 'Interactive session established via 192.168.1.50 using WebClient. User-Agent: Chrome/121.0.0.0.' },
-    { time: '2026.02.11 13:45:30', type: '수정', userId: 'op.song', userName: '송지은', message: 'Security policy change: [SESSION_EXPIRY] updated from [1800s] to [3600s]. Scope: GLOBAL.' },
-    { time: '2026.02.11 13:10:05', type: '생성', userId: 'admin.lee', userName: '이지원', message: 'New administrative role [VCDM_VIEWER] registered. Permissions: [vcdm:read]. Target system: VCDM.' },
-    { time: '2026.02.11 12:30:45', type: '로그아웃', userId: 'air.kim', userName: '김동하', message: 'User requested termination of session [SID-99120]. Duration: 02:45:12.' },
-    { time: '2026.02.11 11:50:22', type: '삭제', userId: 'admin.park', userName: '박준호', message: 'Permanent deletion of inactive account [temp_user] (Last Login: 2025-12-01). Associated role mappings cleared.' },
-    { time: '2026.02.11 10:15:10', type: '로그인', userId: 'op.yoon', userName: '윤서진', message: 'Authorization success via SAML 2.0 Provider. Subject: op.yoon@vssi.local. IP: 192.168.1.124.' },
-    { time: '2026.02.11 09:40:05', type: '수정', userId: 'admin.choi', userName: '최유나', message: 'Role mapping update: Added [NET_ADAPT_VIEW] to group [OPERATOR]. Affects 12 users.' },
-    { time: '2026.02.11 09:10:00', type: '로그인', userId: 'admin.jung', userName: '정우성', message: 'Superuser login detected from secure bastion host. Address: 10.20.30.44. MFA verified.' },
-    { time: '2026.02.10 18:20:15', type: '로그아웃', userId: 'vp.song', userName: '송태태', message: 'Implicit session logout due to inactivity timeout (IDLE_TIME > 3600s).' },
-    { time: '2026.02.10 17:45:12', type: '생성', userId: 'admin.kim', userName: '김민수', message: 'Resource addition: New common code group [ERR_TYPE_ENUM] defined with 5 literals.' },
-    { time: '2026.02.10 16:30:00', type: '수정', userId: 'admin.lee', userName: '이지원', message: 'Global password complexity requirement [MIN_SPECIAL_CHARS] updated from [1] to [2].' }
+    { time: '2026.02.11 14:20:12', type: '로그인', userId: 'admin.kim', userName: '김민수' },
+    { time: '2026.02.11 12:30:45', type: '로그아웃', userId: 'air.kim', userName: '김동하' },
+    { time: '2026.02.11 10:15:10', type: '로그인', userId: 'op.yoon', userName: '윤서진' },
+    { time: '2026.02.10 18:20:15', type: '로그아웃', userId: 'vp.song', userName: '송태태' },
+    { time: '2026.02.10 14:10:00', type: '로그인', userId: 'admin.jung', userName: '정우성' },
+    { time: '2026.02.10 09:30:45', type: '로그아웃', userId: 'op.song', userName: '송지은' }
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -45,7 +40,6 @@ function renderLogs(logs) {
             <td data-label="아이디">${log.userId}</td>
             <td data-label="이름">${log.userName}</td>
             <td data-label="로그 유형">${log.type}</td>
-            <td class="td-message" data-label="메시지">${log.message}</td>
         `;
         body.appendChild(row);
     });
@@ -53,7 +47,7 @@ function renderLogs(logs) {
     if (logs.length === 0) {
         body.innerHTML = `
             <tr>
-                <td colspan="5" class="py-20 text-center text-slate-500">
+                <td colspan="4" class="py-20 text-center text-slate-500">
                     <div class="flex flex-col items-center gap-2">
                         <i data-lucide="search-x" class="w-8 h-8 opacity-20"></i>
                         <span>조건에 맞는 활동 로그 데이터가 없습니다.</span>
@@ -112,14 +106,13 @@ function downloadLogs() {
 }
 
 function generateAndDownloadCSV() {
-    const headers = ['발생 일시', '아이디', '이름', '로그 유형', '메시지'];
+    const headers = ['발생 일시', '아이디', '이름', '로그 유형'];
 
     const rows = activityLogs.map(log => [
         log.time,
         log.userId,
         log.userName,
-        log.type,
-        `"${log.message.replace(/"/g, '""')}"`
+        log.type
     ]);
 
     const csvContent = [

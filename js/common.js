@@ -28,7 +28,7 @@ document.addEventListener('includes-loaded', () => {
     const sidebar = document.getElementById('sidebar');
     if (sidebar) {
         sidebar.addEventListener('click', (e) => {
-            const btn = e.target.closest('.sidebar-nav-btn:not(.group), .sidebar-sub-btn');
+            const btn = e.target.closest('.sidebar-nav-btn:not(.group), .sidebar-sub-btn, .sidebar-footer-btn');
             if (btn) {
                 closeSidebarOnMobile();
             }
@@ -307,7 +307,7 @@ function highlightActiveMenu() {
     if (!sidebar) return;
 
     // Remove all existing active states
-    const allBtns = sidebar.querySelectorAll('.sidebar-nav-btn, .sidebar-sub-btn');
+    const allBtns = sidebar.querySelectorAll('.sidebar-nav-btn, .sidebar-sub-btn, .sidebar-footer-btn');
     allBtns.forEach(btn => btn.classList.remove('active'));
 
     // Also remove active from group buttons and reset icons
@@ -355,9 +355,9 @@ function highlightActiveMenu() {
         }
     });
 
-    // 2. If no sub-menu matched, try top-level buttons
+    // 2. If no sub-menu matched, try top-level buttons and footer buttons
     if (!matched) {
-        const navBtns = sidebar.querySelectorAll('.sidebar-nav-btn:not(.group)');
+        const navBtns = sidebar.querySelectorAll('.sidebar-nav-btn:not(.group), .sidebar-footer-btn');
         navBtns.forEach(btn => {
             const span = btn.querySelector('span');
             if (span && span.textContent.trim() === pageTitle.trim()) {

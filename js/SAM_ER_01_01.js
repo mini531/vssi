@@ -1,8 +1,7 @@
 /**
- * Fault Management Page Logic (SAM_SY_02_01)
+ * Fault Receipt Page Logic (SAM_ER_01_01)
  */
 
-// Sample Fault Data
 // Sample Fault Data
 const faultsData = [
     {
@@ -36,40 +35,23 @@ const faultsData = [
         actions: [
             { id: 'ACT-003', time: '2026.02.10 18:05', actor: '김철수', content: 'DB 인덱스 리빌드 및 통계 정보 갱신', result: '성공' }
         ]
-    },
-    {
-        id: 'FLT-004',
-        time: '2026.02.10 15:10:45',
-        system: 'V-CDM (협동적 의사 결정 지원 시스템)',
-        registrant: '박미영',
-        status: '완료',
-        desc: '협동적 의사결정 엔진 모듈에서 메모리 누수(Memory Leak) 현상이 감지되었습니다. 힙 메모리 사용량이 계단식으로 상승하다가 임계치 도달 시 커널에 의한 자동 재시작이 3회 반복되었습니다. 힙 덤프 분석 결과, 비정상 종료된 세션 객체가 제대로 해제되지 않고 누적되는 버그가 발견되었습니다. 해당 패치 적용 및 JVM 옵션 조정을 완료했으며, 24시간 모니터링 결과 더 이상의 메모리 상승은 없는 것으로 확인되었습니다.',
-        actions: [
-            { id: 'ACT-004', time: '2026.02.10 15:30', actor: '박미영', content: 'JVM 힙 메모리 분석 및 가비지 컬렉션 최적화 설정', result: '성공' }
-        ]
-    },
-    {
-        id: 'FLT-005',
-        time: '2026.02.10 15:10:45',
-        system: 'SAMS (관리자 시스템)',
-        registrant: '최현우',
-        status: '완료',
-        desc: '관리자 화면 내 통계 대시보드 및 로그 조회 메뉴의 로딩 속도가 10초 이상 소요되는 현상이 있었습니다. 특정 기간의 대량 로그를 프론트엔드에서 한꺼번에 처리하려고 시도하면서 브라우저 프리징 현상이 동반되었습니다. 서버 사이드 페이징 처리를 보강하고 프론트엔드 렌더링 로직을 최적화하여 현재는 수만 건의 데이터도 1초 내외로 조회가 가능하도록 개선되었습니다.',
-        actions: []
     }
 ];
 
-let selectedFaultId = null;
-let pendingDeleteActionId = null;
-let isDeleteOperation = false; // Track if success modal is for deletion
+// Current user simulation
+const currentUser = '홍길동';
 
+let selectedFaultId = null;
+let isRegMode = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     init();
 });
 
 function init() {
-    renderFaults(faultsData);
+    // Filter data for current user only
+    const myFaults = faultsData.filter(f => f.registrant === currentUser);
+    renderFaults(myFaults);
 
     // Initialize date filters to today
     const today = new Date().toISOString().split('T')[0];
@@ -80,11 +62,10 @@ function init() {
 
     lucide.createIcons();
 
-    // Check for deep link (id) in URL
+    // Check for mode=reg in URL
     const urlParams = new URLSearchParams(window.location.search);
-    const faultId = urlParams.get('id');
-    if (faultId) {
-        selectFault(faultId);
+    if (urlParams.get('mode') === 'reg') {
+        initRegistrationMode();
     }
 }
 
@@ -96,7 +77,7 @@ function renderFaults(list) {
     totalCount.innerText = `총 ${list.length} 건`;
 
     if (list.length === 0) {
-        listBody.innerHTML = `<tr><td colspan="4" class="td-center">접수된 장애가 없습니다.</td></tr>`;
+        listBody.innerHTML = `<tr><td colspan="3" class="td-center py-8 text-slate-500">장애 접수 내역이 없습니다.</td></tr>`;
         return;
     }
 
@@ -111,7 +92,6 @@ function renderFaults(list) {
         tr.innerHTML = `
             <td data-label="시스템">${fault.system}</td>
             <td class="td-date text-center" data-label="등록 일시">${fault.time}</td>
-            <td class="text-center" data-label="등록자">${fault.registrant}</td>
             <td class="td-center" data-label="상태"><span class="badge ${getStatusClass(fault.status)}">${fault.status}</span></td>
         `;
         listBody.appendChild(tr);
@@ -119,6 +99,12 @@ function renderFaults(list) {
 }
 
 function selectFault(id, row) {
+    if (isRegMode) {
+        // Option: allow switching or block? 
+        // Following SAM_US_01_01, list selection is often allowed to exit reg mode
+        cancelRegistration();
+    }
+
     selectedFaultId = id;
     const fault = faultsData.find(f => f.id === id);
     if (!fault) return;
@@ -133,19 +119,19 @@ function selectFault(id, row) {
     if (targetRow) targetRow.classList.add('active');
 
     document.getElementById('empty-state').classList.add('hidden');
+    document.getElementById('reg-content').classList.add('hidden');
     document.getElementById('detail-content').classList.remove('hidden');
 
     // Content
     document.getElementById('detail-system').innerText = fault.system;
     document.getElementById('detail-time').innerText = fault.time;
-    document.getElementById('detail-registrant').innerText = fault.registrant;
     document.getElementById('detail-status').innerHTML = `<span class="badge ${getStatusClass(fault.status)}">${fault.status}</span>`;
     document.getElementById('detail-desc').innerText = fault.desc;
 
     renderActions(fault.actions);
 
     // Mobile View Toggle
-    openDetailPane();
+    if (typeof openDetailPane === 'function') openDetailPane();
 }
 
 function renderActions(actions) {
@@ -155,7 +141,7 @@ function renderActions(actions) {
     if (totalCount) totalCount.innerText = `총 ${actions ? actions.length : 0} 건`;
 
     if (!actions || actions.length === 0) {
-        actionBody.innerHTML = `<tr><td colspan="5" class="td-center">등록된 조치 내역이 없습니다.</td></tr>`;
+        actionBody.innerHTML = `<tr><td colspan="4" class="td-center py-4 text-slate-500">등록된 조치 내역이 없습니다.</td></tr>`;
         return;
     }
 
@@ -167,18 +153,9 @@ function renderActions(actions) {
             <td class="td-message table-text-wrap" data-label="조치 내용">${action.content}</td>
             <td data-label="담당자">${action.actor}</td>
             <td class="td-center" data-label="결과"><span class="badge ${getResultClass(action.result)}">${action.result}</span></td>
-            <td class="td-center" data-label="관리">
-                <div class="flex items-center justify-center gap-2">
-                    <button class="text-slate-400 hover:text-red-400 transition-colors" title="삭제" onclick="deleteAction('${action.id}')">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    </button>
-                </div>
-            </td>
         `;
         actionBody.appendChild(tr);
     });
-
-    lucide.createIcons();
 }
 
 function getStatusClass(status) {
@@ -193,8 +170,18 @@ function getResultClass(result) {
     return 'badge-warning';
 }
 
-// Modal Logic
-window.openActionModal = function () {
+// Registration Mode Logic
+window.initRegistrationMode = function () {
+    isRegMode = true;
+    selectedFaultId = null;
+
+    // Deselect list
+    document.querySelectorAll('#fault-list-body tr').forEach(tr => tr.classList.remove('active'));
+
+    document.getElementById('empty-state').classList.add('hidden');
+    document.getElementById('detail-content').classList.add('hidden');
+    document.getElementById('reg-content').classList.remove('hidden');
+
     // Set current datetime
     const now = new Date();
     const year = now.getFullYear();
@@ -203,126 +190,125 @@ window.openActionModal = function () {
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
 
-    const dateValue = `${year}-${month}-${day}`;
-    const timeValue = `${hours}:${minutes}`;
+    document.getElementById('reg-fault-date').value = `${year}-${month}-${day}`;
+    document.getElementById('reg-fault-time').value = `${hours}:${minutes}`;
+    document.getElementById('reg-fault-system').value = 'SAMS';
+    document.getElementById('reg-fault-desc').value = '';
 
-    document.getElementById('reg-action-date').value = dateValue;
-    document.getElementById('reg-action-time').value = timeValue;
-    document.getElementById('reg-action-actor').value = '홍길동'; // Current logged-in user
-    document.getElementById('reg-action-content').value = '';
-    document.getElementById('reg-action-result').value = '성공';
+    clearAllFaultErrors();
+    lucide.createIcons();
 
-    document.getElementById('action-modal').classList.add('active');
+    if (typeof openDetailPane === 'function') openDetailPane();
 };
 
-window.closeActionModal = function () {
-    document.getElementById('action-modal').classList.remove('active');
-    // Clear all error messages and classes
-    clearAllActionErrors();
+window.cancelRegistration = function () {
+    isRegMode = false;
+    document.getElementById('reg-content').classList.add('hidden');
+
+    if (selectedFaultId) {
+        document.getElementById('detail-content').classList.remove('hidden');
+    } else {
+        document.getElementById('empty-state').classList.remove('hidden');
+        // On mobile, if no parent view to return to, go back to list
+        if (typeof closeDetailPane === 'function') {
+            closeDetailPane();
+        }
+    }
 };
 
-// Helper functions for validation
-window.resetActionError = function (fieldId) {
-    document.getElementById(fieldId).classList.remove('error');
-    const errDiv = document.getElementById('error-' + fieldId);
-    if (errDiv) errDiv.innerText = '';
+window.resetFaultError = function (id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('error');
+    const err = document.getElementById('error-' + id);
+    if (err) err.innerText = '';
+};
+
+function setFaultError(id, msg) {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('error');
+    const err = document.getElementById('error-' + id);
+    if (err) err.innerText = msg;
 }
 
-function setActionError(fieldId, msg) {
-    document.getElementById(fieldId).classList.add('error');
-    const errDiv = document.getElementById('error-' + fieldId);
-    if (errDiv) errDiv.innerText = msg;
-}
-
-function clearAllActionErrors() {
-    ['reg-action-date', 'reg-action-time', 'reg-action-content', 'reg-action-actor'].forEach(fieldId => {
-        const field = document.getElementById(fieldId);
-        if (field) field.classList.remove('error');
-        const errDiv = document.getElementById('error-' + fieldId);
-        if (errDiv) errDiv.innerText = '';
+function clearAllFaultErrors() {
+    ['reg-fault-system', 'reg-fault-date', 'reg-fault-time', 'reg-fault-desc'].forEach(id => {
+        resetFaultError(id);
     });
 }
 
-window.confirmActionRegistration = function () {
-    const date = document.getElementById('reg-action-date').value;
-    const time = document.getElementById('reg-action-time').value;
-    const content = document.getElementById('reg-action-content').value;
-    const actor = document.getElementById('reg-action-actor').value;
-    const result = document.getElementById('reg-action-result').value;
+window.confirmFaultRegistration = function () {
+    const system = document.getElementById('reg-fault-system').value;
+    const date = document.getElementById('reg-fault-date').value;
+    const time = document.getElementById('reg-fault-time').value;
+    const desc = document.getElementById('reg-fault-desc').value;
 
     let hasError = false;
+    clearAllFaultErrors();
 
-    // Clear previous errors
-    clearAllActionErrors();
-
-    // Validate date
+    if (!system) {
+        setFaultError('reg-fault-system', '시스템을 선택해주세요.');
+        hasError = true;
+    }
     if (!date) {
-        setActionError('reg-action-date', '조치 일자를 선택해주세요.');
+        setFaultError('reg-fault-date', '날짜를 선택해주세요.');
         hasError = true;
     }
-
-    // Validate time
     if (!time) {
-        setActionError('reg-action-time', '조치 시간을 입력해주세요.');
+        setFaultError('reg-fault-time', '시간을 입력해주세요.');
         hasError = true;
     }
-
-    // Validate content
-    if (!content.trim()) {
-        setActionError('reg-action-content', '조치 내용을 입력해주세요.');
-        hasError = true;
-    }
-
-    // Validate actor
-    if (!actor.trim()) {
-        setActionError('reg-action-actor', '담당자를 입력해주세요.');
+    if (!desc.trim()) {
+        setFaultError('reg-fault-desc', '장애 내용을 입력해주세요.');
         hasError = true;
     }
 
     if (hasError) return;
 
-    closeActionModal();
-    document.getElementById('success-modal').classList.add('active');
+    // Simulation: Success
+    showSuccessModal('장애 접수가 성공적으로 완료되었습니다.', '등록 완료');
+
+    // On mobile, return to list view after saving
+    if (typeof closeDetailPane === 'function') {
+        closeDetailPane();
+    }
 };
 
 window.closeSuccessModal = function () {
-    const successModal = document.getElementById('success-modal');
-    successModal.classList.remove('active');
-
-    // Reset modal text to default (registration)
-    const successTitle = successModal.querySelector('.modal-title');
-    const successDesc = successModal.querySelector('.modal-desc');
-    if (successTitle) successTitle.innerText = '등록 완료';
-    if (successDesc) successDesc.innerText = '조치 내역이 성공적으로 등록되었습니다.';
-
-    // Refresh simulation
-    // Only add new action data if this was NOT a delete operation
-    if (!isDeleteOperation && selectedFaultId) {
-        const fault = faultsData.find(f => f.id === selectedFaultId);
-        if (fault) {
-            const dateValue = document.getElementById('reg-action-date').value;
-            const timeValue = document.getElementById('reg-action-time').value;
-
-            // Combine date and time, format as YYYY.MM.DD HH:MM
-            const formattedTime = `${dateValue.replace(/-/g, '.')} ${timeValue}`;
-
-            const newId = 'ACT-' + String(Date.now()).slice(-3);
-            fault.actions.unshift({
-                id: newId,
-                time: formattedTime,
-                actor: document.getElementById('reg-action-actor').value,
-                content: document.getElementById('reg-action-content').value,
-                result: document.getElementById('reg-action-result').value
-            });
-            renderActions(fault.actions);
-        }
-    }
-
-    // Reset the flag
-    isDeleteOperation = false;
+    document.getElementById('success-modal').classList.remove('active');
+    // Note: location.reload() removed to show in-session list removal for testing empty state
 };
 
-// Filter Logic
+// Deletion Logic
+window.showDeleteWarning = function () {
+    if (!selectedFaultId) return;
+    showConfirmModal('장애 내역 삭제', '선택한 장애 신고 내역을 삭제하시겠습니까?\n삭제 후 복구할 수 없습니다.');
+};
+
+window.confirmDeleteAction = function () {
+    // Simulation: Remove from in-memory array
+    const idx = faultsData.findIndex(f => f.id === selectedFaultId);
+    if (idx > -1) {
+        faultsData.splice(idx, 1);
+    }
+
+    // Refresh List
+    applyFaultFilter();
+
+    // Close Detail
+    selectedFaultId = null;
+    document.getElementById('detail-content').classList.add('hidden');
+    document.getElementById('empty-state').classList.remove('hidden');
+
+    // On mobile, return to list view after deletion
+    if (typeof closeDetailPane === 'function') {
+        closeDetailPane();
+    }
+
+    closeConfirmModal();
+    showSuccessModal('장애 신고 내역이 성공적으로 삭제되었습니다.', '삭제 완료');
+};
+
+// Common Utilities
 window.toggleFilter = function (id) {
     const content = document.getElementById(`${id}-content`);
     const chevron = document.getElementById(`${id}-chevron`);
@@ -335,18 +321,17 @@ window.applyFaultFilter = function () {
     const startDate = document.getElementById('filter-date-start').value;
     const endDate = document.getElementById('filter-date-end').value;
 
-    const filtered = faultsData.filter(f => {
-        const matchStatus = statusTerm === 'all' || f.status === statusTerm;
+    const myFaults = faultsData.filter(f => f.registrant === currentUser);
 
-        // Date filtering
+    const filtered = myFaults.filter(f => {
+        const matchStatus = statusTerm === 'all' || f.status === statusTerm;
         let matchDate = true;
         if (startDate || endDate) {
             const faultDate = f.time.split(' ')[0].replace(/\./g, '-');
             if (startDate && faultDate < startDate) matchDate = false;
             if (endDate && faultDate > endDate) matchDate = false;
         }
-
-        return matchLevel && matchStatus && matchDate;
+        return matchStatus && matchDate;
     });
 
     renderFaults(filtered);
@@ -357,16 +342,6 @@ window.resetFaultFilter = function () {
     document.getElementById('filter-fault-status').value = 'all';
     document.getElementById('filter-date-start').value = today;
     document.getElementById('filter-date-end').value = today;
-    renderFaults(faultsData);
+    const myFaults = faultsData.filter(f => f.registrant === currentUser);
+    renderFaults(myFaults);
 };
-
-// Delete Action
-window.deleteAction = function (actionId) {
-    pendingDeleteActionId = actionId;
-    const modal = document.getElementById('confirm-modal');
-    modal.classList.add('active');
-    lucide.createIcons();
-};
-
-
-// Success modal logic is handled by showSuccessModal in common.js but they have custom success logic here

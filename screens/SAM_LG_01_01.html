@@ -55,24 +55,12 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <label class="filter-label">로그 레벨</label>
-                                        <select id="filter-level" class="filter-select">
+                                        <label class="filter-label">심각도</label>
+                                        <select id="filter-severity" class="filter-select">
                                             <option value="all">전체</option>
-                                            <option value="ERROR">ERROR</option>
-                                            <option value="WARN">WARN</option>
-                                            <option value="INFO">INFO</option>
-                                            <option value="DEBUG">DEBUG</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="filter-label">모듈</label>
-                                        <select id="filter-module" class="filter-select">
-                                            <option value="all">전체</option>
-                                            <option value="SERVER">SERVER</option>
-                                            <option value="AUTH">AUTH</option>
-                                            <option value="DB">DB</option>
-                                            <option value="API">API</option>
-                                            <option value="NETWORK">NETWORK</option>
+                                            <option value="높음">높음</option>
+                                            <option value="보통">보통</option>
+                                            <option value="낮음">낮음</option>
                                         </select>
                                     </div>
                                     <div class="filter-grid-wide">
@@ -114,8 +102,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center" style="width: 180px;">발생 일시</th>
-                                            <th class="text-center" style="width: 100px;">로그 레벨</th>
-                                            <th class="text-center" style="width: 120px;">모듈</th>
+                                            <th class="text-center" style="width: 100px;">심각도</th>
                                             <th style="width: 150px;">오류 코드</th>
                                             <th>메시지</th>
                                         </tr>
