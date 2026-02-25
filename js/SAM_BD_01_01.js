@@ -434,11 +434,6 @@ document.addEventListener('DOMContentLoaded', () => {
         openDetailPane();
     }
 
-    function openDetailPane() {
-        const splitContainer = document.querySelector('.split-container');
-        if (splitContainer) splitContainer.classList.add('show-detail');
-    }
-
     function resetViewMode() {
         isEditMode = false;
         isRegMode = false;
@@ -832,25 +827,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Modal Helpers
-    function showSuccessModal(msg) {
-        const msgEl = document.getElementById('success-message');
-        if (msgEl) msgEl.textContent = msg;
-        successModal.classList.add('active');
-        lucide.createIcons();
-    }
-
-    window.closeSuccessModal = function () {
-        successModal.classList.remove('active');
-    };
-
-    window.closeDetailPane = function () {
-        emptyState.classList.remove('hidden');
-        detailContent.classList.add('hidden');
-
-        const splitContainer = document.querySelector('.split-container');
-        if (splitContainer) splitContainer.classList.remove('show-detail');
-    };
 
     // === Multi-Select Helpers ===
     window.toggleSystemDropdown = function () {

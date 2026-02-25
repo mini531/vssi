@@ -367,43 +367,5 @@ window.deleteAction = function (actionId) {
     lucide.createIcons();
 };
 
-window.closeConfirmModal = function () {
-    document.getElementById('confirm-modal').classList.remove('active');
-    pendingDeleteActionId = null;
-};
 
-window.confirmDelete = function () {
-    if (selectedFaultId && pendingDeleteActionId) {
-        const fault = faultsData.find(f => f.id === selectedFaultId);
-        if (fault) {
-            fault.actions = fault.actions.filter(a => a.id !== pendingDeleteActionId);
-            renderActions(fault.actions);
-        }
-    }
-    closeConfirmModal();
-
-    // Set flag to indicate this is a delete operation
-    isDeleteOperation = true;
-
-    // Update success modal for deletion
-    const successModal = document.getElementById('success-modal');
-    const successTitle = successModal.querySelector('.modal-title');
-    const successDesc = successModal.querySelector('.modal-desc');
-
-    if (successTitle) successTitle.innerText = '삭제 완료';
-    if (successDesc) successDesc.innerText = '조치 내역이 성공적으로 삭제되었습니다.';
-
-    successModal.classList.add('active');
-};
-
-// Mobile Split Pane Functions
-window.openDetailPane = function () {
-    const splitContainer = document.querySelector('.split-container');
-    if (splitContainer) splitContainer.classList.add('show-detail');
-}
-
-window.closeDetailPane = function () {
-    const splitContainer = document.querySelector('.split-container');
-    if (splitContainer) splitContainer.classList.remove('rotate-0'); // Just checking for potential class issues
-    if (splitContainer) splitContainer.classList.remove('show-detail');
-}
+// Success modal logic is handled by showSuccessModal in common.js but they have custom success logic here

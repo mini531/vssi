@@ -67,16 +67,20 @@
                                                     <label class="filter-label">송신 노드</label>
                                                     <select id="filter-sender" class="filter-select">
                                                         <option value="all">전체</option>
-                                                        <option value="IVS">IVS</option>
-                                                        <option value="VOS">VOS</option>
+                                                        <option value="WAS(IVS) VM#1">WAS VM#1</option>
+                                                        <option value="WEB(IVS) VM#1">WEB VM#1</option>
+                                                        <option value="통합DB(IVS) VM#1">통합DB VM#1</option>
+                                                        <option value="VCDM운용 VM#1">VCDM VM#1</option>
                                                     </select>
                                                 </div>
                                                 <div>
                                                     <label class="filter-label">수신 노드</label>
                                                     <select id="filter-receiver" class="filter-select">
                                                         <option value="all">전체</option>
-                                                        <option value="IVS">IVS</option>
-                                                        <option value="VOS">VOS</option>
+                                                        <option value="WAS(IVS) VM#1">WAS VM#1</option>
+                                                        <option value="WEB(IVS) VM#1">WEB VM#1</option>
+                                                        <option value="통합DB(IVS) VM#1">통합DB VM#1</option>
+                                                        <option value="VCDM운용 VM#1">VCDM VM#1</option>
                                                     </select>
                                                 </div>
                                                 <div>
@@ -170,7 +174,8 @@
                                 </div>
 
                                 <div class="pane-content custom-scrollbar p-standard flex-1 flex flex-col">
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-standard mb-sm">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-standard mb-sm"
+                                        id="detail-summary-grid">
                                         <div class="flex-1">
                                             <h4 class="modal-section-title">송신 노드</h4>
                                             <div class="data-value whitespace-nowrap" id="net-detail-source">-</div>
@@ -187,75 +192,24 @@
                                             <h4 class="modal-section-title">상태</h4>
                                             <div class="data-value" id="net-detail-status">-</div>
                                         </div>
-                                    </div>
-                                    <!-- Metrics Charts (Vertical Stack) -->
-                                    <!-- TPS Chart -->
-                                    <div class="mb-sm">
-                                        <div class="section-header">
-                                            <h4 class="modal-section-title mb-0">TPS</h4>
-                                            <div class="flex items-center gap-sm text-xs">
-                                                <div class="flex items-center gap-xs">
-                                                    <span class="dot-success"></span>
-                                                    <span class="text-slate">현재 데이터</span>
-                                                </div>
-                                                <div class="flex items-center gap-xs">
-                                                    <span class="dot-slate"></span>
-                                                    <span class="text-slate">전일 평균</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="monitoring-chart-container">
-                                            <canvas id="chart-tps" class="w-full h-full block"></canvas>
-                                            <div class="chart-grid-overlay"></div>
-                                        </div>
-                                        <div class="monitoring-chart-footer">
-                                            <span>60초</span>
-                                            <span id="val-tps-current">0</span>
-                                        </div>
-                                    </div>
 
-                                    <!-- Latency Chart -->
-                                    <div class="mb-sm">
-                                        <div class="section-header">
-                                            <h4 class="modal-section-title mb-0">응답 시간</h4>
+                                        <!-- MQ Items (Hidden by default, shown for MQ type) -->
+                                        <div class="flex-1 mq-only hidden">
+                                            <h4 class="modal-section-title">큐 적체량</h4>
+                                            <div class="data-value" id="mq-depth">0</div>
                                         </div>
-                                        <div class="monitoring-chart-container">
-                                            <canvas id="chart-latency" class="w-full h-full block"></canvas>
-                                            <div class="chart-grid-overlay"></div>
+                                        <div class="flex-1 mq-only hidden">
+                                            <h4 class="modal-section-title">활성 컨슈머</h4>
+                                            <div class="data-value" id="mq-consumers">0</div>
                                         </div>
-                                        <div class="monitoring-chart-footer">
-                                            <span>60초</span>
-                                            <span id="val-latency-current">0</span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Data Volume Chart -->
-                                    <div class="mb-sm">
-                                        <div class="section-header">
-                                            <h4 class="modal-section-title mb-0">데이터 트랜젝션 용량</h4>
-                                            <div class="flex items-center gap-sm text-xs">
-                                                <div class="flex items-center gap-xs">
-                                                    <span class="dot-info"></span>
-                                                    <span class="text-slate">현재 전송량</span>
-                                                </div>
-                                                <div class="flex items-center gap-xs">
-                                                    <span class="dot-slate"></span>
-                                                    <span class="text-slate">전일 평균</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="monitoring-chart-container">
-                                            <canvas id="chart-volume" class="w-full h-full block"></canvas>
-                                            <div class="chart-grid-overlay"></div>
-                                        </div>
-                                        <div class="monitoring-chart-footer">
-                                            <span>60초</span>
-                                            <span id="val-volume-current">0 KB</span>
+                                        <div class="flex-1 mq-only hidden">
+                                            <h4 class="modal-section-title">마지막 활동</h4>
+                                            <div class="data-value" id="mq-last-activity">-</div>
                                         </div>
                                     </div>
 
                                     <!-- Processing History Table -->
-                                    <div>
+                                    <div id="history-section" class="hidden">
                                         <div class="section-header">
                                             <h4 class="modal-section-title">요청 내역</h4>
                                         </div>

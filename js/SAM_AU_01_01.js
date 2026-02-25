@@ -13,28 +13,21 @@ document.addEventListener('DOMContentLoaded', () => {
             // Add active class to clicked row
             row.classList.add('active');
 
-            // Toggle Panes
-            emptyState.classList.add('hidden');
-            detailContent.classList.remove('hidden');
+            // Reset UI to View Mode
+            exitEditMode();
+            document.getElementById('reg-mode-buttons').classList.add('hidden');
+            document.getElementById('reg-header-group').classList.add('hidden');
+
+            // Show detail title group
+            const detailTitleGroup = detailContent.querySelector('.search-panel-title-group');
+            if (detailTitleGroup) detailTitleGroup.classList.remove('hidden');
 
             // Open Detail Pane (Mobile)
             openDetailPane();
 
-            // Force Disable Checkboxes (Bug Fix)
-            const checkboxes = detailContent.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(cb => cb.disabled = true);
-
-            // Ensure View Mode UI
-            document.getElementById('view-mode-buttons').classList.remove('hidden');
-            document.getElementById('edit-mode-buttons').classList.add('hidden');
-            document.getElementById('reg-mode-buttons').classList.add('hidden');
-            document.getElementById('bulk-select-controls').classList.add('hidden');
-            document.getElementById('reg-header-group').classList.add('hidden');
-            document.getElementById('reg-header-group').classList.add('hidden');
-            // Remove 'hidden' from the details title specifically
-            const detailTitleGroup = detailContent.querySelector('.search-panel-title-group');
-            if (detailTitleGroup) detailTitleGroup.classList.remove('hidden');
-            document.getElementById('registration-form').classList.add('hidden');
+            // Toggle Panes
+            emptyState.classList.add('hidden');
+            detailContent.classList.remove('hidden');
 
             // Update Header Name
             const roleName = row.cells[1].textContent;
@@ -47,63 +40,95 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /**
      * Update permissions based on selected role
-     * Each role has predefined access patterns
      */
     function updatePermissions(roleId) {
         // Reset all checkboxes first
-        const checkboxes = detailContent.querySelectorAll('input[type="checkbox"]');
+        const checkboxes = detailContent.querySelectorAll('input[type="checkbox"][data-permission]');
 
         checkboxes.forEach(cb => {
             cb.checked = false;
+            updateToggleLabel(cb);
         });
 
-        // Helper function to check checkboxes by system and permissions
-        const setPermissions = (system, permissions) => {
-            permissions.forEach(perm => {
-                const cb = detailContent.querySelector(`input[data-system="${system}"][data-permission="${perm}"]`);
-                if (cb) cb.checked = true;
+        // Helper function to check checkboxes by system
+        const setAccess = (systems) => {
+            systems.forEach(system => {
+                const cb = detailContent.querySelector(`input[data-system="${system}"][data-permission="access"]`);
+                if (cb) {
+                    cb.checked = true;
+                    updateToggleLabel(cb);
+                }
             });
         };
 
-        // Role-based permission patterns
+        // Role-based permission patterns (R=Y logic)
         switch (roleId) {
             case 'role_total':
-                // 통합 관리자: All permissions
-                checkboxes.forEach(cb => cb.checked = true);
+                // 통합 관리자: All Access
+                checkboxes.forEach(cb => {
+                    cb.checked = true;
+                    updateToggleLabel(cb);
+                });
                 break;
 
             case 'role_operator':
-                // 통합 운용자: IVMS, IFPS, SAMS write access
-                setPermissions('ivms', ['read', 'write']);
-                setPermissions('ifps', ['read', 'write']);
-                setPermissions('sams', ['read', 'write']);
+                // 통합 운용자: IVMS, IFPS, SAMS
+                setAccess(['ivms', 'ifps', 'sams']);
                 break;
 
             case 'role_vcdm':
-                // VCDM 운용자: V-CDM write access only
-                setPermissions('vcdm', ['read', 'write']);
+                // VCDM 운용자: V-CDM
+                setAccess(['vcdm']);
                 break;
 
             case 'role_airline':
-                // 항공사: IFRS 운항사 전용 write access only
-                setPermissions('ifrs-airline', ['read', 'write']);
+                // 항공사: IFRS 운항사 전용
+                setAccess(['ifrs-airline']);
                 break;
 
             case 'role_vertiport':
-                // 버티포트 운용자: IFRS 버티포트 전용 write access only
-                setPermissions('ifrs-vertiport', ['read', 'write']);
+                // 버티포트 운용자: IFRS 버티포트 전용
+                setAccess(['ifrs-vertiport']);
                 break;
         }
+
+        // Sync Select All Toggle
+        updateBulkSelectState('access');
     }
 
 
     // Event Listener for Permission Checkboxes to sync "Select All" state
     detailContent.addEventListener('change', (e) => {
         if (e.target.matches('input[type="checkbox"][data-permission]')) {
-            const type = e.target.dataset.permission;
-            updateBulkSelectState(type);
+            updateToggleLabel(e.target);
+            updateBulkSelectState('access');
+        }
+        if (e.target.id === 'select-all-access') {
+            updateToggleLabel(e.target);
         }
     });
+
+    /**
+     * Update the text and color of the toggle label
+     */
+    function updateToggleLabel(cb) {
+        const container = cb.closest('.switch-container') || cb.closest('.switch').parentElement;
+        const label = container.querySelector('.toggle-label');
+        if (label) {
+            if (cb.checked) {
+                label.textContent = '접근 가능';
+                label.classList.remove('status-denied');
+                label.classList.add('status-allowed');
+            } else {
+                label.textContent = '접근 불가';
+                label.classList.add('status-denied');
+                label.classList.remove('status-allowed');
+            }
+        }
+    }
+
+    // Expose for external calls
+    window.updateToggleLabel = updateToggleLabel;
 });
 
 // Edit Mode Functions
@@ -122,8 +147,11 @@ function enterEditMode() {
     clearValidationErrors();
 
     // Populate Inputs
-    const roleId = document.querySelector('.clickable-row.active').dataset.roleId;
-    const roleName = document.querySelector('.clickable-row.active').cells[1].textContent;
+    const row = document.querySelector('.clickable-row.active');
+    if (!row) return;
+
+    const roleId = row.dataset.roleId;
+    const roleName = row.cells[1].textContent;
 
     const idInput = document.getElementById('reg-role-id');
     const nameInput = document.getElementById('reg-role-name');
@@ -139,14 +167,19 @@ function enterEditMode() {
     // Hide required asterisk for ID in edit mode
     document.getElementById('reg-role-id-required').classList.add('hidden');
 
-    // Enable all checkboxes
+    // Enable all checkboxes and switch containers
     const checkboxes = document.querySelectorAll('#detail-content input[type="checkbox"]');
-    checkboxes.forEach(cb => cb.disabled = false);
+    checkboxes.forEach(cb => {
+        cb.disabled = false;
+        const container = cb.closest('.switch-container');
+        if (container) {
+            container.classList.remove('disabled');
+            container.classList.remove('view-only');
+        }
+    });
 
-    // Sync Bulk Select State based on initial values
-    updateBulkSelectState('read');
-    updateBulkSelectState('write');
-    updateBulkSelectState('delete');
+    // Sync Bulk Select State
+    updateBulkSelectState('access');
 }
 
 function saveChanges() {
@@ -194,9 +227,16 @@ function exitEditMode() {
     const idInput = document.getElementById('reg-role-id');
     idInput.disabled = false;
 
-    // Disable all checkboxes
+    // Disable all checkboxes and switch containers
     const checkboxes = document.querySelectorAll('#detail-content input[type="checkbox"]');
-    checkboxes.forEach(cb => cb.disabled = true);
+    checkboxes.forEach(cb => {
+        cb.disabled = true;
+        const container = cb.closest('.switch-container');
+        if (container) {
+            container.classList.add('disabled');
+            container.classList.add('view-only');
+        }
+    });
 }
 // Registration Mode Functions
 function initRegistrationMode() {
@@ -222,9 +262,11 @@ function initRegistrationMode() {
     // Show Bulk Select
     document.getElementById('bulk-select-controls').classList.remove('hidden');
     // Reset bulk select checkboxes
-    document.getElementById('select-all-read').checked = false;
-    document.getElementById('select-all-write').checked = false;
-    document.getElementById('select-all-delete').checked = false;
+    const selectAllAccess = document.getElementById('select-all-access');
+    selectAllAccess.checked = false;
+    const bulkContainer = selectAllAccess.closest('.switch-container');
+    if (bulkContainer) bulkContainer.classList.remove('view-only');
+    if (window.updateToggleLabel) window.updateToggleLabel(selectAllAccess);
 
     // 5. Show Registration Form Inputs
     document.getElementById('registration-form').classList.remove('hidden');
@@ -254,6 +296,12 @@ function initRegistrationMode() {
     checkboxes.forEach(cb => {
         cb.checked = false;
         cb.disabled = false;
+        const container = cb.closest('.switch-container');
+        if (container) {
+            container.classList.remove('disabled');
+            container.classList.remove('view-only');
+            if (window.updateToggleLabel) window.updateToggleLabel(cb);
+        }
     });
 
     // 7. Show right pane on mobile (like view/edit mode)
@@ -353,12 +401,26 @@ function closeSuccessModal() {
 
 // Bulk Select Function
 function toggleAllPermissions(type) {
-    const isChecked = document.getElementById(`select-all-${type}`).checked;
+    const selectAllCb = document.getElementById(`select-all-${type}`);
+    const isChecked = selectAllCb.checked;
     const checkboxes = document.querySelectorAll(`input[data-permission="${type}"]`);
 
     checkboxes.forEach(cb => {
         if (!cb.disabled) {
             cb.checked = isChecked;
+            const container = cb.closest('.switch-container') || cb.closest('.switch').parentElement;
+            const label = container.querySelector('.toggle-label');
+            if (label) {
+                if (cb.checked) {
+                    label.textContent = '접근 가능';
+                    label.classList.remove('status-denied');
+                    label.classList.add('status-allowed');
+                } else {
+                    label.textContent = '접근 불가';
+                    label.classList.add('status-denied');
+                    label.classList.remove('status-allowed');
+                }
+            }
         }
     });
 }
@@ -369,23 +431,39 @@ function toggleAllPermissions(type) {
  */
 function updateBulkSelectState(type) {
     const selectAllCb = document.getElementById(`select-all-${type}`);
-    const checkboxes = Array.from(document.querySelectorAll(`input[data-permission="${type}"]`));
+    if (!selectAllCb) return;
 
-    // Filter only enabled checkboxes (or all if we want strict logical "all")
-    // Usually "Select All" applies to what is available to be selected.
-    // In this context, all are effectively available in edit mode.
+    const checkboxes = Array.from(document.querySelectorAll(`input[data-permission="${type}"]`));
     const enabledCheckboxes = checkboxes.filter(cb => !cb.disabled);
 
     if (enabledCheckboxes.length === 0) {
         selectAllCb.checked = false;
+        // Label logic for select all
+        const label = selectAllCb.closest('.switch-container').querySelector('.toggle-label');
+        if (label) {
+            label.textContent = '접근 불가';
+            label.classList.add('status-denied');
+            label.classList.remove('status-allowed');
+        }
         return;
     }
 
     const allChecked = enabledCheckboxes.every(cb => cb.checked);
     selectAllCb.checked = allChecked;
 
-    // Optional: If some are checked, could use indeterminate state
-    // selectAllCb.indeterminate = !allChecked && enabledCheckboxes.some(cb => cb.checked);
+    // Update Label for Bulk Toggle
+    const label = selectAllCb.closest('.switch-container').querySelector('.toggle-label');
+    if (label) {
+        if (selectAllCb.checked) {
+            label.textContent = '접근 가능';
+            label.classList.remove('status-denied');
+            label.classList.add('status-allowed');
+        } else {
+            label.textContent = '접근 불가';
+            label.classList.add('status-denied');
+            label.classList.remove('status-allowed');
+        }
+    }
 }
 
 function clearValidationErrors() {

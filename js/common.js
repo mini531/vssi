@@ -452,15 +452,79 @@ function closeSidebarOnMobile() {
 // Global Modal Backdrop Click Handler
 document.addEventListener('click', (e) => {
     if (e.target.classList.contains('modal-overlay')) {
-        // Standard practice in this project is only toggling the 'active' class.
-        // Adding 'hidden' class conflicts with many 'open' functions that don't remove it.
         e.target.classList.remove('active');
 
-        // If the modal has specific cleanup logic (like stopping charts), 
-        // we might need to call specific functions.
         if (typeof window.closeMonitoringModal === 'function' && e.target.id === 'monitoring-detail-modal') {
             window.closeMonitoringModal();
         }
     }
 });
+
+/**
+ * Common UI Helpers for Mobile and Modals
+ * Centralized to reduce redundancy across screen-specific scripts.
+ */
+
+// Mobile Split Pane Transitions
+window.openDetailPane = function () {
+    const splitContainer = document.querySelector('.split-container');
+    if (splitContainer) splitContainer.classList.add('show-detail');
+};
+
+window.closeDetailPane = function () {
+    const splitContainer = document.querySelector('.split-container');
+    if (splitContainer) splitContainer.classList.remove('show-detail');
+
+    // Optional: Stop charts if ChartManager exists (Monitoring screens)
+    if (window.ChartManager && typeof window.ChartManager.stopAll === 'function') {
+        window.ChartManager.stopAll();
+    }
+
+    // Optional: Reset views if handle exists
+    const emptyState = document.getElementById('empty-state');
+    const detailContent = document.getElementById('detail-content');
+    if (emptyState && detailContent) {
+        emptyState.classList.remove('hidden');
+        detailContent.classList.add('hidden');
+    }
+};
+
+// Modal Helpers
+window.showSuccessModal = function (msg, title = '완료') {
+    const modal = document.getElementById('success-modal');
+    if (!modal) return;
+
+    const titleEl = modal.querySelector('.modal-title');
+    const msgEl = modal.querySelector('.modal-desc') || document.getElementById('success-message');
+
+    if (titleEl) titleEl.innerText = title;
+    if (msgEl) msgEl.innerText = msg;
+
+    modal.classList.add('active');
+    if (window.lucide) lucide.createIcons();
+};
+
+window.closeSuccessModal = function () {
+    const modal = document.getElementById('success-modal');
+    if (modal) modal.classList.remove('active');
+};
+
+window.showConfirmModal = function (title, desc, confirmBtnId = 'btn-confirm-ok') {
+    const modal = document.getElementById('confirm-modal');
+    if (!modal) return;
+
+    const titleEl = modal.querySelector('.modal-title') || document.getElementById('confirm-modal-title');
+    const descEl = modal.querySelector('.modal-desc') || document.getElementById('confirm-modal-desc');
+
+    if (titleEl) titleEl.innerText = title;
+    if (descEl) descEl.innerText = desc;
+
+    modal.classList.add('active');
+    if (window.lucide) lucide.createIcons();
+};
+
+window.closeConfirmModal = function () {
+    const modal = document.getElementById('confirm-modal');
+    if (modal) modal.classList.remove('active');
+};
 

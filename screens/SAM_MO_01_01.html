@@ -61,25 +61,21 @@
                                     <!-- DIRECT CONNECTORS: Nodes to IVS L2 Switch -->
 
                                     <!-- VOS Ops Lines -->
-                                    <g class="network-group" id="link-vos1-ivsl2"
-                                        onclick="openNetworkModal('LINK_VOS1_L2', 'VOS운용서버#1', 'IVS L2스위치')">
+                                    <g id="link-vos1-ivsl2">
                                         <path d="M190 97 L250 97 L250 340 L320 340" class="network-hit-area" />
                                         <path d="M190 97 L250 97 L250 340 L320 340" class="line-normal status-normal" />
                                     </g>
-                                    <g class="network-group" id="link-vos2-ivsl2"
-                                        onclick="openNetworkModal('LINK_VOS2_L2', 'VOS운용서버#2', 'IVS L2스위치')">
+                                    <g id="link-vos2-ivsl2">
                                         <path d="M190 141 L260 141 L260 342 L320 342" class="network-hit-area" />
                                         <path d="M190 141 L260 141 L260 342 L320 342"
                                             class="line-normal status-normal" />
                                     </g>
-                                    <g class="network-group" id="link-vos3-ivsl2"
-                                        onclick="openNetworkModal('LINK_VOS3_L2', 'VOS운용서버#3', 'IVS L2스위치')">
+                                    <g id="link-vos3-ivsl2">
                                         <path d="M190 185 L270 185 L270 344 L320 344" class="network-hit-area" />
                                         <path d="M190 185 L270 185 L270 344 L320 344"
                                             class="line-normal status-normal" />
                                     </g>
-                                    <g class="network-group" id="link-vos4-ivsl2"
-                                        onclick="openNetworkModal('LINK_VOS4_L2', 'VOS운용서버#4', 'IVS L2스위치')">
+                                    <g id="link-vos4-ivsl2">
                                         <path d="M190 229 L280 229 L280 346 L320 346" class="network-hit-area" />
                                         <path d="M190 229 L280 229 L280 346 L320 346"
                                             class="line-normal status-normal" />
@@ -87,86 +83,75 @@
 
                                     <!-- IVS Servers -->
                                     <!-- WAS#1 -->
-                                    <g class="network-group" id="link-was1-ivsl2"
-                                        onclick="openNetworkModal('LINK_WAS1_L2', 'WAS서버(IVS) VM#1', 'IVS L2스위치')">
+                                    <g id="link-was1-ivsl2">
                                         <path d="M190 297 L290 297 L290 348 L320 348" class="network-hit-area" />
                                         <path d="M190 297 L290 297 L290 348 L320 348"
                                             class="line-normal status-normal" />
                                     </g>
                                     <!-- WAS#2 -->
-                                    <g class="network-group" id="link-was2-ivsl2"
-                                        onclick="openNetworkModal('LINK_WAS2_L2', 'WAS서버(IVS) VM#2', 'IVS L2스위치')">
+                                    <g id="link-was2-ivsl2">
                                         <path d="M190 341 L300 341 L300 350 L320 350" class="network-hit-area" />
-                                        <path d="M190 341 L300 341 L300 350 L320 350"
+                                        <path d="M190 341 L300 341 Mul300 350 L320 350"
                                             class="line-normal status-normal" />
                                     </g>
                                     <!-- WEB#1 -->
-                                    <g class="network-group" id="link-web1-ivsl2"
-                                        onclick="openNetworkModal('LINK_WEB1_L2', 'WEB서버(IVS) VM#1', 'IVS L2스위치')">
+                                    <g id="link-web1-ivsl2">
                                         <path d="M190 385 L300 385 L300 352 L320 352" class="network-hit-area" />
                                         <path d="M190 385 L300 385 L300 352 L320 352"
                                             class="line-normal status-normal" />
                                     </g>
                                     <!-- WEB#2 -->
-                                    <g class="network-group" id="link-web2-ivsl2"
-                                        onclick="openNetworkModal('LINK_WEB2_L2', 'WEB서버(IVS) VM#2', 'IVS L2스위치')">
+                                    <g id="link-web2-ivsl2">
                                         <path d="M190 429 L290 429 L290 354 L320 354" class="network-hit-area" />
                                         <path d="M190 429 L290 429 L290 354 L320 354"
                                             class="line-normal status-normal" />
                                     </g>
                                     <!-- DB#1 -->
-                                    <g class="network-group" id="link-db1-ivsl2"
-                                        onclick="openNetworkModal('LINK_DB1_L2', '통합DB서버(IVS) VM#1', 'IVS L2스위치')">
+                                    <g id="link-db1-ivsl2">
                                         <path d="M190 473 L280 473 L280 356 L320 356" class="network-hit-area" />
                                         <path d="M190 473 L280 473 L280 356 L320 356"
                                             class="line-normal status-normal" />
                                     </g>
                                     <!-- DB#2 -->
-                                    <g class="network-group" id="link-db2-ivsl2"
-                                        onclick="openNetworkModal('LINK_DB2_L2', '통합DB서버(IVS) VM#2', 'IVS L2스위치')">
+                                    <g id="link-db2-ivsl2">
                                         <path d="M190 517 L270 517 L270 358 L320 358" class="network-hit-area" />
                                         <path d="M190 517 L270 517 L270 358 L320 358"
                                             class="line-normal status-normal" />
                                     </g>
                                     <!-- VCDM#1 -->
-                                    <g class="network-group" id="link-vcdm1-ivsl2"
-                                        onclick="openNetworkModal('LINK_VCDM1_L2', 'VCDM운용서버 VM#1', 'IVS L2스위치')">
+                                    <g id="link-vcdm1-ivsl2">
                                         <path d="M190 561 L260 561 L260 360 L320 360" class="network-hit-area" />
                                         <path d="M190 561 L260 561 L260 360 L320 360"
                                             class="line-normal status-normal" />
                                     </g>
                                     <!-- VCDM#2 -->
-                                    <g class="network-group" id="link-vcdm2-ivsl2"
-                                        onclick="openNetworkModal('LINK_VCDM2_L2', 'VCDM운용서버 VM#2', 'IVS L2스위치')">
+                                    <g id="link-vcdm2-ivsl2">
                                         <path d="M190 605 L250 605 L250 362 L320 362" class="network-hit-area" />
                                         <path d="M190 605 L250 605 L250 362 L320 362"
-                                            class="line-normal status-caution" />
+                                            class="line-normal status-normal" />
                                     </g>
 
                                     <!-- Link L2 to CEC -->
-                                    <g class="network-group" id="link-ivsl2-cec"
-                                        onclick="openNetworkModal('LINK_IVSL2_CEC', 'IVS L2스위치', 'CEC 미들웨어')">
+                                    <g id="link-ivsl2-cec">
                                         <path d="M420 350 L460 350" class="network-hit-area" />
-                                        <path d="M420 350 L460 350" class="line-normal status-caution" />
+                                        <path d="M420 350 L460 350" class="line-normal status-normal" />
                                     </g>
 
                                     <!-- Link CEC to L3 -->
-                                    <g class="network-group" id="link-cec-ivsl3"
-                                        onclick="openNetworkModal('LINK_CEC_L3', 'CEC 미들웨어', 'IVS L3스위치')">
+                                    <g id="link-cec-ivsl3">
                                         <path d="M580 350 L620 350" class="network-hit-area" />
                                         <path d="M580 350 L620 350" class="line-normal status-normal" />
                                     </g>
 
                                     <!-- Link L3 to WAN -->
-                                    <g class="network-group" id="link-ivsl3-wan"
-                                        onclick="openNetworkModal('LINK_IVSL3_WAN', 'IVS L3스위치', 'WAN')">
+                                    <g id="link-ivsl3-wan">
                                         <path d="M720 350 L760 350" class="network-hit-area" />
                                         <path d="M720 350 L760 350" class="line-normal status-normal" />
                                     </g>
 
                                     <!-- Nodes (Front) -->
                                     <g transform="translate(30, 80)">
-                                        <g class="node-interactive" onclick="openHardwareModal('VOS운용서버#1')">
+                                        <g class="node-interactive" onclick="openHardwareModal('VOS운용서버#1', 'normal')">
                                             <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label">VOS운용서버#1</text>
                                             <circle cx="145" cy="17" r="4" class="status-indicator status-normal" />
@@ -176,7 +161,7 @@
                                             </g>
                                         </g>
                                         <g transform="translate(0, 44)" class="node-interactive"
-                                            onclick="openHardwareModal('VOS운용서버#2')">
+                                            onclick="openHardwareModal('VOS운용서버#2', 'fault')">
                                             <rect x="0" y="0" width="160" height="34" class="box-fill status-danger"
                                                 rx="0" />
                                             <text x="10" y="22" class="text-label status-danger">VOS운용서버#2</text>
@@ -187,7 +172,7 @@
                                             </g>
                                         </g>
                                         <g transform="translate(0, 88)" class="node-interactive"
-                                            onclick="openHardwareModal('VOS운용서버#3')">
+                                            onclick="openHardwareModal('VOS운용서버#3', 'normal')">
                                             <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label">VOS운용서버#3</text>
                                             <circle cx="145" cy="17" r="4" class="status-indicator status-normal" />
@@ -197,7 +182,7 @@
                                             </g>
                                         </g>
                                         <g transform="translate(0, 132)" class="node-interactive"
-                                            onclick="openHardwareModal('VOS운용서버#4')">
+                                            onclick="openHardwareModal('VOS운용서버#4', 'normal')">
                                             <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label">VOS운용서버#4</text>
                                             <circle cx="145" cy="17" r="4" class="status-indicator status-normal" />
@@ -208,18 +193,18 @@
                                         </g>
                                     </g>
                                     <g transform="translate(30, 280)">
-                                        <g class="node-interactive" onclick="openHardwareModal('WAS서버(IVS) VM#1')">
-                                            <rect x="0" y="0" width="160" height="34" class="box-fill status-caution"
-                                                rx="0" />
-                                            <text x="10" y="22" class="text-label status-caution">WAS서버(IVS) VM#1</text>
-                                            <circle cx="145" cy="17" r="4" class="status-indicator status-caution" />
+                                        <g class="node-interactive"
+                                            onclick="openHardwareModal('WAS서버(IVS) VM#1', 'normal')">
+                                            <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">WAS서버(IVS) VM#1</text>
+                                            <circle cx="145" cy="17" r="4" class="status-indicator status-normal" />
                                             <g class="svg-tooltip" transform="translate(155, 5)">
                                                 <rect x="0" y="0" width="40" height="24" class="tooltip-box" />
-                                                <text x="20" y="17" text-anchor="middle" class="tooltip-text">위험</text>
+                                                <text x="20" y="17" text-anchor="middle" class="tooltip-text">정상</text>
                                             </g>
                                         </g>
                                         <g transform="translate(0, 44)" class="node-interactive"
-                                            onclick="openHardwareModal('WAS서버(IVS) VM#2')">
+                                            onclick="openHardwareModal('WAS서버(IVS) VM#2', 'normal')">
                                             <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label">WAS서버(IVS) VM#2</text>
                                             <circle cx="145" cy="17" r="4" class="status-indicator status-normal" />
@@ -229,7 +214,7 @@
                                             </g>
                                         </g>
                                         <g transform="translate(0, 88)" class="node-interactive"
-                                            onclick="openHardwareModal('WEB서버(IVS) VM#1')">
+                                            onclick="openHardwareModal('WEB서버(IVS) VM#1', 'normal')">
                                             <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label">WEB서버(IVS) VM#1</text>
                                             <circle cx="145" cy="17" r="4" class="status-indicator status-normal" />
@@ -239,7 +224,7 @@
                                             </g>
                                         </g>
                                         <g transform="translate(0, 132)" class="node-interactive"
-                                            onclick="openHardwareModal('WEB서버(IVS) VM#2')">
+                                            onclick="openHardwareModal('WEB서버(IVS) VM#2', 'normal')">
                                             <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label">WEB서버(IVS) VM#2</text>
                                             <circle cx="145" cy="17" r="4" class="status-indicator status-normal" />
@@ -249,19 +234,18 @@
                                             </g>
                                         </g>
                                         <g transform="translate(0, 176)" class="node-interactive"
-                                            onclick="openHardwareModal('통합DB서버(IVS) VM#1')">
-                                            <rect x="0" y="0" width="160" height="34" class="box-fill status-caution"
-                                                rx="0" />
-                                            <text x="10" y="22" class="text-label status-caution">통합DB서버(IVS)
+                                            onclick="openHardwareModal('통합DB서버(IVS) VM#1', 'normal')">
+                                            <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">통합DB서버(IVS)
                                                 VM#1</text>
-                                            <circle cx="145" cy="17" r="4" class="status-indicator status-caution" />
+                                            <circle cx="145" cy="17" r="4" class="status-indicator status-normal" />
                                             <g class="svg-tooltip" transform="translate(155, 5)">
                                                 <rect x="0" y="0" width="40" height="24" class="tooltip-box" />
-                                                <text x="20" y="17" text-anchor="middle" class="tooltip-text">위험</text>
+                                                <text x="20" y="17" text-anchor="middle" class="tooltip-text">정상</text>
                                             </g>
                                         </g>
                                         <g transform="translate(0, 220)" class="node-interactive"
-                                            onclick="openHardwareModal('통합DB서버(IVS) VM#2')">
+                                            onclick="openHardwareModal('통합DB서버(IVS) VM#2', 'normal')">
                                             <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label">통합DB서버(IVS) VM#2</text>
                                             <circle cx="145" cy="17" r="4" class="status-indicator status-normal" />
@@ -271,7 +255,7 @@
                                             </g>
                                         </g>
                                         <g transform="translate(0, 264)" class="node-interactive"
-                                            onclick="openHardwareModal('VCDM운용서버 VM#1')">
+                                            onclick="openHardwareModal('VCDM운용서버 VM#1', 'normal')">
                                             <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label">VCDM운용서버 VM#1</text>
                                             <circle cx="145" cy="17" r="4" class="status-indicator status-normal" />
@@ -281,7 +265,7 @@
                                             </g>
                                         </g>
                                         <g transform="translate(0, 308)" class="node-interactive"
-                                            onclick="openHardwareModal('VCDM운용서버 VM#2')">
+                                            onclick="openHardwareModal('VCDM운용서버 VM#2', 'normal')">
                                             <rect x="0" y="0" width="160" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label">VCDM운용서버 VM#2</text>
                                             <circle cx="145" cy="17" r="4" class="status-indicator status-normal" />
@@ -298,7 +282,7 @@
                                         <text x="50" y="20" text-anchor="middle" class="text-label static">L2스위치</text>
                                     </g>
                                     <g transform="translate(460, 335)" class="node-interactive"
-                                        onclick="openHardwareModal('CEC 미들웨어')">
+                                        onclick="openHardwareModal('CEC 미들웨어', 'normal')">
                                         <rect x="0" y="0" width="120" height="30" class="box-fill stroke-highlight"
                                             rx="0" />
                                         <text x="60" y="20" text-anchor="middle" class="text-label">CEC 미들웨어</text>
@@ -336,8 +320,7 @@
                                         (VOS)</text>
 
                                     <!-- WAN Link -->
-                                    <g class="network-group" id="link-wan-utm"
-                                        onclick="openNetworkModal('LINK_WAN_UTM', 'WAN', 'UTM')">
+                                    <g id="link-wan-utm">
                                         <path d="M840 350 L910 350" class="network-hit-area" />
                                         <path d="M840 350 L910 350" class="line-normal status-normal" />
                                     </g>
@@ -352,14 +335,12 @@
                                     </g>
 
                                     <!-- UTM to L2 Split -->
-                                    <g class="network-group" id="link-utm-splittop"
-                                        onclick="openNetworkModal('LINK_UTM_L2TOP', 'UTM', 'VOS L2(Top)')">
+                                    <g id="link-utm-splittop">
                                         <path d="M990 350 L1010 350 L1010 150 L1030 150" class="network-hit-area" />
                                         <path d="M990 350 L1010 350 L1010 150 L1030 150"
                                             class="line-normal status-normal" />
                                     </g>
-                                    <g class="network-group" id="link-utm-splitbot"
-                                        onclick="openNetworkModal('LINK_UTM_L2BOT', 'UTM', 'VOS L2(Bot)')">
+                                    <g id="link-utm-splitbot">
                                         <path d="M990 350 L1010 350 L1010 550 L1030 550" class="network-hit-area" />
                                         <path d="M990 350 L1010 350 L1010 550 L1030 550"
                                             class="line-normal status-normal" />
@@ -379,103 +360,89 @@
                                     <!-- DIRECT CONNECTORS: Top L2 (x=1150, y=150) to Nodes (x=1280) -->
 
                                     <!-- VP#1 -->
-                                    <g class="network-group" id="link-vp1-l2top"
-                                        onclick="openNetworkModal('LINK_VP1_L2', 'VP운용 단말 #1', 'VOS L2(Top)')">
+                                    <g id="link-vp1-l2top">
                                         <path d="M1150 142 L1170 142 L1170 97 L1280 97" class="network-hit-area" />
                                         <path d="M1150 142 L1170 142 L1170 97 L1280 97"
                                             class="line-normal status-normal" />
                                     </g>
                                     <!-- VP#2 -->
-                                    <g class="network-group" id="link-vp2-l2top"
-                                        onclick="openNetworkModal('LINK_VP2_L2', 'VP운용 단말 #2', 'VOS L2(Top)')">
+                                    <g id="link-vp2-l2top">
                                         <path d="M1150 146 L1180 146 L1180 141 L1280 141" class="network-hit-area" />
                                         <path d="M1150 146 L1180 146 L1180 141 L1280 141"
                                             class="line-normal status-normal" />
                                     </g>
                                     <!-- VP#3 -->
-                                    <g class="network-group" id="link-vp3-l2top"
-                                        onclick="openNetworkModal('LINK_VP3_L2', 'VP운용 단말 #3', 'VOS L2(Top)')">
+                                    <g id="link-vp3-l2top">
                                         <path d="M1150 150 L1190 150 L1190 185 L1280 185" class="network-hit-area" />
                                         <path d="M1150 150 L1190 150 L1190 185 L1280 185"
                                             class="line-normal status-normal" />
                                     </g>
                                     <!-- VP#4 -->
-                                    <g class="network-group" id="link-vp4-l2top"
-                                        onclick="openNetworkModal('LINK_VP4_L2', 'VP운용 단말 #4', 'VOS L2(Top)')">
+                                    <g id="link-vp4-l2top">
                                         <path d="M1150 154 L1200 154 L1200 229 L1280 229" class="network-hit-area" />
                                         <path d="M1150 154 L1200 154 L1200 229 L1280 229"
                                             class="line-normal status-normal" />
                                     </g>
                                     <!-- VOS Svr#1 -->
-                                    <g class="network-group" id="link-vos_svr1-l2top"
-                                        onclick="openNetworkModal('LINK_VOSSVR1_L2', 'VOS운용서버#1', 'VOS L2(Top)')">
+                                    <g id="link-vos_svr1-l2top">
                                         <path d="M1150 158 L1210 158 L1210 273 L1280 273" class="network-hit-area" />
                                         <path d="M1150 158 L1210 158 L1210 273 L1280 273"
-                                            class="line-normal status-danger" />
+                                            class="line-normal status-normal" />
                                     </g>
 
 
                                     <!-- DIRECT CONNECTORS: Bottom L2 (x=1150, y=550) to Nodes (x=1280) -->
 
                                     <!-- Node 1 (347) -->
-                                    <g class="network-group" id="link-console1-l2bot"
-                                        onclick="openNetworkModal('LINK_CSL1_L2', '지상 감시 콘솔', 'VOS L2(Bot)')">
+                                    <g id="link-console1-l2bot">
                                         <path d="M1150 538 L1160 538 L1160 347 L1280 347" class="network-hit-area" />
                                         <path d="M1150 538 L1160 538 L1160 347 L1280 347"
                                             class="line-normal status-normal" />
                                     </g>
                                     <!-- Node 2 (391) -->
-                                    <g class="network-group" id="link-console2-l2bot"
-                                        onclick="openNetworkModal('LINK_CSL2_L2', '상황 인식 콘솔', 'VOS L2(Bot)')">
+                                    <g id="link-console2-l2bot">
                                         <path d="M1150 541 L1170 541 L1170 391 L1280 391" class="network-hit-area" />
                                         <path d="M1150 541 L1170 541 L1170 391 L1280 391"
                                             class="line-normal status-normal" />
                                     </g>
                                     <!-- Node 3 (435) -->
-                                    <g class="network-group" id="link-console3-l2bot"
-                                        onclick="openNetworkModal('LINK_CSL3_L2', 'NWICS 콘솔', 'VOS L2(Bot)')">
+                                    <g id="link-console3-l2bot">
                                         <path d="M1150 544 L1180 544 L1180 435 L1280 435" class="network-hit-area" />
                                         <path d="M1150 544 L1180 544 L1180 435 L1280 435"
-                                            class="line-normal status-danger" />
+                                            class="line-normal status-normal" />
                                     </g>
                                     <!-- Node 4 (479) -->
-                                    <g class="network-group" id="link-console4-l2bot"
-                                        onclick="openNetworkModal('LINK_MSDP_L2', 'MSDP', 'VOS L2(Bot)')">
+                                    <g id="link-console4-l2bot">
                                         <path d="M1150 547 L1190 547 L1190 479 L1280 479" class="network-hit-area" />
                                         <path d="M1150 547 L1190 547 L1190 479 L1280 479"
                                             class="line-normal status-normal" />
                                     </g>
                                     <!-- Node 5 (523) -->
-                                    <g class="network-group" id="link-console5-l2bot"
-                                        onclick="openNetworkModal('LINK_SWSVR_L2', '감시SW 중앙 서버', 'VOS L2(Bot)')">
+                                    <g id="link-console5-l2bot">
                                         <path d="M1150 550 L1200 550 L1200 523 L1280 523" class="network-hit-area" />
                                         <path d="M1150 550 L1200 550 L1200 523 L1280 523"
                                             class="line-normal status-normal" />
                                     </g>
                                     <!-- Node 6 (567) -->
-                                    <g class="network-group" id="link-console6-l2bot"
-                                        onclick="openNetworkModal('LINK_ADSB_L2', 'ADSB 수신기', 'VOS L2(Bot)')">
+                                    <g id="link-console6-l2bot">
                                         <path d="M1150 553 L1210 553 L1210 567 L1280 567" class="network-hit-area" />
                                         <path d="M1150 553 L1210 553 L1210 567 L1280 567"
                                             class="line-normal status-normal" />
                                     </g>
                                     <!-- Node 7 (611) -->
-                                    <g class="network-group" id="link-console7-l2bot"
-                                        onclick="openNetworkModal('LINK_VULN_L2', '취약점 분석 장치', 'VOS L2(Bot)')">
+                                    <g id="link-console7-l2bot">
                                         <path d="M1150 556 L1220 556 L1220 611 L1280 611" class="network-hit-area" />
                                         <path d="M1150 556 L1220 556 L1220 611 L1280 611"
                                             class="line-normal status-normal" />
                                     </g>
                                     <!-- Node 8 (655) -->
-                                    <g class="network-group" id="link-console8-l2bot"
-                                        onclick="openNetworkModal('LINK_FIXCAM_L2', '고정카메라 영상처리 서버', 'VOS L2(Bot)')">
+                                    <g id="link-console8-l2bot">
                                         <path d="M1150 559 L1230 559 L1230 655 L1280 655" class="network-hit-area" />
                                         <path d="M1150 559 L1230 559 L1230 655 L1280 655"
                                             class="line-normal status-normal" />
                                     </g>
                                     <!-- Node 9 (699) -->
-                                    <g class="network-group" id="link-console9-l2bot"
-                                        onclick="openNetworkModal('LINK_PTZCAM_L2', 'PTZ카메라 영상처리 서버', 'VOS L2(Bot)')">
+                                    <g id="link-console9-l2bot">
                                         <path d="M1150 562 L1240 550 L1240 699 L1280 699" class="network-hit-area" />
                                         <path d="M1150 562 L1240 562 L1240 699 L1280 699"
                                             class="line-normal status-normal" />
@@ -484,7 +451,7 @@
                                     <!-- Nodes (Front) -->
                                     <g transform="translate(1280, 80)">
                                         <!-- VP Terminals -->
-                                        <g class="node-interactive" onclick="openHardwareModal('VP운용 단말 #1')">
+                                        <g class="node-interactive" onclick="openHardwareModal('VP운용 단말 #1', 'normal')">
                                             <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label">VP운용 단말 #1</text>
                                             <circle cx="185" cy="17" r="4" class="status-indicator status-normal" />
@@ -494,7 +461,7 @@
                                             </g>
                                         </g>
                                         <g transform="translate(0, 44)" class="node-interactive"
-                                            onclick="openHardwareModal('VP운용 단말 #2')">
+                                            onclick="openHardwareModal('VP운용 단말 #2', 'normal')">
                                             <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label">VP운용 단말 #2</text>
                                             <circle cx="185" cy="17" r="4" class="status-indicator status-normal" />
@@ -504,18 +471,17 @@
                                             </g>
                                         </g>
                                         <g transform="translate(0, 88)" class="node-interactive"
-                                            onclick="openHardwareModal('VP운용 단말 #3')">
-                                            <rect x="0" y="0" width="200" height="34" class="box-fill status-caution"
-                                                rx="0" />
-                                            <text x="10" y="22" class="text-label status-caution">VP운용 단말 #3</text>
-                                            <circle cx="185" cy="17" r="4" class="status-indicator status-caution" />
+                                            onclick="openHardwareModal('VP운용 단말 #3', 'normal')">
+                                            <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">VP운용 단말 #3</text>
+                                            <circle cx="185" cy="17" r="4" class="status-indicator status-normal" />
                                             <g class="svg-tooltip" transform="translate(195, 5)">
                                                 <rect x="0" y="0" width="40" height="24" class="tooltip-box" />
-                                                <text x="20" y="17" text-anchor="middle" class="tooltip-text">위험</text>
+                                                <text x="20" y="17" text-anchor="middle" class="tooltip-text">정상</text>
                                             </g>
                                         </g>
                                         <g transform="translate(0, 132)" class="node-interactive"
-                                            onclick="openHardwareModal('VP운용 단말 #4')">
+                                            onclick="openHardwareModal('VP운용 단말 #4', 'normal')">
                                             <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label">VP운용 단말 #4</text>
                                             <circle cx="185" cy="17" r="4" class="status-indicator status-normal" />
@@ -525,7 +491,7 @@
                                             </g>
                                         </g>
                                         <g transform="translate(0, 176)" class="node-interactive"
-                                            onclick="openHardwareModal('VOS운용서버#1')">
+                                            onclick="openHardwareModal('VOS운용서버#1', 'normal')">
                                             <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label status-normal">VOS운용서버#1</text>
                                             <circle cx="185" cy="17" r="4" class="status-indicator status-normal" />
@@ -538,19 +504,18 @@
 
                                     <g transform="translate(1280, 330)">
                                         <!-- Consoles -->
-                                        <g class="node-interactive" onclick="openHardwareModal('지상 감시 콘솔')">
-                                            <rect x="0" y="0" width="200" height="34" class="box-fill status-caution"
-                                                rx="0" />
-                                            <text x="10" y="22" class="text-label status-caution">지상 감시 콘솔</text>
-                                            <circle cx="185" cy="17" r="4" class="status-indicator status-caution" />
+                                        <g class="node-interactive" onclick="openHardwareModal('지상 감시 콘솔', 'normal')">
+                                            <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">지상 감시 콘솔</text>
+                                            <circle cx="185" cy="17" r="4" class="status-indicator status-normal" />
                                             <g class="svg-tooltip" transform="translate(195, 5)">
                                                 <rect x="0" y="0" width="40" height="24" class="tooltip-box" />
-                                                <text x="20" y="17" text-anchor="middle" class="tooltip-text">위험</text>
+                                                <text x="20" y="17" text-anchor="middle" class="tooltip-text">정상</text>
                                             </g>
                                         </g>
 
                                         <g transform="translate(0, 44)" class="node-interactive"
-                                            onclick="openHardwareModal('상황 인식 콘솔')">
+                                            onclick="openHardwareModal('상황 인식 콘솔', 'normal')">
                                             <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label">상황 인식 콘솔</text>
                                             <circle cx="185" cy="17" r="4" class="status-indicator status-normal" />
@@ -561,7 +526,7 @@
                                         </g>
 
                                         <g transform="translate(0, 88)" class="node-interactive"
-                                            onclick="openNetworkModal('NWICS 콘솔')">
+                                            onclick="openHardwareModal('NWICS 콘솔', 'fault')">
                                             <rect x="0" y="0" width="200" height="34" class="box-fill status-danger"
                                                 rx="0" />
                                             <text x="10" y="22" class="text-label status-danger">NWICS 콘솔</text>
@@ -573,7 +538,7 @@
                                         </g>
 
                                         <g transform="translate(0, 132)" class="node-interactive"
-                                            onclick="openHardwareModal('MSDP')">
+                                            onclick="openHardwareModal('MSDP', 'normal')">
                                             <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label">MSDP</text>
                                             <circle cx="185" cy="17" r="4" class="status-indicator status-normal" />
@@ -584,19 +549,18 @@
                                         </g>
 
                                         <g transform="translate(0, 176)" class="node-interactive"
-                                            onclick="openHardwareModal('감시SW 중앙 서버')">
-                                            <rect x="0" y="0" width="200" height="34" class="box-fill status-caution"
-                                                rx="0" />
-                                            <text x="10" y="22" class="text-label status-caution">감시SW 중앙 서버</text>
-                                            <circle cx="185" cy="17" r="4" class="status-indicator status-caution" />
+                                            onclick="openHardwareModal('감시SW 중앙 서버', 'normal')">
+                                            <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
+                                            <text x="10" y="22" class="text-label">감시SW 중앙 서버</text>
+                                            <circle cx="185" cy="17" r="4" class="status-indicator status-normal" />
                                             <g class="svg-tooltip" transform="translate(195, 5)">
                                                 <rect x="0" y="0" width="40" height="24" class="tooltip-box" />
-                                                <text x="20" y="17" text-anchor="middle" class="tooltip-text">위험</text>
+                                                <text x="20" y="17" text-anchor="middle" class="tooltip-text">정상</text>
                                             </g>
                                         </g>
 
                                         <g transform="translate(0, 220)" class="node-interactive"
-                                            onclick="openHardwareModal('ADSB 수신기')">
+                                            onclick="openHardwareModal('ADSB 수신기', 'normal')">
                                             <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label">ADSB 수신기</text>
                                             <circle cx="185" cy="17" r="4" class="status-indicator status-normal" />
@@ -607,7 +571,7 @@
                                         </g>
 
                                         <g transform="translate(0, 264)" class="node-interactive"
-                                            onclick="openHardwareModal('취약점 분석 장치')">
+                                            onclick="openHardwareModal('취약점 분석 장치', 'normal')">
                                             <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label">취약점 분석 장치</text>
                                             <circle cx="185" cy="17" r="4" class="status-indicator status-normal" />
@@ -618,7 +582,7 @@
                                         </g>
 
                                         <g transform="translate(0, 308)" class="node-interactive"
-                                            onclick="openHardwareModal('고정카메라 영상처리 서버')">
+                                            onclick="openHardwareModal('고정카메라 영상처리 서버', 'normal')">
                                             <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label">고정카메라 영상처리 서버</text>
                                             <circle cx="185" cy="17" r="4" class="status-indicator status-normal" />
@@ -629,7 +593,7 @@
                                         </g>
 
                                         <g transform="translate(0, 352)" class="node-interactive"
-                                            onclick="openHardwareModal('PTZ카메라 영상처리 서버')">
+                                            onclick="openHardwareModal('PTZ카메라 영상처리 서버', 'normal')">
                                             <rect x="0" y="0" width="200" height="34" class="box-fill" rx="0" />
                                             <text x="10" y="22" class="text-label">PTZ카메라 영상처리 서버</text>
                                             <circle cx="185" cy="17" r="4" class="status-indicator status-normal" />
@@ -684,7 +648,7 @@
                         <div class="summary-item">
                             <h4 class="modal-section-title mb-0">상태</h4>
                             <div class="flex items-center">
-                                <span class="badge badge-success">정상</span>
+                                <span class="badge badge-success" id="server-modal-status">정상</span>
                             </div>
                         </div>
                     </div>
@@ -724,113 +688,56 @@
 
                     <!-- Disk Section -->
                     <!-- Disk Section -->
+                    <div class="section-header">
+                        <h4 class="modal-section-title">디스크 IO</h4>
+                        <span class="text-value-sub">100%</span>
+                    </div>
+                    <div class="monitoring-chart-container">
+                        <canvas id="chart-disk" class="w-full h-full block"></canvas>
+                        <div class="chart-grid-overlay"></div>
+                    </div>
+                    <div class="monitoring-chart-footer">
+                        <span>60초</span>
+                        <span id="val-disk-current">0</span>
+                    </div>
+
+                    <!-- Disk Usage Bar -->
+                    <div class="disk-usage-container mb-sm">
+                        <div class="disk-usage-header">
+                            <span class="disk-usage-label">디스크 사용량</span>
+                            <span class="disk-usage-value" id="disk-usage-text">0.00 TB / 0.00 TB</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div id="disk-usage-bar" class="progress-bar-fill"></div>
+                        </div>
+                    </div>
+
+                    <!-- Network Section -->
                     <div class="mb-sm">
                         <div class="section-header">
-                            <h4 class="modal-section-title">디스크 활성</h4>
-                            <span class="text-value-sub">100%</span>
+                            <h4 class="modal-section-title">네트워크</h4>
+                            <div class="flex items-center gap-sm text-xs">
+                                <div class="flex items-center gap-xs">
+                                    <span class="dot-success"></span>
+                                    <span class="text-slate">수신</span>
+                                </div>
+                                <div class="flex items-center gap-xs">
+                                    <span class="dot-info"></span>
+                                    <span class="text-slate">송신</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="monitoring-chart-container">
-                            <canvas id="chart-disk" class="w-full h-full block"></canvas>
+                            <canvas id="chart-net" class="w-full h-full block"></canvas>
                             <div class="chart-grid-overlay"></div>
                         </div>
                         <div class="monitoring-chart-footer">
                             <span>60초</span>
-                            <span id="val-disk-current">0</span>
-                        </div>
-
-                        <!-- Disk Usage Bar -->
-                        <div class="disk-usage-container">
-                            <div class="disk-usage-header">
-                                <span class="disk-usage-label">디스크 사용량</span>
-                                <span class="disk-usage-value" id="disk-usage-text">0.00 TB / 0.00 TB</span>
-                            </div>
-                            <div class="progress-bar-bg">
-                                <div id="disk-usage-bar" class="progress-bar-fill"></div>
-                            </div>
+                            <span id="val-net-current">수신: 0.0 Mbps / 송신: 0.0 Mbps</span>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Network Monitoring Content -->
-            <div class="modal-content hidden" id="modal-view-network">
-                <div class="flex flex-col">
-                    <!-- Head Summary: Text Style -->
-                    <div class="flex flex-row gap-standard mb-sm">
-                        <!-- Start Point -->
-                        <div class="flex-1">
-                            <h4 class="modal-section-title">송신 노드</h4>
-                            <div class="data-value whitespace-nowrap" id="network-source">Source</div>
-                        </div>
-                        <!-- End Point -->
-                        <div class="flex-1">
-                            <h4 class="modal-section-title">수신 노드</h4>
-                            <div class="data-value whitespace-nowrap" id="network-target">Target</div>
-                        </div>
-                        <!-- Status -->
-                        <div class="flex-1">
-                            <h4 class="modal-section-title">상태</h4>
-                            <div class="data-value">
-                                <span class="badge badge-success w-fit">정상</span>
-                                <!-- <span class="badge badge-error w-fit">장애</span> -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Traffic Chart -->
-                    <div class="mb-sm">
-                        <div class="section-header">
-                            <div class="flex items-center gap-xs">
-                                <h4 class="modal-section-title">네트워크 트래픽</h4>
-                                <span class="text-value-sub" id="val-net">Send/Recv</span>
-                            </div>
-                            <span class="text-value-sub">1 Gbps</span>
-                        </div>
-                        <div class="monitoring-chart-container">
-                            <canvas id="chart-network" class="w-full h-full block"></canvas>
-                            <div class="chart-grid-overlay"></div>
-                        </div>
-                        <div class="monitoring-chart-footer">
-                            <span>60초</span>
-                            <span id="val-net-current">0</span>
-                        </div>
-                    </div>
-
-                    <!-- Failure History Table -->
-                    <div>
-                        <div class="section-header">
-                            <h4 class="modal-section-title">네트워크 장애 이력</h4>
-                            <a href="SAM_MO_03_01.html" id="btn-view-more-network" class="btn-xs btn-secondary">더 보기</a>
-                        </div>
-                        <div class="table-container modal-table-scroll custom-scrollbar">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">발생 일시</th>
-                                        <th class="text-center">상태</th>
-                                        <th>내용</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="data-table-body">
-                                    <tr class="data-table-row">
-                                        <td class="td-date">2026.02.10 09:00</td>
-                                        <td class="td-center"><span class="badge badge-error">Critical</span></td>
-                                        <td>패킷 손실율 80% 초과</td>
-                                    </tr>
-                                    <tr class="data-table-row">
-                                        <td class="td-date">2026.02.09 14:30</td>
-                                        <td class="td-center"><span class="badge badge-warning">Warning</span>
-                                        </td>
-                                        <td>응답 지연 (Lat > 200ms)</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
             <div class="modal-btn-group">
                 <button onclick="closeMonitoringModal()" class="btn-md btn-primary">확인</button>
             </div>

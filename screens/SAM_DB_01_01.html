@@ -103,16 +103,12 @@
                                     <!-- Column Headers -->
                                     <div></div>
                                     <div class="infra-grid-header">정상 (Normal)</div>
-                                    <div class="infra-grid-header">위험 (Critical)</div>
                                     <div class="infra-grid-header">장애 (Failure)</div>
 
                                     <!-- CPU Row -->
                                     <div class="infra-resource-label">CPU</div>
                                     <div class="infra-status-card success" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">23</span>
-                                    </div>
-                                    <div class="infra-status-card warning" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">2</span>
+                                        <span class="infra-status-count">25</span>
                                     </div>
                                     <div class="infra-status-card error" onclick="location.href='SAM_MO_01_01.html'">
                                         <span class="infra-status-count">1</span>
@@ -121,10 +117,7 @@
                                     <!-- MEM Row -->
                                     <div class="infra-resource-label">메모리</div>
                                     <div class="infra-status-card success" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">25</span>
-                                    </div>
-                                    <div class="infra-status-card warning" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">1</span>
+                                        <span class="infra-status-count">26</span>
                                     </div>
                                     <div class="infra-status-card error" onclick="location.href='SAM_MO_01_01.html'">
                                         <span class="infra-status-count">0</span>
@@ -134,9 +127,6 @@
                                     <div class="infra-resource-label">네트워크</div>
                                     <div class="infra-status-card success" onclick="location.href='SAM_MO_01_01.html'">
                                         <span class="infra-status-count">14</span>
-                                    </div>
-                                    <div class="infra-status-card warning" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">0</span>
                                     </div>
                                     <div class="infra-status-card error" onclick="location.href='SAM_MO_01_01.html'">
                                         <span class="infra-status-count">1</span>
@@ -338,16 +328,12 @@
                     <h4 class="modal-section-title">3. 점수별 상태 안내</h4>
                     <div class="space-y-1">
                         <div class="modal-status-item">
-                            <span class="badge badge-success">90점 이상</span>
-                            <span class="modal-status-desc">안정 (시스템이 최적의 상태로 운영되고 있습니다)</span>
+                            <span class="badge badge-success">80점 이상</span>
+                            <span class="modal-status-desc">정상 (시스템이 최적의 상태로 운영되고 있습니다)</span>
                         </div>
                         <div class="modal-status-item">
-                            <span class="badge badge-warning">70 - 89점</span>
-                            <span class="modal-status-desc">주의 (일부 노드 부하 또는 비핵심 장애 감지)</span>
-                        </div>
-                        <div class="modal-status-item">
-                            <span class="badge badge-error">70점 미만</span>
-                            <span class="modal-status-desc">위험 (핵심 서비스 장애 또는 백업 미이행)</span>
+                            <span class="badge badge-error">80점 미만</span>
+                            <span class="modal-status-desc">장애 (핵심 서비스 장애 또는 백업 미이행)</span>
                         </div>
                     </div>
                 </section>

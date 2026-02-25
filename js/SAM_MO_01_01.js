@@ -26,12 +26,8 @@ const ChartManager = {
         this.runChart('chart-mem', 'val-mem', 'mem');
         // Disk Chart
         this.runChart('chart-disk', 'val-disk', 'disk');
-    },
-
-    startNetworkMonitoring: function () {
-        this.stopAll();
-        // Network Chart
-        this.runChart('chart-network', 'val-net', 'net');
+        // Network Chart (Inbound/Outbound)
+        this.runChart('chart-net', 'val-net', 'net');
     },
 
     stopAll: function () {
@@ -51,9 +47,10 @@ const ChartManager = {
 
         // Data history
         const dataPoints = 60;
-        const data = new Array(dataPoints).fill(0);
+        const data = type === 'net' ? { in: new Array(dataPoints).fill(0), out: new Array(dataPoints).fill(0) } : new Array(dataPoints).fill(0);
 
-        const primaryColor = '#3b82f6'; // Main blue
+        const primaryColor = type === 'net' ? '#10b981' : '#3b82f6'; // Green for In, Blue for Out/Normal
+        const secondaryColor = '#3b82f6'; // Blue for Out
         const gridColor = '#334155';
 
         const update = () => {
@@ -70,19 +67,27 @@ const ChartManager = {
             } else if (type === 'disk') {
                 if (Math.random() > 0.7) newVal = Math.floor(Math.random() * 80);
                 else newVal = Math.floor(Math.random() * 5);
-                label = `Active ${newVal}%`;
+                label = `IO ${newVal}%`;
             } else if (type === 'net') {
-                newVal = Math.floor(Math.random() * 60) + 20;
-                label = `S: ${Math.floor(newVal / 2)} Kbps / R: ${newVal * 2} Kbps`;
+                const inVal = Math.floor(Math.random() * 50) + 10;
+                const outVal = Math.floor(Math.random() * 50) + 10;
+                data.in.push(inVal);
+                data.in.shift();
+                data.out.push(outVal);
+                data.out.shift();
+                label = `수신: ${inVal}.0 Mbps / 송신: ${outVal}.0 Mbps`;
             }
 
-            // Shift data
-            data.push(newVal);
-            data.shift();
+            if (type !== 'net') {
+                data.push(newVal);
+                data.shift();
+            }
 
             // Update Label
             const valEl = document.getElementById(valueId);
+            const currentValEl = document.getElementById(valueId + '-current');
             if (valEl) valEl.textContent = label;
+            if (currentValEl) currentValEl.textContent = label;
 
             // Draw
             ctx.clearRect(0, 0, width, height);
@@ -91,74 +96,109 @@ const ChartManager = {
             ctx.beginPath();
             ctx.strokeStyle = gridColor;
             ctx.lineWidth = 0.5;
-            // Vertical lines
             for (let i = 0; i < width; i += width / 10) { ctx.moveTo(i, 0); ctx.lineTo(i, height); }
-            // Horizontal lines
             for (let i = 0; i < height; i += height / 4) { ctx.moveTo(0, i); ctx.lineTo(width, i); }
             ctx.stroke();
 
-            // Path
-            ctx.beginPath();
-            ctx.strokeStyle = primaryColor;
-            ctx.lineWidth = 2;
-            ctx.fillStyle = 'rgba(59, 130, 246, 0.2)'; // fill blue alpha
-
-            ctx.moveTo(0, height);
-
             const step = width / (dataPoints - 1);
 
-            for (let i = 0; i < data.length; i++) {
-                const x = i * step;
-                const normalize = (data[i] / 100) * height; // assume 0-100 scale
-                const y = height - normalize;
-                ctx.lineTo(x, y);
-            }
+            if (type === 'net') {
+                // Draw Outbound (Secondary) first so Inbound (Primary) is on top
+                const drawPath = (points, color) => {
+                    ctx.beginPath();
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = 2;
+                    ctx.fillStyle = color + '22';
+                    ctx.moveTo(0, height);
+                    for (let i = 0; i < points.length; i++) {
+                        const x = i * step;
+                        const y = height - (points[i] / 100) * height;
+                        ctx.lineTo(x, y);
+                    }
+                    ctx.lineTo(width, height);
+                    ctx.closePath();
+                    ctx.fill();
 
-            ctx.lineTo(width, height);
-            ctx.closePath();
-            ctx.fill();
+                    ctx.beginPath();
+                    for (let i = 0; i < points.length; i++) {
+                        const x = i * step;
+                        const y = height - (points[i] / 100) * height;
+                        if (i === 0) ctx.moveTo(x, y);
+                        else ctx.lineTo(x, y);
+                    }
+                    ctx.stroke();
+                };
 
-            // Stroke line on top
-            ctx.beginPath();
-            for (let i = 0; i < data.length; i++) {
-                const x = i * step;
-                const normalize = (data[i] / 100) * height;
-                const y = height - normalize;
-                if (i === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
+                drawPath(data.out, secondaryColor);
+                drawPath(data.in, primaryColor);
+            } else {
+                ctx.beginPath();
+                ctx.strokeStyle = primaryColor;
+                ctx.lineWidth = 2;
+                ctx.fillStyle = primaryColor + '33';
+
+                ctx.moveTo(0, height);
+                for (let i = 0; i < data.length; i++) {
+                    const x = i * step;
+                    const y = height - (data[i] / 100) * height;
+                    ctx.lineTo(x, y);
+                }
+                ctx.lineTo(width, height);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.beginPath();
+                for (let i = 0; i < data.length; i++) {
+                    const x = i * step;
+                    const y = height - (data[i] / 100) * height;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
             }
-            ctx.stroke();
         };
 
-        const interval = setInterval(update, 1000); // 1 sec update
+        const interval = setInterval(update, 1000);
         this.intervals.push(interval);
-        update(); // initial draw
+        update();
     }
 };
 
 /* --- Modal Functions --- */
 
-function openHardwareModal(serverName) {
+function openHardwareModal(serverName, status = 'normal') {
     const titleEl = document.getElementById('monitoring-modal-title');
     if (titleEl) titleEl.textContent = `하드웨어 현황`;
 
-    // Server Name in content (Input field)
+    // Server Name in content
     const nameEl = document.getElementById('server-modal-name');
     if (nameEl) nameEl.textContent = serverName;
 
-    // Show Server Content, Hide Network Content
-    // Show Server Content, Hide Network Content
-    document.getElementById('modal-view-server').classList.remove('hidden');
-    document.getElementById('modal-view-network').classList.add('hidden');
+    // Status Badge
+    const statusEl = document.getElementById('server-modal-status');
+    if (statusEl) {
+        if (status === 'fault') {
+            statusEl.textContent = '장애';
+            statusEl.className = 'badge badge-danger';
+        } else {
+            statusEl.textContent = '정상';
+            statusEl.className = 'badge badge-success';
+        }
+    }
 
-    document.getElementById('monitoring-detail-modal').classList.add('active');
+    // Show Server Content
+    const serverView = document.getElementById('modal-view-server');
+    if (serverView) serverView.classList.remove('hidden');
+
+    const modal = document.getElementById('monitoring-detail-modal');
+    if (modal) modal.classList.add('active');
 
     // Start Charts
     setTimeout(() => ChartManager.startServerMonitoring(), 100);
 
     // Mock Disk Usage Data (TB)
     const totalDisk = 32.00;
-    const usedDisk = (Math.random() * 10 + 12).toFixed(2); // 12.00 ~ 22.00 TB (Typical usage for big projects)
+    const usedDisk = (Math.random() * 10 + 12).toFixed(2);
     const usagePercent = (usedDisk / totalDisk * 100).toFixed(1);
 
     const usageTextEl = document.getElementById('disk-usage-text');
@@ -168,43 +208,12 @@ function openHardwareModal(serverName) {
     if (usageBarEl) usageBarEl.style.setProperty('--progress-width', `${usagePercent}%`);
 }
 
-function openNetworkModal(networkId, source, target) {
-    const titleEl = document.getElementById('monitoring-modal-title');
-    if (titleEl) titleEl.textContent = `네트워크 현황`;
-
-    // Network Name (Removed from view)
-    // const nameEl = document.getElementById('network-modal-name');
-    // if (nameEl) nameEl.textContent = networkId;
-
-    // Update Composition Info (Split Source/Target)
-    const sourceEl = document.getElementById('network-source');
-    if (sourceEl) sourceEl.textContent = source;
-
-    const targetEl = document.getElementById('network-target');
-    if (targetEl) targetEl.textContent = target;
-
-    // Update "View More" link with parameters
-    const viewMoreBtn = document.getElementById('btn-view-more-network');
-    if (viewMoreBtn) {
-        viewMoreBtn.href = `SAM_MO_03_01.html?source=${encodeURIComponent(source)}&target=${encodeURIComponent(target)}`;
-    }
-
-    // Show Network Content, Hide Server Content
-    document.getElementById('modal-view-network').classList.remove('hidden');
-    document.getElementById('modal-view-server').classList.add('hidden');
-
-    document.getElementById('monitoring-detail-modal').classList.add('active');
-
-    // Start Charts
-    setTimeout(() => ChartManager.startNetworkMonitoring(), 100);
-}
-
 function closeMonitoringModal() {
-    document.getElementById('monitoring-detail-modal').classList.remove('active');
+    const modal = document.getElementById('monitoring-detail-modal');
+    if (modal) modal.classList.remove('active');
     ChartManager.stopAll();
 }
 
 // Global exposure
 window.openHardwareModal = openHardwareModal;
-window.openNetworkModal = openNetworkModal;
 window.closeMonitoringModal = closeMonitoringModal;

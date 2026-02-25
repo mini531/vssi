@@ -13,8 +13,8 @@ const networkData = [
     { id: 9, source: '통합DB서버(IVS) VM#1', target: 'IVS L2스위치', status: '정상', lastUpdate: '2026.02.10 16:40' },
     { id: 10, source: '통합DB서버(IVS) VM#2', target: 'IVS L2스위치', status: '정상', lastUpdate: '2026.02.10 16:40' },
     { id: 11, source: 'VCDM운용서버 VM#1', target: 'IVS L2스위치', status: '정상', lastUpdate: '2026.02.10 16:40' },
-    { id: 12, source: 'VCDM운용서버 VM#2', target: 'IVS L2스위치', status: '위험', lastUpdate: '2026.02.10 16:40' },
-    { id: 13, source: 'IVS L2스위치', target: 'CEC 미들웨어', status: '위험', lastUpdate: '2026.02.10 16:40' },
+    { id: 12, source: 'VCDM운용서버 VM#1', target: 'IVS L2스위치', status: '정상', lastUpdate: '2026.02.10 16:40' },
+    { id: 13, source: 'IVS L2스위치', target: 'CEC 미들웨어', status: '정상', lastUpdate: '2026.02.10 16:40' },
     { id: 14, source: 'CEC 미들웨어', target: 'IVS L3스위치', status: '정상', lastUpdate: '2026.02.10 16:40' },
     { id: 15, source: 'IVS L3스위치', target: 'WAN', status: '정상', lastUpdate: '2026.02.10 16:40' }
 ];
@@ -113,8 +113,7 @@ function renderNetworkList() {
         row.className = 'data-table-row clickable-row';
         row.onclick = () => selectNetwork(net, row);
 
-        const statusBadgeClass = net.status === '정상' ? 'badge-success' :
-            net.status === '위험' ? 'badge-warning' : 'badge-error';
+        const statusBadgeClass = net.status === '정상' ? 'badge-success' : 'badge-error';
 
         row.innerHTML = `
             <td data-label="송신 노드">${net.source}</td>
@@ -146,8 +145,7 @@ function selectNetwork(net, element) {
     document.getElementById('net-detail-source').textContent = net.source;
     document.getElementById('net-detail-target').textContent = net.target;
 
-    const statusBadgeClass = net.status === '정상' ? 'badge-success' :
-        net.status === '위험' ? 'badge-warning' : 'badge-error';
+    const statusBadgeClass = net.status === '정상' ? 'badge-success' : 'badge-error';
     document.getElementById('net-detail-status').innerHTML =
         `<span class="badge ${statusBadgeClass} w-fit">${net.status}</span>`;
 
@@ -164,12 +162,6 @@ function selectNetwork(net, element) {
     }
 
     lucide.createIcons();
-}
-
-// Close Detail Pane (Mobile)
-function closeDetailPane() {
-    document.querySelector('.split-container').classList.remove('show-detail');
-    ChartManager.stopAll();
 }
 
 // Toggle Failure Filter

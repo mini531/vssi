@@ -69,7 +69,6 @@
                                                     <select id="filter-hardware-status" class="filter-select">
                                                         <option value="all">전체</option>
                                                         <option value="정상">정상</option>
-                                                        <option value="위험">위험</option>
                                                         <option value="장애">장애</option>
                                                     </select>
                                                 </div>
@@ -214,7 +213,7 @@
                                         <!-- Disk Section -->
                                         <div class="mb-sm">
                                             <div class="section-header">
-                                                <h4 class="modal-section-title">디스크 활성</h4>
+                                                <h4 class="modal-section-title">디스크 IO</h4>
                                                 <span class="text-value-sub">100%</span>
                                             </div>
                                             <div class="monitoring-chart-container">
@@ -237,6 +236,33 @@
                                                     <div id="disk-usage-bar" class="progress-bar-fill"
                                                         style="width: 0%"></div>
                                                 </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Network Section -->
+                                        <div class="mb-sm">
+                                            <div class="section-header">
+                                                <h4 class="modal-section-title">네트워크</h4>
+                                                <div class="chart-legend">
+                                                    <div class="legend-item">
+                                                        <span class="legend-dot"
+                                                            style="background-color: #14b8a6"></span>
+                                                        <span>수신</span>
+                                                    </div>
+                                                    <div class="legend-item">
+                                                        <span class="legend-dot"
+                                                            style="background-color: #3b82f6"></span>
+                                                        <span>송신</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="monitoring-chart-container">
+                                                <canvas id="chart-net" class="w-full h-full block"></canvas>
+                                                <div class="chart-grid-overlay"></div>
+                                            </div>
+                                            <div class="monitoring-chart-footer">
+                                                <span>60초</span>
+                                                <span id="val-net-current">수신: 0.0 Mbps / 송신: 0.0 Mbps</span>
                                             </div>
                                         </div>
                                     </div>

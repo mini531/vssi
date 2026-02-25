@@ -736,17 +736,8 @@ window.confirmSaveRegistration = function () {
     } else {
         successTitle.innerText = '등록 완료';
     }
-
-    successModal.classList.add('active');
+    // Refresh Icons for newly added buttons
     lucide.createIcons();
-};
-
-window.closeConfirmModal = function () {
-    document.getElementById('confirm-modal').classList.remove('active');
-    // We shouldn't clear confirmActionType here if we still need it in confirmSaveRegistration
-    // But since we captured it locally above, it's safer.
-    // However, for single deletion, we might need pendingDeleteId too.
-    // Let's keep it nullified for safety and just capture everything needed.
 };
 
 window.closeSuccessModal = function () {
@@ -783,19 +774,3 @@ function deleteSelectedCode() {
     alert('선택한 코드를 삭제하시겠습니까?');
 }
 
-// Mobile Split Pane Functions
-window.openDetailPane = function () {
-    const splitContainer = document.querySelector('.split-container');
-    if (splitContainer) splitContainer.classList.add('show-detail');
-}
-
-window.closeDetailPane = function () {
-    const splitContainer = document.querySelector('.split-container');
-    if (splitContainer) splitContainer.classList.remove('show-detail');
-
-    // If we cancel from registration without selecting a group, reset to empty
-    if (!selectedGroup) {
-        document.getElementById('empty-state').classList.remove('hidden');
-        document.getElementById('detail-content').classList.add('hidden');
-    }
-}

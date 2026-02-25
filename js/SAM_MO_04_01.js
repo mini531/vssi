@@ -2,22 +2,22 @@
 
 // Sample Interface Data
 const interfaceData = [
-    { id: 1, name: 'MQ_IVS_VOS_SYS_INFO', sender: 'IVS', receiver: 'VOS', type: 'MQ', status: '정상', txCount: '124,501', errorCount: 0, successRate: 99.9, tps: 45, tpsDiff: 5.2, latency: 12 },
-    { id: 2, name: 'MQ_VOS_IVS_DRONE_CMD', sender: 'VOS', receiver: 'IVS', type: 'MQ', status: '정상', txCount: '85,200', errorCount: 0, successRate: 100.0, tps: 12, tpsDiff: -2.1, latency: 8 },
-    { id: 3, name: 'REST_AUTH_TOKEN_SYNC', sender: 'IVS', receiver: 'CEC', type: 'REST', status: '지연', txCount: '12,400', errorCount: 15, successRate: 98.5, tps: 120, tpsDiff: 15.4, latency: 450 },
-    { id: 4, name: 'MQ_ALARM_EVENT_SEND', sender: 'IVS', receiver: 'VOS', type: 'MQ', status: '장애', txCount: '45,201', errorCount: 1542, successRate: 75.2, tps: 0, tpsDiff: -100, latency: 0 },
-    { id: 5, name: 'REST_VOS_TELEMETRY', sender: 'VOS', receiver: 'IVS', type: 'REST', status: '정상', txCount: '1,204,500', errorCount: 5, successRate: 99.9, tps: 850, tpsDiff: 8.7, latency: 5 },
-    { id: 6, name: 'MQ_DB_LOG_STORAGE', sender: 'IVS', receiver: 'DB', type: 'MQ', status: '정상', txCount: '945,000', errorCount: 0, successRate: 99.9, tps: 210, tpsDiff: 1.5, latency: 15 },
-    { id: 7, name: 'MQ_FILE_TRANSFER', sender: 'VOS', receiver: 'NAS', type: 'MQ', status: '지연', txCount: '1,201', errorCount: 60, successRate: 95.0, tps: 5, tpsDiff: -12.3, latency: 1500 }
+    { id: 1, name: 'MQ_IVS_VCDM_SYSTEM_INFO', sender: 'WAS(IVS) VM#1', receiver: 'VCDM운용 VM#1', type: 'MQ', status: '정상', txCount: '124,501', errorCount: 0, successRate: 99.9, tps: 45, tpsDiff: 5.2, latency: 12 },
+    { id: 2, name: 'MQ_VCDM_IVS_COMMAND', sender: 'VCDM운용 VM#1', receiver: 'WAS(IVS) VM#1', type: 'MQ', status: '정상', txCount: '85,200', errorCount: 0, successRate: 100.0, tps: 12, tpsDiff: -2.1, latency: 8 },
+    { id: 3, name: 'REST_WEB_VCDM_AUTH_SYNC', sender: 'WEB(IVS) VM#1', receiver: 'VCDM운용 VM#2', type: 'REST', status: '지연', txCount: '12,400', errorCount: 15, successRate: 98.5, tps: 120, tpsDiff: 15.4, latency: 450 },
+    { id: 4, name: 'MQ_IVS_VCDM_ALARM_EVENT', sender: 'WAS(IVS) VM#2', receiver: 'VCDM운용 VM#1', type: 'MQ', status: '장애', txCount: '45,201', errorCount: 1542, successRate: 75.2, tps: 0, tpsDiff: -100, latency: 0 },
+    { id: 5, name: 'REST_VCDM_WEB_TELEMETRY', sender: 'VCDM운용 VM#2', receiver: 'WEB(IVS) VM#2', type: 'REST', status: '정상', txCount: '1,204,500', errorCount: 5, successRate: 99.9, tps: 850, tpsDiff: 8.7, latency: 5 },
+    { id: 6, name: 'MQ_IVS_DB_LOG_SAVE', sender: 'WAS(IVS) VM#1', receiver: '통합DB(IVS) VM#1', type: 'MQ', status: '정상', txCount: '945,000', errorCount: 0, successRate: 99.9, tps: 210, tpsDiff: 1.5, latency: 15 },
+    { id: 7, name: 'MQ_DB_VCDM_FILE_TRANS', sender: '통합DB(IVS) VM#2', receiver: 'VCDM운용 VM#2', type: 'MQ', status: '지연', txCount: '1,201', errorCount: 60, successRate: 95.0, tps: 5, tpsDiff: -12.3, latency: 1500 }
 ];
 
 // Sample Transaction Logs
 const transactionLogs = [
     { time: '2026.02.11 09:15:24', status: '성공', volume: '1.20', latency: '12', error: '-' },
     { time: '2026.02.11 09:15:22', status: '성공', volume: '0.80', latency: '15', error: '-' },
-    { time: '2026.02.11 09:15:18', status: '실패', volume: '0.00', latency: '0', error: 'MQ_ERR_2041: Connection Timeout' },
+    { time: '2026.02.11 09:15:18', status: '실패', volume: '0.00', latency: '0', error: '404: Not Found' },
     { time: '2026.02.11 09:15:15', status: '성공', volume: '2.50', latency: '10', error: '-' },
-    { time: '2026.02.11 09:15:10', status: '실패', volume: '0.00', latency: '2500', error: 'SYS_BUSY: Processing Overload' },
+    { time: '2026.02.11 09:15:10', status: '실패', volume: '0.00', latency: '5000', error: '504: Gateway Timeout' },
     { time: '2026.02.11 09:15:05', status: '성공', volume: '1.40', latency: '14', error: '-' }
 ];
 
@@ -119,14 +119,39 @@ function selectInterface(item, element) {
     document.getElementById('net-detail-target').textContent = item.receiver;
     document.getElementById('net-detail-type').textContent = item.type;
 
+    // Status Badge
     const statusBadgeClass = item.status === '정상' ? 'badge-success' : (item.status === '지연' ? 'badge-warning' : 'badge-error');
-    document.getElementById('net-detail-status').innerHTML = `<span class="badge ${statusBadgeClass} w-fit">${item.status}</span>`;
+    const statusEl = document.getElementById('net-detail-status');
+    if (statusEl) statusEl.innerHTML = `<span class="badge ${statusBadgeClass} w-fit">${item.status}</span>`;
 
-    // Restart Charts
-    ChartManager.startMonitoring();
+    // Toggle Content based on type
+    const historySection = document.getElementById('history-section');
+    const mqItems = document.querySelectorAll('.mq-only');
 
-    // Render logs
-    resetLogFilter();
+    if (item.type === 'REST') {
+        if (historySection) historySection.classList.remove('hidden');
+        mqItems.forEach(el => el.classList.add('hidden'));
+        // Render logs
+        resetLogFilter();
+    } else if (item.type === 'MQ') {
+        if (historySection) historySection.classList.add('hidden');
+        mqItems.forEach(el => el.classList.remove('hidden'));
+
+        // Populate MQ Data (Mock)
+        const depth = document.getElementById('mq-depth');
+        const consumers = document.getElementById('mq-consumers');
+        const lastAct = document.getElementById('mq-last-activity');
+
+        if (depth) depth.textContent = Math.floor(Math.random() * 20).toLocaleString();
+        if (consumers) consumers.textContent = (Math.floor(Math.random() * 3) + 1).toLocaleString();
+        if (lastAct) {
+            const now = new Date();
+            lastAct.textContent = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+        }
+    } else {
+        if (historySection) historySection.classList.add('hidden');
+        mqItems.forEach(el => el.classList.add('hidden'));
+    }
 
     // Mobile scroll
     if (window.innerWidth < 1024) {
@@ -134,12 +159,6 @@ function selectInterface(item, element) {
     }
 
     lucide.createIcons();
-}
-
-// Close Detail Pane (Mobile)
-function closeDetailPane() {
-    document.querySelector('.split-container').classList.remove('show-detail');
-    ChartManager.stopAll();
 }
 
 // Reset Log Filter
@@ -199,143 +218,3 @@ function renderLogs() {
         tbody.appendChild(row);
     });
 }
-
-// --- Real-time Chart Logic ---
-const ChartManager = {
-    intervals: [],
-
-    startMonitoring: function () {
-        this.stopAll();
-        this.runChart('chart-tps', 1000, true);
-        this.runChart('chart-latency', 1000, false, 500);
-        this.runChart('chart-volume', 1024 * 50, true, null, 'KB');
-    },
-
-    stopAll: function () {
-        this.intervals.forEach(clearInterval);
-        this.intervals = [];
-    },
-
-    formatValue: function (val, unit) {
-        if (unit === 'KB') {
-            if (val >= 1024) return `${(val / 1024).toFixed(1)} MB`;
-            return `${Math.floor(val)} KB`;
-        }
-        return val.toLocaleString();
-    },
-
-    runChart: function (canvasId, maxScale, showHistory = false, threshold = null, unit = '') {
-        const canvas = document.getElementById(canvasId);
-        if (!canvas) return;
-
-        const ctx = canvas.getContext('2d');
-        const parent = canvas.parentElement;
-
-        const resize = () => {
-            canvas.width = parent.clientWidth;
-            canvas.height = parent.clientHeight;
-        };
-        resize();
-        window.addEventListener('resize', resize);
-
-        const dataPoints = 30;
-        const currentData = new Array(dataPoints).fill(0).map(() => Math.random() * maxScale * 0.5);
-        const historyValue = Math.random() * maxScale * 0.4 + (maxScale * 0.1);
-
-        let primaryColor = canvasId === 'chart-tps' ? '#10b981' :
-            canvasId === 'chart-volume' ? '#3b82f6' : '#6366f1';
-        const historyColor = 'rgba(148, 163, 184, 0.4)';
-        const gridColor = '#1e293b';
-
-        const update = () => {
-            const width = canvas.width;
-            const height = canvas.height;
-
-            // Generate next random point
-            const nextVal = Math.floor(Math.random() * (maxScale * 0.8)) + (maxScale * 0.1);
-            currentData.shift();
-            currentData.push(nextVal);
-
-            // Update Value Label in Footer
-            const valueLabelId = canvasId === 'chart-tps' ? 'val-tps-current' :
-                canvasId === 'chart-latency' ? 'val-latency-current' : 'val-volume-current';
-            const valEl = document.getElementById(valueLabelId);
-            if (valEl) {
-                valEl.textContent = this.formatValue(nextVal, unit);
-            }
-
-            // Dynamic Color Change if threshold exceeded (Latency chart)
-            if (threshold !== null) {
-                const isOverThreshold = currentData.some(d => d > threshold);
-                primaryColor = isOverThreshold ? '#ef4444' : '#3b82f6';
-            }
-
-            ctx.clearRect(0, 0, width, height);
-
-            // 1. Threshold Line & Label (Latency)
-            if (threshold !== null) {
-                const ty = height - (threshold / maxScale) * height;
-                ctx.beginPath();
-                ctx.strokeStyle = '#ef4444';
-                ctx.setLineDash([5, 5]);
-                ctx.moveTo(0, ty);
-                ctx.lineTo(width, ty);
-                ctx.stroke();
-                ctx.setLineDash([]);
-
-                // Threshold Label
-                ctx.fillStyle = '#ef4444';
-                ctx.font = 'bold 10px Inter';
-                ctx.textAlign = 'right';
-                ctx.fillText('Limit (500ms)', width - 5, ty - 5);
-            }
-
-            // 2. Previous Day Average Line (TPS)
-            if (showHistory) {
-                const hy = height - (historyValue / maxScale) * height;
-                ctx.beginPath();
-                ctx.strokeStyle = historyColor;
-                ctx.lineWidth = 1;
-                ctx.setLineDash([10, 5]);
-                ctx.moveTo(0, hy);
-                ctx.lineTo(width, hy);
-                ctx.stroke();
-                ctx.setLineDash([]);
-
-                // Label for average
-                ctx.fillStyle = historyColor;
-                ctx.font = '10px Inter';
-                ctx.textAlign = 'left';
-                ctx.fillText(`Yest. Avg: ${this.formatValue(historyValue, unit)}`, 5, hy - 5);
-            }
-
-            const step = width / (dataPoints - 1);
-
-            // 3. Current Path
-            ctx.beginPath();
-            ctx.strokeStyle = primaryColor;
-            ctx.lineWidth = 2;
-            for (let i = 0; i < currentData.length; i++) {
-                const x = i * step;
-                const normalize = (currentData[i] / maxScale) * height;
-                const y = height - normalize;
-                if (i === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
-            }
-            ctx.stroke();
-
-            // 4. Gradient Fill
-            const grad = ctx.createLinearGradient(0, 0, 0, height);
-            grad.addColorStop(0, primaryColor + '44'); // Slightly subtler
-            grad.addColorStop(1, primaryColor + '00');
-            ctx.fillStyle = grad;
-            ctx.lineTo(width, height);
-            ctx.lineTo(0, height);
-            ctx.fill();
-        };
-
-        const interval = setInterval(update, 2000);
-        this.intervals.push(interval);
-        update();
-    }
-};

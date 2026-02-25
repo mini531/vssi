@@ -6,24 +6,24 @@ const hardwareData = [
     { id: 2, type: '통합', name: 'VOS운용서버#2', status: '장애', lastUpdate: '2026.02.10 16:19' },
     { id: 3, type: '통합', name: 'VOS운용서버#3', status: '정상', lastUpdate: '2026.02.10 16:20' },
     { id: 4, type: '통합', name: 'VOS운용서버#4', status: '정상', lastUpdate: '2026.02.10 16:20' },
-    { id: 5, type: '통합', name: 'WAS서버(IVS) VM#1', status: '위험', lastUpdate: '2026.02.10 16:18' },
+    { id: 5, type: '통합', name: 'WAS서버(IVS) VM#1', status: '정상', lastUpdate: '2026.02.10 16:18' },
     { id: 6, type: '통합', name: 'WAS서버(IVS) VM#2', status: '정상', lastUpdate: '2026.02.10 16:20' },
     { id: 7, type: '통합', name: 'WEB서버(IVS) VM#1', status: '정상', lastUpdate: '2026.02.10 16:20' },
     { id: 8, type: '통합', name: 'WEB서버(IVS) VM#2', status: '정상', lastUpdate: '2026.02.10 16:20' },
-    { id: 9, type: '통합', name: '통합DB서버(IVS) VM#1', status: '위험', lastUpdate: '2026.02.10 16:17' },
+    { id: 9, type: '통합', name: '통합DB서버(IVS) VM#1', status: '정상', lastUpdate: '2026.02.10 16:17' },
     { id: 10, type: '통합', name: '통합DB서버(IVS) VM#2', status: '정상', lastUpdate: '2026.02.10 16:20' },
     { id: 11, type: '통합', name: 'VCDM운용서버 VM#1', status: '정상', lastUpdate: '2026.02.10 16:20' },
     { id: 12, type: '통합', name: 'VCDM운용서버 VM#2', status: '정상', lastUpdate: '2026.02.10 16:20' },
     { id: 13, type: '단독', name: 'CEC 미들웨어', status: '정상', lastUpdate: '2026.02.10 16:20' },
     { id: 14, type: '연동', name: 'VP운용 단말 #1', status: '정상', lastUpdate: '2026.02.10 16:20' },
     { id: 15, type: '연동', name: 'VP운용 단말 #2', status: '정상', lastUpdate: '2026.02.10 16:20' },
-    { id: 16, type: '연동', name: 'VP운용 단말 #3', status: '위험', lastUpdate: '2026.02.10 16:18' },
+    { id: 16, type: '연동', name: 'VP운용 단말 #3', status: '정상', lastUpdate: '2026.02.10 16:18' },
     { id: 17, type: '연동', name: 'VP운용 단말 #4', status: '정상', lastUpdate: '2026.02.10 16:20' },
-    { id: 18, type: '연동', name: '지상 감시 콘솔', status: '위험', lastUpdate: '2026.02.10 16:15' },
+    { id: 18, type: '연동', name: '지상 감시 콘솔', status: '정상', lastUpdate: '2026.02.10 16:15' },
     { id: 19, type: '연동', name: '상황 인식 콘솔', status: '정상', lastUpdate: '2026.02.10 16:20' },
     { id: 20, type: '연동', name: 'NWICS 콘솔', status: '장애', lastUpdate: '2026.02.10 16:10' },
     { id: 21, type: '연동', name: 'MSDP', status: '정상', lastUpdate: '2026.02.10 16:20' },
-    { id: 22, type: '연동', name: '감시SW 중앙 서버', status: '위험', lastUpdate: '2026.02.10 16:16' },
+    { id: 22, type: '연동', name: '감시SW 중앙 서버', status: '정상', lastUpdate: '2026.02.10 16:16' },
     { id: 23, type: '연동', name: 'ADSB 수신기', status: '정상', lastUpdate: '2026.02.10 16:20' },
     { id: 24, type: '단독', name: '취약점 분석 장치', status: '정상', lastUpdate: '2026.02.10 16:20' },
     { id: 25, type: '연동', name: '고정카메라 영상처리 서버', status: '정상', lastUpdate: '2026.02.10 16:20' },
@@ -87,8 +87,7 @@ function renderHardwareList() {
         row.className = 'data-table-row clickable-row';
         row.onclick = () => selectHardware(hw, row);
 
-        const statusBadgeClass = hw.status === '정상' ? 'badge-success' :
-            hw.status === '위험' ? 'badge-warning' : 'badge-error';
+        const statusBadgeClass = hw.status === '정상' ? 'badge-success' : 'badge-error';
 
         row.innerHTML = `
             <td data-label="구분">${hw.type}</td>
@@ -121,8 +120,7 @@ function selectHardware(hw, element) {
     document.getElementById('hw-detail-type').textContent = hw.type;
     document.getElementById('hw-detail-name').textContent = hw.name;
 
-    const statusBadgeClass = hw.status === '정상' ? 'badge-success' :
-        hw.status === '위험' ? 'badge-warning' : 'badge-error';
+    const statusBadgeClass = hw.status === '정상' ? 'badge-success' : 'badge-error';
     document.getElementById('hw-detail-status').innerHTML =
         `<span class="badge ${statusBadgeClass} w-fit">${hw.status}</span>`;
 
@@ -148,10 +146,6 @@ function selectHardware(hw, element) {
     lucide.createIcons();
 }
 
-// Close Detail Pane (Mobile)
-function closeDetailPane() {
-    document.querySelector('.split-container').classList.remove('show-detail');
-}
 
 // Initialize Charts
 function initCharts() {
@@ -176,6 +170,8 @@ const ChartManager = {
         this.runChart('chart-mem', 'val-mem-current', 'mem');
         // Disk Chart
         this.runChart('chart-disk', 'val-disk-current', 'disk');
+        // Network Chart
+        this.runChart('chart-net', 'val-net-current', 'net');
     },
 
     stopAll: function () {
@@ -196,13 +192,16 @@ const ChartManager = {
         // Data history
         const dataPoints = 60;
         const data = new Array(dataPoints).fill(0);
+        const data2 = type === 'net' ? new Array(dataPoints).fill(0) : null;
 
-        const primaryColor = '#3b82f6'; // Main blue
+        const primaryColor = type === 'net' ? '#14b8a6' : '#3b82f6'; // Teal for Inbound
+        const secondaryColor = '#3b82f6'; // Blue for Outbound
         const gridColor = '#334155';
 
         const update = () => {
             // Generate random value based on type
             let newVal = 0;
+            let newVal2 = 0;
             let label = '';
 
             if (type === 'cpu') {
@@ -214,12 +213,20 @@ const ChartManager = {
             } else if (type === 'disk') {
                 if (Math.random() > 0.7) newVal = Math.floor(Math.random() * 80);
                 else newVal = Math.floor(Math.random() * 5);
-                label = `Active ${newVal}%`;
+                label = `IO ${newVal}%`;
+            } else if (type === 'net') {
+                newVal = (Math.random() * 20 + 10).toFixed(1); // 10-30 Mbps
+                newVal2 = (Math.random() * 15 + 5).toFixed(1); // 5-20 Mbps
+                label = `수신: ${newVal} Mbps / 송신: ${newVal2} Mbps`;
             }
 
             // Shift data
-            data.push(newVal);
+            data.push(Number(newVal));
             data.shift();
+            if (data2) {
+                data2.push(Number(newVal2));
+                data2.shift();
+            }
 
             // Update Label
             const valEl = document.getElementById(valueId);
@@ -232,47 +239,50 @@ const ChartManager = {
             ctx.beginPath();
             ctx.strokeStyle = gridColor;
             ctx.lineWidth = 0.5;
-            // Vertical lines
             for (let i = 0; i < width; i += width / 10) { ctx.moveTo(i, 0); ctx.lineTo(i, height); }
-            // Horizontal lines
             for (let i = 0; i < height; i += height / 4) { ctx.moveTo(0, i); ctx.lineTo(width, i); }
             ctx.stroke();
 
-            // Path
-            ctx.beginPath();
-            ctx.strokeStyle = primaryColor;
-            ctx.lineWidth = 2;
-            ctx.fillStyle = 'rgba(59, 130, 246, 0.2)'; // fill blue alpha
-
-            ctx.moveTo(0, height);
-
             const step = width / (dataPoints - 1);
 
-            for (let i = 0; i < data.length; i++) {
-                const x = i * step;
-                const normalize = (data[i] / 100) * height; // assume 0-100 scale
-                const y = height - normalize;
-                ctx.lineTo(x, y);
-            }
+            // Draw Dual Lines or Single Line
+            const drawLine = (dataSet, color, fillAlpha) => {
+                ctx.beginPath();
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                if (fillAlpha) ctx.fillStyle = fillAlpha;
 
-            ctx.lineTo(width, height);
-            ctx.closePath();
-            ctx.fill();
+                ctx.moveTo(0, height);
+                for (let i = 0; i < dataSet.length; i++) {
+                    const x = i * step;
+                    const normalize = (dataSet[i] / (type === 'net' ? 50 : 100)) * height;
+                    const y = height - normalize;
+                    ctx.lineTo(x, y);
+                }
 
-            // Stroke line on top
-            ctx.beginPath();
-            for (let i = 0; i < data.length; i++) {
-                const x = i * step;
-                const normalize = (data[i] / 100) * height;
-                const y = height - normalize;
-                if (i === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
+                if (fillAlpha) {
+                    ctx.lineTo(width, height);
+                    ctx.lineTo(0, height);
+                    ctx.fill();
+                } else {
+                    ctx.stroke();
+                }
+            };
+
+            if (type === 'net') {
+                drawLine(data, primaryColor, 'rgba(20, 184, 166, 0.1)');
+                drawLine(data2, secondaryColor, 'rgba(59, 130, 246, 0.1)');
+                // Strokes
+                drawLine(data, primaryColor);
+                drawLine(data2, secondaryColor);
+            } else {
+                drawLine(data, primaryColor, 'rgba(59, 130, 246, 0.2)');
+                drawLine(data, primaryColor);
             }
-            ctx.stroke();
         };
 
-        const interval = setInterval(update, 1000); // 1 sec update
+        const interval = setInterval(update, 1000);
         this.intervals.push(interval);
-        update(); // initial draw
+        update();
     }
 };

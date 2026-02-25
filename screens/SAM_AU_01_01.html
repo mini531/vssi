@@ -186,23 +186,13 @@
                                         <div id="bulk-select-controls" class="bulk-select-row hidden">
                                             <span class="bulk-select-label">전체 선택</span>
                                             <div class="system-perm-controls">
-                                                <label class="perm-checkbox-group">
-                                                    <input type="checkbox" id="select-all-read"
-                                                        class="custom-checkbox form-checkbox"
-                                                        onchange="toggleAllPermissions('read')">
-                                                    <span class="perm-checkbox-label">Read</span>
-                                                </label>
-                                                <label class="perm-checkbox-group">
-                                                    <input type="checkbox" id="select-all-write"
-                                                        class="custom-checkbox form-checkbox"
-                                                        onchange="toggleAllPermissions('write')">
-                                                    <span class="perm-checkbox-label">Write</span>
-                                                </label>
-                                                <label class="perm-checkbox-group">
-                                                    <input type="checkbox" id="select-all-delete"
-                                                        class="custom-checkbox form-checkbox"
-                                                        onchange="toggleAllPermissions('delete')">
-                                                    <span class="perm-checkbox-label">Delete</span>
+                                                <label class="switch-container">
+                                                    <span class="toggle-label status-denied">접근 불가</span>
+                                                    <div class="switch">
+                                                        <input type="checkbox" id="select-all-access"
+                                                            onchange="toggleAllPermissions('access')">
+                                                        <span class="slider"></span>
+                                                    </div>
                                                 </label>
                                             </div>
                                         </div>
@@ -213,20 +203,14 @@
                                             <div class="system-perm-header">
                                                 <span class="system-perm-title">IVMS (버티포트 통합 관리 시스템)</span>
                                                 <div class="system-perm-controls">
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="ivms" data-permission="read" disabled>
-                                                        <span class="perm-checkbox-label">Read</span>
-                                                    </label>
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="ivms" data-permission="write" disabled>
-                                                        <span class="perm-checkbox-label">Write</span>
-                                                    </label>
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="ivms" data-permission="delete" disabled>
-                                                        <span class="perm-checkbox-label">Delete</span>
+                                                    <label class="switch-container view-only disabled">
+                                                        <span class="toggle-label status-denied">접근 불가</span>
+                                                        <div class="switch">
+                                                            <input type="checkbox" data-system="ivms"
+                                                                data-permission="access" disabled
+                                                                onchange="handlePermissionToggle(this)">
+                                                            <span class="slider"></span>
+                                                        </div>
                                                     </label>
                                                 </div>
                                             </div>
@@ -237,80 +221,51 @@
                                             <div class="system-perm-header">
                                                 <span class="system-perm-title">IFPS (통합 비행 계획 관리 시스템)</span>
                                                 <div class="system-perm-controls">
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="ifps" data-permission="read" disabled>
-                                                        <span class="perm-checkbox-label">Read</span>
-                                                    </label>
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="ifps" data-permission="write" disabled>
-                                                        <span class="perm-checkbox-label">Write</span>
-                                                    </label>
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="ifps" data-permission="delete" disabled>
-                                                        <span class="perm-checkbox-label">Delete</span>
+                                                    <label class="switch-container view-only disabled">
+                                                        <span class="toggle-label status-denied">접근 불가</span>
+                                                        <div class="switch">
+                                                            <input type="checkbox" data-system="ifps"
+                                                                data-permission="access" disabled
+                                                                onchange="handlePermissionToggle(this)">
+                                                            <span class="slider"></span>
+                                                        </div>
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- IFRS -->
+                                        <!-- IFRS - 운항사 전용 -->
                                         <div class="system-perm-card">
                                             <div class="system-perm-header">
-                                                <span class="system-perm-title">IFRS (통합 운항 예약 시스템)</span>
-                                            </div>
-                                            <!-- IFRS Subsection: 운항사 전용 -->
-                                            <div class="system-perm-subsection">
-                                                <div class="system-perm-subheader">
-                                                    <span class="system-perm-subtitle">운항사 전용</span>
-                                                    <div class="system-perm-controls">
-                                                        <label class="perm-checkbox-group">
-                                                            <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                                data-system="ifrs-airline" data-permission="read"
-                                                                disabled>
-                                                            <span class="perm-checkbox-label">Read</span>
-                                                        </label>
-                                                        <label class="perm-checkbox-group">
-                                                            <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                                data-system="ifrs-airline" data-permission="write"
-                                                                disabled>
-                                                            <span class="perm-checkbox-label">Write</span>
-                                                        </label>
-                                                        <label class="perm-checkbox-group">
-                                                            <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                                data-system="ifrs-airline" data-permission="delete"
-                                                                disabled>
-                                                            <span class="perm-checkbox-label">Delete</span>
-                                                        </label>
-                                                    </div>
+                                                <span class="system-perm-title">IFRS (통합 운항 예약 시스템) - 운항사 전용</span>
+                                                <div class="system-perm-controls">
+                                                    <label class="switch-container view-only disabled">
+                                                        <span class="toggle-label status-denied">접근 불가</span>
+                                                        <div class="switch">
+                                                            <input type="checkbox" data-system="ifrs-airline"
+                                                                data-permission="access" disabled
+                                                                onchange="handlePermissionToggle(this)">
+                                                            <span class="slider"></span>
+                                                        </div>
+                                                    </label>
                                                 </div>
                                             </div>
-                                            <!-- IFRS Subsection: 버티포트 전용 -->
-                                            <div class="system-perm-subsection">
-                                                <div class="system-perm-subheader">
-                                                    <span class="system-perm-subtitle">버티포트 전용</span>
-                                                    <div class="system-perm-controls">
-                                                        <label class="perm-checkbox-group">
-                                                            <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                                data-system="ifrs-vertiport" data-permission="read"
-                                                                disabled>
-                                                            <span class="perm-checkbox-label">Read</span>
-                                                        </label>
-                                                        <label class="perm-checkbox-group">
-                                                            <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                                data-system="ifrs-vertiport" data-permission="write"
-                                                                disabled>
-                                                            <span class="perm-checkbox-label">Write</span>
-                                                        </label>
-                                                        <label class="perm-checkbox-group">
-                                                            <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                                data-system="ifrs-vertiport" data-permission="delete"
-                                                                disabled>
-                                                            <span class="perm-checkbox-label">Delete</span>
-                                                        </label>
-                                                    </div>
+                                        </div>
+
+                                        <!-- IFRS - 버티포트 전용 -->
+                                        <div class="system-perm-card">
+                                            <div class="system-perm-header">
+                                                <span class="system-perm-title">IFRS (통합 운항 예약 시스템) - 버티포트 전용</span>
+                                                <div class="system-perm-controls">
+                                                    <label class="switch-container view-only disabled">
+                                                        <span class="toggle-label status-denied">접근 불가</span>
+                                                        <div class="switch">
+                                                            <input type="checkbox" data-system="ifrs-vertiport"
+                                                                data-permission="access" disabled
+                                                                onchange="handlePermissionToggle(this)">
+                                                            <span class="slider"></span>
+                                                        </div>
+                                                    </label>
                                                 </div>
                                             </div>
                                         </div>
@@ -320,20 +275,14 @@
                                             <div class="system-perm-header">
                                                 <span class="system-perm-title">V-CDM (협동적 의사 결정 지원 시스템)</span>
                                                 <div class="system-perm-controls">
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="vcdm" data-permission="read" disabled>
-                                                        <span class="perm-checkbox-label">Read</span>
-                                                    </label>
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="vcdm" data-permission="write" disabled>
-                                                        <span class="perm-checkbox-label">Write</span>
-                                                    </label>
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="vcdm" data-permission="delete" disabled>
-                                                        <span class="perm-checkbox-label">Delete</span>
+                                                    <label class="switch-container view-only disabled">
+                                                        <span class="toggle-label status-denied">접근 불가</span>
+                                                        <div class="switch">
+                                                            <input type="checkbox" data-system="vcdm"
+                                                                data-permission="access" disabled
+                                                                onchange="handlePermissionToggle(this)">
+                                                            <span class="slider"></span>
+                                                        </div>
                                                     </label>
                                                 </div>
                                             </div>
@@ -344,20 +293,14 @@
                                             <div class="system-perm-header">
                                                 <span class="system-perm-title">SAMS (관리자 시스템)</span>
                                                 <div class="system-perm-controls">
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="sams" data-permission="read" disabled>
-                                                        <span class="perm-checkbox-label">Read</span>
-                                                    </label>
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="sams" data-permission="write" disabled>
-                                                        <span class="perm-checkbox-label">Write</span>
-                                                    </label>
-                                                    <label class="perm-checkbox-group">
-                                                        <input type="checkbox" class="custom-checkbox form-checkbox"
-                                                            data-system="sams" data-permission="delete" disabled>
-                                                        <span class="perm-checkbox-label">Delete</span>
+                                                    <label class="switch-container view-only disabled">
+                                                        <span class="toggle-label status-denied">접근 불가</span>
+                                                        <div class="switch">
+                                                            <input type="checkbox" data-system="sams"
+                                                                data-permission="access" disabled
+                                                                onchange="handlePermissionToggle(this)">
+                                                            <span class="slider"></span>
+                                                        </div>
                                                     </label>
                                                 </div>
                                             </div>
