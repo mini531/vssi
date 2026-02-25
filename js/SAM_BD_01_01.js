@@ -635,6 +635,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         emptyState.classList.add('hidden');
         detailContent.classList.remove('hidden');
+
+        // Mobile Split Pane View
+        openDetailPane();
     };
 
     window.cancelRegistration = function () {
@@ -642,8 +645,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentNotice) {
             selectNotice(currentNotice);
         } else {
-            emptyState.classList.remove('hidden');
-            detailContent.classList.add('hidden');
+            closeDetailPane();
         }
     };
 

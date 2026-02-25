@@ -506,16 +506,7 @@ window.cancelRegistration = function () {
         document.getElementById('reg-mode-buttons').classList.add('hidden');
     } else {
         // Return to Empty State
-        const emptyState = document.getElementById('empty-state');
-        const detailContent = document.getElementById('detail-content');
-
-        emptyState.classList.remove('hidden');
-        detailContent.classList.add('hidden');
-
-        document.getElementById('reg-form-view').classList.add('hidden');
-        document.getElementById('reg-header-group').classList.add('hidden');
-        document.getElementById('edit-header-group').classList.add('hidden');
-        document.getElementById('reg-mode-buttons').classList.add('hidden');
+        closeDetailPane();
     }
 
     // Refresh Icons for newly added buttons
