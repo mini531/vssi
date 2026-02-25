@@ -6561,5 +6561,5 @@ input:checked+.slider:before {
 }
 
 .status-allowed {
-  color: #10b981;
+  color: var(--accent-teal);
 }
