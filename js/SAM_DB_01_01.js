@@ -47,34 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
         charts: {},
 
         init() {
-            this.initHealthGauge();
             this.initEnvelopeCharts();
             this.initLiveFeeds();
             this.initNoticeHub();
             this.startSimulation();
         },
 
-        initHealthGauge() {
-            const ctx = document.getElementById('health-gauge').getContext('2d');
-            this.charts.health = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    datasets: [{
-                        data: [98, 2],
-                        backgroundColor: ['#14b8a6', '#1e293b'],
-                        borderWidth: 0,
-                        circumference: 270,
-                        rotation: 225,
-                        cutout: '85%'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false }, tooltip: { enabled: false } }
-                }
-            });
-        },
 
         initEnvelopeCharts() {
             const chartOptions = {
@@ -277,15 +255,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         startSimulation() {
             this.updateMetrics();
-            setInterval(() => {
-                const scoreSpan = document.getElementById('health-score');
-                if (scoreSpan) {
-                    let current = parseInt(scoreSpan.innerText);
-                    current = Math.max(95, Math.min(100, current + (Math.random() > 0.5 ? 1 : -1)));
-                    scoreSpan.innerText = current;
-                }
-                this.updateMetrics();
-            }, 3000);
         }
     };
 

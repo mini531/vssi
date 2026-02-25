@@ -30,27 +30,27 @@
 
                     <!-- Dashboard Header: Metrics & Pulse -->
                     <section class="dashboard-layout-grid">
-                        <!-- Global Health Pulse -->
-                        <div class="db-health-gauge-card col-side">
-                            <div class="flex-1">
-                                <h3 class="db-card-label flex items-center gap-1">
-                                    시스템 종합 건전성
-                                    <button type="button" class="text-gray-400 hover:text-white transition-colors"
-                                        onclick="openHealthInfoModal()">
-                                        <i data-lucide="info" class="w-3.5 h-3.5"></i>
-                                    </button>
-                                </h3>
-                                <div class="flex items-baseline">
-                                    <span class="db-health-score" id="health-score">98</span>
-                                    <span class="db-health-total">/100</span>
+                        <!-- Health/Status Cards Summary -->
+                        <div class="col-side grid grid-cols-2 gap-4">
+                            <article class="db-stat-card cursor-pointer" onclick="location.href='SAM_MO_02_01.html'">
+                                <span class="db-card-label">하드웨어</span>
+                                <div class="flex items-baseline mt-2">
+                                    <span class="db-card-value font-bold text-3xl">28</span>
                                 </div>
-                                <div class="db-status-text">
-                                    <span class="pulse-dot success"></span> 안정성 최적화 (2026.02.12 12:10)
+                                <div class="db-sub-label text-success flex items-center gap-1 mt-2">
+                                    <i data-lucide="layers" class="w-3 h-3"></i> 전체 시스템 중 노드 수
                                 </div>
-                            </div>
-                            <div class="flex-none">
-                                <canvas id="health-gauge" width="128" height="128"></canvas>
-                            </div>
+                            </article>
+
+                            <article class="db-stat-card cursor-pointer" onclick="location.href='SAM_MO_04_01.html'">
+                                <span class="db-card-label">인터페이스</span>
+                                <div class="flex items-baseline mt-2">
+                                    <span class="db-card-value font-bold text-3xl">14</span>
+                                </div>
+                                <div class="db-sub-label text-info flex items-center gap-1 mt-2">
+                                    <i data-lucide="arrow-left-right" class="w-3 h-3"></i> MQ 및 REST 인터페이스
+                                </div>
+                            </article>
                         </div>
 
                         <!-- Quick KPIs -->
