@@ -28,140 +28,186 @@
             <div class="dashboard-content dashboard-content-full custom-scrollbar">
                 <div class="dashboard-container dashboard-container-full">
 
-                    <!-- Single Pane Container -->
-                    <div class="glass-panel h-full flex flex-col" id="diagram-panel">
+                    <!-- Main Card (Single Pane Layout like SAM_SY_01_01) -->
+                    <div class="glass-panel h-full flex flex-col">
 
-                        <!-- Header -->
-                        <div class="pane-header select-none cursor-default">
+                        <!-- Pane Header: Title + Registration Action -->
+                        <div class="pane-header">
                             <div class="search-panel-title-group">
-                                <i data-lucide="shield" class="status-card-icon text-success"></i>
-                                <span class="search-panel-title" id="pane-title">보안 정책 정보</span>
+                                <i data-lucide="shield-check" class="status-card-icon text-success"></i>
+                                <span class="search-panel-title">접근 가능 IP</span>
+                            </div>
+                            <button class="btn-sm btn-primary" onclick="openRegistrationModal(event)">
+                                <i data-lucide="plus" class="trend-icon"></i> 접근 IP 등록
+                            </button>
+                        </div>
+
+                        <!-- Pane Content -->
+                        <div class="pane-content custom-scrollbar flex-1 flex flex-col">
+
+                            <!-- Search Filter -->
+                            <div class="search-panel flex-none mb-4">
+                                <div class="search-panel-header" onclick="toggleFilter()">
+                                    <div class="search-panel-title-group">
+                                        <i data-lucide="filter" class="status-card-icon text-success"></i>
+                                        <span class="search-panel-title">검색 필터</span>
+                                    </div>
+                                    <i data-lucide="chevron-up" id="filter-chevron"
+                                        class="filter-chevron rotate-180"></i>
+                                </div>
+
+                                <div id="filter-content" class="search-panel-content hidden">
+                                    <div class="filter-panel-inner">
+                                        <div class="filter-grid">
+                                            <div>
+                                                <label class="filter-label">IP 주소</label>
+                                                <input type="text" id="filter-ip" placeholder="IP 주소"
+                                                    class="filter-input">
+                                            </div>
+                                            <div>
+                                                <label class="filter-label">설명</label>
+                                                <input type="text" id="filter-desc" placeholder="설명"
+                                                    class="filter-input">
+                                            </div>
+                                            <div>
+                                                <label class="filter-label">등록자</label>
+                                                <input type="text" id="filter-user" placeholder="등록자 이름"
+                                                    class="filter-input">
+                                            </div>
+                                        </div>
+
+                                        <div class="filter-actions">
+                                            <button class="filter-btn-common filter-btn-reset" onclick="resetFilter()">
+                                                <i data-lucide="rotate-ccw" class="trend-icon"></i> 초기화
+                                            </button>
+                                            <button class="filter-btn-common filter-btn-search" onclick="applyFilter()">
+                                                <i data-lucide="search" class="trend-icon"></i> 조회
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <!-- Buttons Group -->
-                            <div class="pane-header-right">
-                                <!-- View Mode Buttons -->
-                                <div id="view-mode-buttons" class="action-btn-group">
-                                    <button class="btn-sm btn-primary" onclick="enterEditMode()">
-                                        <i data-lucide="edit-3" class="trend-icon"></i> 수정
-                                    </button>
-                                </div>
-                                <!-- Edit Mode Buttons -->
-                                <div id="edit-mode-buttons" class="action-btn-group hidden">
-                                    <button class="btn-sm btn-secondary" onclick="cancelEdit()">
-                                        <i data-lucide="x" class="trend-icon"></i> 취소
-                                    </button>
-                                    <button class="btn-sm btn-primary" onclick="saveChanges()">
-                                        <i data-lucide="save" class="trend-icon"></i> 저장
-                                    </button>
-                                </div>
+                            <!-- Table Area -->
+                            <div class="table-container flex-1">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>IP 주소</th>
+                                            <th>설명</th>
+                                            <th>등록자</th>
+                                            <th class="text-center">등록 일시</th>
+                                            <th class="text-center w-24">관리</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ip-list-body" class="data-table-body">
+                                        <!-- JS Rendered -->
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 
-                        <!-- Content Area -->
-                        <div class="pane-content" id="diagram-content">
-
-                            <div class="spacing-y-6">
-                                <!-- Security Settings Row (3 columns) -->
-                                <div class="settings-grid">
-                                    <!-- Session Timeout Setting -->
-                                    <div>
-                                        <label class="form-label">세션 타임아웃 시간 (분)<span
-                                                class="text-error required-mark hidden"> *</span></label>
-                                        <input type="number" id="session-timeout" class="form-input" placeholder="30"
-                                            min="1" max="1440" disabled>
-                                        <div id="error-session-timeout" class="form-error"></div>
-                                        <p class="input-guide-text hidden">1-1440분</p>
-                                    </div>
-
-                                    <!-- Password Expiry Period -->
-                                    <div>
-                                        <label class="form-label">비밀번호 만료 기간 (일)<span
-                                                class="text-error required-mark hidden"> *</span></label>
-                                        <input type="number" id="password-expiry" class="form-input" placeholder="90"
-                                            min="0" max="365" disabled>
-                                        <div id="error-password-expiry" class="form-error"></div>
-                                        <p class="input-guide-text hidden">0-365일 (0=무제한)</p>
-                                    </div>
-
-                                    <!-- Login Failure Limit -->
-                                    <div>
-                                        <label class="form-label">로그인 실패 허용 횟수<span
-                                                class="text-error required-mark hidden"> *</span></label>
-                                        <input type="number" id="login-failure-limit" class="form-input" placeholder="5"
-                                            min="3" max="10" disabled>
-                                        <div id="error-login-failure-limit" class="form-error"></div>
-                                        <p class="input-guide-text hidden">3-10회</p>
-                                    </div>
-                                </div>
-
-                                <!-- Duplicate Login Setting -->
-                                <div>
-                                    <label class="form-label">중복 로그인 허용</label>
-                                    <label class="perm-checkbox-group">
-                                        <input type="checkbox" id="allow-duplicate-login"
-                                            class="custom-checkbox form-checkbox" disabled>
-                                        <span class="perm-checkbox-label">동일 계정으로 여러 기기에서 동시 로그인 허용</span>
-                                    </label>
-                                    <p class="input-guide-text hidden">체크 해제 시 새로운 로그인이 발생하면 기존 세션이 종료됩니다</p>
-                                </div>
-
-                                <!-- Multiple Login Setting -->
-                                <div>
-                                    <label class="form-label">다중 로그인 허용</label>
-                                    <label class="perm-checkbox-group">
-                                        <input type="checkbox" id="allow-multiple-login"
-                                            class="custom-checkbox form-checkbox" disabled>
-                                        <span class="perm-checkbox-label">동일 계정으로 다중 브라우저/탭에서 동시 로그인 허용</span>
-                                    </label>
-                                    <p class="input-guide-text hidden">체크 해제 시 하나의 세션만 유지됩니다</p>
-                                </div>
+                        <!-- Footer (Shared Pattern) -->
+                        <div class="table-footer flex-none border-t border-slate-700/50">
+                            <span class="pagination-info" id="total-count">총 0 건</span>
+                            <div class="pagination-controls">
+                                <button class="page-btn active">1</button>
+                                <button class="page-btn">2</button>
+                                <button class="page-btn">3</button>
+                                <button class="page-btn pc-only">4</button>
+                                <button class="page-btn pc-only">5</button>
+                                <button class="page-btn"><i data-lucide="chevron-right"
+                                        class="pagination-icon"></i></button>
+                                <select class="pagination-select pagination-select-margin">
+                                    <option>20개씩 보기</option>
+                                    <option>50개씩 보기</option>
+                                </select>
                             </div>
-
                         </div>
 
-                    </div>
+                    </div> <!-- End of glass-panel -->
 
                 </div>
-
             </div>
-
-    </div>
-    </div>
-    </main>
+        </main>
     </div>
 
-    <!-- System Switcher Modal -->
-    <div data-include="../components/system-switcher.html"></div>
-
-    <!-- Confirm Modal -->
-    <div id="confirm-modal" class="modal-overlay">
+    <!-- Registration Modal -->
+    <div id="registration-modal" class="modal-overlay">
         <div class="modal-dialog">
-            <div class="modal-icon info">
-                <i data-lucide="help-circle" width="64" height="64" class="text-icon-info"></i>
+            <div class="modal-header">
+                <h3 class="modal-title-left">접근 IP 등록</h3>
+                <i data-lucide="x" class="close-icon" onclick="closeRegistrationModal()"></i>
             </div>
-            <h3 class="modal-title">보안 정책 저장</h3>
-            <p class="modal-desc">변경된 보안 정책 설정을 저장하시겠습니까?</p>
+            <div class="modal-content">
+                <div class="registration-form-panel">
+                    <div class="mb-4">
+                        <label class="form-label">접근 IP 주소 (또는 대역) <span
+                                class="text-error required-mark">*</span></label>
+                        <input type="text" id="reg-ip" class="form-input"
+                            placeholder="예: 192.168.1.100 또는 192.168.1.* (또는 /24)" oninput="resetError('reg-ip')">
+                        <div id="error-reg-ip" class="form-error"></div>
+                    </div>
+                    <div>
+                        <label class="form-label">설명</label>
+                        <textarea id="reg-desc" class="form-input min-h-[80px] py-2"
+                            placeholder="용도 및 비고 사항을 입력해 주세요."></textarea>
+                    </div>
+                </div>
+            </div>
             <div class="modal-btn-group">
-                <button onclick="closeConfirmModal()" class="btn-flex btn-modal-secondary">취소</button>
-                <button onclick="processSave()" class="btn-flex btn-modal-primary">확인</button>
+                <button onclick="closeRegistrationModal()" class="btn-secondary">취소</button>
+                <button onclick="confirmRegistration()" class="btn-primary">저장</button>
             </div>
         </div>
     </div>
 
-    <!-- Success Modal -->
+    <!-- Confirm Save Modal -->
+    <div id="confirm-save-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-icon info">
+                <i data-lucide="help-circle" width="64" height="64" class="text-icon-info"></i>
+            </div>
+            <h3 class="modal-title">IP 저장 확인</h3>
+            <p class="modal-desc">입력하신 IP 정보를 저장하시겠습니까?</p>
+            <div class="modal-btn-group">
+                <button onclick="closeConfirmSaveModal()" class="btn-flex btn-modal-secondary">취소</button>
+                <button onclick="processRegistration()" class="btn-flex btn-modal-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Standardized Delete Confirm Modal (Copy from SAM_US_01_01) -->
+    <div id="delete-confirm-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <div class="modal-icon info">
+                <i data-lucide="help-circle" width="64" height="64" class="text-icon-info"></i>
+            </div>
+            <h3 class="modal-title">접근 IP 삭제</h3>
+            <p class="modal-desc">선택한 IP 정보를 삭제하시겠습니까?<br>삭제 후 복구할 수 없습니다.</p>
+            <div class="modal-btn-group">
+                <button onclick="closeDeleteConfirm()" class="btn-flex btn-modal-secondary">취소</button>
+                <button onclick="confirmDeleteAction()" class="btn-flex btn-modal-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Standardized Success Modal -->
     <div id="success-modal" class="modal-overlay">
         <div class="modal-dialog">
             <div class="modal-icon success">
-                <i data-lucide="check-circle" width="64" height="64" class="text-icon-success"></i>
+                <i data-lucide="check-circle-2" width="64" height="64" class="text-icon-success"></i>
             </div>
-            <h3 class="modal-title">저장 완료</h3>
-            <p class="modal-desc">보안 정책 설정이 성공적으로 저장되었습니다.</p>
+            <h3 class="modal-title" id="success-modal-title">저장 완료</h3>
+            <p id="success-message" class="modal-desc">IP 정보가 저장되었습니다.</p>
             <div class="modal-btn-group">
                 <button onclick="closeSuccessModal()" class="btn-modal-success">확인</button>
             </div>
         </div>
     </div>
+
+    <!-- System Switcher -->
+    <div data-include="../components/system-switcher.html"></div>
 
     <script src="../js/include.js"></script>
     <script src="../js/common.js"></script>
