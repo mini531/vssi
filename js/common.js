@@ -288,11 +288,11 @@ function switchSystem(name, acronym) {
 
     // Redirect to the new system's gateway
     if (acronym === 'VSSI') {
-        location.href = 'COM_IT_01_01.html';
+        window.open('COM_IT_01_01.html', '_blank');
     } else if (acronym === 'IVMS') {
-        location.href = 'IVM_DB_01_01.html';
+        window.open('IVM_DB_01_01.html', '_blank');
     } else if (acronym === 'SAMS') {
-        location.href = 'SAM_DB_01_01.html';
+        window.open('SAM_DB_01_01.html', '_blank');
     }
 }
 

@@ -4103,7 +4103,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .system-switcher-overlay {
   position: fixed;
   inset: 0;
-  z-index: 200;
+  z-index: 9999;
   background-color: rgba(0, 0, 0, 0.4);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
@@ -4113,6 +4113,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   opacity: 1;
   visibility: visible;
   transition: all 0.3s;
+  z-index: inhe
 }
 
 .system-switcher-overlay.hidden {
