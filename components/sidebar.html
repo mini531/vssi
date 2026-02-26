@@ -2,13 +2,13 @@
 <aside id="sidebar" class="sidebar-container">
     <div class="sidebar-nav custom-scrollbar space-y-1 flex-1">
 
-        <button class="sidebar-nav-btn active" data-system="ALL" onclick="location.href='SAM_DB_01_01.html'">
+        <button class="sidebar-nav-btn active" data-system="SAMS" onclick="location.href='SAM_DB_01_01.html'">
             <i data-lucide="layout-grid" class="sidebar-icon"></i>
             <span>대시보드</span>
         </button>
 
         <!-- Monitoring Group -->
-        <div data-system="ALL">
+        <div data-system="SAMS">
             <button onclick="toggleSubmenu('monitoring-sub', this)" class="sidebar-nav-btn group">
                 <div class="sidebar-group-label">
                     <i data-lucide="activity" class="sidebar-icon"></i>
@@ -106,6 +106,20 @@
         <button class="sidebar-nav-btn" data-system="SAMS" onclick="location.href='SAM_BD_01_01.html'">
             <i data-lucide="bell" class="sidebar-icon"></i>
             <span>공지사항 관리</span>
+        </button>
+
+        <!-- IVMS Group -->
+        <button class="sidebar-nav-btn" data-system="IVMS" onclick="location.href='IVM_DB_01_01.html'">
+            <i data-lucide="layout-grid" class="sidebar-icon"></i>
+            <span>대시보드</span>
+        </button>
+        <button class="sidebar-nav-btn" data-system="IVMS" onclick="location.href='IVM_MT_01_01.html'">
+            <i data-lucide="activity" class="sidebar-icon"></i>
+            <span>모니터링</span>
+        </button>
+        <button class="sidebar-nav-btn" data-system="IVMS" onclick="location.href='IVM_CS_01_01.html'">
+            <i data-lucide="bell" class="sidebar-icon"></i>
+            <span>공지사항</span>
         </button>
 
     </div>

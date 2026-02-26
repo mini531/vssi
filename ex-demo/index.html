@@ -1,0 +1,1672 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>버티포트 통합운용시스템</title>
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Leaflet Heatmap -->
+  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+  
+  <style>
+      :root{
+      --bg:#0a0c0e;
+      --bg2:#12141a;
+      --card:#1a1f26;
+      --line:#2a2f36;
+      --accent:#00d1ff;
+      --accent2:#ffd166;
+      --danger:#ff5a5f;
+      --ok:#35e27d;
+      --muted:#8aa0b5;
+    }
+
+    html,body{height:100%;background:var(--bg);color:#e6eef6;font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", sans-serif; overflow:hidden; }
+
+    .scroll-theme{scrollbar-color:#3a3f47 #1a1f26;scrollbar-width:thin}
+    .scroll-theme::-webkit-scrollbar{width:6px;height:6px}
+    .scroll-theme::-webkit-scrollbar-track{background:#1a1f26;border-radius:0}
+    .scroll-theme::-webkit-scrollbar-thumb{background:#3a3f47;border-radius:0;border:none}
+    .scroll-theme::-webkit-scrollbar-thumb:hover{background:#4a5058}
+    
+    .app-wrap{height:100%;display:flex;flex-direction:column;}
+    .topbar{background: linear-gradient(180deg, #0d0f12 0%, #08090b 100%);padding:10px 12px 0px 14px;position:relative;}
+    .brand-title{letter-spacing:1px;font-weight:800;font-size:24px;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+    .tabbar{position:absolute;left:50%;transform:translateX(-50%);display:flex;gap:.5rem}
+    .tabbar .nav-link{color:#bcd0e0}
+    .tabbar .nav-link.active{color:#fff;background:transparent;border-bottom:2px solid var(--accent)}
+
+    .content{flex:1;display:grid;grid-template-columns:1fr;gap:15px;padding:10px;min-height:0}
+
+    .map-panel{position:relative;background:var(--bg2);border:1px solid var(--line);border-radius:0;overflow:hidden;min-height:600px;height:calc(100vh - 85px)}
+    #map{height:100%;width:100%} 
+
+    .plane i{font-size:24px;color:#6ee7ff;display:inline-block;transform-origin:50% 50%;filter:drop-shadow(0 1px 3px rgba(0,0,0,.6))}
+
+    .leaflet-popup-content-wrapper{background:rgba(10,20,40,0.85);border:1px solid rgba(66,232,255,0.8);border-radius:0;color:#fff;box-shadow:0 0 12px rgba(66,232,255,0.35);padding:6px 10px}
+    .leaflet-popup-content{margin:0;color:#fff;font-size:12px;line-height:1.4}
+    .leaflet-popup-close-button{color:#66e8ffc5!important;font-size:14px}
+    .leaflet-popup-tip-container{display:none}
+  
+    /* Vertiport panel */
+    .vp-panel{position:absolute; left:12px; top:12px; z-index:999; width:320px; border-radius:0; background:rgba(8,18,29,.15); backdrop-filter: blur(6px); border:1px solid rgba(173,197,255,.1); box-shadow:0 10px 24px rgba(0,0,0,.35); color:#e6f0ff; font-size:12px; overflow:hidden;}
+    .vp-header{display:flex; align-items:center; justify-content:space-between; padding:8px 10px; border-bottom:1px solid rgba(173,197,255,.1);}
+    .vp-title{font-weight:800; letter-spacing:.3px;}
+    .vp-tools{display:flex; gap:6px;}
+    .vp-ic{width:26px; height:24px; border-radius:0; border:1px solid rgba(173,197,255,.1); background:rgba(13,29,45,.2); color:#cfe7ff; display:flex; align-items:center; justify-content:center;}
+    .vp-ic:hover{outline:1px solid var(--accent);}
+
+    .vp-list{padding:8px;max-height:calc(4*60px+8px);overflow:hidden}
+    .vp-item{cursor:pointer;display:flex;align-items:center;justify-content:space-between;background:rgba(8,18,29,.15);border:1px solid rgba(173,197,255,.1);border-radius:0;height:50px;padding:8px 10px;margin-bottom:8px;color:#eaf6ff;box-shadow:none}
+    .vp-item:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.35);border-color:rgba(0,209,255,.45);background:rgba(8,18,29,.25);outline:none}
+    .vp-item:focus-visible{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.35);border-color:rgba(0,209,255,.45);background:rgba(8,18,29,.25);outline:none}
+    
+    .vp-item.hover-temp{background:rgba(66,232,255,.08)}
+    .vp-item.is-hover{background:rgba(66,232,255,.15);border-left:3px solid rgba(66,232,255,.65)} 
+   
+    .vp-left{display:flex; flex-direction:column; justify-content:space-between;}
+    .vp-right{display:flex;flex-direction:column;justify-content:space-between;align-items:flex-end;min-width:80px}
+    .vp-code{font-weight:900; font-size:14px; letter-spacing:.5px;}
+    .vp-states{display:flex;align-items:center;gap:6px;font-size:11px;opacity:.95}
+    .vp-states.top{margin-bottom:2px;}
+    .vp-states.bottom{margin-top:2px;}
+    .vp-state{display:flex;align-items:center;min-width:100px;justify-content:flex-start}
+    .vp-state span:last-child{margin-left:6px}
+    
+    .vp-stack{position:absolute;left:12px;top:12px;z-index:999;width:320px;display:flex;flex-direction:column;gap:10px}
+    .vp-stack .vp-panel { flex:0 0 auto; position:relative; left:auto; top:auto; width:100%; }
+    .vp-panel.mini { border-radius:0; background:rgba(8,18,29,.15); backdrop-filter:blur(6px); border:1px solid rgba(173,197,255,.1); box-shadow:0 10px 24px rgba(0, 0, 0, 0.178); color:#e6f0ff; }
+    .vp-header { display:flex; align-items:center; justify-content:space-between; padding:8px 10px; border-bottom:1px solid rgba(173,197,255,.1); }
+    .vp-title { font-weight:800; letter-spacing:.3px; }
+    .vp-footer { padding:6px 10px; border-top:1px solid rgba(173,197,255,.1); text-align:right; color:#9db5d1; }
+    .nw-mini { width:100%; height:160px; display:flex; align-items:center; justify-content:center; box-sizing: border-box; padding: 4px;  }
+    .vp-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+    .vp-dot.ok{background:#17c964;} .vp-dot.warn{background:#ffd166;} .vp-dot.off{background:#ff5a5f;}
+    .vp-amenities{display:flex; gap:8px; margin-top:2px; opacity:.95}
+    .vp-amenities i{font-size:14px; color:#eaf6ff; filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
+    .vp-amenities .dim{opacity:.7}
+
+    #nwPanel { overflow: visible; }
+    #nwMini { width: 100%; height: 100%; display: block; }
+  
+
+    .vp-stack-right{position:absolute;right:12px;top:12px;width:320px;display:flex;flex-direction:column;gap:10px}
+    .vp-stack-right>.vp-panel{position:relative!important;top:auto!important;left:auto!important;right:auto!important;bottom:auto!important;flex:0 0 auto;margin:0}
+    .ops-chart{margin-top:6px}
+
+    .ops-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+    .ops-k{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;border:1px solid rgba(173,197,255,.1);border-radius:0;background:rgba(12,25,41,.2)}
+    .ops-k .lbl{text-align:center;font-size:12px;color:#bcd1ea;margin-bottom:2px}
+    .ops-k .val{text-align:center;font-size:16px;font-weight:800;letter-spacing:.2px;line-height:1.15}
+    .ops-k .warn{color:#ffd166}
+    .vp-select{width:100%;height:32px;padding:4px 10px;border:1px solid rgba(173,197,255,.1);border-radius:0;background:rgba(10,22,38,.3);color:#e6f0ff;outline:none}
+    .vp-select option{background:#141719;color:#e6f0ff}
+    .vp-select:focus{border-color:rgba(110,231,255,.5);box-shadow:0 0 0 3px rgba(110,231,255,.12)}
+    .ops-chart{margin-top:8px;}
+
+    #fpList{display:flex;flex-direction:column}
+    .fp-item{display:flex;flex-direction:column;gap:2px;padding:2px 4px;border:none;border-bottom:1px solid rgba(173,197,255,.25);background:transparent;border-radius:0;cursor:pointer;transition:background .12s ease}
+    .fp-item:last-child{border-bottom:none}
+    .fp-flight{font-weight:800;font-size:13px;line-height:1.2;margin:0}
+    .fp-meta{display:grid;grid-template-columns:repeat(3,auto);gap:2px 6px;align-items:baseline;font-size:12px;line-height:1.2;color:#bcd1ea}
+    .fp-kv{display:flex;gap:4px;align-items:baseline;white-space:nowrap}
+
+    .fp-list{max-height:150px;overflow:auto;display:flex;flex-direction:column;gap:8px}
+    .fp-item:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,.35)}
+    .fp-item.is-hover{background:rgba(66,232,255,.15);border-left:3px solid rgba(66,232,255,.65)}
+    .fp-flight{font-weight:800;letter-spacing:.2px;color:#e6f0ff;margin-right:4px;white-space:nowrap}
+    .fp-line{font-size:12px;color:#bcd1ea;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .fp-img{height:74px;border-radius:0;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02)),repeating-linear-gradient(90deg,rgba(255,255,255,.08) 0,rgba(255,255,255,.08) 1px,transparent 1px,transparent 6px);background-color:rgba(21,35,53,.9)}
+    .fp-badge{position:absolute;left:14px;top:12px;font-size:12px;padding:2px 8px;border-radius:0;border:1px solid rgba(173,197,255,.3);background:rgba(66,232,255,.12);color:#cfe4ff;font-weight:700}
+
+    .fp-k{opacity:.7}
+
+    .legend{position:absolute;left:12px;bottom:12px;background:rgba(8,18,29,.15);backdrop-filter: blur(6px);border:1px solid var(--line);border-radius:0;padding:8px 10px;font-size:12px;z-index:999;}
+    .statusbar{position:absolute;bottom:0;left:0;right:0;height:28px;background:#0a0c0e;border-top:1px solid var(--line);color:#a9bfd3;font-size:12px;display:flex;align-items:center;padding:0 12px;z-index:999;}
+
+    .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#0d1d2d;color:#cfe7ff;border-radius:0;padding:3px 8px;font-size:12px}
+
+    .side-panel{background:var(--bg2);border:1px solid var(--line);border-radius:0;display:flex;flex-direction:column;min-height:600px}
+    .side-header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding:10px 12px}
+    .clock{font-size:12px;color:var(--muted)}
+    .lists{padding:8px;height:100%;overflow:auto}
+    .section-title{font-size:14px;color:#d9ecff;margin:8px 0 6px 2px;display:flex;align-items:center;gap:6px}
+    .table-darkish{--bs-table-bg: #0f2033;--bs-table-hover-bg:#12283f;--bs-table-striped-bg:#0d1e31;border-color:var(--line);color:#d9ecff;}
+    .table-darkish tr td,.table-darkish tr th{vertical-align:middle; color:#c7f5ff; font-size: 12px;}
+    .tag{font-size:10px;padding:2px 6px;border-radius:0;border:1px solid var(--line);color:#b9d5eb}
+    .tag.ok{border-color:rgba(53,226,125,.35);color:#aef3c9}
+    .tag.warn{border-color:rgba(255,90,95,.35);color:#ffb3b6}
+    .dot{width:10px;height:10px;border-radius:50%}
+    .dot.ok{background:var(--ok)} .dot.fail{background:var(--danger)} .dot.wait{background:var(--accent2)}
+    .top-right-tabs{display:flex;gap:16px} .top-right-tabs .chip{background:#0d0f12}
+
+    /* HW overlay */
+    .ov { position:fixed; inset:0; background:rgba(8,18,29,.55); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .35s cubic-bezier(0.4, 0, 0.2, 1); z-index:2000; }
+    .ov.show { opacity:1; pointer-events:auto; }
+    .hidden { display:none; }
+    .ov-panel { width:1100px; max-width:100vw; height:auto; max-height:95vh; background:rgba(15,27,42,.2); border:1px solid #00d1ff; border-radius:0; box-shadow:0 20px 48px rgba(0,0,0,.45), 0 0 20px rgba(0,209,255,.3); transform:scale(0.3); opacity:0; transition:transform .5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity .5s ease, box-shadow .5s ease; overflow:hidden; position:relative; }
+     .ov.show .ov-panel { animation:ovGlow 1.5s ease-in-out; }
+     .ov.show .ov-panel { transform:scale(1); opacity:1; box-shadow:0 30px 60px rgba(0,0,0,.6), 0 0 40px rgba(0,209,255,.6), 0 0 80px rgba(0,209,255,.3); }
+    .ov-close { position:absolute; top:12px; right:12px; width:28px; height:28px; border-radius:0; border:1px solid rgba(173,197,255,.2); background:rgba(11,26,42,.6); color:#cfe4ff; cursor:pointer; z-index:2; }
+    .ov-close:hover { background:rgba(173,197,255,.1); }    
+    #hwFrame { width:100%; height:100%; border:0; display:block; background:#0b1930; }
+    #pageFrame{width:100%;height:100%;border:0;border-radius:0}
+    @keyframes ovGlow { 0% { box-shadow:0 30px 60px rgba(0,0,0,.6), 0 0 40px rgba(0,209,255,.5); } 
+    50% { box-shadow:0 30px 60px rgba(0,0,0,.6), 0 0 60px rgba(0,209,255,.8), 0 0 120px rgba(0,209,255,.4); } 
+    100% { box-shadow:0 30px 60px rgba(0,0,0,.6), 0 0 40px rgba(0,209,255,.5); }
+    }
+
+    html,body{height:100%;overflow:hidden}
+    .lists{scrollbar-width:thin;scrollbar-color:#3a3f47 #1a1f26}  
+    .lists::-webkit-scrollbar{width:4px;height:6px}
+    .lists::-webkit-scrollbar-track{background:#1a1f26;border-radius:0}
+    .lists::-webkit-scrollbar-thumb{background:#3a3f47;border-radius:0;border:none}
+    .lists::-webkit-scrollbar-thumb:hover{background:#4a5058}
+    
+    .ev-mini{--time:92px;--spine:16px;--gap:6px;--pad:10px;position:relative;height:auto;max-height:220px;overflow:auto;padding:8px 10px}
+    .ev-mini:before{content:"";position:absolute;left:calc(var(--pad) + var(--time) + var(--gap) + var(--spine)/2);top:0;bottom:0;width:2px;background:rgba(173,197,255,.22);z-index:0}
+    .ev-item{position:relative;display:grid;grid-template-columns:var(--time) var(--spine) 1fr;align-items:start;gap:var(--gap);margin:4px 0}
+    .ev-time{font-size:11px;color:#a9bfd3;text-align:right;line-height:1.15}
+    .ev-tl{position:relative}
+    .ev-tl:before{content:none}
+    .ev-dot{position:absolute;left:calc(50% - 5px);top:6px;width:10px;height:10px;border-radius:50%;background:#42e8ff;box-shadow:0 0 0 3px rgba(66,232,255,.2);z-index:1}
+    .ev-bubble{background:rgba(13,29,45,.2);border:1px solid rgba(173,197,255,.1);border-radius:0;padding:6px 10px;color:#dff0ff}
+    .ev-code{display:inline-block;font-weight:800;color:#c5e9ff;background:rgba(66,232,255,.12);border:1px solid rgba(66,232,255,.28);padding:2px 6px;border-radius:0;margin-right:6px;font-size:11px}
+    .ev-msg{font-size:12px;letter-spacing:.1px}
+    .ov-panel.page{width:1100px;max-width:96vw;height:76vh;max-height:76vh;background:rgba(15,27,42,.2);border:1px solid #00d1ff;border-radius:0;box-shadow:0 20px 48px rgba(0,0,0,.45), 0 0 20px rgba(0,209,255,.3);overflow:hidden;position:relative}
+    #pageFrame{width:100%;height:100%;border:0;display:block;background:#0b1930}
+
+    #opsStack{display:flex;flex-direction:column}
+    #fpPanel{flex:0 0 auto}
+    #layerCard{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+    #layerCard .vp-header{padding:8px 12px;border-bottom:1px solid var(--line);font-weight:700}
+    #layerCard .vp-list{flex:1 1 auto;min-height:0;overflow-y:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 12px;padding:8px 10px}
+    .layer-item{display:flex;align-items:center;gap:8px;padding:3px 4px;border-bottom:1px s}
+    .layer-item:last-child{border-bottom:none}
+    .layer-check{accent-color:#00e5ff;margin:0}
+    .layer-name{font-size:12px;color:#eaf6ff}
+    .legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+    .legend-line{width:22px;height:4px;border-radius:2px;display:inline-block}
+    .legend-box{width:14px;height:14px;border:2px solid currentColor;border-radius:0;display:inline-block}
+    .c-airport{background:#bcd1ff;color:#bcd1ff}
+    .c-runway{background:#8a8f98;color:#8a8f98}
+    .c-airway{background:#6ec1ff;color:#6ec1ff}
+    .c-sid{background:#d6ddff;color:#d6ddff}
+    .c-star{background:#bdfcc2;color:#bdfcc2}
+    .c-ils{background:#ffc8a8;color:#ffc8a8}
+    .c-sector{color:#2ea7ff}
+    .c-tma{color:#ff42ff}
+    .c-ctr{color:#2e7d32}
+    .c-haz{color:#ff9800}
+    .c-proh{color:#ff2d2d}
+    .c-rest{color:#ff9a1a}
+    .c-rain{color:rgba(100,150,255,.8)}
+
+    /* Rain Layer Control */
+    #rainControl{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:999;width:600px;max-width:calc(100vw - 40px)}
+    .rain-timeline{background:rgba(8,18,29,.15);backdrop-filter:blur(6px);border:1px solid rgba(173,197,255,.1);border-radius:0;padding:4px 10px;box-shadow:0 8px 20px rgba(0,0,0,.35)}
+    .rain-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}  
+    .rain-title{font-size:11px;font-weight:800;color:#e6f0ff;letter-spacing:.2px}
+    .rain-tools{display:flex;gap:6px}
+    .rain-btn{width:22px;height:22px;border-radius:0;border:1px solid rgba(173,197,255,.1);background:rgba(13,29,45,.2);color:#cfe7ff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px}
+    .rain-btn:hover{outline:1px solid var(--accent)}
+    .rain-slider-wrap{position:relative;margin-top:2px}
+    .rain-slider{width:100%;height:10px;-webkit-appearance:none;appearance:none;background:rgba(0, 0, 0, 0.541);outline:none;cursor:pointer}
+    .rain-slider::-webkit-slider-track{height:1px;background:rgba(0, 0, 0, 0.473);border:0;border-radius:0}
+    .rain-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:12px;height:12px;background:#42e8ff;border:2px solid #0a0c0e;border-radius:0;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+    .rain-slider::-moz-range-track{height:1px;background:rgba(173,197,255,.15);border:1px solid rgba(173,197,255,.2);border-radius:0}
+    .rain-slider::-moz-range-thumb{width:12px;height:12px;background:#42e8ff;border:2px solid #0a0c0e;border-radius:0;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+    .rain-labels{display:flex;justify-content:space-between;margin-top:1px;font-size:10px;color:#bcd1ea}
+    .rain-label-r{opacity:.7}
+    .rain-label-r{opacity:.7}
+
+    /* Layer toggle button */
+    .layer-rain-toggle{position:absolute;right:12px;bottom:100px;z-index:999;width:40px;height:40px;border-radius:0;border:1px solid rgba(173,197,255,.1);background:rgba(8,18,29,.15);backdrop-filter:blur(6px);color:#cfe7ff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+    .layer-rain-toggle:hover{background:rgba(8,18,29,.25);outline:1px solid var(--accent)}
+    .layer-rain-toggle.active{background:rgba(66,232,255,.15);color:#42e8ff;border-color:rgba(66,232,255,.35)}
+
+    iframe {background: transparent;} 
+
+  </style>
+</head>
+<body>
+  <div class="app-wrap">
+    <div class="topbar d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center gap-3">
+        <div class="brand-title">VSSI</div>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <!--ul class="nav tabbar d-none d-md-flex justify-content-center flex-grow-1">
+          <li class="nav-item"><a class="nav-link active" href="#">비행계획</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">지상관제</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">권역관제</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">희망관제</a></li>
+        </ul-->
+       <div class="top-right-tabs">
+            <span class="chip"><i class="bi bi-people"></i> <span>Administrator</span></span>
+            <span class="chip"><i class="bi bi-calendar2-week"></i> <span id="current-date"></span></span>
+            <span class="chip">KST <span id="kst-time"></span> UTC <span id="utc-time"></span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="map-panel">
+        <div id="map"></div>
+        <!-- 하단 타임라인 컨트롤 -->
+        <div id="rainControl">
+          <div class="rain-timeline">
+            <div class="rain-header">
+              <span class="rain-title"><i class="bi bi-cloud-rain"></i> Precipitation Forecast (24h)</span>
+              <div class="rain-tools">
+                <button class="rain-btn" id="rainPlay" title="Play/Pause"><i class="bi bi-play-fill"></i></button>
+              </div>
+            </div>
+            <div class="rain-slider-wrap">
+              <input type="range" id="rainSlider" min="0" max="24" step="0.5" value="0" class="rain-slider" />
+              <div class="rain-labels">
+                <span id="rainTime">Current</span>
+                <span class="rain-label-r">+24h</span>
+              </div>
+            </div>
+            <!-- Precipitation rate legend -->
+            <div class="rain-legend" style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;padding:0 4px;font-size:9px;color:#bcd1ea;gap:4px;">
+              <span style="min-width:32px;">0</span>
+              <div style="flex:1;height:10px;background:linear-gradient(to right, rgba(100,200,255,0.7), rgba(100,220,100,0.8), rgba(255,255,100,0.85), rgba(255,180,80,0.9), rgba(255,100,100,0.95), rgba(220,50,80,1));border-radius:2px;border:1px solid rgba(173,197,255,.15);"></div>
+              <span style="min-width:32px;text-align:right;">50+ mm/h</span>
+            </div>
+          </div>
+          </div>
+        <div class="vp-stack">
+            <div class="vp-panel" id="vpPanel">
+                <div class="vp-header">
+                    <span class="vp-title"><i class="bi bi-airplane"></i> Vertiport Status</span>
+                    <div class="vp-tools">
+                    <button type="button" class="vp-ic" id="btnPrev" title="이전 페이지"><i class="bi bi-chevron-up"></i></button>
+                    <button type="button" class="vp-ic" id="btnNext" title="다음 페이지"><i class="bi bi-chevron-down"></i></button>
+                    </div>
+                </div>
+            <div class="vp-list" id="vpList"></div>
+            <div class="vp-footer"><span id="vpPageText">1 / 2</span></div>
+            </div>
+            <div class="vp-panel mini" id="nwPanel">
+                <div class="vp-header">
+                <span class="vp-title"><i class="bi bi-cloud"></i> H/W & N/W Status</span>
+                </div>
+                <div class="vp-list" style="padding:0">
+                <div class="nw-mini">
+                    <canvas id="nwMini" width="320" height="160" aria-label="Network status"></canvas>
+                </div>
+                </div>
+                <div class="vp-footer"><span class="text-secondary">9-Node · 1 Error</span></div>
+            </div>
+            <div class="vp-panel mini" id="evPanel">
+                <div class="vp-header">
+                    <span class="vp-title"><i class="bi bi-activity"></i> Event Log</span>
+                    <div class="vp-tools">
+                    <button class="vp-ic" id="btnEvMore" title="More"><i class="bi bi-box-arrow-up-right"></i></button>
+                    </div>
+                </div>
+                <div class="vp-list" style="padding:0">
+                    <div class="ev-mini" id="evList"></div>
+                </div>
+                <div class="vp-footer"><span id="evCountText">—</span></div>
+            </div>
+        </div>
+
+        <!-- ✅ 우측 Ops 스택 -->
+        <div class="vp-stack-right" id="opsStack">
+            <div class="vp-panel mini" id="opsPanel">
+                <div class="vp-header"><span class="vp-title"><i class="bi bi-speedometer2"></i> Flight Operations</span></div>
+                <div class="vp-list" style="padding:10px">
+                <div class="ops-kpis">
+                    <div class="ops-k"><span class="lbl">Total</span><span class="val" id="opsTotal">17 / 33</span></div>
+                    <div class="ops-k"><span class="lbl">Cancelled</span><span class="val warn" id="opsCancel">3 / 33</span></div>
+                        <div class="ops-k"><span class="lbl">Events</span><span class="val" id="opsEvents">3</span></div>
+                </div>
+                <div class="ops-filter"><select class="vp-select" id="selVertiport" aria-label="Vertiport">
+                    <option value="VPT-A">VPT-A</option>
+                    <option value="VPT-B">VPT-B</option>
+                    <option value="VPT-C">VPT-C</option>
+                    <option value="VPT-D">VPT-D</option>
+                </select></div>
+                <div class="ops-chart"><canvas id="opsChart" width="300" height="80" aria-label="Per-vertiport flights"></canvas></div>
+                </div>
+            </div>
+            <!-- Flight Plans -->
+            <div class="vp-panel mini" id="fpPanel">
+                <div class="vp-header">
+                    <span class="vp-title"><i class="bi bi-clipboard2-check"></i> Flight Plans</span>
+                    <!--div class="vp-tools"><button class="vp-ic" id="btnFpMore" title="More"><i class="bi bi-box-arrow-up-right"></i></button></div-->
+                </div>
+                <div class="fp-list scroll-theme" style="padding:10px">
+                    <div class="fp-list" id="fpList"></div>
+                </div>
+                <div class="vp-footer"><span class="text-secondary" id="fpCount">—</span></div>
+            </div>
+
+            <!-- layer -->
+            <!-- Layer (Flight Plans 바로 아래) -->
+            <div class="vp-panel mini" id="layerCard">
+                <div class="vp-header"><span class="vp-title"><i class="bi bi-layers"></i> Layer</span></div>
+                <div class="vp-list scroll-theme" id="layerList">
+                    <label class="layer-item"><input type="checkbox" class="layer-check" data-layer="airport" checked><span class="legend-dot c-airport"></span><span class="layer-name">공항</span></label>
+                    <label class="layer-item"><input type="checkbox" class="layer-check" data-layer="runway" checked><span class="legend-line c-runway"></span><span class="layer-name">활주로</span></label>
+                    <label class="layer-item"><input type="checkbox" class="layer-check" data-layer="airway" checked><span class="legend-line c-airway"></span><span class="layer-name">항공로</span></label>
+                    <label class="layer-item"><input type="checkbox" class="layer-check" data-layer="sid"><span class="legend-line c-sid"></span><span class="layer-name">SID</span></label>
+                    <label class="layer-item"><input type="checkbox" class="layer-check" data-layer="star"><span class="legend-line c-star"></span><span class="layer-name">STAR</span></label>
+                    <label class="layer-item"><input type="checkbox" class="layer-check" data-layer="ils"><span class="legend-line c-ils"></span><span class="layer-name">ILS</span></label>
+                    <label class="layer-item"><input type="checkbox" class="layer-check" data-layer="sector"><span class="legend-box c-sector"></span><span class="layer-name">관제섹터</span></label>
+                    <label class="layer-item"><input type="checkbox" class="layer-check" data-layer="tma"><span class="legend-box c-tma"></span><span class="layer-name">접근관제구역</span></label>
+                    <label class="layer-item"><input type="checkbox" class="layer-check" data-layer="ctr"><span class="legend-box c-ctr"></span><span class="layer-name">관제권</span></label>
+                    <label class="layer-item"><input type="checkbox" class="layer-check" data-layer="haz"><span class="legend-box c-haz"></span><span class="layer-name">위험구역</span></label>
+                    <label class="layer-item"><input type="checkbox" class="layer-check" data-layer="proh"><span class="legend-box c-proh"></span><span class="layer-name">비행금지구역</span></label>
+                    <label class="layer-item"><input type="checkbox" class="layer-check" data-layer="rest"><span class="legend-box c-rest"></span><span class="layer-name">비행제한구역</span></label>
+                    <label class="layer-item"><input type="checkbox" class="layer-check" data-layer="rain"><span class="legend-box c-rain"></span><span class="layer-name">강수예측</span></label>
+                </div>
+            </div>
+
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+    <div id="hwOv" class="ov hidden">
+        <div class="ov-panel">
+            <button id="hwOvClose" class="ov-close" aria-label="닫기">✕</button>
+            <iframe id="hwFrame" title="Hardware Dashboard" loading="lazy"></iframe>
+        </div>
+    </div>
+    <div id="pageOv" class="ov hidden">
+        <div class="ov-panel page">
+            <button id="pageOvClose" class="ov-close" aria-label="닫기">✕</button>
+            <iframe id="pageFrame" title="Event Log" loading="lazy"></iframe>
+        </div>
+    </div>
+
+  <script>
+    /******************** 지도 ********************/
+    const map = L.map('map', {
+  zoomControl:false,
+  minZoom:7,
+  maxZoom:18,
+  center:[37.30,127.15],
+  zoom:10,
+  preferCanvas:true
+});
+
+const vertiports=[[37.55806,126.79056],[37.463333,126.440002],[37.57806,127.04472],[37.51194,127.05889],[37.5574,126.7369],[37.5197,126.9212],[37.51333,127.10028],[37.486944,127.101944]];
+map.fitBounds(vertiports,{padding:[50,50]});
+
+
+    map.createPane('routesPane'); map.getPane('routesPane').style.zIndex = 650;
+    map.createPane('flightsPane'); map.getPane('flightsPane').style.zIndex = 660;
+
+    const dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 20
+    }).addTo(map);
+
+    const routeStyleA = { color:'#00d1ff', weight:0.8, opacity:0.75, pane:'routesPane' };
+    const routeStyleB = { color:'#2ee6a9', weight:0.8, opacity:0.75, pane:'routesPane' };
+
+    const coordsA = [[37.460,126.820],[37.435,126.950],[37.362,127.108],[37.270,127.130],[37.205,127.150]];
+    const coordsB = [[37.205,127.150],[37.320,127.260],[37.420,127.420],[37.560,127.360],[37.660,126.980]];
+
+    const airwayA = L.polyline(coordsA, routeStyleA).addTo(map);
+    const airwayB = L.polyline(coordsB, routeStyleB).addTo(map);
+
+    const waypoints = [...coordsA, ...coordsB.slice(1)];
+    waypoints.forEach(c => L.circleMarker(c, {radius:3,color:'#d7f3ff',weight:1,fill:true,fillOpacity:1,pane:'routesPane'}).addTo(map));    
+
+   
+
+    function addLabel(latlng, text){
+      return L.marker(latlng, { icon: L.divIcon({className:'', html:`<span style="color:#a9bfd3;font-size:11px;background:rgba(8,18,29,.7);padding:2px 6px;border:1px solid var(--line);border-radius:6px">${text}</span>`})}).addTo(map);
+    }
+    addLabel([37.30,127.00], 'R75'); addLabel([37.46,127.42], 'A810'); addLabel([37.66,127.10], 'A835');
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+    const VERTIPORTS = [
+  // 이름, 위도(lat), 경도(lng)
+  { id:'김포공항',   lat:37.55806, lng:126.79056 }, // Gimpo Intl. :contentReference[oaicite:0]{index=0}
+  { id:'인천공항',   lat:37.463333, lng:126.440002 }, // Incheon Intl. :contentReference[oaicite:1]{index=1}
+  { id:'청량리역',   lat:37.57806, lng:127.04472 },  // Cheongnyangni 인근 좌표 :contentReference[oaicite:2]{index=2}
+  { id:'코엑스',     lat:37.51194, lng:127.05889 },  // COEX :contentReference[oaicite:3]{index=3}
+  { id:'계양신도시', lat:37.5574,  lng:126.7369  },  // Gyeyang-gu 중심 좌표(신도시 대표값) :contentReference[oaicite:4]{index=4}
+  { id:'여의도',     lat:37.5197,  lng:126.9212  },  // Yeouido(역) 대표 좌표 :contentReference[oaicite:5]{index=5}
+  { id:'잠실',       lat:37.51333, lng:127.10028 },  // Jamsil(역) :contentReference[oaicite:6]{index=6}
+  { id:'수서역',     lat:37.486944, lng:127.101944 } // Suseo Station(Wikidata) :contentReference[oaicite:7]{index=7}
+];
+
+/* 버티포트 마커(옵션) */
+const vpMarkers = VERTIPORTS.map(v => 
+  L.circleMarker([v.lat, v.lng], { radius:6, color:'#79d6ff', weight:2, fillOpacity:.9 })
+   .bindTooltip(`${v.id}`, {direction:'top'})
+   .addTo(map)
+);
+
+/* 항로(폴리라인) 연결 */
+const ROUTE_COORDS = VERTIPORTS.map(v => [v.lat, v.lng]);
+const routeLine = L.polyline(ROUTE_COORDS, { ...routeStyleA }).addTo(map);
+
+/* 경로 보간 도움 함수: t∈[0,1]에서 점 좌표 반환 */
+function pointOnRoute(t){
+  // 💡 FIX: ROUTE_COORDS가 배열이며 유효한지 먼저 확인합니다.
+  if (!Array.isArray(ROUTE_COORDS) || ROUTE_COORDS.length < 2) {
+    // 유효한 경로가 없을 경우, 에러를 방지하고 null 등을 반환합니다.
+    return null; 
+  }
+
+  // 이제 ROUTE_COORDS는 최소 2개 이상의 좌표를 가진 유효한 배열임이 보장됩니다.
+  // 이 부분은 기존 코드의 (A) 라인이 하던 역할을 포함합니다.
+  const segs = ROUTE_COORDS.length - 1;
+  const pos = t * segs;
+  const i = Math.floor(pos);
+  const frac = pos - i;
+  
+  // (B)와 (C)에서 구조 분해 할당(destructuring assignment)을 시도할 때,
+  // ROUTE_COORDS[i] 또는 ROUTE_COORDS[i+1]이 undefined이면 
+  // 에러가 발생하므로, 위에서 ROUTE_COORDS 자체를 보호해야 합니다.
+  const [lat1, lng1] = ROUTE_COORDS[i];
+  const [lat2, lng2] = ROUTE_COORDS[(i+1)];
+  return [lat1 + (lat2-lat1)*frac, lng1 + (lng2-lng1)*frac];
+}
+
+/* 헤딩(방위) 계산: 현재 구간 접선 방향 */
+function headingOnRoute(t){
+  const eps = 1e-4;
+  const [latA,lngA] = pointOnRoute(Math.max(0, t - eps));
+  const [latB,lngB] = pointOnRoute(Math.min(1, t + eps));
+  const dy = (latB - latA), dx = (lngB - lngA);
+  const rad = Math.atan2(dx, dy);             // dx,dy 순서 주의(스크린Y↕︎보정)
+  let deg = (rad * 180 / Math.PI);
+  if (deg < 0) deg += 360;
+  return deg;
+}
+
+/* 회전 가능한 아이콘(Flight Plans 전용) */
+function makePlaneIcon(angle=0){
+  const a = Number.isFinite(angle) ? angle : 0;
+  return L.divIcon({
+    className: 'plane', // 파일에 이미 있는 .plane i 스타일 재사용
+    html: `<i class="bi bi-airplane-fill" style="display:inline-block;transform:rotate(${a}deg);transform-origin:50% 50%"></i>`,
+    iconSize: [24,24],
+    iconAnchor: [12,12]
+  });
+}
+
+    /********** 테이블 (원본 유지) **********/
+    const departures=[
+        {time:'11:33', flt:'KE078', dest:'용산', g:'G4', f:'F2', link:true, lat:37.53, lng:126.97},
+        {time:'11:43', flt:'OZ086', dest:'여의도', g:'G6', f:'F2', link:true, lat:37.52, lng:126.93},
+        {time:'11:53', flt:'7C245', dest:'의정부', g:'G3', f:'F1', link:true, lat:37.74, lng:127.04},
+        {time:'12:03', flt:'KE085', dest:'광명', g:'G3', f:'F1', link:true, lat:37.48, lng:126.87},
+        {time:'12:13', flt:'TW012', dest:'코엑스', g:'G4', f:'F2', link:true, lat:37.51, lng:127.06},
+        {time:'12:23', flt:'KE999', dest:'수서', g:'G2', f:'F2', link:true, lat:37.48, lng:127.10}
+    ];  
+
+    /********** 시간 **********/
+    function pad(n){return n.toString().padStart(2,'0')}
+    function updateTime(){
+      const now=new Date();
+      const kst=new Date(now.getTime()+(9*60*60*1000)-(now.getTimezoneOffset()*60000));
+      const kstDate=`${kst.getFullYear()}.${pad(kst.getMonth()+1)}.${pad(kst.getDate())}`;
+      const kstTime=`${pad(kst.getHours())}:${pad(kst.getMinutes())}:${pad(kst.getSeconds())}`;
+      const utcTime=`${pad(now.getUTCHours())}:${pad(now.getUTCMinutes())}:${pad(now.getUTCSeconds())}`;
+      document.getElementById("current-date").textContent=kstDate;
+      document.getElementById("kst-time").textContent=kstTime;
+      document.getElementById("utc-time").textContent=utcTime;
+    }
+    updateTime(); setInterval(updateTime,1000);
+
+    /******************** 비행기 애니메이션 ********************/
+    const planeIcon = L.divIcon({ html:'<i class="bi bi-airplane-fill"></i>', className:'plane', iconSize:[24,24], iconAnchor:[12,12] });
+
+    function animatePlane(latlngs,{speed=80,loop=true}={}){
+      if(!latlngs||latlngs.length<2)return;
+      const marker=L.marker(latlngs[0],{icon:planeIcon,pane:'flightsPane'}).addTo(map);
+      const segDist=Array(latlngs.length-1).fill(0).map((_,i)=>latlngs[i].distanceTo(latlngs[i+1]));
+      let seg=0,traveled=0,stepMs=33,perStep=speed*(stepMs/1000);
+      function step(){
+        let d=perStep;
+        while(d>0&&seg<latlngs.length-1){
+          const left=segDist[seg]-traveled;
+          if(d<left){traveled+=d;d=0}else{d-=left;seg++;traveled=0}
+        }
+        if(seg>=latlngs.length-1){if(loop){seg=0;traveled=0}else{return clearInterval(t)}}
+        const a=latlngs[seg],b=latlngs[seg+1];const r=traveled/segDist[seg];
+        const lat=a.lat+(b.lat-a.lat)*r,lng=a.lng+(b.lng-a.lng)*r;
+        marker.setLatLng([lat,lng]);
+        const bearing=Math.atan2(b.lng-a.lng,b.lat-a.lat)*180/Math.PI;
+        const el=marker.getElement(); if(el){const iTag=el.querySelector('i'); if(iTag) iTag.style.transform=`rotate(${bearing}deg)`;}
+      }
+      const t=setInterval(step,stepMs); return marker;
+    }
+    const demoRoute=airwayA.getLatLngs().concat(airwayB.getLatLngs().slice(1));
+    animatePlane(demoRoute,{speed:100,loop:true});
+
+    const ROT_OFFSET = -45; 
+    function bearingDeg(a,b){
+        const φ1=a.lat*Math.PI/180, φ2=b.lat*Math.PI/180, λ1=a.lng*Math.PI/180, λ2=b.lng*Math.PI/180;
+        const y=Math.sin(λ2-λ1)*Math.cos(φ2);
+        const x=Math.cos(φ1)*Math.sin(φ2)-Math.sin(φ1)*Math.cos(φ2)*Math.cos(λ2-λ1);
+        return (Math.atan2(y,x)*180/Math.PI+360)%360; // 0..360
+    }
+
+    
+
+
+    /********** Vertiport Panel **********/
+    function dotClassBy(v){ if(['가용','낮음','정상','가능'].includes(v)) return 'ok'; if(['보통','중간'].includes(v)) return 'warn'; return 'off'; }
+    const AMENITY_POOL=['bi-ev-station','bi-person-wheelchair','bi-cup-hot','bi-wifi','bi-tools','bi-bag','bi-shield-check'];
+    function randomAmenities(min=2,max=4){ const n=Math.floor(Math.random()*(max-min+1))+min; return [...AMENITY_POOL].sort(()=>Math.random()-0.5).slice(0,n); }
+
+    const vpData=[
+    {code:'GMP VP',  stand:'가용', crowd:'보통', lat:37.55806,  lng:126.79056},   // 김포공항
+    {code:'ICN VP',  stand:'가용', crowd:'낮음', lat:37.463333, lng:126.440002},  // 인천공항
+    {code:'CNY VP',  stand:'보통', crowd:'보통', lat:37.57806,  lng:127.04472},   // 청량리역
+    {code:'COEX VP', stand:'가용', crowd:'낮음', lat:37.51194,  lng:127.05889},   // 코엑스
+    {code:'GYG VP',  stand:'보통', crowd:'보통', lat:37.5574,   lng:126.7369},    // 계양신도시
+    {code:'YEO VP',  stand:'가용', crowd:'보통', lat:37.5197,   lng:126.9212},    // 여의도
+    {code:'JMS VP',  stand:'가용', crowd:'높음', lat:37.51333,  lng:127.10028},   // 잠실
+    {code:'SUS VP',  stand:'보통', crowd:'낮음', lat:37.486944, lng:127.101944},  // 수서역
+    ];
+    vpData.forEach(v => v._amen = randomAmenities());
+
+    const perPage=4; let page=0;
+   function renderVp(){
+  const start = page * perPage, end = start + perPage, items = vpData.slice(start, end);
+  const html = items.map(v=>{
+    const standDot = dotClassBy(v.stand), crowdDot = dotClassBy(v.crowd);
+    const amenHTML = v._amen.map((ic,i)=>`<i class="bi ${ic} ${i%2?'dim':''}"></i>`).join('');
+    return `
+      <div class="vp-item" data-lat="${v.lat}" data-lng="${v.lng}" data-code="${v.code}">
+        <div class="vp-left">
+          <div class="vp-code">${v.code}</div>
+          <div class="vp-amenities">${amenHTML}</div>
+        </div>
+        <div class="vp-right">
+          <div class="vp-states top">
+            <div class="vp-state"><span class="vp-dot ${standDot}"></span><span>STAND ${v.stand}</span></div>
+          </div>
+          <div class="vp-states bottom">
+            <div class="vp-state"><span class="vp-dot ${crowdDot}"></span><span>혼잡도 ${v.crowd}</span></div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+  document.getElementById('vpList').innerHTML = html;
+  document.getElementById('vpPageText').textContent = `${page+1} / ${Math.ceil(vpData.length/perPage)}`;
+  attachVpHoverHandlers();
+}
+renderVp();
+updateVpPagerUI(); // ← 초기 버튼 상태/페이지 텍스트 동기화
+
+// 1) 위임 + 직접 바인딩을 함께: DOM 변화에도 안전
+const vpHeader = document.querySelector('#vpPanel .vp-header');
+vpHeader.addEventListener('click', (e)=>{
+  const prevBtn = e.target.closest('#btnPrev');
+  const nextBtn = e.target.closest('#btnNext');
+  if (!prevBtn && !nextBtn) return;
+
+  const pages = Math.max(1, Math.ceil(vpData.length / perPage));
+  if (pages <= 1) return; // 한 페이지만 있으면 무시
+
+  if (prevBtn) page = (page - 1 + pages) % pages;
+  if (nextBtn) page = (page + 1) % pages;
+
+  renderVp();
+  updateVpPagerUI();
+});
+
+// 2) 버튼 상태/페이지 텍스트 동기화 유틸
+function updateVpPagerUI(){
+  const pages = Math.max(1, Math.ceil(vpData.length / perPage));
+  const txt = document.getElementById('vpPageText');
+  if (txt) txt.textContent = `${page + 1} / ${pages}`;
+
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+
+  const disabled = pages <= 1;
+  if (btnPrev) btnPrev.disabled = disabled;
+  if (btnNext) btnNext.disabled = disabled;
+}
+
+
+document.getElementById('layerList').addEventListener('change', e => {
+  const cb = e.target.closest('.layer-check');
+  if (!cb) return;
+  const id = cb.dataset.layer;
+  const on = cb.checked;
+
+  // 강수 레이어 처리
+  if (id === 'rain') {
+  const control = document.getElementById('rainControl');
+  
+  if(control) {
+    control.style.display = on ? 'block' : 'none';
+  }
+  
+  if(on) {
+    if(typeof window.rainDraw === 'function') {
+      window.rainDraw();
+      const playBtn = document.getElementById('rainPlay');
+      if(playBtn && playBtn.innerHTML.includes('play-fill')) {
+        playBtn.click();
+      }
+    }
+  } else {
+    // 체크 해제 시: 구름 제거
+    if(typeof window.stopRain === 'function') {
+      window.stopRain();
+    }
+  }
+  return;
+}
+
+  // 기존 레이어 토글
+  if (typeof setLayerVisible === 'function') {
+    setLayerVisible(id, on);
+  } else {
+    console.log('[layer]', id, on);
+  }
+
+  if (on) focusLayer(id);
+});
+
+
+let hoverTimer = null;
+
+function attachVpHoverHandlers(){
+  const items = document.querySelectorAll('.vp-item');
+  items.forEach(el=>{
+    el.addEventListener('mouseenter', ()=>{
+      el.classList.add('hover-temp');
+    });
+    el.addEventListener('mouseleave', ()=>{
+      el.classList.remove('hover-temp');
+    });
+    el.addEventListener('click', ()=>{
+      const lat = Number(el.dataset.lat), lng = Number(el.dataset.lng);
+      if (Number.isFinite(lat) && Number.isFinite(lng)) {
+        map.flyTo([lat, lng], Math.max(map.getZoom(), 14), { animate:true, duration:0.8 });
+      }
+
+      document.querySelectorAll('#vpList .vp-item').forEach(v=>v.classList.remove('is-hover'));
+      el.classList.add('is-hover');
+      document.querySelectorAll('#fpList .fp-item.is-hover').forEach(x=>x.classList.remove('is-hover'));
+
+      followTarget = null;
+      map.closePopup();
+
+      // ▼ vp_status.html 팝업(키 높이) 오픈
+      const name = (el.dataset.code || el.querySelector('.vp-code')?.textContent || 'Vertiport').trim();
+      if (typeof openPage === 'function') {
+        openPage(`vp_status.html?name=${encodeURIComponent(name)}`, { height:'70vh' });
+      }
+    });
+  });
+}
+
+
+    /******************** H/W & N/W Status (mini canvas, rect nodes + animated links) ********************/
+    (function initMiniNetwork(){
+    const cvs = document.getElementById('nwMini'); if(!cvs) return;
+    const ctx = cvs.getContext('2d', { alpha:true });
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+
+    // --- 설정값
+    const HUB_LABEL = 'VSSI'; 
+    const NODE_W = 85, NODE_H = 22, NODE_R = 0; 
+    const NODE_FONT = '700 10px ui-sans-serif,system-ui';
+    const HUB_FONT = '700 11px ui-sans-serif,system-ui';
+    const COLOR_LINE_OK = '#42e8ff';
+    const COLOR_LINE_BAD = '#ffd055';
+    const COLOR_NODE_BG = '#141719';  
+    const COLOR_NODE_BG_HOVER = '#1e2328';  
+    const COLOR_NODE_STROKE = '#42e8ff';
+    const COLOR_LABEL = '#dff6ff';
+    const LINK_WIDTH_OK=2;
+    const LINK_WIDTH_BAD=2; 
+    const DASH_LEN=3;
+
+    // --- 캔버스 스케일
+    function fitCanvas(){
+        const cssW = cvs.clientWidth || 320, cssH = cvs.clientHeight || 160;
+        cvs.width = Math.floor(cssW * dpr);
+        cvs.height = Math.floor(cssH * dpr);
+    }
+
+    // --- 데이터 (9개 하드웨어 이름/상태: ok|bad)
+    const nodes = [
+        { name:'DATA #1', status:'ok' },
+        { name:'DATA #2', status:'bad' },
+        { name:'DATA #3', status:'ok' },
+        { name:'RADAR #1', status:'ok' },
+        { name:'RADAR #2', status:'ok' },
+        { name:'RADAR #3', status:'ok' },
+        { name:'5G #1', status:'ok' },
+        { name:'5G #2', status:'ok' },
+        { name:'LEO', status:'ok' },
+    ];
+    const hub = { label:HUB_LABEL, x:0, y:0 };
+
+    // 링크는 허브↔각 노드
+    const links = nodes.map((n,i)=>({ a:hub, b:n }));
+
+    // --- 배치(원형 배치, 노드 중심 좌표 → 사각형 좌표로 확장)
+    /* layout()을 아래 코드로 교체 */
+    function layout(){
+        const W=cvs.width, H=cvs.height, d=dpr;
+
+        /* 허브 중앙 */
+        hub.x = Math.round(W/2);
+        hub.y = Math.round(H/2);
+
+        /* 카드 안쪽 여백과 노드 크기 */
+        const p = 10*d;
+        const w = NODE_W*d, h = NODE_H*d;
+
+        /* 네 변 기준선(노드 '중심' 좌표) */
+        const leftX   = p + w/2;
+        const rightX  = W - p - w/2;
+        const topY    = p + h/2;
+        const bottomY = H - p - h/2;
+
+        /* 1) nodes를 타입별로 분류 (라벨 접두어 기준) */
+        const g5  = [], datas = [], radars = [], leos = [];
+        nodes.forEach((n, i) => {
+            if (n.name.startsWith('5G')) g5.push(n);
+            else if (n.name.startsWith('DATA')) datas.push(n);
+            else if (n.name.startsWith('RADAR')) radars.push(n);
+            else if (n.name === 'LEO') leos.push(n);
+            else datas.push(n); // 예외는 DATA로
+        });
+
+        /* 2) 균등 간격 분배 유틸 (겹침 방지) */
+        const minGap = 6*d;
+        function distribute(count, axisLen, startPad, itemLen){
+            const usable = axisLen - 2*startPad;
+            const gap = Math.max(minGap, (usable - count*itemLen) / (count + 1));
+            const start = startPad + gap + itemLen/2;
+            return (idx)=> start + idx*(itemLen + gap);
+        }
+
+        /* 3) 상단: 5G 2개 가로 정렬 */
+        const topX = distribute(g5.length, W, p, w);
+        g5.forEach((n,i)=>{
+            n.cx = topX(i);
+            n.cy = topY;
+            n.w = w; n.h = h; n.x = n.cx - w/2; n.y = n.cy - h/2;
+        });
+
+        /* 4) 좌측: DATA 3개 세로 정렬 */
+        const leftY = distribute(datas.length, H, p, h);
+        datas.forEach((n,i)=>{
+            const offset = 20 * d;                  // 내려주는 오프셋(px) 값, 필요시 조정
+            n.cx = leftX;
+            n.cy = leftY(i) + offset;               // 기존 위치 + offset
+            n.w = w; n.h = h;
+            n.x = n.cx - w/2; n.y = n.cy - h/2;
+        });
+
+        /* 5) 우측: RADAR 3개 세로 정렬 */
+        const rightY = distribute(radars.length, H, p, h);
+        radars.forEach((n,i)=>{
+            const offset = 20 * d;                  // 동일 오프셋
+            n.cx = rightX;
+            n.cy = rightY(i) + offset;
+            n.w = w; n.h = h;
+            n.x = n.cx - w/2; n.y = n.cy - h/2;
+        });
+
+
+        /* 6) 하단 중앙: LEO 1개 */
+        leos.forEach((n)=>{
+            n.cx = hub.x;
+            n.cy = bottomY;
+            n.w = w; n.h = h; n.x = n.cx - w/2; n.y = n.cy - h/2;
+        });
+    }
+
+
+    // --- 그리기 유틸
+    function rrect(x,y,w,h,r){
+        const rr = Math.min(r, w/2, h/2)*dpr;
+        ctx.beginPath();
+        ctx.moveTo(x+rr,y);
+        ctx.arcTo(x+w,y,x+w,y+h,rr);
+        ctx.arcTo(x+w,y+h,x,y+h,rr);
+        ctx.arcTo(x,y+h,x,y,rr);
+        ctx.arcTo(x,y,x+w,y,rr);
+        ctx.closePath();
+    }
+
+    function drawNode(n, hovered){
+        const isBad = n.status === 'bad';
+        ctx.lineWidth = 0.5*dpr;                                         // 얇게
+        ctx.strokeStyle = isBad ? COLOR_LINE_BAD : COLOR_NODE_STROKE;  // 상태 연동
+        ctx.fillStyle = hovered ? COLOR_NODE_BG_HOVER : COLOR_NODE_BG;
+
+        rrect(n.x, n.y, n.w, n.h, 0);
+        ctx.fill(); ctx.stroke();
+
+        const pad = 7*dpr;
+        const iconX = n.x + pad + 7*dpr, iconY = n.y + n.h/2;
+        drawIcon(n.name, iconX, iconY, 1.30);                           // ← 아이콘 35% 확대
+
+        ctx.fillStyle = COLOR_LABEL;
+        ctx.font = NODE_FONT.replace('10px', (10 * dpr) + 'px');
+        ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+        ctx.fillText(n.name, n.x + pad + 18*dpr, n.y + n.h/2);
+    }
+
+    function drawHub(){
+    const R = 28*dpr;
+    
+    // 팔각형 좌표 계산
+    const angles = [];
+    for(let i = 0; i < 8; i++) {
+        angles.push((Math.PI / 4) * i - Math.PI / 8); // 22.5도 회전
+    }
+    
+    // 팔각형 그리기
+    ctx.fillStyle = '#080a0c'; // 아주 어두운 블랙
+    ctx.beginPath();
+    angles.forEach((angle, i) => {
+        const x = hub.x + R * Math.cos(angle);
+        const y = hub.y + R * Math.sin(angle);
+        if(i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.fill();
+    
+    // 테두리
+    ctx.lineWidth = 2*dpr; 
+    ctx.strokeStyle = COLOR_NODE_STROKE;
+    ctx.stroke();
+    
+    // 라벨
+    ctx.fillStyle = COLOR_LABEL; 
+    ctx.font = HUB_FONT.replace('11px',(11*dpr)+'px'); 
+    ctx.textAlign = 'center'; 
+    ctx.textBaseline = 'middle';
+    ctx.fillText(HUB_LABEL, hub.x, hub.y);
+}
+
+    // 점선 링크 + 상태별 애니메이션 점
+    function drawLink(l, t){
+        const a = l.a, b = l.b;
+        const color = (b.status === 'ok') ? COLOR_LINE_OK : COLOR_LINE_BAD;
+        const lw = (b.status === 'ok') ? LINK_WIDTH_OK : LINK_WIDTH_BAD;
+
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = lw * dpr;
+        ctx.setLineDash((l.b.status === 'ok') ? [3*dpr, 3*dpr] : [3*dpr, 3*dpr]);
+        ctx.lineDashOffset = 0;
+
+        // 경로(부드러운 2차 베지어)
+        const mx = (a.x + b.cx) / 2, my = (a.y + b.cy) / 2;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.quadraticCurveTo(mx, my, b.cx, b.cy);
+        ctx.stroke();
+
+        // 왕복 애니메이션: 0→1→0 삼각파 + 느린 속도(2.4초/왕복)
+        let u;
+        if (b.status === 'ok') {
+            const period = 2400;                             // ms (원하면 2000~3000 사이로 조절)
+            const prog = (t % period) / period;              // 0..1
+            u = 1 - Math.abs(2 * prog - 1);                  // triangle wave: 0→1→0
+            // 부드러운 감속/가속을 원하면 아래 한 줄로 매핑 (옵션)
+            // u = 0.5 - 0.5 * Math.cos(Math.PI * u);        // ease-in-out
+        } else {
+            u = 1;                                           // 비정상: 끝점에서 정지
+        }
+
+        const { x: dx, y: dy } = quadPoint(a.x, a.y, mx, my, b.cx, b.cy, u);
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(dx, dy, 2 * dpr, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+    }
+
+    function drawIcon(label, x, y, s=1){
+        ctx.save();
+        const lw = 1.5*dpr*s;
+
+        if(label.startsWith('DATA')){              // 칩셋
+            ctx.strokeStyle='#a7f3ff'; ctx.lineWidth=lw;
+            ctx.strokeRect(x-6*dpr*s, y-5*dpr*s, 12*dpr*s, 10*dpr*s);
+            ctx.beginPath(); ctx.moveTo(x-8*dpr*s,y); ctx.lineTo(x-6*dpr*s,y); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(x+6*dpr*s,y); ctx.lineTo(x+8*dpr*s,y); ctx.stroke();
+
+        }else if(label.startsWith('RADAR')){       // 반원+전파
+            ctx.strokeStyle='#a7f3ff'; ctx.lineWidth=lw;
+            ctx.beginPath(); ctx.arc(x, y+2*dpr*s, 6*dpr*s, Math.PI, 0); ctx.stroke();
+            ctx.beginPath(); ctx.arc(x, y+2*dpr*s, 4*dpr*s, Math.PI, 0); ctx.stroke();
+
+        }else if(label.startsWith('5G')){          // 5G 배지
+            ctx.fillStyle='#a7f3ff'; ctx.font=(8*dpr*s)+'px ui-sans-serif';
+            ctx.textAlign='center'; ctx.textBaseline='middle';
+            ctx.fillText('5G', x, y);
+
+        }else if(label==='LEO'){                   // 별
+            ctx.fillStyle='#a7f3ff';
+            const R1=5*dpr*s, R2=2.2*dpr*s;
+            ctx.beginPath();
+            for(let i=0;i<5;i++){
+            const a=-Math.PI/2 + i*2*Math.PI/5, b=a+Math.PI/5;
+            const x1=x+R1*Math.cos(a), y1=y+R1*Math.sin(a);
+            const x2=x+R2*Math.cos(b), y2=y+R2*Math.sin(b);
+            if(i===0) ctx.moveTo(x1,y1); else ctx.lineTo(x1,y1);
+            ctx.lineTo(x2,y2);
+            }
+            ctx.closePath(); ctx.fill();
+
+        }else{                                     // 기본 점
+            ctx.fillStyle='#a7f3ff'; ctx.beginPath(); ctx.arc(x, y, 3*dpr*s, 0, Math.PI*2); ctx.fill();
+        }
+        ctx.restore();
+    }
+
+    function quadPoint(x0,y0,cx,cy,x1,y1,u){
+        const inv=1-u;
+        const x = inv*inv*x0 + 2*inv*u*cx + u*u*x1;
+        const y = inv*inv*y0 + 2*inv*u*cy + u*u*y1;
+        return {x,y};
+    }
+
+    // --- 히트 테스트(사각형 안에 포인터?)
+    function hitNode(px,py){
+        return nodes.findIndex(n => px>=n.x && px<=n.x+n.w && py>=n.y && py<=n.y+n.h);
+    }
+
+    // --- 렌더 루프
+    let hovered=-1, rafId=0;
+    function draw(t=0){
+        layout();
+        const W=cvs.width, H=cvs.height;
+        ctx.clearRect(0,0,W,H);
+
+        // 링크
+        links.forEach(l => drawLink(l, t));
+
+        // 허브 + 노드
+        drawHub();
+        nodes.forEach((n,i)=> drawNode(n, i===hovered));
+    }
+
+      function loop(t){ draw(t); rafId=requestAnimationFrame(loop); }
+
+    // --- 이벤트(hover + click)
+    function toLocal(e){
+        const r=cvs.getBoundingClientRect();
+        const x=(e.clientX - r.left)*dpr;
+        const y=(e.clientY - r.top)*dpr;
+        return {x,y};
+    }
+
+    cvs.addEventListener('mousemove', e=>{
+        const {x,y}=toLocal(e);
+        const idx=hitNode(x,y);
+        if(idx!==hovered){
+        hovered=idx;
+        cvs.style.cursor = (idx>-1) ? 'pointer' : 'default';
+        }
+    });
+
+    cvs.addEventListener('mouseleave', ()=>{
+        hovered=-1; cvs.style.cursor='default';
+    });
+
+    cvs.addEventListener('click', (e)=>{
+    if(hovered<0) return;
+    const n = nodes[hovered];
+    openHw(n.name, { status:n.status }, e);  // 이벤트 객체 전달
+    });
+
+    // --- 시작
+    fitCanvas(); window.addEventListener('resize', ()=>{ fitCanvas(); });
+    loop(0);
+    })();
+
+    /* HW overlay open/close */
+      function openHw(name, meta={}, clickEvent=null){
+        const q = new URLSearchParams({ name, status:meta.status||'ok', ip:meta.ip||'', ping:meta.ping??'', loss:meta.loss??'', cpu:meta.cpu??'', mem:meta.mem??'' });
+        const ov = document.getElementById('hwOv'); 
+        const panel = ov.querySelector('.ov-panel'); 
+        const frame = document.getElementById('hwFrame');
+        
+        // 클릭 지점 계산
+        if(clickEvent && clickEvent.clientX && clickEvent.clientY) {
+            const x = clickEvent.clientX;
+            const y = clickEvent.clientY;
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            const percentX = ((x - centerX) / centerX) * 100;
+            const percentY = ((y - centerY) / centerY) * 100;
+            panel.style.transformOrigin = `${50 + percentX}% ${50 + percentY}%`;
+        } else {
+            panel.style.transformOrigin = 'center center';
+        }
+        
+        panel.style.height = 'auto';
+        frame.src = `hw_dashboard.html?${q.toString()}`;
+        ov.classList.remove('hidden'); 
+        requestAnimationFrame(()=> ov.classList.add('show'));
+       }
+
+        function closePage(){
+        const ov=document.getElementById('pageOv');
+        const frame=document.getElementById('pageFrame');
+        ov.classList.remove('show');
+        setTimeout(()=>{ ov.classList.add('hidden'); frame.src='about:blank'; },220);
+      }
+
+      function closeHw(){
+        const ov = document.getElementById('hwOv');
+        const frame = document.getElementById('hwFrame');
+        ov.classList.remove('show');
+        setTimeout(()=>{
+            ov.classList.add('hidden');
+            frame.src = 'about:blank';
+        }, 500);  // CSS transition 시간과 맞춤
+    }
+
+      document.getElementById('hwOvClose').addEventListener('click', closeHw);
+      document.getElementById('hwOv').addEventListener('click', (e)=>{ if(e.target.id==='hwOv') closeHw(); });
+
+      
+    /* 자식 문서에서 보내는 높이 메시지를 받아 패널 높이 업데이트 */
+    window.addEventListener('message', (e)=>{
+      const d = e.data; if(!d || d.type !== 'HW_DASH_SIZE') return;
+      const ov = document.getElementById('hwOv'); const panel = ov.querySelector('.ov-panel'); const frame = document.getElementById('hwFrame');
+      const target = Math.floor(window.innerHeight * 0.71) - 32; // ← 화면의 80% - 여백
+      panel.style.height = target + 'px';
+      frame.style.height = '100%';
+    });
+
+
+
+    /* === Event Log: 최근순(내림차순) === */
+
+    /* UTC 한국어 포맷 */
+    function fmtKoDateUTC(ts){ const d=new Date(ts); return `${d.getUTCFullYear()}년 ${d.getUTCMonth()+1}월 ${d.getUTCDate()}일`; }
+    function fmtKoTimeUTC(ts){ const d=new Date(ts); const h=String(d.getUTCHours()).padStart(2,'0'); const m=String(d.getUTCMinutes()).padStart(2,'0'); const s=String(d.getUTCSeconds()).padStart(2,'0'); return `${h}:${m}:${s} UTC`; }
+
+    /* “방금 들어온 것 같은” 간격(초) 생성 */
+    function recentOffsets(n){ const steps=[]; let acc=0; for(let i=0;i<n;i++){ const step=(i===0)?0:10+Math.floor(Math.random()*35); acc+=step; steps.push(acc*1000);} return steps; }
+
+    /* 메시지 시드(코드/본문만 정의) */
+    const EV_SEED=[
+    {code:'TG001',msg:'Mode switch HOLD→CRZ'},
+    {code:'TG002',msg:'Battery health check'},
+    {code:'TG001',msg:'Altitude change requested 1500→1200'},
+    ];
+
+    /* 지금 시각 기준으로 타임스탬프 부여 */
+    let evData=(function(){ const now=Date.now(); const offs=recentOffsets(EV_SEED.length); return EV_SEED.map((e,i)=>({ ...e, ts: now - offs[i] })); })();
+
+    /* 렌더(항상 ts 내림차순) */
+    function renderEventLog(list=evData){
+    const sorted=[...list].sort((a,b)=>b.ts-a.ts);
+    const html = sorted.map(e => `
+        <div class="ev-item">
+            <div class="ev-time"><div>${fmtKoDateUTC(e.ts)}</div><div>${fmtKoTimeUTC(e.ts)}</div></div>
+            <div class="ev-tl"><span class="ev-dot"></span></div>
+            <div class="ev-bubble"><span class="ev-code">${e.code}</span><span class="ev-msg">${e.msg}</span></div>
+        </div>`).join('');
+    document.getElementById('evList').innerHTML=html;
+    document.getElementById('evCountText').textContent = `${sorted.length} Events`;
+    }
+
+    /* 실시간 추가(기본 ts=지금) */
+    function pushEvent({code,msg,ts=Date.now()}){ evData.push({code,msg,ts}); renderEventLog(); }
+
+    /* 최초 렌더 */
+    renderEventLog();
+
+    /* Event Log 오버레이 열기/닫기 */
+    function openPage(url,{height='650px'}={}, clickEvent=null) {
+      const ov=document.getElementById('pageOv');
+      const panel=ov.querySelector('.ov-panel.page');
+      const frame=document.getElementById('pageFrame');
+      
+      // 클릭 지점 계산
+      if(clickEvent && clickEvent.clientX && clickEvent.clientY) {
+          const x = clickEvent.clientX;
+          const y = clickEvent.clientY;
+          const centerX = window.innerWidth / 2;
+          const centerY = window.innerHeight / 2;
+          const percentX = ((x - centerX) / centerX) * 100;
+          const percentY = ((y - centerY) / centerY) * 100;
+          panel.style.transformOrigin = `${50 + percentX}% ${50 + percentY}%`;
+      } else {
+          panel.style.transformOrigin = 'center center';
+      }
+      
+      panel.style.height=(typeof height==='number')? (height+'px') : height;
+      frame.style.height='100%';
+      frame.src=url;
+      ov.classList.remove('hidden');
+      requestAnimationFrame(()=>ov.classList.add('show'));
+    }
+
+/* 버튼 바인딩 */
+document.getElementById('btnEvMore').addEventListener('click', (e)=> openPage('event_log.html', {}, e));
+document.getElementById('pageOvClose').addEventListener('click', closePage);
+document.getElementById('pageOv').addEventListener('click', (e)=>{ if(e.target.id==='pageOv') closePage(); });
+
+    (function initOpsMini(){
+  const CH=document.getElementById('opsChart'); if(!CH) return;
+  const sel=document.getElementById('selVertiport'); if(!sel) return;
+
+  /* DPR 스케일링 */
+  const dpr=window.devicePixelRatio||1;
+  const CT=CH.getContext('2d');
+  const W=CH.width,H=CH.height;
+  CH.style.width=W+'px'; CH.style.height=H+'px'; CH.width=W*dpr; CH.height=H*dpr; CT.scale(dpr,dpr);
+
+  /* 이름 수집: vpData → DOM → 폴백 */
+  function getVertiportNames(){
+    if(Array.isArray(window.vpData)&&vpData.length) return vpData.slice(0,8).map(v=>v.code);
+    const nodes=document.querySelectorAll('#vpList .vp-name, #vpList .vp-item .vp-title, #vpList .vp-row strong, #vpList .vp-row .name');
+    const list=Array.from(nodes).map(el=>el.textContent.trim()).filter(Boolean);
+    const uniq=Array.from(new Set(list)).slice(0,8);
+    return uniq.length?uniq:['GMP VP','ICN VP','CNY VP','COEX VP','GYG VP','YEO VP','JMS VP','SUS VP'];
+  }
+  const OPS_NAMES=getVertiportNames();
+
+  /* 셀렉트 옵션 주입 */
+  sel.innerHTML=OPS_NAMES.map(n=>`<option value="${n}">${n}</option>`).join('');
+
+  /* 버티포트별 더미 시드(완료/취소 12칸) */
+  const OPS_SEED=Object.fromEntries(
+    OPS_NAMES.map((n,idx)=>[
+      n,
+      Array.from({length:12},(_,i)=>({
+        ok:10+((i+idx)%7)+Math.floor(Math.random()*4),   // 완료량
+        cx:Math.floor(Math.random()*3)                   // 취소량(0~2)
+      }))
+    ])
+  );
+
+  /* 차트 그리기(좌우 여백 대칭) */
+  function draw(name){
+    const data=OPS_SEED[name]||OPS_SEED[OPS_NAMES[0]];
+    CT.clearRect(0,0,W,H);
+
+    const L=5, R=5, T=10, B=10;
+    const plotW=W-L-R, plotH=H-T-B;
+
+    CT.globalAlpha=.85; CT.strokeStyle='rgba(173,197,255,.22)'; CT.lineWidth=1;
+    CT.beginPath(); CT.moveTo(L,H-B); CT.lineTo(W-R,H-B); CT.moveTo(L,T); CT.lineTo(L,H-B); CT.stroke();
+
+    const max=Math.max(...data.map(d=>d.ok+d.cx),20);
+    const n=data.length, slot=plotW/n, bw=Math.max(5,slot*0.62), gap=slot-bw;
+    let x=L+gap/2;
+
+    data.forEach(d=>{
+      const th=(d.ok/max)*plotH, ch=(d.cx/max)*plotH;
+      CT.fillStyle='rgba(66,232,255,.85)'; CT.fillRect(x,(H-B)-th,bw,th);        // 완료
+      CT.fillStyle='rgba(255,208,85,.95)'; CT.fillRect(x,(H-B)-(th+ch),bw,ch);    // 취소
+      x+=slot;
+    });
+
+    CT.globalAlpha=1; CT.fillStyle='#cfe4ff'; CT.font='12px system-ui';
+    CT.fillText(name,L+2,T+12);
+  }
+
+  /* KPI(고정값) */
+  const elT=document.getElementById('opsTotal');  if(elT) elT.textContent='17 / 33';
+  const elC=document.getElementById('opsCancel'); if(elC) elC.textContent='3 / 33';
+  const elE=document.getElementById('opsEvents'); if(elE) elE.textContent='3';
+
+  /* 최초 렌더 + 셀렉트 연동 */
+  sel.addEventListener('change',()=>draw(sel.value));
+  draw(sel.value||OPS_NAMES[0]);
+})();
+
+   /* === Flight Plans === */
+(function initFlightPlans(){
+  const listEl = document.getElementById('fpList');
+  const cntEl  = document.getElementById('fpCount');
+  if(!listEl) return;
+
+  // 6대 비행기: id/고도/속도/방위 + 경로상의 시작 위치(위상 offset)
+  const plans = [
+    { id:'KE326', alt:18470, spd:410, trk:129, phase:0.02 },
+    { id:'7C191',  alt:36000, spd:425, trk: 62, phase:0.18 },
+    { id:'OZ097',  alt:14356, spd:410, trk:102, phase:0.33 },
+    { id:'TW385',  alt:37000, spd:520, trk: 42, phase:0.50 },
+    { id:'KE321',  alt:36000, spd:477, trk:142, phase:0.66 },
+    { id:'KE003',  alt:28400, spd:458, trk: 85, phase:0.82 }
+  ];
+
+  /* 리스트 렌더(1행 편명, 2행 3열 APA) */
+  const itemHTML = (p)=>`
+    <div class="fp-item" data-flt="${p.id}">
+      <div class="fp-flight">${p.id}</div>
+      <div class="fp-meta">
+        <div class="fp-kv"><span class="fp-k">ALT</span><span>${p.alt.toLocaleString()} ft</span></div>
+        <div class="fp-kv"><span class="fp-k">SPD</span><span>${p.spd.toLocaleString()} km/h</span></div>
+        <div class="fp-kv"><span class="fp-k">TRK</span><span>${p.trk}°</span></div>
+      </div>
+    </div>`;
+  listEl.innerHTML = plans.map(itemHTML).join('');
+  if (cntEl) cntEl.textContent = `${plans.length} plans`;
+
+  /* 경로 위에서 움직이는 마커 생성 */
+  const planeMarkers = {};
+  plans.forEach(p=>{
+    const t0 = (p.phase ?? 0) % 1;
+    const pos = pointOnRoute(t0);
+    const hdg = headingOnRoute(t0);
+    const marker = L.marker(pos, { icon: makePlaneIcon(hdg), pane:'flightsPane' })
+      .bindPopup(`<b>${p.id}</b><br>ALT ${p.alt.toLocaleString()} ft<br>SPD ${p.spd.toLocaleString()} km/h<br>TRK ${p.trk}°`)
+      .addTo(map);
+    planeMarkers[p.id] = { marker, t: t0 };
+  });
+
+  /* 애니메이션: 실제속도 기반(대략화) — km/h → t증가량으로 변환 */
+  const KM_PER_LOOP = 55;  // 경로 한 바퀴를 55km로 가정(지도의 스케일에 맞춰 조절)
+  const TICK_MS = 1000/30;
+  setInterval(()=>{
+    plans.forEach(p=>{
+      const obj = planeMarkers[p.id]; if(!obj) return;
+      // t 증가: (속도 km/h) * (초/3600) / (경로 km)  → 프레임마다 t 증가량
+      const dt = (p.spd / 3600) * (TICK_MS/1000) / KM_PER_LOOP;
+      obj.t = (obj.t + dt) % 1;
+      const pos = pointOnRoute(obj.t);
+      const hdg = headingOnRoute(obj.t);
+      obj.marker.setLatLng(pos);
+      obj.marker.setIcon(makePlaneIcon(hdg));
+    });
+  }, TICK_MS);
+
+  /* 리스트 클릭 → 해당 비행기 포커스 */
+  listEl.addEventListener('click', e=>{
+  const item = e.target.closest('.fp-item');
+  if(!item) return;
+  const flt = item.dataset.flt;
+
+  // 마커 객체 안전 추출 (marker 또는 {marker,...} 대응)
+  const obj = planeMarkers[flt];
+  const marker = obj?.getLatLng ? obj : obj?.marker;
+  if(marker){
+    map.flyTo(marker.getLatLng(),14,{animate:true,duration:0.7});
+    marker.openPopup();
+  }
+
+  // Flight Plans 하이라이트
+  listEl.querySelectorAll('.fp-item').forEach(el=>el.classList.remove('is-hover'));
+  item.classList.add('is-hover');
+
+  // Vertiport 하이라이트 해제
+  document.querySelectorAll('#vpList .vp-item.is-hover').forEach(el=>el.classList.remove('is-hover'));
+
+  // ✅ 이제부터 비행기를 따라간다
+  followTarget = { type:'plane', id: flt };
+});
+
+
+})();
+
+// 지도 클릭 시 Flight Plans 선택 해제
+map.on('click', ()=>{
+  document.querySelectorAll('#fpList .fp-item.is-hover, #vpList .vp-item.is-hover')
+    .forEach(el=>el.classList.remove('is-hover'));
+  followTarget = null;
+  map.closePopup();
+});
+
+let followTarget = null;
+
+// layerList 변화시: 토글 + 켤 때는 그 레이어의 경계로 flyToBounds(자동 확대)
+document.getElementById('layerList').addEventListener('change', e => {
+  const cb = e.target.closest('.layer-check');
+  if (!cb) return;
+  const id = cb.dataset.layer;
+  const on = cb.checked;
+
+  // 기존 토글 유지
+  if (typeof setLayerVisible === 'function') {
+    setLayerVisible(id, on);
+  } else {
+    console.log('[layer]', id, on);
+  }
+
+  // ✅ ON일 때만 포커싱 + 확대
+  if (on) focusLayer(id);
+});
+
+// 🔧 추가: 레이어 경계 계산 → 지도 이동/확대
+function focusLayer(id) {
+  const group = (window.LAYERS && window.LAYERS[id]) || null;
+
+  // 1) L.FeatureGroup/L.LayerGroup 이면 내부 레이어들로 bounds 산출
+  if (group) {
+    let bounds = null;
+
+    // getBounds가 바로 있으면 사용(Polyline/Polygon/FeatureGroup)
+    if (typeof group.getBounds === 'function') {
+      try { bounds = group.getBounds(); } catch(e) {}
+    }
+
+    // LayerGroup(마커 섞임 등)일 수 있으니 보수적으로 재계산
+    if ((!bounds || !bounds.isValid?.()) && typeof group.getLayers === 'function') {
+      const layers = group.getLayers();
+      if (layers && layers.length) {
+        const fg = L.featureGroup(layers);
+        bounds = fg.getBounds();
+      }
+    }
+
+    // 유효 bounds면 자동 확대 + 이동 (maxZoom으로 과확대 방지)
+    if (bounds && bounds.isValid && bounds.isValid()) {
+      map.flyToBounds(bounds, {
+        padding: [40, 40],
+        maxZoom: 14,          // 필요 시 13~15 사이로 조절
+        animate: true,
+        duration: 0.8
+      });
+      return;
+    }
+  }
+
+  // 2) 데이터가 아직 없거나 빈 그룹이면 프리셋 BBox로 폴백(선택)
+  const PRESETS = {
+    airport: L.latLngBounds([[37.0, 126.3],[37.8, 127.3]]),
+    runway:  L.latLngBounds([[37.0, 126.3],[37.8, 127.3]]),
+    sector:  L.latLngBounds([[37.3, 126.8],[37.7, 127.2]]),
+    tma:     L.latLngBounds([[37.3, 126.7],[37.8, 127.3]]),
+    ctr:     L.latLngBounds([[37.4, 126.7],[37.7, 127.1]])
+  };
+  if (PRESETS[id]) {
+    map.flyToBounds(PRESETS[id], {
+      padding: [40, 40],
+      maxZoom: 13,
+      animate: true,
+      duration: 0.8
+    });
+  }
+}
+
+
+// 추가: 포커싱 유틸
+function focusLayer(id) {
+  // L.LayerGroup 또는 FeatureGroup 이면 getBounds() 사용
+  const g = (window.LAYERS && window.LAYERS[id]) || null;
+  if (g && typeof g.getBounds === 'function') {
+    const b = g.getBounds?.();
+    if (b && b.isValid && b.isValid()) {
+      map.flyToBounds(b, {
+        padding: [40, 40],   // 좌우/상하 여백
+        maxZoom: 12,         // 너무 깊게 들어가지 않게 상한
+        animate: true,
+        duration: 0.8
+      });
+      return;
+    }
+  }
+
+  // 예비(BBox 프리셋) — 데이터가 비어있거나 아직 로딩 전일 때
+  const presets = {
+    // 필요 시 레이어별로 추가
+    airport: L.latLngBounds([[37.0, 126.3], [37.8, 127.3]]),
+    runway:  L.latLngBounds([[37.0, 126.3], [37.8, 127.3]]),
+    sector:  L.latLngBounds([[37.3, 126.8], [37.7, 127.2]]),
+    tma:     L.latLngBounds([[37.3, 126.7], [37.8, 127.3]]),
+    ctr:     L.latLngBounds([[37.4, 126.7], [37.7, 127.1]])
+  };
+  if (presets[id]) {
+    map.flyToBounds(presets[id], {
+      padding: [40, 40],
+      maxZoom: 12,
+      animate: true,
+      duration: 0.8
+    });
+  }
+}
+
+
+
+/* === [추가] 레이어 그룹 & 패널 토글 훅 === */
+map.createPane('airportsPane'); map.getPane('airportsPane').style.zIndex=640;
+map.createPane('runwaysPane'); map.getPane('runwaysPane').style.zIndex=645;
+// 레이어 그룹 생성
+const LAYERS = {
+  airport: L.layerGroup([], { pane: 'airportsPane' }).addTo(map),
+  runway:  L.layerGroup([], { pane: 'runwaysPane'  }).addTo(map),
+  // ... airway, sid, star, ils, sector, tma, ctr, haz, proh, rest 등
+};
+
+// 🔵 전역 노출
+window.LAYERS = LAYERS;
+
+window.setLayerVisible = (id, on) => {
+  const g = LAYERS[id];
+  if (!g) return;
+  on ? map.addLayer(g) : map.removeLayer(g);
+};
+
+
+/* === [추가] CSV 파서(따로 라이브러리 불필요) === */
+function parseCSV(txt){const lines=txt.trim().split(/\r?\n/);const headers=lines.shift().split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(h=>h.replace(/^"|"$/g,''));return lines.map(l=>{const cols=l.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(c=>c.replace(/^"|"$/g,'').replace(/""/g,'"'));const o={};headers.forEach((h,i)=>o[h]=cols[i]);return o})}
+
+/* === [추가] OurAirports: KR 공항/활주로 로딩 & 렌더 === */
+async function loadAirportsRunwaysKR(){
+  const A='https://davidmegginson.github.io/ourairports-data/airports.csv';
+  const R='https://davidmegginson.github.io/ourairports-data/runways.csv';
+  const [aTxt,rTxt]=await Promise.all([fetch(A).then(r=>r.text()),fetch(R).then(r=>r.text())]);
+  const airports=parseCSV(aTxt).filter(a=>a.iso_country==='KR'&&['large_airport','medium_airport','small_airport'].includes(a.type)&&a.scheduled_service==='yes');
+  const rwy=parseCSV(rTxt).filter(r=>airports.some(a=>a.ident===r.airport_ident));
+  const byIdent=new Map(airports.map(a=>[a.ident,a]));
+  // 공항 마커
+  airports.forEach(a=>{
+    const lat=+a.latitude_deg,lng=+a.longitude_deg;if(!isFinite(lat)||!isFinite(lng))return;
+    const m=L.circleMarker([lat,lng],{radius:3.5,color:'#bcd1ff',weight:1,fill:true,fillOpacity:1,pane:'airportsPane'})
+      .bindPopup(`<b>${a.ident||'-'}</b><br>${a.name||''}<br>${a.municipality||''}`);
+    LAYERS.airport.addLayer(m);
+  });
+  // 활주로 선
+  rwy.forEach(r=>{
+    const le=[+r.le_latitude_deg,+r.le_longitude_deg],he=[+r.he_latitude_deg,+r.he_longitude_deg];
+    if(!isFinite(le[0])||!isFinite(le[1])||!isFinite(he[0])||!isFinite(he[1]))return;
+    const ll=L.polyline([le,he],{color:'#8a8f98',weight:1.2,opacity:.9,pane:'runwaysPane'})
+      .bindPopup(`<b>${r.airport_ident}</b> RWY ${r.le_ident||''}/${r.he_ident||''} · ${Math.round(+r.length_ft*0.3048)||'-'} m`);
+    LAYERS.runway.addLayer(ll);
+  });
+}
+loadAirportsRunwaysKR();
+
+//레이어
+map.createPane('airspacePane'); map.getPane('airspacePane').style.zIndex=635;
+const AS={sector:{c:'#2ea7ff'},tma:{c:'#ff42ff'},ctr:{c:'#2e7d32'},haz:{c:'#ff9800'},proh:{c:'#ff2d2d'},rest:{c:'#ff9a1a'}};
+const sty=k=>({color:AS[k].c,weight:1,opacity:.95,fillColor:AS[k].c,fillOpacity:.38,pane:'airspacePane'});
+LAYERS.sector=L.layerGroup(); LAYERS.tma=L.layerGroup(); LAYERS.ctr=L.layerGroup(); LAYERS.haz=L.layerGroup(); LAYERS.proh=L.layerGroup(); LAYERS.rest=L.layerGroup();
+LAYERS.sector.addLayer(L.polyline([[37.57,127.02],[37.60,127.08],[37.57,127.14],[37.53,127.10],[37.54,127.04],[37.57,127.02]],{color:'#2ea7ff',weight:1,opacity:.95,pane:'airspacePane'}).bindTooltip('관제섹터'));
+LAYERS.tma.addLayer(L.polygon([[37.62,126.93],[37.65,127.06],[37.60,127.18],[37.50,127.16],[37.47,127.00],[37.55,126.90]],sty('tma')).bindTooltip('접근관제구역'));
+LAYERS.ctr.addLayer(L.circle([37.55806,126.79056],{...sty('ctr'),radius:3000}).bindTooltip('관제권')); // 김포 중심 6km
+LAYERS.haz.addLayer(L.polygon([[37.48,127.05],[37.49,127.08],[37.47,127.10],[37.46,127.06]],sty('haz')).bindTooltip('위험구역'));
+LAYERS.proh.addLayer(L.circle([37.52,127.03],{...sty('proh'),radius:1500}).bindTooltip('비행금지구역'));
+LAYERS.rest.addLayer(L.polygon([[37.50,126.95],[37.51,126.99],[37.49,127.01],[37.48,126.97]],sty('rest')).bindTooltip('비행제한구역'));
+document.querySelectorAll('#layerList .layer-check').forEach(cb=>setLayerVisible(cb.dataset.layer,cb.checked));
+
+/* ===== 강수 강도별 색상 레이더 ===== */
+(function(){
+  const control = document.getElementById('rainControl');
+  const slider = document.getElementById('rainSlider');
+  const timeLabel = document.getElementById('rainTime');
+  const playBtn = document.getElementById('rainPlay');
+  
+  if(!control || !slider || !timeLabel || !playBtn) {
+    console.error('Rain elements missing');
+    return;
+  }
+  
+  let isPlaying = false;
+  let playInterval = null;
+  let cloudLayer = null;
+  
+  window.cloudLayer = null;
+  
+  // 강수 셀 생성 (강도별로 다른 색상)
+  function generateRainCell(i) {
+    const centerLat = 37.5, centerLng = 126.8;
+    const startLng = centerLng - 0.5 + Math.random() * 0.3;
+    const startLat = centerLat + (Math.random() - 0.5) * 1.4;
+    
+    // 강수 강도 (0: 약함, 1: 보통, 2: 강함)
+    const intensityLevel = Math.floor(Math.random() * 3);
+    const baseIntensity = [0.3, 0.6, 0.9][intensityLevel];
+    
+    return {
+      id: i,
+      startLat: startLat,
+      startLng: startLng,
+      speedLng: 0.04 + Math.random() * 0.03,
+      speedLat: (Math.random() - 0.5) * 0.006,
+      intensity: baseIntensity + Math.random() * 0.2,
+      intensityLevel: intensityLevel,
+      dissipateStart: 6 + Math.random() * 5,
+      baseSize: 0.06 + Math.random() * 0.04,
+      noiseFreq: 0.3 + Math.random() * 0.7,
+      noiseAmp: 0.02 + Math.random() * 0.03,
+      rotationSpeed: (Math.random() - 0.5) * 0.1
+    };
+  }
+  
+  const rainCells = Array.from({length: 20}, (_, i) => generateRainCell(i));
+  
+  function updateRain(){
+    const hours = parseFloat(slider.value);
+    
+    // 기존 레이어 제거
+    if(cloudLayer && map.hasLayer(cloudLayer)) {
+      map.removeLayer(cloudLayer);
+    }
+    if(window.cloudLayer && map.hasLayer(window.cloudLayer)) {
+      map.removeLayer(window.cloudLayer);
+    }
+    
+    const heatPoints = [];
+    
+    rainCells.forEach(cell => {
+      const currentLat = cell.startLat + cell.speedLat * hours;
+      const currentLng = cell.startLng + cell.speedLng * hours;
+      
+      if(currentLng > 128 || currentLng < 125.5) return;
+      
+      let intensity = cell.intensity;
+      if(hours >= cell.dissipateStart){
+        const fadeProgress = (hours - cell.dissipateStart) / (24 - cell.dissipateStart);
+        intensity *= (1 - fadeProgress * 0.8);
+      }
+      
+      const numPoints = 12 + Math.floor(Math.abs(Math.sin(hours * 0.5 + cell.id)) * 8);
+      const rotation = hours * cell.rotationSpeed;
+      
+      for(let i = 0; i < numPoints; i++) {
+        const angle = (i / numPoints) * Math.PI * 2 + rotation;
+        const noise1 = Math.sin(angle * 3 + hours * cell.noiseFreq) * cell.noiseAmp;
+        const noise2 = Math.cos(angle * 5 - hours * cell.noiseFreq * 0.7) * cell.noiseAmp * 0.5;
+        const radius = cell.baseSize + noise1 + noise2;
+        const offsetLat = Math.sin(angle) * radius;
+        const offsetLng = Math.cos(angle) * radius;
+        const pulsePhase = angle + hours * (cell.noiseFreq * 2);
+        const weight = 0.4 + Math.sin(pulsePhase) * 0.3;
+        
+        heatPoints.push([
+          currentLat + offsetLat,
+          currentLng + offsetLng,
+          intensity * weight
+        ]);
+      }
+    });
+    
+    // 강수 강도별 색상 그라디언트 (초록→노랑→빨강)
+    cloudLayer = L.heatLayer(heatPoints, {
+      radius: 55,
+      blur: 50,
+      maxZoom: 14,
+      minOpacity: 0.35,
+      gradient: {
+        0.0: 'rgba(0, 0, 0, 0)',
+        0.15: 'rgba(100, 200, 255, 0.3)',    // 약한 강수: 하늘색
+        0.30: 'rgba(80, 180, 120, 0.5)',     // 약한 강수: 초록
+        0.45: 'rgba(100, 220, 100, 0.65)',   // 보통 강수: 연두
+        0.60: 'rgba(255, 255, 100, 0.75)',   // 보통 강수: 노랑
+        0.75: 'rgba(255, 180, 80, 0.85)',    // 강한 강수: 주황
+        0.90: 'rgba(255, 100, 100, 0.9)',    // 강한 강수: 빨강
+        1.0: 'rgba(220, 50, 80, 0.95)'       // 매우 강한 강수: 진한 빨강
+      }
+    });
+    
+    cloudLayer.on('add', function(){
+      if (this._canvas) {
+        this._ctx = this._canvas.getContext('2d', { willReadFrequently: true });
+      }
+    });
+    
+    cloudLayer.addTo(map);
+    window.cloudLayer = cloudLayer;
+  }
+  
+  function updateSlider(){
+    const hours = parseFloat(slider.value);
+    updateRain();
+    timeLabel.textContent = hours === 0 ? '현재' : `+${hours.toFixed(1)}h`;
+  }
+  
+  function togglePlay(){
+    isPlaying = !isPlaying;
+    playBtn.innerHTML = isPlaying ? '<i class="bi bi-pause-fill"></i>' : '<i class="bi bi-play-fill"></i>';
+    
+    if(isPlaying){
+      playInterval = setInterval(() => {
+        let val = parseFloat(slider.value) + 0.5;
+        if(val > 24) val = 0;
+        slider.value = val;
+        updateSlider();
+      }, 400);
+    } else {
+      clearInterval(playInterval);
+    }
+  }
+  
+  slider.addEventListener('input', updateSlider);
+  playBtn.addEventListener('click', togglePlay);
+  
+  window.rainDraw = updateRain;
+  window.stopRain = function() {
+    isPlaying = false;
+    if(playInterval) clearInterval(playInterval);
+    if(window.cloudLayer && map.hasLayer(window.cloudLayer)) {
+      map.removeLayer(window.cloudLayer);
+    }
+  };
+  
+  control.style.display = 'none';
+})();
+
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

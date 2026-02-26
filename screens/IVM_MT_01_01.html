@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IVMS - 모니터링</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/monitoring.css">
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="dashboard-body app-screen-height" data-system-acronym="IVMS" data-page-title="모니터링">
+    <!-- Header (Fixed Top) -->
+    <div data-include="../components/header.html"></div>
+
+    <!-- Main Flex Container (Sidebar + Content) -->
+    <div class="dashboard-main-flex">
+
+        <!-- Sidebar -->
+        <div data-include="../components/sidebar.html"></div>
+
+        <!-- Main Content -->
+        <main class="dashboard-main" id="main-content">
+            <div class="monitoring-container">
+                <!-- Leaflet Map Container -->
+                <div id="monitoring-map"></div>
+
+                <!-- Overlays -->
+
+                <!-- Left Column -->
+                <div class="panel-column left-column">
+                    <!-- 1. Vertiport Status -->
+                    <div class="overlay-panel">
+                        <div class="overlay-panel-header">
+                            <div class="overlay-panel-title-group">
+                                <i data-lucide="tower-control" class="overlay-panel-icon"></i>
+                                <span class="overlay-panel-title">버티포트 현황</span>
+                            </div>
+                            <button class="collapse-btn">
+                                <i data-lucide="chevron-up" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div class="overlay-panel-content custom-scrollbar">
+                            <div class="mon-status-list" id="vp-list">
+                                <!-- JS Generated -->
+                            </div>
+                        </div>
+                        <div class="panel-footer-actions">
+                            <div class="flex gap-1">
+                                <button id="vp-prev" class="btn-secondary btn-xs px-2" title="이전">
+                                    <i data-lucide="chevron-left" class="w-3 h-3"></i>
+                                </button>
+                                <button id="vp-next" class="btn-secondary btn-xs px-2" title="다음">
+                                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. H/W & N/W Status -->
+                    <div class="overlay-panel">
+                        <div class="overlay-panel-header">
+                            <div class="overlay-panel-title-group">
+                                <i data-lucide="server" class="overlay-panel-icon"></i>
+                                <span class="overlay-panel-title">인프라 상태</span>
+                            </div>
+                            <button class="collapse-btn">
+                                <i data-lucide="chevron-up" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div class="overlay-panel-content">
+                            <div class="mon-network-container">
+                                <canvas id="mon-network-canvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Event Log -->
+                    <div class="overlay-panel">
+                        <div class="overlay-panel-header">
+                            <div class="overlay-panel-title-group">
+                                <i data-lucide="activity" class="overlay-panel-icon"></i>
+                                <span class="overlay-panel-title">이벤트 로그</span>
+                            </div>
+                            <button class="collapse-btn">
+                                <i data-lucide="chevron-up" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div class="overlay-panel-content custom-scrollbar mon-timeline-container">
+                            <div class="mon-timeline" id="event-log">
+                                <!-- JS Generated -->
+                            </div>
+                        </div>
+                        <div class="panel-footer-actions">
+                            <button class="btn-secondary btn-xs px-2" id="btn-more-log" title="이벤트 로그 상세보기">
+                                <span>더 보기</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="panel-column right-column">
+                    <!-- 4. Flight Operations -->
+                    <div class="overlay-panel">
+                        <div class="overlay-panel-header">
+                            <div class="overlay-panel-title-group">
+                                <i data-lucide="plane-takeoff" class="overlay-panel-icon"></i>
+                                <span class="overlay-panel-title">운항 현황</span>
+                            </div>
+                            <button class="collapse-btn">
+                                <i data-lucide="chevron-up" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div class="overlay-panel-content">
+                            <div class="mon-kpi-grid">
+                                <div class="mon-kpi-card">
+                                    <span class="mon-kpi-label">Total</span>
+                                    <span class="mon-kpi-value">17 / 33</span>
+                                </div>
+                                <div class="mon-kpi-card">
+                                    <span class="mon-kpi-label text-warning">Cancelled</span>
+                                    <span class="mon-kpi-value text-warning">3 / 33</span>
+                                </div>
+                                <div class="mon-kpi-card">
+                                    <span class="mon-kpi-label">Events</span>
+                                    <span class="mon-kpi-value">3</span>
+                                </div>
+                            </div>
+                            <div>
+                                <select id="vp-select" class="filter-select w-full mb-2">
+                                    <option>GMP VP</option>
+                                    <option>ICN VP</option>
+                                </select>
+                            </div>
+                            <div class="h-20 flex items-end justify-around px-2" id="ops-chart">
+                                <!-- JS Generated Stacked Bars -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Flight Plans -->
+                    <div class="overlay-panel">
+                        <div class="overlay-panel-header">
+                            <div class="overlay-panel-title-group">
+                                <i data-lucide="clipboard-list" class="overlay-panel-icon"></i>
+                                <span class="overlay-panel-title">운항 계획</span>
+                            </div>
+                            <button class="collapse-btn">
+                                <i data-lucide="chevron-up" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div class="overlay-panel-content custom-scrollbar max-h-40">
+                            <div class="mon-flight-list" id="flight-plans">
+                                <!-- JS Generated -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6. Layer -->
+                    <div class="overlay-panel">
+                        <div class="overlay-panel-header">
+                            <div class="overlay-panel-title-group">
+                                <i data-lucide="layers" class="overlay-panel-icon"></i>
+                                <span class="overlay-panel-title">레이어</span>
+                            </div>
+                            <button class="collapse-btn">
+                                <i data-lucide="chevron-up" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div class="overlay-panel-content">
+                            <div class="mon-layer-grid">
+                                <label class="mon-layer-item">
+                                    <input type="checkbox" checked class="custom-checkbox code-checkbox">
+                                    <span class="mon-layer-legend bg-blue-300 rounded-full"></span>
+                                    <span>공항</span>
+                                </label>
+                                <label class="mon-layer-item">
+                                    <input type="checkbox" checked class="custom-checkbox code-checkbox">
+                                    <span class="mon-layer-legend bg-slate-500"></span>
+                                    <span>활주로</span>
+                                </label>
+                                <label class="mon-layer-item">
+                                    <input type="checkbox" checked class="custom-checkbox code-checkbox">
+                                    <span class="mon-layer-legend bg-blue-400"></span>
+                                    <span>항공로</span>
+                                </label>
+                                <label class="mon-layer-item">
+                                    <input type="checkbox" class="custom-checkbox code-checkbox">
+                                    <span class="mon-layer-legend border border-blue-400"></span>
+                                    <span>SID</span>
+                                </label>
+                                <label class="mon-layer-item">
+                                    <input type="checkbox" class="custom-checkbox code-checkbox">
+                                    <span class="mon-layer-legend border border-green-400"></span>
+                                    <span>STAR</span>
+                                </label>
+                                <label class="mon-layer-item">
+                                    <input type="checkbox" class="custom-checkbox code-checkbox">
+                                    <span class="mon-layer-legend border border-orange-400"></span>
+                                    <span>ILS</span>
+                                </label>
+                                <label class="mon-layer-item">
+                                    <input type="checkbox" class="custom-checkbox code-checkbox">
+                                    <span class="mon-layer-legend border-2 border-blue-500"></span>
+                                    <span>관제섹터</span>
+                                </label>
+                                <label class="mon-layer-item">
+                                    <input type="checkbox" class="custom-checkbox code-checkbox">
+                                    <span class="mon-layer-legend border-2 border-purple-500"></span>
+                                    <span>관제권</span>
+                                </label>
+                                <label class="mon-layer-item">
+                                    <input type="checkbox" class="custom-checkbox code-checkbox">
+                                    <span class="mon-layer-legend border-2 border-red-500"></span>
+                                    <span>비행금지구역</span>
+                                </label>
+                                <label class="mon-layer-item">
+                                    <input type="checkbox" class="custom-checkbox code-checkbox">
+                                    <span class="mon-layer-legend border-2 border-orange-500"></span>
+                                    <span>비행제한구역</span>
+                                </label>
+                                <label class="mon-layer-item">
+                                    <input type="checkbox" class="custom-checkbox code-checkbox">
+                                    <span class="mon-layer-legend bg-blue-200"></span>
+                                    <span>강수예측</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Event Log Detail Modal -->
+    <div id="event-log-modal" class="modal-overlay">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-header">
+                <h3 class="modal-title-left">이벤트 로그</h3>
+                <i data-lucide="x" class="close-icon" onclick="closeEventLogModal()"></i>
+            </div>
+
+            <div class="modal-content">
+                <!-- Search Filter Area -->
+                <div class="search-panel mb-4">
+                    <div class="search-panel-header" onclick="toggleFilter()">
+                        <div class="search-panel-title-group">
+                            <i data-lucide="filter" class="status-card-icon text-success"></i>
+                            <span class="search-panel-title">검색 필터</span>
+                        </div>
+                        <i data-lucide="chevron-down" id="filter-chevron" class="filter-chevron"></i>
+                    </div>
+                    <div id="filter-content" class="search-panel-content hidden">
+                        <div class="filter-panel-inner">
+                            <div class="filter-grid">
+                                <div class="filter-grid-wide">
+                                    <label class="filter-label">발생일</label>
+                                    <div class="filter-date-range">
+                                        <input type="date" id="log-start-date" class="filter-input filter-input-flex"
+                                            onclick="try{this.showPicker()}catch(e){}">
+                                        <span class="filter-date-separator">~</span>
+                                        <input type="date" id="log-end-date" class="filter-input filter-input-flex"
+                                            onclick="try{this.showPicker()}catch(e){}">
+                                    </div>
+                                </div>
+                                <div class="filter-grid-wide">
+                                    <label class="filter-label">메시지</label>
+                                    <input type="text" placeholder="메시지 입력" class="filter-input">
+                                </div>
+                            </div>
+                            <div class="filter-actions mt-4">
+                                <button class="filter-btn-common filter-btn-reset">
+                                    <i data-lucide="rotate-ccw" class="trend-icon"></i> 초기화
+                                </button>
+                                <button class="filter-btn-common filter-btn-search">
+                                    <i data-lucide="search" class="trend-icon"></i> 조회
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table Area -->
+                <div class="table-main-wrapper">
+                    <div class="pane-header flex-none border-b-0">
+                        <div class="search-panel-title-group">
+                            <i data-lucide="list" class="status-card-icon text-success"></i>
+                            <span class="search-panel-title">이벤트 목록</span>
+                        </div>
+                        <div class="pane-header-right">
+                            <button class="btn-sm btn-secondary">
+                                <i data-lucide="download" class="trend-icon"></i> 다운로드
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-scroll-area custom-scrollbar max-h-[400px]">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">발생 일시</th>
+                                    <th class="text-center">코드</th>
+                                    <th>메시지</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modal-event-tbody">
+                                <!-- JS Generated -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Table Footer / Pagination (SAM_LG_01_01 style) -->
+                    <div class="table-footer flex-none">
+                        <span class="pagination-info" id="modal-log-total">총 0 건</span>
+                        <div class="pagination-controls">
+                            <button class="page-btn active">1</button>
+                            <button class="page-btn">2</button>
+                            <button class="page-btn">3</button>
+                            <button class="page-btn"><i data-lucide="chevron-right"
+                                    class="pagination-icon"></i></button>
+                            <select class="pagination-select pagination-select-margin">
+                                <option>20개씩 보기</option>
+                                <option>50개씩 보기</option>
+                                <option>100개씩 보기</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal Bottom Button -->
+            <div class="modal-btn-group">
+                <button onclick="closeEventLogModal()" class="btn-md btn-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Switcher Modal -->
+    <div data-include="../components/system-switcher.html"></div>
+
+    <script src="../js/include.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/IVM_MT_01_01.js"></script>
+
+    <!-- Monitoring Detail Modal -->
+    <div id="monitoring-detail-modal" class="modal-overlay">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-header">
+                <h3 class="modal-title-left" id="monitoring-modal-title">상세 모니터링</h3>
+                <i data-lucide="x" class="close-icon" onclick="closeMonitoringModal()"></i>
+            </div>
+            <div class="modal-content" id="modal-view-server">
+                <div class="flex flex-col">
+                    <div class="modal-summary-panel-2col">
+                        <div class="summary-item">
+                            <h4 class="modal-section-title mb-0">이름</h4>
+                            <div class="data-value font-bold" id="server-modal-name">Server Name</div>
+                        </div>
+                        <div class="summary-item">
+                            <h4 class="modal-section-title mb-0">상태</h4>
+                            <div class="flex items-center">
+                                <span class="badge badge-success" id="server-modal-status">정상</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-sm">
+                        <div class="section-header">
+                            <h4 class="modal-section-title">CPU 이용률</h4>
+                            <span class="text-value-sub">100%</span>
+                        </div>
+                        <div class="monitoring-chart-container">
+                            <canvas id="chart-cpu" class="w-full h-full block"></canvas>
+                            <div class="chart-grid-overlay"></div>
+                        </div>
+                        <div class="monitoring-chart-footer">
+                            <span>60초</span>
+                            <span id="val-cpu-current">1</span>
+                        </div>
+                    </div>
+                    <div class="mb-sm">
+                        <div class="section-header">
+                            <h4 class="modal-section-title">메모리 사용량</h4>
+                            <span class="text-value-sub">64GB</span>
+                        </div>
+                        <div class="monitoring-chart-container">
+                            <canvas id="chart-mem" class="w-full h-full block"></canvas>
+                            <div class="chart-grid-overlay"></div>
+                        </div>
+                        <div class="monitoring-chart-footer">
+                            <span>60초</span>
+                            <span id="val-mem-current">0</span>
+                        </div>
+                    </div>
+                    <div class="section-header">
+                        <h4 class="modal-section-title">디스크 IO</h4>
+                        <span class="text-value-sub">100%</span>
+                    </div>
+                    <div class="monitoring-chart-container">
+                        <canvas id="chart-disk" class="w-full h-full block"></canvas>
+                        <div class="chart-grid-overlay"></div>
+                    </div>
+                    <div class="monitoring-chart-footer">
+                        <span>60초</span>
+                        <span id="val-disk-current">0</span>
+                    </div>
+                    <div class="disk-usage-container mb-sm">
+                        <div class="disk-usage-header">
+                            <span class="disk-usage-label">디스크 사용량</span>
+                            <span class="disk-usage-value" id="disk-usage-text">0.00 TB / 0.00 TB</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div id="disk-usage-bar" class="progress-bar-fill"></div>
+                        </div>
+                    </div>
+                    <div class="mb-sm">
+                        <div class="section-header">
+                            <h4 class="modal-section-title">네트워크</h4>
+                            <div class="flex items-center gap-sm text-xs">
+                                <div class="flex items-center gap-xs">
+                                    <span class="dot-success"></span>
+                                    <span class="text-slate">수신</span>
+                                </div>
+                                <div class="flex items-center gap-xs">
+                                    <span class="dot-info"></span>
+                                    <span class="text-slate">송신</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="monitoring-chart-container">
+                            <canvas id="chart-net" class="w-full h-full block"></canvas>
+                            <div class="chart-grid-overlay"></div>
+                        </div>
+                        <div class="monitoring-chart-footer">
+                            <span>60초</span>
+                            <span id="val-net-current">수신: 0.0 Mbps / 송신: 0.0 Mbps</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-btn-group">
+                <button onclick="closeMonitoringModal()" class="btn-md btn-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vertiport Status Modal -->
+    <div id="vp-status-modal" class="modal-overlay">
+        <div class="modal-dialog modal-big">
+            <div class="modal-header">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="building-2" class="overlay-panel-icon"></i>
+                    <h3 class="modal-title-left" id="vp-modal-title">버티포트 현황</h3>
+                </div>
+                <i data-lucide="x" class="close-icon" onclick="closeVpModal()"></i>
+            </div>
+            <div class="modal-content">
+
+                <!-- KPI + Diagram 2-column layout -->
+                <div class="vp-top-layout">
+                    <div class="vp-kpi-col">
+                        <div>
+                            <h4 class="modal-section-title">운영 현황</h4>
+                        </div>
+                        <div class="vp-kpi-grid">
+                            <div class="vp-kpi-card"><span class="vp-kpi-label">가용 스탠드</span><span
+                                    class="vp-kpi-value text-success">2 / 3</span></div>
+                            <div class="vp-kpi-card"><span class="vp-kpi-label">가용 FATO</span><span
+                                    class="vp-kpi-value text-success">1 / 2</span></div>
+                            <div class="vp-kpi-card"><span class="vp-kpi-label">혼잡도</span><span class="vp-kpi-value"
+                                    id="vp-modal-crowd">낮음</span></div>
+                            <div class="vp-kpi-card"><span class="vp-kpi-label">운항 중</span><span
+                                    class="vp-kpi-value">5</span></div>
+                            <div class="vp-kpi-card"><span class="vp-kpi-label">충전 중</span><span class="vp-kpi-value">4
+                                    / 6</span></div>
+                            <div class="vp-kpi-card"><span class="vp-kpi-label">대기</span><span
+                                    class="vp-kpi-value">2</span></div>
+                            <div class="vp-kpi-card"><span class="vp-kpi-label">평균 지연</span><span
+                                    class="vp-kpi-value text-warning">+5분</span></div>
+                            <div class="vp-kpi-card"><span class="vp-kpi-label">기상</span><span
+                                    class="vp-kpi-value text-success">VFR</span></div>
+                            <div class="vp-kpi-card"><span class="vp-kpi-label">풍속</span><span class="vp-kpi-value">5kt
+                                    NE</span></div>
+                        </div>
+                        <!-- Facility List -->
+                        <div>
+                            <h4 class="modal-section-title">시설 현황</h4>
+                        </div>
+                        <div class="vp-chip-row">
+                            <span class="vp-chip"><i data-lucide="wifi" class="w-3 h-3"></i> 네트워크</span>
+                            <span class="vp-chip"><i data-lucide="battery-charging" class="w-3 h-3"></i> 충전기</span>
+                            <span class="vp-chip"><i data-lucide="shield-check" class="w-3 h-3"></i> 보안</span>
+                            <span class="vp-chip"><i data-lucide="wrench" class="w-3 h-3"></i> 정비</span>
+                        </div>
+                    </div>
+                    <div class="vp-diagram-col">
+                        <div>
+                            <h4 class="modal-section-title">배치도</h4>
+                        </div>
+                        <div class="vp-diagram-panel">
+                            <img id="vp-diagram-img" src="../images/vp_default.png" alt="버티포트 구성도" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline -->
+                <div class="section-header">
+                    <h4 class="modal-section-title">타임라인</h4>
+                    <div class="flex items-center gap-2">
+                        <button class="icon-btn-xs" id="vp-tl-minus" title="축소"><i data-lucide="minus"
+                                class="w-3 h-3"></i></button>
+                        <button class="icon-btn-xs" id="vp-tl-plus" title="확대"><i data-lucide="plus"
+                                class="w-3 h-3"></i></button>
+                        <button class="icon-btn-xs" id="vp-tl-now" title="현재"><i data-lucide="clock"
+                                class="w-3 h-3"></i></button>
+                    </div>
+                </div>
+                <div class="vp-tl-wrap">
+                    <div class="vp-tl-labels">
+                        <span id="vp-lab-dep">출발</span>
+                        <span id="vp-lab-arr">도착</span>
+                    </div>
+                    <div class="canvas-wrap" style="position:relative;">
+                        <canvas id="vp-timeline"></canvas>
+                        <div class="vp-tl-now-marker" id="vp-tl-now-marker"></div>
+                        <div class="vp-tl-tip" id="vp-tl-tip"></div>
+                        <div class="tl-help" style="position:absolute;right:6px;bottom:6px;font-size:10px;opacity:0.5;">
+                            휠: 확대/축소 · 드래그: 이동</div>
+                    </div>
+                </div>
+
+                <!-- Operations Table -->
+                <div>
+                    <h4 class="modal-section-title">운항 계획</h4>
+                </div>
+                <div class="table-main-wrapper">
+                    <div class="custom-scrollbar" style="max-height: 200px; overflow-y: auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Call Sign</th>
+                                    <th>ADES</th>
+                                    <th>A/C</th>
+                                    <th>PP</th>
+                                    <th>EOBT</th>
+                                    <th>TOBT</th>
+                                    <th>TSAT</th>
+                                    <th>Delay</th>
+                                    <th>AOBT</th>
+                                    <th>FATO</th>
+                                    <th>CTOT</th>
+                                    <th>TTOT</th>
+                                    <th>ATOT</th>
+                                    <th>SID</th>
+                                    <th>SOBT</th>
+                                    <th>WTC</th>
+                                    <th>State</th>
+                                    <th>ASRT</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vp-ops-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-btn-group">
+                <button onclick="closeVpModal()" class="btn-md btn-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

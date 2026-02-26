@@ -1,0 +1,690 @@
+/* ================================
+   Monitoring Dashboard (Map-Based)
+   ================================ */
+
+.monitoring-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #050810;
+}
+
+#monitoring-map {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.overlay-panel-header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.overlay-panel-header:hover {
+    background: rgba(30, 41, 59, 0.3);
+}
+
+.overlay-panel-title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    pointer-events: none;
+}
+
+.overlay-panel-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.025em;
+    white-space: nowrap;
+}
+
+.overlay-panel-icon {
+    width: 1rem;
+    height: 1rem;
+    color: var(--accent-teal);
+}
+
+.collapse-btn {
+    padding: 0.25rem;
+    color: var(--text-secondary);
+    transition: transform 0.3s;
+}
+
+.overlay-panel.collapsed .overlay-panel-content,
+.overlay-panel.collapsed .panel-footer-actions {
+    display: none;
+}
+
+.overlay-panel.collapsed .collapse-btn {
+    transform: rotate(-180deg);
+}
+
+.overlay-panel-content {
+    padding: 0.75rem;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Panel Columns */
+.panel-column {
+    position: absolute;
+    top: 1.25rem;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    /* Space between panels */
+    pointer-events: none;
+}
+
+.left-column {
+    left: 1.25rem;
+}
+
+.right-column {
+    right: 1.25rem;
+}
+
+.overlay-panel {
+    position: relative;
+    z-index: 10;
+    background: rgba(15, 23, 42, 0.2);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto;
+    width: 22rem;
+    min-width: 22rem;
+    border-radius: 0;
+}
+
+/* Panel Footer Actions (Fixed row at bottom) */
+.panel-footer-actions {
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid rgba(30, 41, 59, 0.3);
+    background: rgba(15, 23, 42, 0.1);
+}
+
+/* Specific component overrides if any */
+.mon-timeline-container {
+    max-height: 15rem;
+}
+
+.mon-status-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.mon-status-item {
+    background: rgba(30, 41, 59, 0.15);
+    border: 1px solid rgba(51, 65, 85, 0.2);
+    padding: 0.5rem 0 0.5rem 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-radius: 0;
+}
+
+.mon-status-item:hover {
+    background: rgba(30, 41, 59, 0.5);
+    border-color: var(--accent-teal);
+}
+
+.mon-status-item.active {
+    background: rgba(20, 184, 166, 0.15);
+    border-left: 2px solid var(--accent-teal);
+}
+
+.modal-summary-panel-2col {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.mon-status-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.mon-status-name {
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.mon-status-icons {
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0.6;
+}
+
+.mon-status-indicators {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.mon-status-indicator {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* Status row grid layout: [Label | Dot | Value] */
+.mon-stat-row {
+    display: grid;
+    grid-template-columns: 45px 14px 45px;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.mon-stat-label {
+    font-size: 0.625rem;
+    opacity: 0.6;
+    text-align: left;
+}
+
+.mon-stat-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    justify-self: center;
+}
+
+.mon-stat-value {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: left;
+}
+
+/* Flight Ops KPI */
+.mon-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.mon-kpi-card {
+    background: rgba(15, 23, 42, 0.2);
+    border: 1px solid rgba(30, 41, 59, 0.5);
+    padding: 0.5rem;
+    text-align: center;
+    border-radius: 0;
+}
+
+.mon-kpi-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.mon-kpi-value {
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+/* Network Canvas Area */
+.mon-network-container {
+    height: 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#mon-network-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+/* Event Log Timeline */
+.mon-timeline {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.mon-timeline::before {
+    content: '';
+    position: absolute;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    left: 5.25rem;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 1;
+}
+
+
+.mon-timeline-item {
+    display: flex;
+    gap: 1rem;
+}
+
+.mon-timeline-time {
+    font-size: 0.625rem;
+    color: var(--text-secondary);
+    width: 4rem;
+    flex-shrink: 0;
+    text-align: right;
+    padding-top: 0.25rem;
+}
+
+.mon-timeline-marker {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--accent-teal);
+    position: relative;
+    flex-shrink: 0;
+    margin-top: 0.4rem;
+    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+    z-index: 2;
+}
+
+.mon-timeline-item:last-child .mon-timeline-marker::after {
+    display: none;
+}
+
+.mon-timeline-content {
+    background: rgba(10, 15, 28, 0.2);
+    border: 1px solid rgba(51, 65, 85, 0.2);
+    padding: 0.2rem 0.75rem;
+    flex: 1;
+    border-radius: 0;
+}
+
+.mon-timeline-code {
+    font-size: 0.625rem;
+    font-weight: 800;
+    color: var(--accent-teal);
+    margin-bottom: 0.125rem;
+    display: block;
+}
+
+.mon-timeline-text {
+    font-size: 0.75rem;
+}
+
+/* Flight Plan Item */
+.mon-flight-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.mon-flight-item {
+    background: rgba(30, 41, 59, 0.15);
+    border: 1px solid rgba(51, 65, 85, 0.2);
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.mon-flight-item:hover {
+    background: rgba(30, 41, 59, 0.5);
+    border-color: var(--accent-teal);
+}
+
+.mon-flight-item.active {
+    background: rgba(20, 184, 166, 0.15);
+    border-left: 2px solid var(--accent-teal);
+}
+
+.mon-flight-id {
+    font-weight: 600;
+    font-size: 0.8125rem;
+}
+
+.mon-flight-details {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.6875rem;
+    color: var(--text-secondary);
+}
+
+/* Layer Control */
+.mon-layer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.mon-layer-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.75rem;
+    gap: 0.25rem;
+}
+
+.mon-layer-legend {
+    width: 0.75rem;
+    height: 0.75rem;
+    flex-shrink: 0;
+    border-radius: 0;
+}
+
+/* ================================
+   Leaflet Popup Customization
+   ================================ */
+.leaflet-popup-content-wrapper {
+    background: rgba(10, 15, 28, 0.9) !important;
+    color: var(--text-primary) !important;
+    border-radius: 0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 0 !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4) !important;
+}
+
+.leaflet-popup-content {
+    margin: 0.75rem !important;
+    line-height: 1.4 !important;
+    font-family: inherit !important;
+}
+
+.leaflet-popup-tip {
+    background: rgba(10, 15, 28, 0.9) !important;
+    box-shadow: none !important;
+}
+
+.leaflet-popup-close-button {
+    color: var(--text-secondary) !important;
+    padding: 0.25rem !important;
+}
+
+.leaflet-popup-close-button:hover {
+    color: #fff !important;
+    background: transparent !important;
+}
+
+/* ================================
+   Animated Drone Marker
+   ================================ */
+.drone-marker-container {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.drone-body {
+    position: relative;
+    width: 12px;
+    height: 18px;
+    background: var(--accent-teal);
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(20, 184, 166, 0.5);
+    z-index: 2;
+}
+
+/* Drone "Head" for directionality */
+.drone-body::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 4px;
+    width: 4px;
+    height: 4px;
+    background: #fff;
+    border-radius: 1px;
+}
+
+.drone-arm {
+    position: absolute;
+    width: 28px;
+    height: 2px;
+    background: rgba(20, 184, 166, 0.6);
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+}
+
+.drone-arm.ccw {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.drone-arm.cw {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.propeller {
+    position: absolute;
+    width: 10px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 1px;
+    animation: spin 0.2s linear infinite;
+}
+
+.drone-arm.ccw .prop-tl {
+    top: -1px;
+    left: -4px;
+}
+
+.drone-arm.ccw .prop-br {
+    top: -1px;
+    right: -4px;
+}
+
+.drone-arm.cw .prop-tr {
+    top: -1px;
+    left: -4px;
+    animation-direction: reverse;
+}
+
+.drone-arm.cw .prop-bl {
+    top: -1px;
+    right: -4px;
+    animation-direction: reverse;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.leaflet-marker-icon.drone-marker {
+    background: none !important;
+    border: none !important;
+}
+
+/* === Vertiport Status Modal === */
+.vp-top-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.vp-kpi-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.vp-diagram-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.vp-diagram-panel {
+    flex: 1;
+    border: 1px solid rgba(51, 65, 85, 0.4);
+    background: rgba(15, 23, 42, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    max-height: 300px;
+}
+
+.vp-diagram-panel img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.vp-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+}
+
+.vp-kpi-card {
+    background: rgba(15, 23, 42, 0.3);
+    border: 1px solid rgba(30, 41, 59, 0.5);
+    border-radius: 0;
+    padding: 0.625rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.vp-kpi-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+}
+
+.vp-kpi-value {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Badge inside a KPI card should not stretch full width */
+.vp-kpi-card .badge {
+    align-self: flex-start;
+}
+
+/* Section spacing for grouping */
+.vp-kpi-grid {
+    margin-bottom: 1.25rem;
+}
+
+.vp-chip-row {
+    margin-bottom: 1.25rem;
+}
+
+.vp-tl-wrap {
+    margin-bottom: 1.25rem;
+}
+
+.vp-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.vp-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border: 1px solid rgba(51, 65, 85, 0.5);
+    background: rgba(15, 23, 42, 0.3);
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+    color: var(--text-primary);
+}
+
+.vp-chip-success {
+    background: rgba(20, 184, 166, 0.1);
+    border-color: rgba(20, 184, 166, 0.4);
+    color: var(--success);
+}
+
+.vp-chip-warning {
+    background: rgba(249, 115, 22, 0.1);
+    border-color: rgba(249, 115, 22, 0.4);
+    color: var(--warning);
+}
+
+/* === Vertiport Timeline === */
+.icon-btn-xs {
+    width: 22px;
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(51, 65, 85, 0.5);
+    background: rgba(15, 23, 42, 0.3);
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.icon-btn-xs:hover {
+    border-color: var(--success);
+    color: var(--success);
+}
+
+.vp-tl-wrap {
+    position: relative;
+    border: 1px solid rgba(51, 65, 85, 0.3);
+    background: rgba(15, 23, 42, 0.2);
+    overflow: hidden;
+}
+
+.vp-tl-labels {
+    position: absolute;
+    left: 6px;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.vp-tl-now-marker {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(249, 115, 22, 0.9);
+    pointer-events: none;
+    z-index: 3;
+    transform: translateX(0);
+    will-change: transform;
+}
+
+.vp-tl-tip {
+    position: absolute;
+    display: none;
+    pointer-events: none;
+    background: rgba(10, 20, 35, 0.9);
+    color: var(--text-primary);
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border: 1px solid rgba(20, 184, 166, 0.4);
+    white-space: nowrap;
+    z-index: 10;
+}
+
+#vp-timeline {
+    display: block;
+    width: 100%;
+}

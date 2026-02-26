@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IVMS - 공지사항</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="dashboard-body app-screen-height" data-system-acronym="IVMS" data-page-title="공지사항">
+    <!-- Header (Fixed Top) -->
+    <div data-include="../components/header.html"></div>
+
+    <!-- Main Flex Container (Sidebar + Content) -->
+    <div class="dashboard-main-flex">
+
+        <!-- Sidebar -->
+        <div data-include="../components/sidebar.html"></div>
+
+        <!-- Main Content (Pushed by Sidebar) -->
+        <main class="dashboard-main" id="main-content">
+
+            <!-- Content Scroll Area -->
+            <div class="dashboard-content dashboard-content-full custom-scrollbar">
+                <div class="dashboard-container dashboard-container-full">
+
+                    <!-- Split Pane Container -->
+                    <div class="split-container">
+
+                        <!-- Left Pane: Notice List -->
+                        <div class="split-pane-left">
+                            <div class="pane-header">
+                                <div class="search-panel-title-group">
+                                    <i data-lucide="megaphone" class="status-card-icon text-success"></i>
+                                    <span class="search-panel-title">공지사항 목록</span>
+                                </div>
+                            </div>
+
+
+                            <div class="pane-content custom-scrollbar flex-1 flex flex-col">
+                                <!-- Search Filter -->
+                                <div class="search-panel flex-none mb-4">
+                                    <div class="search-panel-header" onclick="toggleNoticeFilter()">
+                                        <div class="search-panel-title-group">
+                                            <i data-lucide="filter" class="status-card-icon text-success"></i>
+                                            <span class="search-panel-title">검색 필터</span>
+                                        </div>
+                                        <i data-lucide="chevron-down" id="notice-filter-chevron"
+                                            class="filter-chevron"></i>
+                                    </div>
+
+                                    <div id="notice-filter-content" class="search-panel-content hidden">
+                                        <div class="filter-panel-inner">
+                                            <div class="filter-grid">
+                                                <div class="filter-grid-wide">
+                                                    <label class="filter-label">키워드</label>
+                                                    <div class="filter-date-range">
+                                                        <select id="filter-type" class="filter-select">
+                                                            <option value="all">전체</option>
+                                                            <option value="title">제목</option>
+                                                            <option value="content">내용</option>
+                                                        </select>
+                                                        <input type="text" id="filter-keyword" class="filter-input"
+                                                            placeholder="검색어 입력"
+                                                            onkeyup="if(event.key === 'Enter') applyNoticeFilter()">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="filter-actions">
+                                            <button class="filter-btn-common filter-btn-reset"
+                                                onclick="resetNoticeFilter()">
+                                                <i data-lucide="rotate-ccw" class="trend-icon"></i> 초기화
+                                            </button>
+                                            <button class="filter-btn-common filter-btn-search"
+                                                onclick="applyNoticeFilter()">
+                                                <i data-lucide="search" class="trend-icon"></i> 조회
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="table-container flex-1">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>제목</th>
+                                                <th class="text-center">등록일</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="notice-list-body">
+                                            <!-- JS Rendered -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Pagination Footer -->
+                            <div class="table-footer">
+                                <span class="pagination-info" id="total-count">총 0 건</span>
+                                <div class="pagination-controls">
+                                    <button class="page-btn active">1</button>
+                                    <button class="page-btn">2</button>
+                                    <button class="page-btn">3</button>
+                                    <button class="page-btn pc-only">4</button>
+                                    <button class="page-btn pc-only">5</button>
+                                    <button class="page-btn"><i data-lucide="chevron-right"
+                                            class="pagination-icon"></i></button>
+                                    <select class="pagination-select pagination-select-margin">
+                                        <option>20개씩 보기</option>
+                                        <option>50개씩 보기</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Pane: Notice Detail -->
+                        <div class="split-pane-right" id="detail-pane">
+                            <!-- Empty State -->
+                            <div id="empty-state" class="empty-state">
+                                <i data-lucide="file-text" class="empty-state-icon"></i>
+                                <p class="empty-state-text">좌측 목록에서 공지사항을 선택해 주세요.</p>
+                            </div>
+
+                            <!-- Detail Content (Hidden initially) -->
+                            <div id="detail-content" class="hidden h-full flex flex-col">
+                                <div class="pane-header">
+                                    <!-- Right Pane Header Group -->
+                                    <div id="right-pane-header">
+                                        <div class="search-panel-title-group">
+                                            <i data-lucide="file-check" class="status-card-icon text-success"></i>
+                                            <span id="right-pane-title" class="search-panel-title">공지사항 정보</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Buttons Group -->
+                                    <div class="pane-header-right">
+                                        <!-- View Mode Buttons -->
+                                        <div id="view-mode-buttons" class="action-btn-group">
+                                            <button class="btn-sm btn-secondary mobile-list-btn"
+                                                onclick="closeDetailPane()">
+                                                <i data-lucide="list" class="trend-icon"></i> 목록
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Form Content -->
+                                <div class="pane-content custom-scrollbar flex-1">
+                                    <div id="notice-form" class="registration-form-panel">
+                                        <div class="grid grid-cols-1 gap-4">
+                                            <!-- Title -->
+                                            <div>
+                                                <label class="form-label">제목</label>
+                                                <input type="text" id="notice-title" class="form-input" disabled>
+                                            </div>
+
+                                            <!-- Content -->
+                                            <div>
+                                                <label class="form-label">내용</label>
+                                                <div id="notice-content-view" class="data-value min-h-[150px]">
+                                                </div>
+                                            </div>
+
+                                            <!-- Attachments -->
+                                            <div id="notice-attachments-section">
+                                                <label class="form-label">첨부파일</label>
+                                                <!-- File List -->
+                                                <div id="file-list" class="file-list-container space-y-2">
+                                                    <!-- JS Generated -->
+                                                </div>
+                                            </div>
+
+                                            <!-- Dates (View Only) -->
+                                            <div id="notice-dates-section" class="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <label class="form-label">등록 일시</label>
+                                                    <input type="text" id="notice-reg-date" class="form-input" disabled>
+                                                </div>
+                                                <div>
+                                                    <label class="form-label">수정 일시</label>
+                                                    <input type="text" id="notice-mod-date" class="form-input" disabled>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div> <!-- End of split-container -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- System Switcher Modal -->
+    <div data-include="../components/system-switcher.html"></div>
+
+    <script src="../js/include.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/IVM_CS_01_01.js"></script>
+</body>
+
+</html>

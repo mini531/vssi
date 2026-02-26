@@ -20,8 +20,7 @@ const screenData = {
         { category: "메인 메뉴", menu1: "모니터링", menu2: "-", id: "IVM_MT_04_01", name: "이벤트 로그 목록", type: "모달", date: "2026년", remarks: "" },
         { category: "메인 메뉴", menu1: "모니터링", menu2: "-", id: "IVM_MT_05_01", name: "운항 통계", type: "모달", date: "2026년", remarks: "" },
         { category: "메인 메뉴", menu1: "모니터링", menu2: "-", id: "IVM_MT_06_01", name: "비행계획서 모니터링", type: "모달", date: "2026년", remarks: "" },
-        { category: "공지사항", menu1: "공지사항", menu2: "-", id: "IVM_CS_06_01", name: "공지사항 목록", type: "일반", date: "2026년", remarks: "" },
-        { category: "공지사항", menu1: "공지사항", menu2: "-", id: "IVM_CS_06_02", name: "공지사항 열람", type: "일반", date: "2026년", remarks: "" },
+        { category: "공지사항", menu1: "공지사항", menu2: "-", id: "IVM_CS_01_01", name: "공지사항", type: "일반", date: "2026년", remarks: "" },
     ],
     "IFPS": [
         { category: "비행 계획", menu1: "계획 수립", menu2: "-", id: "FP_01_01", name: "비행 계획서 작성", type: "일반", date: "2026년", remarks: "" },

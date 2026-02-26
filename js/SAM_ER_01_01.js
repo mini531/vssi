@@ -183,7 +183,9 @@ window.initRegistrationMode = function () {
     document.getElementById('reg-content').classList.remove('hidden');
 
     // Set current datetime
-    document.getElementById('reg-fault-system').value = 'SAMS';
+    // Set current system as default
+    const currentSystem = localStorage.getItem('vssi-system-acronym') || 'SAMS';
+    document.getElementById('reg-fault-system').value = currentSystem;
     document.getElementById('reg-fault-desc').value = '';
 
     clearAllFaultErrors();

@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>H/W & N/W Status</title>
+
+<!-- 기본 톤: 기존 페이지와 유사한 반투명 다크 -->
+<style>
+/* Shell */
+:root { 
+  --bg:#0a0c0e;
+  --bg2:#12141a;
+  --card:#1a1f26;
+  --line:#2a2f36;
+  --card-bg:rgba(8,18,29,.15); 
+  --card-bd:rgba(173,197,255,.1); 
+  --text:#e6f0ff; 
+  --muted:#9db5d1; 
+  --muted2:#bcd1ea; 
+  --ok:#42e8ff; 
+  --warn:#ffd055; 
+}
+
+* { box-sizing:border-box; }
+body { margin:0; font-family:ui-sans-serif,system-ui,Segoe UI,Apple SD Gothic Neo,Malgun Gothic,sans-serif; background:var(--bg); color:var(--text); }
+.wrap { max-width:1200px; margin:24px auto; padding:0 16px; }
+
+/* Header */
+.hdr { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:14px; }
+.title { font-size:18px; font-weight:800; letter-spacing:.2px; }
+.breadcrumb { font-size:12px; color:var(--muted2); display:none;}
+
+/* Grid */
+.hwdb { display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); grid-auto-rows:minmax(86px,auto); gap:10px; }
+.card { background:var(--card-bg); border:1px solid var(--card-bd); border-radius:0; padding:10px; display:flex; flex-direction:column; justify-content:space-between; }
+.title-sm { font-size:12px; color:var(--muted); font-weight:700; letter-spacing:.2px; }
+.big { font-size:24px; color:var(--text); font-weight:800; }
+.sub { font-size:12px; color:var(--muted2); }
+.kpis { display:flex; gap:14px; align-items:flex-end; }
+.kpi { display:flex; flex-direction:column; gap:2px; }
+.k { font-size:11px; color:var(--muted); }
+.v { font-size:16px; font-weight:800; color:var(--text); }
+
+/* Chips */
+.chips { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.chip { display:inline-flex; align-items:center; gap:6px; padding:3px 8px; border-radius:0; font-size:11px; color:#0b1930; }
+.ok { background:var(--ok); }
+.warn { background:var(--warn); }
+
+/* Canvas */
+canvas { width:100%; height:140px; display:block; border-radius:0; }
+
+/* Footer */
+.ftr { margin-top:12px; text-align:right; color:var(--muted2); font-size:12px; }
+
+/* Responsive */
+@media (max-width:980px) { .hwdb { grid-template-columns:repeat(6,minmax(0,1fr)); } }
+
+/* Dashboard page scrollbar */
+html{color-scheme:dark}
+:root{scrollbar-width:thin;scrollbar-color:#3a3f47 #1a1f26}
+*::-webkit-scrollbar{width:6px;height:6px}
+*::-webkit-scrollbar-track{background:#1a1f26;border-radius:0}
+*::-webkit-scrollbar-thumb{background:#3a3f47;border-radius:0;border:none}
+*::-webkit-scrollbar-thumb:hover{background:#4a5058}
+
+.card.state-bad { background:rgba(255,208,85,.12); border-color:rgba(255,208,85,.35); }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <div class="title" id="pageTitle">Hardware</div>
+    <div class="breadcrumb" id="crumb">VSSI · Status</div>
+  </div>
+
+  <div class="hwdb" id="grid">
+    <!-- 1행 -->
+    <div class="card" style="grid-column:span 3;"><div class="title-sm">네임노드 RPC</div><div class="big" id="rpc">—</div></div>
+    <div class="card" style="grid-column:span 3;"><div class="title-sm">네임노드 CPU Wait</div><div class="big" id="cpuw">—</div></div>
+    <div class="card" style="grid-column:span 3;"><div class="title-sm">네임노드 Heap</div><div class="big" id="heap">—</div></div>
+    <div class="card" style="grid-column:span 3;"><div class="title-sm">네임노드 가동시간</div><div class="big" id="uptime">—</div></div>
+
+    <!-- 2행 -->
+    <div class="card" style="grid-column:span 6;"><div class="title-sm">데이터 전체 건수</div><div class="kpis"><div class="big" id="rows">—</div><div class="sub">처리중</div></div></div>
+    <div class="card" style="grid-column:span 6;"><div class="title-sm">이벤트 처리 수</div><div class="kpis"><div class="big" id="events">—</div><div class="sub" id="evSize">—</div></div></div>
+
+    <!-- 3행 -->
+    <div class="card" style="grid-column:span 3;"><div class="title-sm">HDFS 디스크 사용률</div><div class="big" id="hdfs">—</div></div>
+    <div class="card" style="grid-column:span 3;"><div class="title-sm">HBase 평균 응답</div><div class="big" id="hblat">—</div></div>
+    <div class="card" style="grid-column:span 3;"><div class="title-sm">HBase 마스터 Heap</div><div class="big" id="hbheap">—</div></div>
+    <div class="card" style="grid-column:span 3;"><div class="title-sm">HBase 마스터 가동시간</div><div class="big" id="hbup">—</div></div>
+
+    <!-- 4행: 차트 -->
+    <div class="card" style="grid-column:span 6;"><div class="title-sm">클러스터 현황</div><canvas id="cCluster"></canvas><div class="sub">1-min_avg · CPUs_avg · Nodes_avg · Procs_avg</div></div>
+    <div class="card" style="grid-column:span 6;"><div class="title-sm">CPU 사용률</div><canvas id="cCpu"></canvas><div class="sub">idle_avg · nice_avg · system_avg · user_avg</div></div>
+
+    <!-- 5행: 차트 -->
+    <div class="card" style="grid-column:span 6;"><div class="title-sm">메모리 사용률</div><canvas id="cMem"></canvas><div class="sub">buffer_avg · cache_avg · share_avg · swap_avg · total_avg · use_avg</div></div>
+    <div class="card" style="grid-column:span 6;"><div class="title-sm">네트워크 사용률</div><canvas id="cNet"></canvas><div class="sub">in_avg · out_avg</div></div>
+
+    <!-- 6행: 상태/메타 -->
+    <div class="card" style="grid-column:span 12;">
+      <div class="title-sm">상태</div>
+      <div class="kpis">
+        <div class="chips">
+          <span class="chip ok" id="chipStat">OK</span>
+        </div>
+        <div class="kpi"><div class="k">IP</div><div class="v" id="ip">—</div></div>
+        <div class="kpi"><div class="k">Ping</div><div class="v" id="ping">—</div></div>
+        <div class="kpi"><div class="k">Packet Loss</div><div class="v" id="loss">—</div></div>
+        <div class="kpi"><div class="k">CPU</div><div class="v" id="cpu">—</div></div>
+        <div class="kpi"><div class="k">MEM</div><div class="v" id="mem">—</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ===== 유틸 ===== */
+const $=s=>document.querySelector(s);
+const fmtInt=n=>Number(n).toLocaleString();
+const fmtBytes=gb=>`${Number(gb).toFixed(2)} GB`;
+const clamp=(v,min,max)=>Math.min(Math.max(v,min),max);
+const randn=()=>{const u=Math.random()||1e-9,v=Math.random()||1e-9;return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}; // N(0,1)
+const shiftPush=(arr,v,len)=>{ if(arr.length>=len) arr.shift(); arr.push(v); };
+
+/* ===== 초기 합성 데이터 ===== */
+function synthMetrics(seed=1){
+  const rnd=(a,b)=>{const x=Math.sin(seed++)*10000;return a+(x-Math.floor(x))*(b-a)}
+  const series=(n,fn)=>Array.from({length:n},(_,i)=>Number(fn(i)));
+  return {
+    rpc:Math.round(rnd(1200,2600)),
+    cpuWait:Math.round(rnd(0,4)),
+    heap:Math.round(rnd(36,72)),
+    uptimeDays:Math.round(rnd(120,540)),
+    rows:1088549811,
+    events:98388660,
+    eventSizeGB:56.18,
+    hdfsUse:Math.round(rnd(41,68)),
+    hbaseLatency:rnd(3.4,7.2).toFixed(1),
+    hbaseHeap:Math.round(rnd(12,22)),
+    hbaseUptime:Math.round(rnd(200,600)),
+    cluster:{c1:series(90,_=>rnd(10,35)),c2:series(90,_=>rnd(4,12)),c3:series(90,_=>rnd(2,9))},
+    cpu:{idle:series(90,_=>rnd(40,80)),nice:series(90,_=>rnd(0,5)),sys:series(90,_=>rnd(5,18)),user:series(90,_=>rnd(5,35))},
+    mem:{buff:series(90,_=>rnd(8,24)),cache:series(90,_=>rnd(18,46)),share:series(90,_=>rnd(1,6)),swap:series(90,_=>rnd(0,2)),total:series(90,_=>100),use:series(90,_=>rnd(30,78))},
+    net:{inB:series(90,_=>rnd(0.2,18)),outB:series(90,_=>rnd(0.1,9))}
+  };
+}
+
+/* ===== 라인차트 (캔버스) ===== */
+function drawLine(canvasSel, arrs, label){
+  const c=typeof canvasSel==='string'?$(canvasSel):canvasSel; if(!c) return;
+  const ctx=c.getContext('2d'), cssW=c.clientWidth||720, cssH=c.clientHeight||140, dpr=Math.max(1,devicePixelRatio||1);
+  c.width=Math.floor(cssW*dpr); c.height=Math.floor(cssH*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
+  const W=c.width/dpr, H=c.height/dpr, pad=28;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='rgba(173,197,255,.06)'; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(173,197,255,.12)'; ctx.lineWidth=1;
+  for(let i=0;i<4;i++){const y=pad+i*(H-2*pad)/3; ctx.beginPath(); ctx.moveTo(pad,y); ctx.lineTo(W-pad,y); ctx.stroke();}
+  const colors=['#42e8ff','#9be7ff','#ffd055','#a0b8ff','#7effbd','#ffa0a0'];
+  arrs.forEach((arr,si)=>{
+    const min=Math.min(...arr), max=Math.max(...arr), sx=pad, ex=W-pad, sy=pad, ey=H-pad;
+    ctx.strokeStyle=colors[si%colors.length]; ctx.lineWidth=1.6; ctx.beginPath();
+    arr.forEach((v,i)=>{const t=i/(arr.length-1||1),x=sx+(ex-sx)*t,y=ey-((v-min)/(max-min||1))*(ey-sy); i?ctx.lineTo(x,y):ctx.moveTo(x,y);});
+    ctx.stroke();
+  });
+  if(label){ctx.fillStyle='#cfe4ff'; ctx.font='12px ui-sans-serif'; ctx.fillText(label,8,16);}
+}
+
+/* ===== 렌더(초기 그리기) ===== */
+function render(name, meta){
+  const t = $('#pageTitle');if (t) t.textContent = `H/W & N/W Status: ${name}`;
+  const b=$('#crumb'); if(b) b.textContent=`VSSI · ${name}`;
+  const m=synthMetrics(name.length+(meta?.seed||0));
+  // 상단 KPI
+  $('#rpc').textContent=fmtInt(m.rpc);
+  $('#cpuw').textContent=`${m.cpuWait}%`;
+  $('#heap').textContent=`${m.heap}%`;
+  $('#uptime').textContent=`${m.uptimeDays}일`;
+  $('#rows').textContent=`약 ${fmtInt(m.rows)}`;
+  $('#events').textContent=`약 ${fmtInt(m.events)}`;
+  $('#evSize').textContent=fmtBytes(m.eventSizeGB);
+  $('#hdfs').textContent=`${m.hdfsUse}%`;
+  $('#hblat').textContent=`${m.hbaseLatency} ms`;
+  $('#hbheap').textContent=`${m.hbaseHeap}%`;
+  $('#hbup').textContent=`${m.hbaseUptime}일`;
+  $('#ip').textContent=meta?.ip||'10.0.0.1';
+  $('#ping').textContent=`${meta?.ping ?? 12} ms`;
+  $('#loss').textContent=`${meta?.loss ?? 0.1} %`;
+  $('#cpu').textContent=`${meta?.cpu ?? 34} %`;
+  $('#mem').textContent=`${meta?.mem ?? 48} %`;
+  const chip=$('#chipStat');
+  const stat=(meta?.status||'ok').toLowerCase();
+  chip.className=`chip ${stat==='bad'?'warn':'ok'}`;
+  chip.textContent=stat.toUpperCase();
+  const stateCard = chip.closest('.card');
+  if(stateCard) stateCard.classList.toggle('state-bad', stat==='bad');
+  // 차트
+  drawLine('#cCluster',[m.cluster.c1,m.cluster.c2,m.cluster.c3],'Cluster');
+  drawLine('#cCpu',[m.cpu.idle,m.cpu.nice,m.cpu.sys,m.cpu.user],'CPU');
+  drawLine('#cMem',[m.mem.buff,m.mem.cache,m.mem.share,m.mem.swap,m.mem.total,m.mem.use],'Memory');
+  drawLine('#cNet',[m.net.inB,m.net.outB],'Network');
+  return m; // 초기 시계열을 실시간 엔진으로 넘김
+}
+
+/* ===== 실시간 엔진 ===== */
+function startRealtime(seedName, meta){
+  const LEN=120;                        // 시계열 길이
+  const base=render(seedName, meta);    // 초기 그리기 + 베이스
+  const S={ // 실시간 시리즈를 복사해 관리
+    cluster:{ c1:[...base.cluster.c1], c2:[...base.cluster.c2], c3:[...base.cluster.c3] },
+    cpu:{ idle:[...base.cpu.idle], nice:[...base.cpu.nice], sys:[...base.cpu.sys], user:[...base.cpu.user] },
+    mem:{ buff:[...base.mem.buff], cache:[...base.mem.cache], share:[...base.mem.share], swap:[...base.mem.swap], total:Array(LEN).fill(100), use:[...base.mem.use] },
+    net:{ inB:[...base.net.inB], outB:[...base.net.outB] },
+    kpi:{ rows:base.rows, events:base.events, rpc:base.rpc, cpuWait:base.cpuWait, heap:base.heap, hdfs:base.hdfsUse, hblat:Number(base.hbaseLatency) }
+  };
+
+  function step(){
+    // --- Cluster (느린 변동)
+    const c1=clamp(S.cluster.c1.at(-1)+randn()*1.8,8,38);
+    const c2=clamp(S.cluster.c2.at(-1)+randn()*0.9,3,14);
+    const c3=clamp(S.cluster.c3.at(-1)+randn()*0.8,1,10);
+    shiftPush(S.cluster.c1,c1,LEN); shiftPush(S.cluster.c2,c2,LEN); shiftPush(S.cluster.c3,c3,LEN);
+
+    // --- CPU (합계≈100 유지)
+    const nice=clamp(S.cpu.nice.at(-1)+randn()*0.4,0,4);
+    const sys=clamp(S.cpu.sys.at(-1)+randn()*1.2,6,22);
+    const user=clamp(S.cpu.user.at(-1)+(randn()*2.2 + (Math.random()<0.1?randn()*6:0)),8,55);
+    let idle=clamp(100-(nice+sys+user),10,85);
+    shiftPush(S.cpu.nice,nice,LEN); shiftPush(S.cpu.sys,sys,LEN); shiftPush(S.cpu.user,user,LEN); shiftPush(S.cpu.idle,idle,LEN);
+
+    // --- Memory (use는 느리게, 가끔 상승/하강 파동)
+    const use=clamp(S.mem.use.at(-1)+randn()*1.2+(Math.random()<0.02?randn()*10:0),28,92);
+    const buff=clamp(S.mem.buff.at(-1)+randn()*1.0,6,28);
+    const cache=clamp(S.mem.cache.at(-1)+randn()*1.2,16,52);
+    const share=clamp(S.mem.share.at(-1)+randn()*0.4,0.5,8);
+    const swap=clamp(S.mem.swap.at(-1)+Math.max(0,randn()*0.5),0,6);
+    shiftPush(S.mem.use,use,LEN); shiftPush(S.mem.buff,buff,LEN); shiftPush(S.mem.cache,cache,LEN); shiftPush(S.mem.share,share,LEN); shiftPush(S.mem.swap,swap,LEN);
+
+    // --- Network (스파이크)
+    const spikeIn  = Math.random()<0.10 ? Math.abs(randn()*8) : 0;
+    const spikeOut = Math.random()<0.06 ? Math.abs(randn()*6) : 0;
+    const inB = clamp(S.net.inB.at(-1)+randn()*1.5 + spikeIn, 0, 22);
+    const outB= clamp(S.net.outB.at(-1)+randn()*1.2 + spikeOut, 0, 14);
+    shiftPush(S.net.inB,inB,LEN); shiftPush(S.net.outB,outB,LEN);
+
+    // --- KPI 실시간 갱신
+    S.kpi.rpc = clamp(S.kpi.rpc + Math.round(randn()*40), 1800, 2800);
+    S.kpi.cpuWait = clamp(S.kpi.cpuWait + Math.round(randn()*0.6), 0, 7);
+    S.kpi.heap = clamp(S.kpi.heap + Math.round(randn()*1.0), 30, 95);
+    S.kpi.hdfs = clamp(S.kpi.hdfs + Math.round(randn()*1.0), 30, 95);
+    S.kpi.hblat = clamp(S.kpi.hblat + randn()*0.2, 2.8, 9.0);
+    S.kpi.rows += Math.floor(50000 + Math.random()*250000);
+    S.kpi.events += Math.floor(10000 + Math.random()*60000);
+
+    $('#rpc').textContent = fmtInt(S.kpi.rpc);
+    $('#cpuw').textContent = `${S.kpi.cpuWait}%`;
+    $('#heap').textContent = `${S.kpi.heap}%`;
+    $('#rows').textContent = `약 ${fmtInt(S.kpi.rows)}`;
+    $('#events').textContent = `약 ${fmtInt(S.kpi.events)}`;
+    $('#hdfs').textContent = `${S.kpi.hdfs}%`;
+    $('#hblat').textContent = `${S.kpi.hblat.toFixed(1)} ms`;
+    $('#cpu').textContent = `${Math.round(user+sys)} %`;
+    $('#mem').textContent = `${Math.round(use)} %`;
+    $('#ping').textContent = `${Math.max(1,Math.round(8 + inB*0.6 + Math.abs(randn()*2)))} ms`;
+    $('#loss').textContent = `${Math.max(0,(randn()*0.15+0.1)).toFixed(1)} %`;
+
+    // --- 차트 리렌더(부하 낮게 1초마다)
+    drawLine('#cCluster',[S.cluster.c1,S.cluster.c2,S.cluster.c3],'Cluster');
+    drawLine('#cCpu',[S.cpu.idle,S.cpu.nice,S.cpu.sys,S.cpu.user],'CPU');
+    drawLine('#cMem',[S.mem.buff,S.mem.cache,S.mem.share,S.mem.swap,S.mem.total,S.mem.use],'Memory');
+    drawLine('#cNet',[S.net.inB,S.net.outB],'Network');
+  }
+
+  // 1초마다 업데이트 (탭 비활성화 시 interval 조정)
+  let iv=setInterval(step,1000);
+  document.addEventListener('visibilitychange',()=>{ if(document.hidden){ clearInterval(iv); iv=setInterval(step,1500);} else { clearInterval(iv); iv=setInterval(step,1000);} });
+  window.addEventListener('resize',()=>{ // 리사이즈 시 한 번 더 그리기
+    drawLine('#cCluster',[S.cluster.c1,S.cluster.c2,S.cluster.c3],'Cluster');
+    drawLine('#cCpu',[S.cpu.idle,S.cpu.nice,S.cpu.sys,S.cpu.user],'CPU');
+    drawLine('#cMem',[S.mem.buff,S.mem.cache,S.mem.share,S.mem.swap,S.mem.total,S.mem.use],'Memory');
+    drawLine('#cNet',[S.net.inB,S.net.outB],'Network');
+  });
+}
+
+/* ===== 시작: URL 파라미터 반영 + 실시간 스타트 ===== */
+(function(){
+  const p=new URLSearchParams(location.search);
+  const name=p.get('name')||'DATA #1';
+  const meta={
+    status:p.get('status')||'ok',
+    ip:p.get('ip')||undefined,
+    ping:p.has('ping')?Number(p.get('ping')):undefined,
+    loss:p.has('loss')?Number(p.get('loss')):undefined,
+    cpu:p.has('cpu')?Number(p.get('cpu')):undefined,
+    mem:p.has('mem')?Number(p.get('mem')):undefined,
+    seed:p.has('seed')?Number(p.get('seed')):0
+  };
+  startRealtime(name,meta);
+})();
+
+/* ===== 팝업 사이즈 메시지 (부모 높이 조절) ===== */
+(function(){
+  function sendSize(){
+    const h = Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.offsetHeight
+    );
+    parent.postMessage({ type:'HW_DASH_SIZE', height:h }, '*');
+  }
+  window.addEventListener('load',sendSize);
+  window.addEventListener('resize',sendSize);
+  new ResizeObserver(sendSize).observe(document.body);
+})();
+
+
+
+
+</script>
+
+</body>
+</html>

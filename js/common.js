@@ -239,6 +239,8 @@ function initSystemTitle() {
         // Dynamic Link: VSSI -> Intro, Others -> Dashboard
         if (activeAcronym === 'VSSI') {
             headerTitle.href = 'COM_IT_01_01.html';
+        } else if (activeAcronym === 'IVMS') {
+            headerTitle.href = 'IVM_DB_01_01.html';
         } else {
             headerTitle.href = 'SAM_DB_01_01.html';
         }
@@ -268,6 +270,8 @@ function switchSystem(name, acronym) {
         // Dynamic Link Update
         if (acronym === 'VSSI') {
             headerTitle.href = 'COM_IT_01_01.html';
+        } else if (acronym === 'IVMS') {
+            headerTitle.href = 'IVM_DB_01_01.html';
         } else {
             headerTitle.href = 'SAM_DB_01_01.html';
         }
@@ -281,6 +285,15 @@ function switchSystem(name, acronym) {
 
     // Update Sidebar
     updateSidebarMenu();
+
+    // Redirect to the new system's gateway
+    if (acronym === 'VSSI') {
+        location.href = 'COM_IT_01_01.html';
+    } else if (acronym === 'IVMS') {
+        location.href = 'IVM_DB_01_01.html';
+    } else if (acronym === 'SAMS') {
+        location.href = 'SAM_DB_01_01.html';
+    }
 }
 
 // Sidebar Menu Visibility Filter

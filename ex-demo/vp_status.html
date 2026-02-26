@@ -1,0 +1,951 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vertiport Status: GMP VP</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0c0e;
+  --bg2:#12141a;
+  --card:#1a1f26;
+  --line:#2a2f36;
+  --accent:#00d1ff;
+  --accent2:#ffd166;
+  --danger:#ff5a5f;
+  --ok:#35e27d;
+  --muted:#8aa0b5;
+  --card-bg:rgba(8,18,29,.15);
+  --card-bd:rgba(173,197,255,.1);
+  --text:#e6f0ff;
+  --muted2:#bcd1ea;
+  --warn:#ffd055;
+  --topRowH:340px;
+}
+
+*{box-sizing:border-box}
+html{color-scheme:dark;overflow:auto}
+body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,Segoe UI,Apple SD Gothic Neo,Malgun Gothic,sans-serif}
+
+.wrap{max-width:1480px;margin:24px auto;padding:0 18px}
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.title{font-size:20px;font-weight:900;letter-spacing:.3px}
+
+.grid{display:grid;grid-template-columns:1fr 1.2fr;grid-auto-flow:row dense;gap:12px;align-items:stretch;}
+
+.card{background:var(--card-bg);border:1px solid var(--card-bd);border-radius:0;padding:12px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.card-vp{grid-column:1;height:var(--topRowH);}
+.card-vp .kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+
+.card-ov{grid-column:2;height:var(--topRowH);}
+.card-tl{grid-column:1 / -1;}
+.card-dp{grid-column:1 / -1;}
+
+.ov-embed.grabbing{cursor:grabbing;}
+#ovZoom{position:relative;width:100%; padding:0 10px;}
+.ov-embed{position:relative;height:calc(var(--topRowH) - 84px);background:transparent;border-radius:0;overflow:hidden;}
+.ov-help{position:absolute;right:10px;bottom:10px;font-size:11px;color:var(--muted2);background:rgba(0,0,0,.3);padding:3px 8px;border-radius:0;pointer-events:none;z-index:100;}
+
+#flightCanvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;background:transparent;}
+#floorPlan{display:none;}
+#vpOverview{display:none !important;}
+#vpSVG{display:none !important;}
+
+.card>.head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.card>.head .t{font-weight:800;letter-spacing:.2px}
+.card>.head .tools{display:flex;gap:8px}
+
+.icon-btn{width:28px;height:28px;border-radius:0;border:1px solid rgba(173,197,255,.1);background:rgba(11,26,42,.2);color:#cfe4ff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.icon-btn:hover{outline:1px solid var(--accent)}
+
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
+.kpi{display:flex;flex-direction:column;gap:4px;padding:10px;border:1px solid rgba(173,197,255,.1);border-radius:0;background:rgba(12,25,41,.2)}
+.kpi .k{font-size:11px;color:#fff}
+.kpi .v{font-size:20px;font-weight:900;letter-spacing:.2px;color:#fff}
+
+.status-ok{color:#42e8ff;}
+.status-busy{color:#ffd055;}
+.status-maint{color:#ff6b9e;}
+
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(173,197,255,.1);background:rgba(12,25,41,.2);border-radius:0;padding:4px 8px;font-size:12px;color:#fff}
+.chip.ok{background:rgba(66,232,255,.14);border-color:rgba(66,232,255,.35)}
+.chip.warn{background:rgba(255,208,85,.12);border-color:rgba(255,208,85,.4)}
+
+.tl-wrap{position:relative}
+.tl-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.tl-toolbar .pill{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(173,197,255,.1);background:rgba(12,25,41,.2);border-radius:0;padding:4px 10px;font-size:12px;color:#cfe4ff}
+
+.canvas-wrap{position:relative;border:1px solid rgba(173,197,255,.1);background:rgba(12,25,41,.2);border-radius:0;overflow:hidden}
+#timeline{width:100%;display:block}
+
+.tl-now{position:absolute;top:0;bottom:0;width:2px;left:0;background:rgba(255,208,85,.95);pointer-events:none;transform:translateX(0);will-change:transform}
+.tl-help{position:absolute;right:6px;bottom:6px;font-size:11px;color:var(--muted2);background:rgba(0,0,0,.3);padding:2px 6px;border-radius:0}
+
+.tbl-wrap{max-height:360px;overflow:auto}
+table{width:100%;border-collapse:collapse}
+thead th{position:sticky;top:0;background:rgba(11,26,42,.92);backdrop-filter:blur(4px);font-weight:700;color:#fff}
+th,td{padding:9px 10px;border-bottom:1px solid rgba(173,197,255,.1);font-size:12px;color:#fff}
+tbody tr:hover{background:rgba(66,232,255,.05)}
+
+.badge-code{font-weight:800;background:rgba(66,232,255,.12);border:1px solid rgba(66,232,255,.28);color:#cfe4ff;border-radius:0;padding:2px 8px}
+.delay-warn{color:#ffd055;font-weight:700}
+.delay-bad{color:#ff6b9e;font-weight:700}
+
+.tl-label{position:absolute;left:8px;font-size:12px;color:#cfe4ff;opacity:.85;padding:2px 8px;border-radius:0;border:1px solid rgba(173,197,255,.1);background:rgba(12,25,41,.2);transform:translateY(-30%);}
+
+.tl-tip{position:absolute;display:none;pointer-events:none;background:rgba(10,20,35,.88);color:#e6f0ff;font-size:12px;line-height:1.35;padding:6px 8px;border-radius:0;border:1px solid rgba(0,255,170,.45);box-shadow:0 8px 22px rgba(0,0,0,.35);white-space:nowrap;z-index:500;}
+
+:root{scrollbar-width:thin;scrollbar-color:#3a3f47 #1a1f26}
+*::-webkit-scrollbar{width:6px;height:6px}
+*::-webkit-scrollbar-track{background:#1a1f26;border-radius:0}
+*::-webkit-scrollbar-thumb{background:#3a3f47;border-radius:0;border:none}
+*::-webkit-scrollbar-thumb:hover{background:#4a5058}
+
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:var(--bg);z-index:9999;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s ease;}
+.modal-overlay.active{display:flex;opacity:1;}
+
+.modal-content{width:90vw;height:90vh;background:var(--card-bg);border:1px solid var(--card-bd);border-radius:0;padding:12px;box-shadow:0 8px 24px rgba(0,0,0,.5);position:relative;transform:scale(0.9);opacity:0;transition:transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;}
+.modal-overlay.active .modal-content{transform:scale(1);opacity:1;}
+
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.modal-header .t{font-weight:800;letter-spacing:.2px;font-size:18px;}
+
+.modal-close{width:32px;height:32px;border-radius:0;border:1px solid rgba(173,197,255,.1);background:rgba(11,26,42,.2);color:#cfe4ff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;}
+.modal-close:hover{outline:1px solid var(--accent);}
+
+.modal-body{height:calc(100% - 60px);overflow:hidden;position:relative;}
+#modalOvZoom{position:relative;width:100%;height:100%;cursor:grab;}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <div class="title">Vertiport Status: GMP VP</div>
+  </div>
+
+  <div class="grid">
+    <section class="card card-vp">
+      <div class="head"><span class="t"><i class="bi bi-buildings"></i> Vertiport Status</span></div>
+      <div class="kpis">
+        <div class="kpi"><div class="k">Available Stands</div><div class="v">2/3</div></div>
+        <div class="kpi"><div class="k">Available FATOs</div><div class="v">1/2</div></div>
+        <div class="kpi"><div class="k">Congestion</div><div class="v">Low</div></div>
+        <div class="kpi"><div class="k">Active Flights</div><div class="v" id="kpiActive">5</div></div>
+        <div class="kpi"><div class="k">Charging</div><div class="v">4/6</div></div>
+        <div class="kpi"><div class="k">Queue</div><div class="v">2</div></div>
+        <div class="kpi"><div class="k">Avg Delay</div><div class="v">+5m</div></div>
+        <div class="kpi"><div class="k">Wind</div><div class="v">5kt NE</div></div>
+        <div class="kpi"><div class="k">Weather</div><div class="v">VFR</div></div>
+      </div>
+      <div class="chips" style="margin-top:10px">
+        <span class="chip ok"><i class="bi bi-wifi"></i> Network</span>
+        <span class="chip ok"><i class="bi bi-ev-station"></i> Charger</span>
+        <span class="chip ok"><i class="bi bi-shield-check"></i> Security</span>
+        <span class="chip warn"><i class="bi bi-tools"></i> Maintenance</span>
+      </div>
+    </section>
+    <section class="card card-ov" style="position:relative;">
+    <div class="head">
+      <span class="t"><i class="bi bi-diagram-3"></i> Vertiport Overview</span>
+      <div class="tools">
+        <button class="icon-btn" id="btnOvMinus" title="Zoom Out"><i class="bi bi-dash"></i></button>
+        <button class="icon-btn" id="btnOvPlus" title="Zoom In"><i class="bi bi-plus"></i></button>
+        <button class="icon-btn" id="btnOvReset" title="Reset"><i class="bi bi-arrow-clockwise"></i></button>
+        <button class="icon-btn" id="btnOvFullscreen" title="Fullscreen"><i class="bi bi-arrows-fullscreen"></i></button>
+      </div>
+    </div>
+    <div class="ov-embed">
+      <div id="ovZoom">
+        <svg id="vpSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 149.48958 96.244537" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
+            <g transform="translate(-11.761953,-9.6305589)">
+              <g transform="matrix(0.26458333,0,0,0.26458333,-62.85293,-40.661118)">
+                <!-- FATO 사각형들 -->
+                <rect x="372.009" y="200.89467" width="54" height="107" stroke="#33e3f5" stroke-width="2" fill="transparent"/>
+                <rect x="426.009" y="200.89467" width="55" height="107" stroke="#33e3f5" stroke-width="2" fill="transparent"/>
+                <rect x="372.009" y="387.89465" width="54" height="107" stroke="#33e3f5" stroke-width="2" fill="transparent"/>
+                <rect x="426.009" y="387.89465" width="55" height="107" stroke="#33e3f5" stroke-width="2" fill="transparent"/>
+                <path d="m 399.00901,307.89466 v 79.808" stroke="#33e3f5" stroke-width="2" fill="none"/>
+                <path d="m 453.00901,307.89466 v 79.808" stroke="#33e3f5" stroke-width="2" fill="none"/>
+                <rect x="638.00903" y="200.89467" width="54" height="107" stroke="#33e3f5" stroke-width="2" fill="transparent"/>
+                <rect x="692.00903" y="200.89467" width="55" height="107" stroke="#33e3f5" stroke-width="2" fill="transparent"/>
+                <rect x="638.00903" y="387.89465" width="54" height="107" stroke="#33e3f5" stroke-width="2" fill="transparent"/>
+                <rect x="692.00903" y="387.89465" width="55" height="107" stroke="#33e3f5" stroke-width="2" fill="transparent"/>
+                <path d="m 665.00901,307.89466 v 79.808" stroke="#33e3f5" stroke-width="2" fill="none"/>
+                <path d="m 719.00901,307.89466 v 79.808" stroke="#33e3f5" stroke-width="2" fill="none"/>
+                <path d="m 559.00901,199.89466 v 353.943" stroke="#33e3f5" stroke-width="2" fill="none"/>
+                <path d="m 283.00901,199.89466 v 353.943" stroke="#33e3f5" stroke-width="2" fill="none"/>
+                <path d="m 846.00901,199.89466 v 353.943" stroke="#33e3f5" stroke-width="2" fill="none"/>
+                
+                <!-- 항공기 아이콘 -->
+                <path d="m 419.42643,240.06712 v 4.17006 l -15.29617,9.49848 v 9.03513 c 0,1.80703 -1.05491,4.17007 -2.63727,4.17007 -1.52961,0 -2.63727,-2.36304 -2.63727,-4.17007 v -9.03513 l -15.29616,-9.49848 v -4.17006 l 15.29616,6.71843 v -10.10082 l -5.27454,-4.03106 v -2.78004 l 7.91181,2.78004 7.91181,-2.78004 v 2.78004 l -5.27454,4.03106 v 10.10082 z" fill="#ff00ff"/>
+                <path d="m 737.44905,453.67959 v -4.17006 l -15.29616,-9.49848 v -9.03514 c 0,-1.80703 -1.05491,-4.17006 -2.63727,-4.17006 -1.52962,0 -2.63727,2.36303 -2.63727,4.17006 v 9.03514 l -15.29617,9.49848 v 4.17006 l 15.29617,-6.71844 v 10.10082 l -5.27454,4.03106 v 2.78005 l 7.91181,-2.78005 7.91181,2.78005 v -2.78005 l -5.27454,-4.03106 v -10.10082 z" fill="#ff00ff"/>
+                
+                <!-- 항공편 라벨 -->
+                <text x="380.59351" y="286.68164" fill="#ff00ff" font-size="12">KE124</text>
+                <text x="699.00391" y="475.77487" fill="#ff00ff" font-size="12">KE304</text>
+                
+                <!-- FATO 라벨 -->
+                <text x="384.42007" y="196.68816" fill="#33e3f5" font-size="9">FATO01</text>
+                <text x="437.08609" y="196.68816" fill="#33e3f5" font-size="9">FATO02</text>
+                <text x="653.08612" y="196.68816" fill="#33e3f5" font-size="9">FATO03</text>
+                <text x="705.75311" y="196.68816" fill="#33e3f5" font-size="9">FATO04</text>
+                
+                <!-- STAND 라벨 -->
+                <text x="404.539" y="508.73746" fill="#33e3f5" font-size="9">STAND4</text>
+                <text x="678.14612" y="508.73746" fill="#33e3f5" font-size="9">STAND4</text>
+                
+                <!-- 왼쪽 다이어그램 시간 박스들 -->
+                <rect x="373.96127" y="203.74593" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="377.81027" y="212.24593" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="403.88293" y="212.56577" font-size="8" fill="#33e3f5">AVZT</text>
+                
+                <rect x="300.3699" y="296.4234" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="304.78391" y="304.9234" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="332.38791" y="304.9234" font-size="8" fill="#33e3f5">ELDT</text>
+                
+                <rect x="373.79819" y="295.46149" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="377.64719" y="303.96149" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="405.25018" y="303.96149" font-size="8" fill="#33e3f5">ALDT</text>
+                
+                <rect x="428.79819" y="295.46149" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="432.60321" y="303.96149" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="460.20718" y="303.96149" font-size="8" fill="#33e3f5">ATOT</text>
+                
+                <rect x="490.79822" y="268.46149" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="495.21222" y="277.96149" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="522.81622" y="277.96149" font-size="8" fill="#33e3f5">TTOT</text>
+                
+                <rect x="490.79822" y="291.46149" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="495.21222" y="300.96149" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="522.81622" y="300.96149" font-size="8" fill="#33e3f5">ETOT</text>
+                
+                <rect x="490.79822" y="313.46149" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="495.21222" y="322.96149" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="522.81622" y="322.96149" font-size="8" fill="#33e3f5">TSAT</text>
+                
+                <rect x="299.00961" y="345.98605" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="303.42361" y="355.48605" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="331.02762" y="355.48605" font-size="8" fill="#33e3f5">EXIT</text>
+                
+                <rect x="372.4379" y="345.02414" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="376.2869" y="354.52414" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="403.88989" y="354.52414" font-size="8" fill="#33e3f5">AXIT</text>
+                
+                <rect x="427.4379" y="345.02414" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="431.24292" y="354.52414" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="458.84689" y="354.52414" font-size="8" fill="#33e3f5">AXOT</text>
+                
+                <rect x="491.43793" y="345.02414" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="495.93893" y="354.52414" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="523.54291" y="354.52414" font-size="8" fill="#33e3f5">EXOT</text>
+                
+                <rect x="300.3699" y="381.28784" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="304.78391" y="390.78784" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="332.38791" y="390.78784" font-size="8" fill="#33e3f5">ERIT</text>
+                
+                <rect x="373.79819" y="380.32593" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="377.64719" y="389.82593" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="405.25018" y="389.82593" font-size="8" fill="#33e3f5">ARIT</text>
+                
+                <rect x="428.79819" y="380.32593" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="432.60321" y="389.82593" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="460.20718" y="389.82593" font-size="8" fill="#33e3f5">AROT</text>
+                
+                <rect x="492.79822" y="380.32593" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="497.29922" y="389.82593" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="524.90326" y="389.82593" font-size="8" fill="#33e3f5">EROT</text>
+                
+                <rect x="300.3699" y="399.28784" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="304.78391" y="407.78784" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="332.38791" y="408.78784" font-size="8" fill="#33e3f5">EIBT</text>
+                
+                <rect x="373.79819" y="398.32593" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="377.64719" y="406.82593" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="405.25018" y="407.82593" font-size="8" fill="#33e3f5">AIBT</text>
+                
+                <rect x="428.79819" y="398.32593" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="432.60321" y="406.82593" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="460.20718" y="407.82593" font-size="8" fill="#33e3f5">AROT</text>
+                
+                <rect x="492.79822" y="398.32593" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="497.29922" y="406.82593" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="524.90326" y="407.82593" font-size="8" fill="#33e3f5">TOBT</text>
+                
+                <rect x="373.11804" y="414.5506" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="376.96704" y="423.0506" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="404.57004" y="424.0506" font-size="8" fill="#33e3f5">ARDT</text>
+                
+                <rect x="428.11804" y="414.5506" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="431.92307" y="423.0506" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="459.52704" y="424.0506" font-size="8" fill="#33e3f5">ARDT</text>
+                
+                <rect x="492.11807" y="414.5506" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="496.61908" y="423.0506" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="524.22308" y="424.0506" font-size="8" fill="#33e3f5">EOBT</text>
+                
+                <rect x="430.97537" y="480.86731" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="434.7804" y="490.36731" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="462.38437" y="490.36731" font-size="8" fill="#33e3f5">ACGT</text>
+                
+                <rect x="494.9754" y="480.86731" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="499.47641" y="490.36731" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="527.08044" y="490.36731" font-size="8" fill="#33e3f5">MTTT</text>
+                
+                <rect x="430.97537" y="528.28656" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="434.7804" y="537.78656" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="462.38437" y="537.78656" font-size="8" fill="#33e3f5">ARBT</text>
+                
+                <!-- 오른쪽 다이어그램 시간 박스들 -->
+                <rect x="640.23657" y="203.15079" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="644.12854" y="211.65079" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="671.73254" y="212.65079" font-size="8" fill="#33e3f5">AVZT</text>
+                
+                <rect x="579.79828" y="295.46149" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="584.25525" y="303.96149" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="611.85925" y="303.96149" font-size="8" fill="#33e3f5">ELDT</text>
+                
+                <rect x="638.79828" y="295.46149" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="642.69025" y="303.96149" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="670.29425" y="303.96149" font-size="8" fill="#33e3f5">ALDT</text>
+                
+                <rect x="693.79828" y="295.46149" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="697.64728" y="303.96149" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="725.25024" y="303.96149" font-size="8" fill="#33e3f5">ATOT</text>
+                
+                <rect x="755.79828" y="268.46149" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="760.25525" y="277.96149" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="787.85925" y="277.96149" font-size="8" fill="#33e3f5">TTOT</text>
+                
+                <rect x="755.79828" y="291.46149" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="760.25525" y="300.96149" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="787.85925" y="300.96149" font-size="8" fill="#33e3f5">ETOT</text>
+                
+                <rect x="755.79828" y="313.46149" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="760.25525" y="322.96149" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="787.85925" y="322.96149" font-size="8" fill="#33e3f5">TSAT</text>
+                
+                <rect x="580.43793" y="345.02414" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="584.98193" y="354.52414" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="612.58594" y="354.52414" font-size="8" fill="#33e3f5">EXIT</text>
+                
+                <rect x="639.43793" y="345.02414" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="643.41693" y="354.52414" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="671.02094" y="354.52414" font-size="8" fill="#33e3f5">AXIT</text>
+                
+                <rect x="694.43793" y="345.02414" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="698.3739" y="354.52414" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="725.97693" y="354.52414" font-size="8" fill="#33e3f5">AXOT</text>
+                
+                <rect x="758.43793" y="345.02414" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="763.06891" y="354.52414" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="790.67291" y="354.52414" font-size="8" fill="#33e3f5">EXOT</text>
+                
+                <rect x="581.79828" y="380.32593" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="586.34229" y="389.82593" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="613.94629" y="389.82593" font-size="8" fill="#33e3f5">ERIT</text>
+                
+                <rect x="640.79828" y="380.32593" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="644.77728" y="389.82593" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="672.38129" y="389.82593" font-size="8" fill="#33e3f5">ARIT</text>
+                
+                <rect x="695.79828" y="380.32593" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="699.73425" y="389.82593" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="727.33728" y="389.82593" font-size="8" fill="#33e3f5">AROT</text>
+                
+                <rect x="759.79828" y="380.32593" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="764.42926" y="389.82593" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="792.03326" y="389.82593" font-size="8" fill="#33e3f5">EROT</text>
+                
+                <rect x="581.79828" y="398.32593" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="586.34229" y="406.82593" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="613.94629" y="407.82593" font-size="8" fill="#33e3f5">EIBT</text>
+                
+                <rect x="640.79828" y="398.32593" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="644.77728" y="406.82593" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="672.38129" y="407.82593" font-size="8" fill="#33e3f5">AIBT</text>
+                
+                <rect x="695.79828" y="398.32593" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="699.73425" y="406.82593" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="727.33728" y="407.82593" font-size="8" fill="#33e3f5">AOBT</text>
+                
+                <rect x="759.79828" y="398.32593" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="764.42926" y="406.82593" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="792.03326" y="407.82593" font-size="8" fill="#33e3f5">TOBT</text>
+                
+                <rect x="640.1181" y="414.5506" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="644.09711" y="423.0506" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="671.70111" y="424.0506" font-size="8" fill="#33e3f5">ARDT</text>
+                
+                <rect x="695.1181" y="414.5506" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="699.05408" y="423.0506" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="726.6571" y="424.0506" font-size="8" fill="#33e3f5">ARDT</text>
+                
+                <rect x="759.1181" y="414.5506" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="763.74908" y="423.0506" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="791.35309" y="424.0506" font-size="8" fill="#33e3f5">EOBT</text>
+                
+                <rect x="697.97546" y="480.86731" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="701.91144" y="490.36731" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="729.51447" y="490.36731" font-size="8" fill="#33e3f5">ACGT</text>
+                
+                <rect x="761.97546" y="480.86731" width="29" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="766.60645" y="490.36731" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="794.21045" y="490.36731" font-size="8" fill="#33e3f5">MTTT</text>
+                
+                <rect x="697.97546" y="528.28656" width="28" height="13" stroke="#33e3f5" stroke-width="0.333333" fill="transparent"/>
+                <text x="701.91144" y="536.78656" font-size="8" fill="#33e3f5">00:00</text>
+                <text x="729.51447" y="537.78656" font-size="8" fill="#33e3f5">ARBT</text>
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="ov-help">휠: 확대/축소 · 드래그: 이동</div>
+    </section>
+
+
+    <section class="card card-tl">
+      <div class="head">
+        <span class="t"><i class="bi bi-clock"></i> Timeline</span>
+        <div class="tools">
+          <button class="icon-btn" id="btnMinus" title="Zoom Out"><i class="bi bi-dash"></i></button>
+          <button class="icon-btn" id="btnPlus" title="Zoom In"><i class="bi bi-plus"></i></button>
+          <button class="icon-btn" id="btnNow" title="Now"><i class="bi bi-clock-history"></i></button>
+        </div>
+      </div>
+      <div class="tl-wrap">
+        <div class="tl-toolbar">
+          <span class="pill"><i class="bi bi-bullseye"></i> 기준: 현재 ±12h · 초기 표시폭 1h</span>
+        </div>
+        <div class="canvas-wrap">
+          <span class="tl-label" id="labDep">Departures</span>
+          <span class="tl-label" id="labArr">Arrivals</span>
+          <canvas id="timeline"></canvas>
+          <div class="tl-tip" id="tlTip"></div> 
+          <div class="tl-now" id="nowMarker"></div>
+          <div class="tl-help">휠: 확대/축소 · 드래그: 이동</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card card-dp">
+      <div class="head"><span class="t"><i class="bi bi-airplane"></i> Departure List</span></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Call Sign</th><th>ADES</th><th>A/C</th><th>PP</th>
+              <th>EOBT</th><th>TOBT</th><th>TSAT</th><th>Delay</th>
+              <th>AOBT</th><th>FATO</th><th>CTOT</th><th>TTOT</th><th>ATOT</th>
+              <th>SID</th><th>SOBT</th><th>WTC</th><th>State</th><th>ASRT</th>
+            </tr>
+          </thead>
+          <tbody id="depTbody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="modal-overlay" id="vpModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="t"><i class="bi bi-diagram-3"></i> Vertiport Overview</span>
+      <div style="display:flex;gap:8px;">
+        <button class="modal-close" id="btnModalClose" title="Close"><i class="bi bi-x"></i></button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div id="modalOvZoom"></div>
+      <div class="ov-help">휠: 확대/축소 · 드래그: 이동</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== URL 파라미터로 버티포트 이름 설정 ===== */
+(function(){
+  const urlParams = new URLSearchParams(window.location.search);
+  const vpName = urlParams.get('name') || 'GMP VP';
+  
+  // 페이지 타이틀 변경
+  document.title = `Vertiport Status: ${vpName}`;
+  
+  // 헤더 타이틀 변경 (DOM 로드 후)
+  const updateTitle = () => {
+    const titleEl = document.querySelector('.title');
+    if (titleEl) titleEl.textContent = `Vertiport Status: ${vpName}`;
+  };
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateTitle);
+  } else {
+    updateTitle();
+  }
+})();
+/* ===== Seed (표 + 타임라인 공용 데이터) ===== */
+const AIRLINES=[{icao:'KE',name:'Korean Air'},{icao:'OZ',name:'Asiana'},{icao:'7C',name:'Jeju Air'},{icao:'LJ',name:'Jin Air'},{icao:'TW',name:"T'way Air"},{icao:'BX',name:'Air Busan'},{icao:'RS',name:'Air Seoul'},{icao:'YP',name:'Air Premia'},{icao:'RF',name:'Aero K'}];
+const makeCall=i=>AIRLINES[i%AIRLINES.length].icao+String(100+Math.floor(Math.random()*900));
+const ADES=['ICN','GMP','CJU','USN','PUS','YNY','YEO','UJB'];
+const AC=['E-VTOL','E-VTOL','E-VTOL','E-VTOL'];
+const WTC=['L'];
+
+(function(){
+  const tbody = document.getElementById('depTbody');
+  if(!tbody) return;
+
+  const now = new Date();
+  const addMin = (d, m) => new Date(d.getTime() + m*60000);
+  const pad = n => String(n).padStart(2,'0');
+  const hm  = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+
+  const COUNT=8;
+  
+  // 실제 항공편 시나리오 기반
+  const realFlights = [
+    {base: -25, call:'KE124', dest:'ICN', stand:'S1'},
+    {base: -18, call:'OZ456', dest:'GMP', stand:'S2'},
+    {base: -8, call:'7C892', dest:'CJU', stand:'S1'},
+    {base: 2, call:'LJ234', dest:'PUS', stand:'S3'},
+    {base: 12, call:'TW567', dest:'USN', stand:'S2'},
+    {base: 22, call:'BX123', dest:'YNY', stand:'S1'},
+    {base: 35, call:'RS789', dest:'CJU', stand:'S3'},
+    {base: 48, call:'YP345', dest:'ICN', stand:'S2'},
+  ];
+
+  const rows = realFlights.map((flight, i) => {
+    const eobt = addMin(now, flight.base);
+    const tobt = addMin(eobt, Math.floor(Math.random()*3)+2); // 2~4분 차이
+    const tsat = addMin(tobt, Math.floor(Math.random()*6)+8); // 8~13분 후
+    const sobt = addMin(eobt, -45);
+    const ctot = addMin(tsat, -3);
+    const ttot = addMin(tsat, 3);
+    
+    // 과거 항공편만 실제 시간 표시
+    const isPast = flight.base < -5;
+    const aobt = isPast ? addMin(tobt, Math.floor(Math.random()*5)-2) : null;
+    const atot = isPast ? addMin(ttot, Math.floor(Math.random()*6)-3) : null;
+    
+    const asrt = addMin(eobt, -12);
+    const delay = Math.round((tsat.getTime() - eobt.getTime())/60000);
+
+    return {
+      call: flight.call,
+      ADES: flight.dest,
+      AC: 'E-VTOL',
+      pp: flight.stand,
+      EOBT: hm(eobt),
+      TOBT: hm(tobt),
+      TSAT: hm(tsat),
+      Delay: (delay>0?'+':'')+delay,
+      AOBT: aobt?hm(aobt):'--:--',
+      FATO: '09R',
+      CTOT: hm(ctot),
+      TTOT: hm(ttot),
+      ATOT: atot?hm(atot):'--:--',
+      SID: (i%3===0?'MID3B':(i%3===1?'DET1J':'KOR2A')),
+      SOBT: hm(sobt),
+      WTC: 'L',
+      State: isPast?'DEP':'PLN',
+      ASRT: hm(asrt),
+      _eobt: eobt,
+      _tsat: tsat
+    };
+  });
+
+  const delayNum = v => { if (typeof v==='number') return v; if(!v) return 0; return parseInt(String(v).replace('+',''),10)||0; };
+  tbody.innerHTML = rows.map(r => {
+    const d=delayNum(r.Delay);
+    const dCls=d>10?'delay-bad':(d>5?'delay-warn':'');
+    return `<tr>
+      <td><span class="badge-code" title="${r.call}">${r.call}</span></td><td>${r.ADES}</td><td>${r.AC}</td><td>${r.pp}</td>
+      <td>${r.EOBT}</td><td>${r.TOBT}</td><td>${r.TSAT}</td><td><span class="${dCls}">${r.Delay}</span></td>
+      <td>${r.AOBT}</td><td>${r.FATO}</td><td>${r.CTOT}</td><td>${r.TTOT}</td><td>${r.ATOT}</td>
+      <td>${r.SID}</td><td>${r.SOBT}</td><td>${r.WTC}</td><td>${r.State}</td><td>${r.ASRT}</td>
+    </tr>`;
+  }).join('');
+
+  const kpi = document.getElementById('kpiActive'); 
+  if(kpi) kpi.textContent = rows.filter(r => r.State === 'PLN').length;
+
+  const DEP3 = rows.slice(0,4);
+  window._depFlights = DEP3.map(r => ({
+    id:r.call, t0:r._eobt, t1:r._tsat, delay: delayNum(r.Delay)
+  }));
+  
+  const ARR3 = [
+    {id:'AR201', offset:-18},
+    {id:'AR305', offset:-5},
+    {id:'AR412', offset:8},
+    {id:'AR528', offset:21}
+  ].map(a => {
+    const eta = addMin(now, a.offset);
+    const slot = addMin(eta, Math.floor(Math.random()*8)+3);
+    const delay = Math.round((slot.getTime() - eta.getTime())/60000);
+    return { id:a.id, t0:eta, t1:slot, delay };
+  });
+  window._arrFlights = ARR3;
+})();
+
+/* ===== Timeline (zoom/pan + responsive labels) ===== */
+const cvs=document.getElementById('timeline'); const ctx=cvs.getContext('2d');
+const NOW=()=>new Date();
+let span=1*3600*1000;             // 초기 표시폭: 1h
+let center=NOW().getTime();       // 중앙 기준시각
+let dragging=false, dragStartX=0, dragStartCenter=center;
+const labDep=document.getElementById('labDep');
+const labArr=document.getElementById('labArr');
+
+function ensureTimelineSize(){
+  const dpr=window.devicePixelRatio||1;
+  const W = cvs.parentElement.clientWidth;
+  const dep=window._depFlights||[], arr=window._arrFlights||[];
+  const rowH=28, top=42, bottom=38;
+  const H = top + rowH*2 + bottom;
+  cvs.style.width=W+'px'; cvs.style.height=H+'px';
+  cvs.width=Math.floor(W*dpr); cvs.height=Math.floor(H*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  if(labDep) labDep.style.top = (top + rowH*0.5) + 'px';
+  if(labArr) labArr.style.top = (top + rowH*1.5) + 'px';
+  return {W,H,rowH,top};
+}
+
+const tip = document.getElementById('tlTip');     // ★ tooltip 엘리먼트
+let hit = [];                                      // ★ 이번 프레임의 도트 위치(히트 테스트용)
+const HIT_R = 9;                                   // ★ 히트 반경(px)
+
+function fmtHM(d){ const p=n=>String(n).padStart(2,'0'); return p(d.getHours())+':'+p(d.getMinutes()); }
+function showTip(x,y,f){
+  const delay = (f.delay>0?'+':'')+(f.delay||0)+'m';
+  tip.textContent = ` ${f.id} ·  ${fmtHM(f.t0)} ·    ${delay}`;
+  tip.style.left = (x+12)+'px';
+  tip.style.top  = (y-8)+'px';
+  tip.style.display = 'block';
+}
+function hideTip(){ tip.style.display='none'; }
+
+
+function worldToX(t){
+  const W = cvs.width/(window.devicePixelRatio||1);
+  return (t - (center - span/2)) * (W / span);
+}
+function xToWorld(x){
+  const W = cvs.width/(window.devicePixelRatio||1);
+  return (center - span/2) + x * (span / W);
+}
+
+function drawTicks(W,H){
+  // 최소 1분 눈금, 확대 수준에 따라 1/5/15분
+  let step = 60000; // 1m
+  if(span>3600000) step = 15*60000;
+  else if(span>900000) step = 5*60000;
+  const tStart = xToWorld(0), tEnd=xToWorld(W);
+  const first = Math.ceil((tStart)/(step))*step;
+  ctx.fillStyle='#fff'; ctx.font='12px ui-sans-serif';
+  for(let t=first; t<=tEnd; t+=step){
+    const x=worldToX(t);
+    ctx.strokeStyle='rgba(173,197,255,.14)'; ctx.beginPath(); ctx.moveTo(x,30); ctx.lineTo(x,H-30); ctx.stroke();
+    const d=new Date(t); const lab=(String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'));
+    ctx.fillText(lab, x-14, 22);
+  }
+}
+const colorByDelay=d=> d>10?'#ff6b9e':(d>0?'#ffd055':'#42e8ff');
+
+function drawPoint(f, x0, y, withLabel){
+  // dot
+  ctx.beginPath(); ctx.arc(x0, y+6, 5, 0, Math.PI*2);
+  ctx.fillStyle = colorByDelay(f.delay); ctx.fill();
+  ctx.strokeStyle = '#0b1930'; ctx.stroke();
+  if(withLabel){
+    const d=f.t0, hh=String(d.getHours()).padStart(2,'0'), mm=String(d.getMinutes()).padStart(2,'0');
+    const label = `${f.id} ${hh}:${mm} ${(f.delay>0?'+':'')+(f.delay||0)}m`;
+    ctx.fillStyle='#e6f0ff'; ctx.font='12px ui-sans-serif';
+    ctx.fillText(label, x0+10, y+11);
+  }
+}
+
+function drawTimeline(){
+  const {W,H,top}=ensureTimelineSize();
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='rgba(173,197,255,.06)'; ctx.fillRect(0,0,W,H);
+
+  // frame
+  ctx.strokeStyle='rgba(173,197,255,.18)'; ctx.beginPath();
+  ctx.moveTo(0,30); ctx.lineTo(W,30); ctx.moveTo(0,H-30); ctx.lineTo(W,H-30); ctx.stroke();
+
+  drawTicks(W,H);
+
+  // label 표시 여부 (줌 수준에 따라)
+  const showLabel = span <= 45*60000; // 45분 이내면 라벨
+
+  const baseY = 30+34;
+  const depY  = baseY - 10;
+  const arrY  = baseY + 18;
+
+  const dep = window._depFlights||[], arr=window._arrFlights||[];
+  dep.forEach(f => {
+    const x = worldToX(f.t0.getTime());
+    drawPoint(f, x, depY, showLabel);
+    hit.push({x, y:depY, f}); // ★ 기록
+  });
+   arr.forEach(f => {
+    const x = worldToX(f.t0.getTime());
+    drawPoint(f, x, arrY, showLabel);
+    hit.push({x, y:arrY, f}); // ★ 기록
+  });
+  // 현재시간 노란선 (parent width 기준으로 CSS transform)
+  const nowX = worldToX(NOW().getTime());
+  const wrapW = cvs.parentElement.clientWidth;
+  const clamped = Math.max(0, Math.min(wrapW - 2, nowX));
+  document.getElementById('nowMarker').style.transform = `translateX(${clamped}px)`;
+}
+
+/* ===== Interaction ===== */
+function zoomAt(px, factor){
+  const centerTimeBefore = xToWorld(px);
+  span = Math.max(5*60000, Math.min(24*3600*1000, span * factor)); // 5분~24h
+  const centerTimeAfter = xToWorld(px);
+  center += (centerTimeBefore - centerTimeAfter);
+  drawTimeline();
+}
+cvs.addEventListener('wheel', e=>{
+  e.preventDefault();
+  const factor = e.deltaY<0 ? 0.85 : 1.15;
+  const rect = cvs.getBoundingClientRect();
+  zoomAt(e.clientX - rect.left, factor);
+}, {passive:false});
+
+cvs.addEventListener('mousedown', e=>{ dragging=true; dragStartX=e.clientX; dragStartCenter=center; });
+window.addEventListener('mouseup', ()=> dragging=false);
+window.addEventListener('mousemove', e=>{
+  if(!dragging) return;
+  const rect=cvs.getBoundingClientRect();
+  const dx=e.clientX - dragStartX;
+  const W=rect.width;
+  const dt = dx * (span / W);
+  center = dragStartCenter - dt;
+  drawTimeline();
+});
+
+document.getElementById('btnPlus').addEventListener('click', ()=>{
+  const rect=cvs.getBoundingClientRect(); zoomAt(rect.width/2, 0.85);
+});
+document.getElementById('btnMinus').addEventListener('click', ()=>{
+  const rect=cvs.getBoundingClientRect(); zoomAt(rect.width/2, 1.15);
+});
+document.getElementById('btnNow').addEventListener('click', ()=>{
+  center = NOW().getTime(); drawTimeline();
+});
+
+cvs.addEventListener('mousemove', (e)=>{
+  const rect = cvs.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  // 가장 가까운 포인트 찾기
+  let best=null, bestD=1e9;
+  for(const p of hit){
+    const dx = x - p.x, dy = y - p.y;
+    const d2 = dx*dx + dy*dy;
+    if(d2 < (HIT_R*HIT_R) && d2 < bestD){ best=p; bestD=d2; }
+  }
+
+  if(best){ showTip(x, y, best.f); }
+  else    { hideTip(); }
+});
+
+cvs.addEventListener('mouseleave', hideTip);
+
+// resize + now-line ticker
+window.addEventListener('resize', drawTimeline);
+setInterval(drawTimeline, 1000); // 1s마다 노란선 업데이트
+
+// first paint
+drawTimeline();
+
+/* ===== Vertiport Overview 줌/팬 기능 ===== */
+(() => {
+  const ovZoom = document.getElementById('ovZoom');
+  const vpSvg = document.getElementById('vpSvg');
+  const modal = document.getElementById('vpModal');
+  const modalOvZoom = document.getElementById('modalOvZoom');
+  
+  if (!ovZoom || !vpSvg || !modal || !modalOvZoom) return;
+
+  let scale = 1;
+  let translateX = 0;
+  let translateY = 0;
+  let isDragging = false;
+  let startX = 0;
+  let startY = 0;
+  let startTranslateX = 0;
+  let startTranslateY = 0;
+  
+  let modalScale = 1;
+  let modalTranslateX = 0;
+  let modalTranslateY = 0;
+  let isModalDragging = false;
+  let modalStartX = 0;
+  let modalStartY = 0;
+  let modalStartTranslateX = 0;
+  let modalStartTranslateY = 0;
+
+  function updateTransform(isModal = false) {
+    const svg = isModal ? modalOvZoom.querySelector('svg') : vpSvg;
+    const s = isModal ? modalScale : scale;
+    const tx = isModal ? modalTranslateX : translateX;
+    const ty = isModal ? modalTranslateY : translateY;
+    if (svg) svg.style.transform = `translate(${tx}px, ${ty}px) scale(${s})`;
+  }
+
+  function resetView(isModal = false) {
+    if (isModal) {
+      modalScale = 1;
+      modalTranslateX = 0;
+      modalTranslateY = 0;
+      updateTransform(true);
+    } else {
+      scale = 1;
+      translateX = 0;
+      translateY = 0;
+      updateTransform(false);
+    }
+  }
+
+  function zoomAtCenter(factor, isModal = false) {
+    const container = isModal ? modalOvZoom : ovZoom;
+    const rect = container.getBoundingClientRect();
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    if (isModal) {
+      const newScale = Math.max(0.5, Math.min(5, modalScale * factor));
+      const scaleChange = newScale / modalScale;
+      modalTranslateX = centerX - (centerX - modalTranslateX) * scaleChange;
+      modalTranslateY = centerY - (centerY - modalTranslateY) * scaleChange;
+      modalScale = newScale;
+      updateTransform(true);
+    } else {
+      const newScale = Math.max(0.5, Math.min(5, scale * factor));
+      const scaleChange = newScale / scale;
+      translateX = centerX - (centerX - translateX) * scaleChange;
+      translateY = centerY - (centerY - translateY) * scaleChange;
+      scale = newScale;
+      updateTransform(false);
+    }
+  }
+
+  function setupZoomPan(container, isModal = false) {
+    // 휠로 줌
+    container.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? 0.9 : 1.1;
+      const rect = container.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      
+      if (isModal) {
+        const newScale = Math.max(0.5, Math.min(5, modalScale * delta));
+        const scaleChange = newScale / modalScale;
+        modalTranslateX = mouseX - (mouseX - modalTranslateX) * scaleChange;
+        modalTranslateY = mouseY - (mouseY - modalTranslateY) * scaleChange;
+        modalScale = newScale;
+        updateTransform(true);
+      } else {
+        const newScale = Math.max(0.5, Math.min(5, scale * delta));
+        const scaleChange = newScale / scale;
+        translateX = mouseX - (mouseX - translateX) * scaleChange;
+        translateY = mouseY - (mouseY - translateY) * scaleChange;
+        scale = newScale;
+        updateTransform(false);
+      }
+    }, { passive: false });
+
+    // 드래그로 팬
+    container.addEventListener('mousedown', (e) => {
+      if (isModal) {
+        isModalDragging = true;
+        modalStartX = e.clientX;
+        modalStartY = e.clientY;
+        modalStartTranslateX = modalTranslateX;
+        modalStartTranslateY = modalTranslateY;
+        container.style.cursor = 'grabbing';
+      } else {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        startTranslateX = translateX;
+        startTranslateY = translateY;
+        container.style.cursor = 'grabbing';
+      }
+    });
+  }
+
+  window.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      translateX = startTranslateX + (e.clientX - startX);
+      translateY = startTranslateY + (e.clientY - startY);
+      updateTransform(false);
+    }
+    if (isModalDragging) {
+      modalTranslateX = modalStartTranslateX + (e.clientX - modalStartX);
+      modalTranslateY = modalStartTranslateY + (e.clientY - modalStartY);
+      updateTransform(true);
+    }
+  });
+
+  window.addEventListener('mouseup', () => {
+    isDragging = false;
+    isModalDragging = false;
+    ovZoom.style.cursor = 'grab';
+    modalOvZoom.style.cursor = 'grab';
+  });
+
+  // 일반 카드 설정
+  setupZoomPan(ovZoom, false);
+  ovZoom.style.cursor = 'grab';
+
+  // 버튼 이벤트 - 일반 카드
+  document.getElementById('btnOvPlus').addEventListener('click', () => zoomAtCenter(1.2, false));
+  document.getElementById('btnOvMinus').addEventListener('click', () => zoomAtCenter(0.8, false));
+  document.getElementById('btnOvReset').addEventListener('click', () => resetView(false));
+  
+   // 전체보기 버튼
+  document.getElementById('btnOvFullscreen').addEventListener('click', () => {
+    modal.style.display = 'flex';
+    requestAnimationFrame(() => {
+      modal.classList.add('active');
+    });
+    const svgClone = vpSvg.cloneNode(true);
+    svgClone.id = 'vpSvgModal';
+    modalOvZoom.innerHTML = '';
+    modalOvZoom.appendChild(svgClone);
+    setupZoomPan(modalOvZoom, true);
+    resetView(true);
+  });
+
+  // 모달 닫기
+  function closeModal() {
+    modal.classList.remove('active');
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 300);
+  }
+
+  document.getElementById('btnModalClose').addEventListener('click', closeModal);
+
+  // ESC 키로 닫기
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('active')) {
+      closeModal();
+    }
+  });
+})();
+
+
+</script>
+</body>
+</html>

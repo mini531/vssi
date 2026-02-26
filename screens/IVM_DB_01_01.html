@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IVMS - 대시보드</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/monitoring.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+
+<body class="dashboard-body app-screen-height" data-system-acronym="IVMS" data-page-title="대시보드">
+    <!-- Header -->
+    <div data-include="../components/header.html"></div>
+
+    <!-- Main Flex Container -->
+    <div class="flex flex-1 overflow-hidden">
+
+        <!-- Sidebar -->
+        <div data-include="../components/sidebar.html"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col overflow-hidden" id="main-content">
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar dashboard-content-full scroll-view-standard">
+                <div class="dashboard-section">
+
+                    <!-- ── Row 1: 버티포트 현황 + 지도 미리보기 ──── -->
+                    <div class="dashboard-layout-grid">
+
+                        <!-- Left: 버티포트 현황 -->
+                        <section class="col-main dashboard-section">
+                            <article class="db-feed-pane flex-1">
+                                <header class="pane-header">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="building-2" class="w-5 h-5 text-success"></i>
+                                        <h2 class="db-section-title">버티포트 현황</h2>
+                                    </div>
+                                    <nav class="flex items-center gap-1">
+                                        <button class="btn-xs btn-primary" id="vp-card-btn" title="카드 보기">
+                                            <i data-lucide="layout-grid" class="w-3 h-3"></i>
+                                            카드 보기
+                                        </button>
+                                        <button class="btn-xs btn-secondary" id="vp-list-btn" title="목록 보기">
+                                            <i data-lucide="list" class="w-3 h-3"></i>
+                                            목록 보기
+                                        </button>
+                                    </nav>
+                                </header>
+                                <div id="vp-view-container" class="pane-content custom-scrollbar"></div>
+                            </article>
+                        </section>
+
+
+                        <!-- Right: 지도 미리보기 -->
+                        <aside class="col-side dashboard-section">
+                            <section class="db-feed-pane flex-1">
+                                <header class="pane-header">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="map" class="w-5 h-5 text-success"></i>
+                                        <h2 class="db-section-title"><span id="db-map-title-text">버티포트 위치</span><span
+                                                id="db-map-vp-name" class="text-accent-teal"></span></h2>
+                                    </div>
+                                    <button id="db-diagram-back" class="btn-xs btn-secondary hidden">
+                                        <i data-lucide="arrow-left" class="w-3 h-3"></i>
+                                        지도 보기
+                                    </button>
+                                </header>
+                                <div class="pane-content pane-content-flush db-map-container">
+                                    <div id="db-mini-map" class="db-mini-map" role="application"
+                                        aria-label="버티포트 위치 지도"></div>
+                                    <div id="db-diagram-overlay" class="db-diagram-overlay hidden">
+                                        <img id="db-diagram-img" class="db-diagram-img" src="" alt="버티포트 배치도" />
+                                    </div>
+                                </div>
+                            </section>
+                        </aside>
+                    </div>
+
+                    <!-- ── Row 2: 인프라 현황 + 데이터 교환 + 이벤트 로그 ── -->
+                    <div class="dashboard-layout-grid">
+
+                        <!-- Left: 인프라 현황 (Narrow) -->
+                        <section class="col-3 dashboard-section">
+                            <article class="db-feed-pane flex-1">
+                                <header class="pane-header">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="server" class="w-5 h-5 text-success"></i>
+                                        <h2 class="db-section-title">인프라 현황</h2>
+                                    </div>
+                                </header>
+                                <div class="pane-content flex-1 flex flex-col">
+                                    <div class="db-infra-canvas-wrap flex-1 min-h-[200px]">
+                                        <canvas id="db-infra-canvas" class="db-canvas-fill"></canvas>
+                                    </div>
+                                </div>
+                            </article>
+                        </section>
+
+                        <!-- Center: 데이터 연계 현황 (Wide) -->
+                        <section class="col-6 dashboard-section">
+                            <article class="db-feed-pane flex-1">
+                                <header class="pane-header">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="arrow-left-right" class="w-5 h-5 text-success"></i>
+                                        <h2 class="db-section-title">데이터 연계 현황</h2>
+                                    </div>
+                                </header>
+                                <div class="pane-content flex-1 flex flex-col custom-scrollbar">
+                                    <div class="grid grid-cols-4 gap-2 mb-3">
+                                        <div class="db-stat-card db-stat-card-compact">
+                                            <span class="db-card-label">활성 (ACTIVE)</span>
+                                            <span class="db-card-value db-card-value-md text-success">1,450</span>
+                                        </div>
+                                        <div class="db-stat-card db-stat-card-compact">
+                                            <span class="db-card-label">대기 (PENDING)</span>
+                                            <span class="db-card-value db-card-value-md text-info">25</span>
+                                        </div>
+                                        <div class="db-stat-card db-stat-card-compact">
+                                            <span class="db-card-label">처리 중</span>
+                                            <span class="db-card-value db-card-value-md text-warning">8</span>
+                                        </div>
+                                        <div class="db-stat-card db-stat-card-compact">
+                                            <span class="db-card-label">실패 (DEAD)</span>
+                                            <span class="db-card-value db-card-value-md text-error">12</span>
+                                        </div>
+                                    </div>
+
+                                    <ul class="dashboard-section gap-1 list-none p-0 flex-1">
+                                        <li class="db-list-item">
+                                            <div class="flex items-center gap-1.5 overflow-hidden">
+                                                <span class="badge badge-purple">수신</span>
+                                                <code class="db-sub-label">v1.gangnam.batt</code>
+                                            </div>
+                                            <span class="badge badge-error flex-none">장애</span>
+                                        </li>
+                                        <li class="db-list-item">
+                                            <div class="flex items-center gap-1.5 overflow-hidden">
+                                                <span class="badge badge-info">송신</span>
+                                                <code class="db-sub-label">v1.airline_a.auth</code>
+                                            </div>
+                                            <span class="badge badge-warning flex-none">지연</span>
+                                        </li>
+                                        <li class="db-list-item">
+                                            <div class="flex items-center gap-1.5 overflow-hidden">
+                                                <span class="badge badge-purple">수신</span>
+                                                <code class="db-sub-label">v1.gangnam.status</code>
+                                            </div>
+                                            <span class="badge badge-success flex-none">정상</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </article>
+                        </section>
+
+                        <!-- Right: 이벤트 로그 (Narrow) -->
+                        <aside class="col-3 dashboard-section">
+                            <section class="db-feed-pane flex-1">
+                                <header class="pane-header">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="scroll-text" class="w-5 h-5 text-success"></i>
+                                        <h2 class="db-section-title">이벤트 로그</h2>
+                                    </div>
+                                    <button class="btn-secondary btn-xs px-2" id="btn-more-log" title="이벤트 로그 상세보기">
+                                        <span>더 보기</span>
+                                    </button>
+                                </header>
+                                <div class="pane-content custom-scrollbar flex-1 flex flex-col mon-timeline-container">
+                                    <ul class="mon-timeline list-none p-0 m-0 flex-1" id="db-log-body"></ul>
+                                </div>
+                            </section>
+                        </aside>
+                    </div>
+
+                    <!-- ── Row 3: 운항 통계 + 시스템 부하 + 항공기 랭킹 + 공지사항 ── -->
+                    <div class="dashboard-layout-grid">
+                        <!-- Card 1: 운항 현황 통계 -->
+                        <section class="col-3 dashboard-section">
+                            <article class="db-feed-pane flex-1">
+                                <header class="pane-header">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="bar-chart-3" class="w-5 h-5 text-success"></i>
+                                        <h2 class="db-section-title">운항 현황 통계</h2>
+                                    </div>
+                                </header>
+                                <div id="db-ops-stats-container" class="pane-content custom-scrollbar"></div>
+                            </article>
+                        </section>
+
+                        <!-- Card 2: 실시간 시스템 부하 -->
+                        <section class="col-3 dashboard-section">
+                            <article class="db-feed-pane flex-1">
+                                <header class="pane-header">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="gauge" class="w-5 h-5 text-success"></i>
+                                        <h2 class="db-section-title">실시간 시스템 부하</h2>
+                                    </div>
+                                </header>
+                                <div id="db-sys-load-container" class="pane-content custom-scrollbar"></div>
+                            </article>
+                        </section>
+
+                        <!-- Card 3: 운항 계획 -->
+                        <section class="col-3 dashboard-section">
+                            <article class="db-feed-pane flex-1">
+                                <header class="pane-header">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="calendar" class="w-5 h-5 text-success"></i>
+                                        <h2 class="db-section-title">운항 계획</h2>
+                                    </div>
+                                </header>
+                                <div id="db-top-flights-container" class="pane-content custom-scrollbar"></div>
+                            </article>
+                        </section>
+
+                        <!-- Card 4: 공지사항 -->
+                        <section class="col-3 dashboard-section">
+                            <article class="db-feed-pane flex-1">
+                                <header class="pane-header">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="megaphone" class="w-5 h-5 text-success"></i>
+                                        <h2 class="db-section-title">공지사항</h2>
+                                    </div>
+                                    <button class="btn-xs btn-secondary" onclick="location.href='IVM_CS_01_01.html'"
+                                        title="더 보기">
+                                        <span>더 보기</span>
+                                    </button>
+                                </header>
+                                <div id="db-notice-container" class="pane-content custom-scrollbar"></div>
+                            </article>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- System Switcher Modal -->
+    <div data-include="../components/system-switcher.html"></div>
+
+    <!-- Monitoring Detail Modal -->
+    <div id="monitoring-detail-modal" class="modal-overlay">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-header">
+                <h3 class="modal-title-left" id="monitoring-modal-title">상세 모니터링</h3>
+                <i data-lucide="x" class="close-icon" onclick="closeMonitoringModal()"></i>
+            </div>
+            <div class="modal-content" id="modal-view-server">
+                <div class="flex flex-col">
+                    <div class="modal-summary-panel-2col">
+                        <div class="summary-item">
+                            <h4 class="modal-section-title mb-0">이름</h4>
+                            <div class="data-value font-bold" id="server-modal-name">Server Name</div>
+                        </div>
+                        <div class="summary-item">
+                            <h4 class="modal-section-title mb-0">상태</h4>
+                            <div class="flex items-center">
+                                <span class="badge badge-success" id="server-modal-status">정상</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-sm">
+                        <div class="section-header">
+                            <h4 class="modal-section-title">CPU 이용률</h4>
+                            <span class="text-value-sub">100%</span>
+                        </div>
+                        <div class="monitoring-chart-container">
+                            <canvas id="chart-cpu" class="w-full h-full block"></canvas>
+                            <div class="chart-grid-overlay"></div>
+                        </div>
+                        <div class="monitoring-chart-footer">
+                            <span>60초</span>
+                            <span id="val-cpu-current">1</span>
+                        </div>
+                    </div>
+                    <div class="mb-sm">
+                        <div class="section-header">
+                            <h4 class="modal-section-title">메모리 사용량</h4>
+                            <span class="text-value-sub">64GB</span>
+                        </div>
+                        <div class="monitoring-chart-container">
+                            <canvas id="chart-mem" class="w-full h-full block"></canvas>
+                            <div class="chart-grid-overlay"></div>
+                        </div>
+                        <div class="monitoring-chart-footer">
+                            <span>60초</span>
+                            <span id="val-mem-current">0</span>
+                        </div>
+                    </div>
+                    <div class="section-header">
+                        <h4 class="modal-section-title">디스크 IO</h4>
+                        <span class="text-value-sub">100%</span>
+                    </div>
+                    <div class="monitoring-chart-container">
+                        <canvas id="chart-disk" class="w-full h-full block"></canvas>
+                        <div class="chart-grid-overlay"></div>
+                    </div>
+                    <div class="monitoring-chart-footer">
+                        <span>60초</span>
+                        <span id="val-disk-current">0</span>
+                    </div>
+                    <div class="disk-usage-container mb-sm">
+                        <div class="disk-usage-header">
+                            <span class="disk-usage-label">디스크 사용량</span>
+                            <span class="disk-usage-value" id="disk-usage-text">0.00 TB / 0.00 TB</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div id="disk-usage-bar" class="progress-bar-fill"></div>
+                        </div>
+                    </div>
+                    <div class="mb-sm">
+                        <div class="section-header">
+                            <h4 class="modal-section-title">네트워크</h4>
+                            <div class="flex items-center gap-sm text-xs">
+                                <div class="flex items-center gap-xs">
+                                    <span class="dot-success"></span>
+                                    <span class="text-slate">수신</span>
+                                </div>
+                                <div class="flex items-center gap-xs">
+                                    <span class="dot-info"></span>
+                                    <span class="text-slate">송신</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="monitoring-chart-container">
+                            <canvas id="chart-net" class="w-full h-full block"></canvas>
+                            <div class="chart-grid-overlay"></div>
+                        </div>
+                        <div class="monitoring-chart-footer">
+                            <span>60초</span>
+                            <span id="val-net-current">수신: 0.0 Mbps / 송신: 0.0 Mbps</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-btn-group">
+                <button onclick="closeMonitoringModal()" class="btn-md btn-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Log Detail Modal -->
+    <div id="event-log-modal" class="modal-overlay">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-header">
+                <h3 class="modal-title-left">이벤트 로그</h3>
+                <i data-lucide="x" class="close-icon" onclick="closeEventLogModal()"></i>
+            </div>
+
+            <div class="modal-content">
+                <!-- Search Filter Area -->
+                <div class="search-panel mb-4">
+                    <div class="search-panel-header" onclick="toggleFilter()">
+                        <div class="search-panel-title-group">
+                            <i data-lucide="filter" class="status-card-icon text-success"></i>
+                            <span class="search-panel-title">검색 필터</span>
+                        </div>
+                        <i data-lucide="chevron-down" id="filter-chevron" class="filter-chevron"></i>
+                    </div>
+                    <div id="filter-content" class="search-panel-content hidden">
+                        <div class="filter-panel-inner">
+                            <div class="filter-grid">
+                                <div class="filter-grid-wide">
+                                    <label class="filter-label">발생일</label>
+                                    <div class="filter-date-range">
+                                        <input type="date" id="log-start-date" class="filter-input filter-input-flex"
+                                            onclick="try{this.showPicker()}catch(e){}">
+                                        <span class="filter-date-separator">~</span>
+                                        <input type="date" id="log-end-date" class="filter-input filter-input-flex"
+                                            onclick="try{this.showPicker()}catch(e){}">
+                                    </div>
+                                </div>
+                                <div class="filter-grid-wide">
+                                    <label class="filter-label">메시지</label>
+                                    <input type="text" placeholder="메시지 입력" class="filter-input">
+                                </div>
+                            </div>
+                            <div class="filter-actions mt-4">
+                                <button class="filter-btn-common filter-btn-reset">
+                                    <i data-lucide="rotate-ccw" class="trend-icon"></i> 초기화
+                                </button>
+                                <button class="filter-btn-common filter-btn-search">
+                                    <i data-lucide="search" class="trend-icon"></i> 조회
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table Area -->
+                <div class="table-main-wrapper">
+                    <div class="pane-header flex-none border-b-0">
+                        <div class="search-panel-title-group">
+                            <i data-lucide="list" class="status-card-icon text-success"></i>
+                            <span class="search-panel-title">이벤트 목록</span>
+                        </div>
+                        <div class="pane-header-right">
+                            <button class="btn-sm btn-secondary">
+                                <i data-lucide="download" class="trend-icon"></i> 다운로드
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-scroll-area custom-scrollbar max-h-[400px]">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">발생 일시</th>
+                                    <th class="text-center">코드</th>
+                                    <th>메시지</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modal-event-tbody">
+                                <!-- JS Generated -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Table Footer / Pagination -->
+                    <div class="table-footer flex-none">
+                        <span class="pagination-info" id="modal-log-total">총 0 건</span>
+                        <div class="pagination-controls">
+                            <button class="page-btn active">1</button>
+                            <button class="page-btn">2</button>
+                            <button class="page-btn">3</button>
+                            <button class="page-btn"><i data-lucide="chevron-right"
+                                    class="pagination-icon"></i></button>
+                            <select class="pagination-select pagination-select-margin">
+                                <option>20개씩 보기</option>
+                                <option>50개씩 보기</option>
+                                <option>100개씩 보기</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal Bottom Button -->
+            <div class="modal-btn-group">
+                <button onclick="closeEventLogModal()" class="btn-md btn-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/include.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/IVM_DB_01_01.js"></script>
+</body>
+
+</html>
