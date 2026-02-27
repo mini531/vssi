@@ -344,6 +344,33 @@
         </div>
     </div>
 
+    <!-- Map Image Modal -->
+    <div id="map-image-modal" class="modal-overlay">
+        <div class="modal-dialog modal-big">
+            <div class="modal-header">
+                <h3 class="modal-title-left" id="map-modal-title">버티포트 배치도</h3>
+                <i data-lucide="x" class="close-icon" onclick="closeMapImageModal()"></i>
+            </div>
+            <div class="modal-map-content">
+                <div class="modal-map-tools" id="db-map-diagram-tools">
+                    <button class="icon-btn-xs" id="btn-db-map-zoom-out" title="축소">
+                        <i data-lucide="zoom-out" class="w-4 h-4 text-white"></i>
+                    </button>
+                    <button class="icon-btn-xs" id="btn-db-map-reset" title="원래 크기">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4 text-white"></i>
+                    </button>
+                    <button class="icon-btn-xs" id="btn-db-map-zoom-in" title="확대">
+                        <i data-lucide="zoom-in" class="w-4 h-4 text-white"></i>
+                    </button>
+                </div>
+                <img id="map-modal-img" src="" alt="버티포트 배치도" class="modal-map-img" />
+            </div>
+            <div class="modal-btn-group">
+                <button onclick="closeMapImageModal()" class="btn-md btn-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Event Log Detail Modal -->
     <div id="event-log-modal" class="modal-overlay">
         <div class="modal-dialog modal-wide">

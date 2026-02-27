@@ -161,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const VP_DIAGRAM_MAP = {
         'VP-01': '../images/vp_01.png',
         'VP-02': '../images/vp_02.png',
+        'VP-03': '../images/vp_03.png',
     };
 
     const mapTitleTextEl = document.getElementById('db-map-title-text');
@@ -188,6 +189,130 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (diagramBackBtn) {
         diagramBackBtn.addEventListener('click', showMap);
+    }
+
+    // Map Image Modal
+    const mapImageModal = document.getElementById('map-image-modal');
+    const mapModalTitle = document.getElementById('map-modal-title');
+    const mapModalImg = document.getElementById('map-modal-img');
+
+    if (diagramImg) {
+        diagramImg.style.cursor = 'pointer';
+        diagramImg.addEventListener('click', () => {
+            if (mapImageModal && activeVpId) {
+                const vp = vertiports.find(v => v.id === activeVpId);
+                if (vp) {
+                    if (mapModalTitle) mapModalTitle.textContent = `버티포트 배치도 - ${vp.name}`;
+                    if (mapModalImg) mapModalImg.src = diagramImg.src;
+                    mapImageModal.classList.add('active');
+                }
+            }
+        });
+    }
+
+    window.closeMapImageModal = () => {
+        if (mapImageModal) mapImageModal.classList.remove('active');
+        currentDbZoom = 1; dbPanX = 0; dbPanY = 0;
+        if (mapModalImg) mapModalImg.style.transform = '';
+    };
+
+    // Map Image Modal Zoom & Pan logic
+    const btnDbMapZoomIn = document.getElementById('btn-db-map-zoom-in');
+    const btnDbMapZoomOut = document.getElementById('btn-db-map-zoom-out');
+    const btnDbMapReset = document.getElementById('btn-db-map-reset');
+    const mapModalContent = document.querySelector('.modal-map-content');
+
+    let currentDbZoom = 1;
+    let dbPanX = 0;
+    let dbPanY = 0;
+    let isDbDragging = false;
+    let dbStartX = 0;
+    let dbStartY = 0;
+    let hasDbDragged = false;
+
+    function applyDbMapTransform() {
+        if (mapModalImg) {
+            mapModalImg.style.transform = `translate(${dbPanX}px, ${dbPanY}px) scale(${currentDbZoom})`;
+        }
+    }
+
+    if (mapModalImg && mapModalContent) {
+        btnDbMapZoomIn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentDbZoom += 0.2;
+            applyDbMapTransform();
+        });
+
+        btnDbMapZoomOut?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentDbZoom = Math.max(0.5, currentDbZoom - 0.2);
+            applyDbMapTransform();
+        });
+
+        btnDbMapReset?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentDbZoom = 1; dbPanX = 0; dbPanY = 0;
+            applyDbMapTransform();
+        });
+
+        // Wheel to zoom
+        mapModalContent.addEventListener('wheel', (e) => {
+            e.preventDefault();
+
+            const zoomStep = 0.1;
+            const prevZoom = currentDbZoom;
+
+            if (e.deltaY < 0) {
+                currentDbZoom += zoomStep; // Zoom in
+            } else {
+                currentDbZoom = Math.max(0.2, currentDbZoom - zoomStep); // Zoom out, min 0.2x
+            }
+
+            // Adjust pan to zoom towards mouse cursor
+            const rect = mapModalContent.getBoundingClientRect();
+            // Mouse position relative to center of panel
+            const mx = e.clientX - (rect.left + rect.width / 2);
+            const my = e.clientY - (rect.top + rect.height / 2);
+
+            // Adjust pan so the point under the mouse stays in the same place
+            dbPanX -= mx * (currentDbZoom / prevZoom - 1);
+            dbPanY -= my * (currentDbZoom / prevZoom - 1);
+
+            applyDbMapTransform();
+        }, { passive: false });
+
+        // Drag to pan
+        mapModalContent.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.modal-map-tools')) return; // Ignore clicks on tools
+
+            e.preventDefault(); // prevent native image drag
+            isDbDragging = true;
+            hasDbDragged = false;
+            dbStartX = e.clientX - dbPanX;
+            dbStartY = e.clientY - dbPanY;
+            mapModalContent.classList.add('dragging');
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDbDragging) return;
+            hasDbDragged = true;
+            dbPanX = e.clientX - dbStartX;
+            dbPanY = e.clientY - dbStartY;
+            applyDbMapTransform();
+        });
+
+        const stopDbDrag = () => {
+            if (isDbDragging) {
+                isDbDragging = false;
+                mapModalContent.classList.remove('dragging');
+                // Use a short timeout to prevent click from firing right after mouseup
+                setTimeout(() => hasDbDragged = false, 50);
+            }
+        };
+
+        window.addEventListener('mouseup', stopDbDrag);
+        // Ensure drag stops if mouse leaves window
+        document.addEventListener('mouseleave', stopDbDrag);
     }
 
     vertiports.forEach(v => {

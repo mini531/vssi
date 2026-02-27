@@ -832,16 +832,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (kpiCards[0]) kpiCards[0].querySelector('.vp-kpi-value').textContent = `${v.stands} / ${v.stands}`;
         if (kpiCards[1]) kpiCards[1].querySelector('.vp-kpi-value').textContent = `${v.fato} / ${v.fato}`;
 
-        // Swap diagram image per vertiport (place files as ../images/vp-01.png etc.)
+        // Swap diagram image per vertiport
         const VP_DIAGRAM_MAP = {
-            'VP-01': '../images/vp_default.png',
-            'VP-02': '../images/vp_default.png',
-            'VP-03': '../images/vp_default.png',
-            'VP-04': '../images/vp_default.png',
-            'VP-05': '../images/vp_default.png',
-            'VP-06': '../images/vp_default.png',
-            'VP-07': '../images/vp_default.png',
-            'VP-08': '../images/vp_default.png',
+            'VP-01': '../images/vp_01.png',
+            'VP-02': '../images/vp_02.png',
+            'VP-03': '../images/vp_03.png',
         };
         const diagImg = document.getElementById('vp-diagram-img');
         if (diagImg) diagImg.src = VP_DIAGRAM_MAP[v.id] || '../images/vp_default.png';
@@ -1062,9 +1057,138 @@ document.addEventListener('DOMContentLoaded', () => {
         draw();
     }
 
+    // Map Image Enlargement
+    const vpDiagramImg = document.getElementById('vp-diagram-img');
+    const vpDiagramPanel = document.getElementById('vp-diagram-panel');
+    const vpDiagramTools = document.getElementById('vp-diagram-tools');
+    const btnVpDiagramShrink = document.getElementById('btn-vp-diagram-shrink');
+    const btnVpDiagramZoomIn = document.getElementById('btn-vp-diagram-zoom-in');
+    const btnVpDiagramZoomOut = document.getElementById('btn-vp-diagram-zoom-out');
+    const btnVpDiagramReset = document.getElementById('btn-vp-diagram-reset');
+
+    let currentZoom = 1;
+    let panX = 0;
+    let panY = 0;
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let hasDragged = false;
+
+    function applyTransform() {
+        if (vpDiagramImg) {
+            vpDiagramImg.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
+        }
+    }
+
+    if (vpDiagramImg && vpDiagramPanel && vpDiagramTools && btnVpDiagramShrink) {
+        vpDiagramImg.addEventListener('click', (e) => {
+            if (hasDragged) return; // Prevent open if it was a drag
+            if (!vpDiagramPanel.classList.contains('full-size')) {
+                vpDiagramPanel.classList.add('full-size');
+                vpDiagramTools.classList.remove('hidden');
+                currentZoom = 1; panX = 0; panY = 0;
+                applyTransform();
+            }
+        });
+
+        btnVpDiagramZoomIn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentZoom += 0.2;
+            applyTransform();
+        });
+
+        btnVpDiagramZoomOut?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentZoom = Math.max(0.5, currentZoom - 0.2);
+            applyTransform();
+        });
+
+        btnVpDiagramReset?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentZoom = 1; panX = 0; panY = 0;
+            applyTransform();
+        });
+
+        btnVpDiagramShrink.addEventListener('click', (e) => {
+            e.stopPropagation();
+            vpDiagramPanel.classList.remove('full-size');
+            vpDiagramTools.classList.add('hidden');
+            currentZoom = 1; panX = 0; panY = 0;
+            vpDiagramImg.style.transform = '';
+        });
+
+        // Wheel to zoom
+        vpDiagramPanel.addEventListener('wheel', (e) => {
+            if (!vpDiagramPanel.classList.contains('full-size')) return;
+            e.preventDefault();
+
+            const zoomStep = 0.1;
+            const prevZoom = currentZoom;
+
+            if (e.deltaY < 0) {
+                currentZoom += zoomStep; // Zoom in
+            } else {
+                currentZoom = Math.max(0.2, currentZoom - zoomStep); // Zoom out, min 0.2x
+            }
+
+            // Adjust pan to zoom towards mouse cursor
+            const rect = vpDiagramPanel.getBoundingClientRect();
+            // Mouse position relative to center of panel
+            const mx = e.clientX - (rect.left + rect.width / 2);
+            const my = e.clientY - (rect.top + rect.height / 2);
+
+            // Adjust pan so the point under the mouse stays in the same place
+            panX -= mx * (currentZoom / prevZoom - 1);
+            panY -= my * (currentZoom / prevZoom - 1);
+
+            applyTransform();
+        }, { passive: false });
+
+        // Drag to pan
+        vpDiagramPanel.addEventListener('mousedown', (e) => {
+            if (!vpDiagramPanel.classList.contains('full-size')) return;
+            if (e.target.closest('.vp-diagram-tools')) return; // Ignore clicks on tools
+
+            e.preventDefault(); // prevent native image drag
+            isDragging = true;
+            hasDragged = false;
+            startX = e.clientX - panX;
+            startY = e.clientY - panY;
+            vpDiagramPanel.classList.add('dragging');
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            hasDragged = true;
+            panX = e.clientX - startX;
+            panY = e.clientY - startY;
+            applyTransform();
+        });
+
+        const stopDrag = () => {
+            if (isDragging) {
+                isDragging = false;
+                vpDiagramPanel.classList.remove('dragging');
+                // Use a short timeout to prevent click from firing right after mouseup
+                setTimeout(() => hasDragged = false, 50);
+            }
+        };
+
+        window.addEventListener('mouseup', stopDrag);
+        // Ensure drag stops if mouse leaves window
+        document.addEventListener('mouseleave', stopDrag);
+    }
+
     window.closeVpModal = () => {
         const modal = document.getElementById('vp-status-modal');
         if (modal) modal.classList.remove('active');
+        // Reset full size when closing
+        if (vpDiagramPanel && vpDiagramTools) {
+            vpDiagramPanel.classList.remove('full-size');
+            vpDiagramTools.classList.add('hidden');
+            currentZoom = 1; panX = 0; panY = 0;
+            if (vpDiagramImg) vpDiagramImg.style.transform = '';
+        }
     };
 
     // Initialize Lucide Icons

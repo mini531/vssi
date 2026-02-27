@@ -394,6 +394,10 @@ function updateSwitcherUI(activeAcronym) {
 
         const acronymSpan = item.querySelector('.switcher-acronym');
         if (acronymSpan) acronymSpan.classList.remove('current');
+
+        item.style.pointerEvents = ''; // Reset pointer events
+        const linkIcon = item.querySelector('.link-icon');
+        if (linkIcon) linkIcon.style.display = ''; // Reset link icon display
     });
 
     // Add active to selected
@@ -412,6 +416,10 @@ function updateSwitcherUI(activeAcronym) {
             badge.innerText = 'CURRENT';
             contentDiv.appendChild(badge);
         }
+
+        activeItem.style.pointerEvents = 'none'; // Disable click
+        const linkIcon = activeItem.querySelector('.link-icon');
+        if (linkIcon) linkIcon.style.display = 'none'; // Hide link icon for current
     }
 }
 
@@ -469,6 +477,10 @@ document.addEventListener('click', (e) => {
 
         if (typeof window.closeMonitoringModal === 'function' && e.target.id === 'monitoring-detail-modal') {
             window.closeMonitoringModal();
+        }
+
+        if (typeof window.closeVpModal === 'function' && e.target.id === 'vp-status-modal') {
+            window.closeVpModal();
         }
     }
 });

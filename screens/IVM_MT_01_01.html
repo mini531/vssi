@@ -457,7 +457,7 @@
                 </div>
                 <i data-lucide="x" class="close-icon" onclick="closeVpModal()"></i>
             </div>
-            <div class="modal-content">
+            <div class="modal-content relative" id="vp-modal-content">
 
                 <!-- KPI + Diagram 2-column layout -->
                 <div class="vp-top-layout">
@@ -500,8 +500,23 @@
                         <div>
                             <h4 class="modal-section-title">배치도</h4>
                         </div>
-                        <div class="vp-diagram-panel">
-                            <img id="vp-diagram-img" src="../images/vp_default.png" alt="버티포트 구성도" />
+                        <div class="vp-diagram-panel relative" id="vp-diagram-panel">
+                            <div class="vp-diagram-tools hidden" id="vp-diagram-tools">
+                                <button class="icon-btn-xs" id="btn-vp-diagram-zoom-out" title="축소">
+                                    <i data-lucide="zoom-out" class="w-4 h-4 text-white"></i>
+                                </button>
+                                <button class="icon-btn-xs" id="btn-vp-diagram-reset" title="원래 크기">
+                                    <i data-lucide="rotate-ccw" class="w-4 h-4 text-white"></i>
+                                </button>
+                                <button class="icon-btn-xs" id="btn-vp-diagram-zoom-in" title="확대">
+                                    <i data-lucide="zoom-in" class="w-4 h-4 text-white"></i>
+                                </button>
+                                <button class="icon-btn-xs" id="btn-vp-diagram-shrink" title="닫기">
+                                    <i data-lucide="minimize-2" class="w-4 h-4 text-white"></i>
+                                </button>
+                            </div>
+                            <img id="vp-diagram-img" src="../images/vp_default.png" alt="버티포트 구성도"
+                                class="cursor-pointer" title="클릭하여 확대" />
                         </div>
                     </div>
                 </div>
@@ -572,6 +587,8 @@
             </div>
         </div>
     </div>
+
+
 
 </body>
 
