@@ -28,7 +28,7 @@
             <div class="flex-1 overflow-y-auto custom-scrollbar dashboard-content-full scroll-view-standard">
                 <div class="dashboard-section">
 
-                    <!-- Dashboard Header: Metrics & Pulse -->
+                    <!-- Row 1: Metrics & Pulse -->
                     <section class="dashboard-layout-grid">
                         <!-- Health/Status Cards Summary -->
                         <div class="col-side grid grid-cols-2 gap-4">
@@ -83,13 +83,11 @@
                         </div>
                     </section>
 
-                    <!-- Main Grid: Top-Tier Monitoring -->
+                    <!-- Row 2: Matrix & Fault Stream -->
                     <div class="dashboard-layout-grid">
-
-                        <!-- Left: Health Matrix (Infrastructure State) -->
+                        <!-- Left: Health Matrix -->
                         <section class="col-main dashboard-section">
-                            <!-- Matrix Top -->
-                            <div class="db-card-p6">
+                            <div class="db-card-p6 h-full">
                                 <header class="db-card-header">
                                     <div class="search-panel-title-group">
                                         <i data-lucide="layout-grid" class="w-5 h-5 text-success"></i>
@@ -100,51 +98,54 @@
                                     </button>
                                 </header>
                                 <div class="infra-status-grid">
-                                    <!-- Column Headers -->
                                     <div></div>
                                     <div class="infra-grid-header">정상 (Normal)</div>
                                     <div class="infra-grid-header">위험 (Critical)</div>
                                     <div class="infra-grid-header">장애 (Failure)</div>
-
-                                    <!-- CPU Row -->
                                     <div class="infra-resource-label">CPU</div>
                                     <div class="infra-status-card success" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">23</span>
-                                    </div>
+                                        <span class="infra-status-count">23</span></div>
                                     <div class="infra-status-card warning" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">2</span>
-                                    </div>
+                                        <span class="infra-status-count">2</span></div>
                                     <div class="infra-status-card error" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">1</span>
-                                    </div>
-
-                                    <!-- MEM Row -->
+                                        <span class="infra-status-count">1</span></div>
                                     <div class="infra-resource-label">메모리</div>
                                     <div class="infra-status-card success" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">25</span>
-                                    </div>
+                                        <span class="infra-status-count">25</span></div>
                                     <div class="infra-status-card warning" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">1</span>
-                                    </div>
+                                        <span class="infra-status-count">1</span></div>
                                     <div class="infra-status-card error" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">0</span>
-                                    </div>
-
-                                    <!-- NET Row -->
+                                        <span class="infra-status-count">0</span></div>
                                     <div class="infra-resource-label">네트워크</div>
                                     <div class="infra-status-card success" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">14</span>
-                                    </div>
+                                        <span class="infra-status-count">14</span></div>
                                     <div class="infra-status-card warning" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">0</span>
-                                    </div>
+                                        <span class="infra-status-count">0</span></div>
                                     <div class="infra-status-card error" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">1</span>
-                                    </div>
+                                        <span class="infra-status-count">1</span></div>
                                 </div>
                             </div>
-                            <!-- Ranking Widget -->
-                            <section class="db-card-p6">
+                        </section>
+                        <!-- Right: Fault Stream -->
+                        <aside class="col-side dashboard-section">
+                            <section class="db-feed-pane h-full">
+                                <header class="pane-header select-none">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="zap" class="w-5 h-5 text-success"></i>
+                                        <span class="db-section-title">실시간 장애 스트림</span>
+                                    </div>
+                                    <button class="btn-xs btn-secondary" onclick="location.href='SAM_SY_02_01.html'">더
+                                        보기</button>
+                                </header>
+                                <div class="pane-content custom-scrollbar" id="fault-feed-container"></div>
+                            </section>
+                        </aside>
+                    </div>
+
+                    <!-- Row 3: Worst 5 Ranking & Activity Log -->
+                    <div class="dashboard-layout-grid">
+                        <section class="col-main dashboard-section">
+                            <section class="db-card-p6 h-full">
                                 <header class="db-card-header border-b border-slate-700/50 pb-4">
                                     <div class="search-panel-title-group">
                                         <i data-lucide="trending-up" class="w-5 h-5 text-error"></i>
@@ -152,7 +153,7 @@
                                     </div>
                                     <span class="db-card-label">최근 갱신: 2026.02.12 12:10:00</span>
                                 </header>
-                                <div class="db-chart-row gap-4 xl:gap-12">
+                                <div class="db-chart-row gap-4 xl:gap-12 mt-4">
                                     <div class="dashboard-section gap-2">
                                         <h4 class="db-item-title mb-2">CPU 부하 상위 노드</h4>
                                         <div id="cpu-rank-container" class="dashboard-section gap-1"></div>
@@ -164,68 +165,45 @@
                                 </div>
                             </section>
                         </section>
-
-                        <!-- Right: Intelligent Feeds (Faults & Security) -->
                         <aside class="col-side dashboard-section">
-                            <!-- Fault Feed -->
-                            <section class="db-feed-pane">
-                                <header class="pane-header select-none">
-                                    <div class="flex items-center gap-2">
-                                        <i data-lucide="zap" class="w-5 h-5 text-success"></i>
-                                        <span class="db-section-title">실시간 장애 스트림</span>
-                                    </div>
-                                    <button class="btn-xs btn-secondary" onclick="location.href='SAM_SY_02_01.html'">
-                                        더 보기
-                                    </button>
-                                </header>
-                                <div class="pane-content custom-scrollbar" id="fault-feed-container">
-                                    <!-- Dynamic Items via JS -->
-                                </div>
-                            </section>
-
-                            <!-- Security Log -->
-                            <section class="db-feed-pane">
+                            <section class="db-feed-pane h-full">
                                 <header class="pane-header select-none">
                                     <div class="flex items-center gap-2">
                                         <i data-lucide="shield-check" class="w-5 h-5 text-success"></i>
                                         <span class="db-section-title">최근 사용자 활동 로그</span>
                                     </div>
-                                    <button class="btn-xs btn-secondary" onclick="location.href='SAM_LG_02_01.html'">
-                                        더 보기
-                                    </button>
+                                    <button class="btn-xs btn-secondary" onclick="location.href='SAM_LG_02_01.html'">더
+                                        보기</button>
                                 </header>
-                                <div class="pane-content custom-scrollbar" id="access-log-container">
-                                    <!-- Dynamic Items via JS -->
-                                </div>
+                                <div class="pane-content custom-scrollbar" id="access-log-container"></div>
                             </section>
                         </aside>
                     </div>
 
-                    <!-- Bottom Widget Wrapper (Ranking + Notices) -->
+                    <!-- Row 4: Trends & Notice (4:4:4 Layout) -->
                     <div class="dashboard-layout-grid pb-12">
-                        <div class="col-main dashboard-section">
-                            <!-- Matrix Bottom: Resource Charts (Multi-Device) -->
-                            <div class="db-chart-row">
-                                <div class="db-card-p6">
-                                    <header class="db-card-header">
-                                        <div class="search-panel-title-group">
-                                            <i data-lucide="cpu" class="w-5 h-5 text-success"></i>
-                                            <h2 class="db-section-title">인프라 그룹별 최대 CPU 부하 추이</h2>
-                                        </div>
-                                        <button class="btn-xs btn-secondary"
-                                            onclick="location.href='SAM_MO_01_01.html'">
-                                            더 보기
-                                        </button>
-                                    </header>
-                                    <div class="sparkline-container">
+                        <!-- Chart: CPU Load Trend -->
+                        <section class="col-4 dashboard-section">
+                            <article class="db-feed-pane h-full">
+                                <header class="pane-header">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="activity" class="w-5 h-5 text-success"></i>
+                                        <h2 class="db-section-title text-sm">인프라 그룹별 최대 CPU 부하 추이</h2>
+                                    </div>
+                                    <button class="btn-xs btn-secondary" onclick="location.href='SAM_MO_01_01.html'">더
+                                        보기</button>
+                                </header>
+                                <div class="pane-content flex-1">
+                                    <div class="sparkline-container mt-4">
                                         <canvas id="chart-cpu"></canvas>
                                     </div>
-                                    <div class="chart-legend-container">
+                                    <!-- Legend Container -->
+                                    <div class="chart-legend-container mt-2">
                                         <button type="button" class="btn-chart-nav"
                                             onclick="scrollLegend('chart-cpu-legend', -100)">
                                             <i data-lucide="chevron-left" class="w-3 h-3"></i>
                                         </button>
-                                        <div class="chart-legend-scroll" id="chart-cpu-legend">
+                                        <div class="chart-legend-scroll custom-scrollbar" id="chart-cpu-legend">
                                             <div class="chart-legend-item">
                                                 <div class="legend-dot" style="background:#14b8a6"></div>
                                                 <span>VOS운용서버</span>
@@ -247,12 +225,12 @@
                                                 <span>VCDM운용서버</span>
                                             </div>
                                             <div class="chart-legend-item">
-                                                <div class="legend-dot" style="background:#10b981"></div>
-                                                <span>VP운용 단말</span>
+                                                <div class="legend-dot" style="background:#10b981"></div><span>VP운용
+                                                    단말</span>
                                             </div>
                                             <div class="chart-legend-item">
-                                                <div class="legend-dot" style="background:#6366f1"></div>
-                                                <span>단독 서버</span>
+                                                <div class="legend-dot" style="background:#6366f1"></div><span>단독
+                                                    서버</span>
                                             </div>
                                         </div>
                                         <button type="button" class="btn-chart-nav"
@@ -261,43 +239,45 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="db-card-p6">
-                                    <header class="db-card-header">
-                                        <div class="search-panel-title-group">
-                                            <i data-lucide="user-plus" class="w-5 h-5 text-success"></i>
-                                            <h2 class="db-section-title">사용자 등록 현황</h2>
-                                        </div>
-                                        <button class="btn-xs btn-secondary"
-                                            onclick="location.href='SAM_US_01_01.html'">
-                                            더 보기
-                                        </button>
-                                    </header>
-                                    <div class="sparkline-container">
+                            </article>
+                        </section>
+
+                        <!-- Chart: User Stats -->
+                        <section class="col-4 dashboard-section">
+                            <article class="db-feed-pane h-full">
+                                <header class="pane-header">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="user-plus" class="w-5 h-5 text-success"></i>
+                                        <h2 class="db-section-title">사용자 등록 현황</h2>
+                                    </div>
+                                    <button class="btn-xs btn-secondary" onclick="location.href='SAM_US_01_01.html'">더
+                                        보기</button>
+                                </header>
+                                <div class="pane-content flex-1">
+                                    <div class="chart-container-sm mt-4">
                                         <canvas id="chart-signup"></canvas>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            </article>
+                        </section>
 
-                        <!-- Right: Notice Feed -->
-                        <aside class="col-side dashboard-section">
-                            <section class="db-feed-pane">
+                        <!-- Notice Feed -->
+                        <aside class="col-4 dashboard-section">
+                            <section class="db-feed-pane h-full">
                                 <header class="pane-header select-none">
                                     <div class="flex items-center gap-2">
                                         <i data-lucide="megaphone" class="w-5 h-5 text-success"></i>
                                         <span class="db-section-title">공지사항</span>
                                     </div>
-                                    <button class="btn-xs btn-secondary" onclick="location.href='SAM_BD_01_01.html'">
-                                        더 보기
-                                    </button>
+                                    <button class="btn-xs btn-secondary" onclick="location.href='SAM_BD_01_01.html'">더
+                                        보기</button>
                                 </header>
-                                <div class="pane-content custom-scrollbar" id="dashboard-notice-list">
-                                    <!-- Dynamic Items via JS -->
-                                </div>
+                                <div class="pane-content custom-scrollbar" id="dashboard-notice-list"></div>
                             </section>
                         </aside>
                     </div>
                 </div>
+            </div>
         </main>
     </div>
 
@@ -356,9 +336,6 @@
             </div>
         </div>
     </div>
-
-    <!-- System Switcher Modal -->
-    <div data-include="../components/system-switcher.html"></div>
 
     <script src="../js/include.js"></script>
     <script src="../js/common.js"></script>
