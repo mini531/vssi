@@ -264,7 +264,7 @@
     position: absolute;
     top: 0.5rem;
     bottom: 0.5rem;
-    left: 5.25rem;
+    left: 5.7rem;
     width: 1px;
     background: rgba(255, 255, 255, 0.1);
     z-index: 1;
@@ -277,7 +277,7 @@
 }
 
 .mon-timeline-time {
-    font-size: 0.625rem;
+    font-size: 0.8rem;
     color: var(--text-secondary);
     width: 4rem;
     flex-shrink: 0;
@@ -304,21 +304,14 @@
 .mon-timeline-content {
     background: rgba(10, 15, 28, 0.2);
     border: 1px solid rgba(51, 65, 85, 0.2);
-    padding: 0.2rem 0.75rem;
+    padding: 0 0.75rem;
     flex: 1;
     border-radius: 0;
 }
 
-.mon-timeline-code {
-    font-size: 0.625rem;
-    font-weight: 800;
-    color: var(--accent-teal);
-    margin-bottom: 0.125rem;
-    display: block;
-}
 
 .mon-timeline-text {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
 }
 
 /* Flight Plan Item */

@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === 3. Vertiport Status Pagination ===
     let vpPage = 0;
-    let activeVpId = null;
+    let activeVpId = 'VP-01'; // Default: Gilcheon
     const perPage = 4;
     const vpListEl = document.getElementById('vp-list');
     const prevBtn = document.getElementById('vp-prev');
@@ -62,6 +62,10 @@ document.addEventListener('DOMContentLoaded', () => {
             item.onclick = () => {
                 map.flyTo([v.lat, v.lng], 14);
                 activeVpId = v.id;
+
+                // Sync with parent select box
+                const parentSelect = document.getElementById('vp-select');
+                if (parentSelect) parentSelect.value = v.id;
 
                 // Deselect Flight Plan items
                 document.querySelectorAll('.mon-flight-item').forEach(i => i.classList.remove('active'));
@@ -142,9 +146,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Create 8 bars
             for (let i = 0; i < 8; i++) {
                 const totalHeight = Math.floor(Math.random() * 60) + 30; // 30% to 90%
-                const failRatio = Math.random() * 0.3; // 0% to 30% of the bar is failure
-                const failHeight = totalHeight * failRatio;
-                const successHeight = totalHeight - failHeight;
+                const cancelRatio = Math.random() * 0.15; // 0% to 15%
+                const delayRatio = Math.random() * 0.2; // 0% to 20%
+                const cancelHeight = totalHeight * cancelRatio;
+                const delayHeight = totalHeight * delayRatio;
+                const successHeight = totalHeight - cancelHeight - delayHeight;
 
                 const barContainer = document.createElement('div');
                 barContainer.className = 'flex flex-col justify-end items-center h-full';
@@ -152,28 +158,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Stacked Bar Wrapper
                 const bar = document.createElement('div');
-                bar.className = 'w-2 flex flex-col-reverse items-center overflow-hidden'; // removed rounded-sm
+                bar.className = 'w-2 flex flex-col-reverse items-center overflow-hidden';
                 bar.style.height = `${totalHeight}%`;
 
                 // Success section (Teal) - Bottom
                 const successPart = document.createElement('div');
-                successPart.className = 'bg-teal-500 w-full';
+                successPart.className = 'bg-success w-full';
                 successPart.style.height = `${(successHeight / totalHeight) * 100}%`;
 
-                // Failure section (Yellow/Amber) - Top
-                const failPart = document.createElement('div');
-                failPart.className = 'bg-amber-400 w-full';
-                failPart.style.height = `${(failHeight / totalHeight) * 100}%`;
+                // Delay section (Warning) - Middle
+                const delayPart = document.createElement('div');
+                delayPart.className = 'bg-warning w-full';
+                delayPart.style.height = `${(delayHeight / totalHeight) * 100}%`;
+
+                // Cancel section (Danger) - Top
+                const cancelPart = document.createElement('div');
+                cancelPart.className = 'bg-danger w-full';
+                cancelPart.style.height = `${(cancelHeight / totalHeight) * 100}%`;
 
                 bar.appendChild(successPart);
-                bar.appendChild(failPart);
+                bar.appendChild(delayPart);
+                bar.appendChild(cancelPart);
                 barContainer.appendChild(bar);
                 chart.appendChild(barContainer);
             }
         }
 
         renderOpsChart();
-        select.onchange = () => renderOpsChart(); // Re-render on change for demo effect
+        select.onchange = () => {
+            activeVpId = select.value;
+            renderOpsChart();
+            renderVertiports(); // Update list highlight
+        };
     }
     initOpsStatus();
 
@@ -1190,6 +1206,289 @@ document.addEventListener('DOMContentLoaded', () => {
             if (vpDiagramImg) vpDiagramImg.style.transform = '';
         }
     };
+
+    // === Flight Ops Stat Modal Logic ===
+    const flightOpsStatModal = document.getElementById('flight-ops-stat-modal');
+    const btnMoreFlightOps = document.getElementById('btn-more-flight-ops');
+    let flightOpsChartInstance = null;
+
+    if (btnMoreFlightOps) {
+        btnMoreFlightOps.onclick = () => openFlightOpsStatModal();
+    }
+
+    window.openFlightOpsStatModal = () => {
+        if (flightOpsStatModal) flightOpsStatModal.classList.add('active');
+
+        // Populate Vertiport Select if empty or needs refresh
+        const vpSelectModal = document.getElementById('flight-ops-vp-select-modal');
+        if (vpSelectModal) {
+            vpSelectModal.innerHTML = '<option value="ALL">전체</option>' +
+                vertiports.map(v => `<option value="${v.id}">${v.name}</option>`).join('');
+
+            // Inherit from parent selection
+            if (activeVpId) {
+                vpSelectModal.value = activeVpId;
+            } else {
+                vpSelectModal.value = 'ALL';
+            }
+        }
+
+        // Ensure filter is collapsed
+        const filterContent = document.getElementById('flight-ops-filter-content');
+        const filterChevron = document.getElementById('flight-ops-filter-chevron');
+        if (filterContent) filterContent.classList.add('hidden');
+        if (filterChevron) {
+            filterChevron.setAttribute('data-lucide', 'chevron-down');
+            if (window.lucide) lucide.createIcons();
+        }
+
+        // Set Defaults
+        const periodTypeSelect = document.getElementById('flight-ops-period-type');
+        if (periodTypeSelect) periodTypeSelect.value = 'daily';
+
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        const dateStr = `${yyyy}-${mm}-${dd}`;
+
+        const startInput = document.getElementById('flight-ops-start-date');
+        const endInput = document.getElementById('flight-ops-end-date');
+        if (startInput) startInput.value = dateStr;
+        if (endInput) endInput.value = dateStr;
+
+        updateFlightOpsDateInputs();
+
+        // Render initial chart (optional, but requested "on search", 
+        // however usually users expect something on first open. 
+        // Let's call it once to show data.)
+        renderFlightOpsChart();
+    };
+
+    window.closeFlightOpsStatModal = () => {
+        if (flightOpsStatModal) flightOpsStatModal.classList.remove('active');
+    };
+
+    window.toggleFlightOpsFilter = () => {
+        const content = document.getElementById('flight-ops-filter-content');
+        const chevron = document.getElementById('flight-ops-filter-chevron');
+        if (!content || !chevron) return;
+
+        const isHidden = content.classList.contains('hidden');
+        if (isHidden) {
+            content.classList.remove('hidden');
+            chevron.setAttribute('data-lucide', 'chevron-up');
+        } else {
+            content.classList.add('hidden');
+            chevron.setAttribute('data-lucide', 'chevron-down');
+        }
+        if (window.lucide) lucide.createIcons();
+    };
+
+    window.updateFlightOpsDateInputs = () => {
+        const periodType = document.getElementById('flight-ops-period-type')?.value || 'daily';
+        const startDateInput = document.getElementById('flight-ops-start-date');
+        const endDateInput = document.getElementById('flight-ops-end-date');
+        const dateSep = document.getElementById('flight-ops-date-sep');
+        const dateLabel = document.getElementById('flight-ops-date-label');
+
+        if (!startDateInput || !endDateInput) return;
+
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+
+        if (periodType === 'daily') {
+            if (dateLabel) dateLabel.textContent = '대상 일';
+            startDateInput.type = 'date';
+            const dd = String(today.getDate()).padStart(2, '0');
+            startDateInput.value = `${yyyy}-${mm}-${dd}`;
+            endDateInput.style.display = 'none'; // Only one date for Daily as per request
+            if (dateSep) dateSep.style.display = 'none';
+        } else {
+            if (periodType === 'weekly') {
+                if (dateLabel) dateLabel.textContent = '대상 주';
+                startDateInput.type = 'week';
+                // Current week calculation
+                const d = new Date();
+                d.setHours(0, 0, 0, 0);
+                d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+                const yearStart = new Date(d.getFullYear(), 0, 1);
+                const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+                startDateInput.value = `${d.getFullYear()}-W${String(weekNo).padStart(2, '0')}`;
+                endDateInput.style.display = 'none';
+                if (dateSep) dateSep.style.display = 'none';
+            } else if (periodType === 'monthly') {
+                if (dateLabel) dateLabel.textContent = '대상 월';
+                startDateInput.type = 'month';
+                startDateInput.value = `${yyyy}-${mm}`;
+                endDateInput.style.display = 'none';
+                if (dateSep) dateSep.style.display = 'none';
+            }
+        }
+    };
+
+    // Add button listeners
+    const btnSearch = document.getElementById('btn-flight-ops-search');
+    const btnReset = document.getElementById('btn-flight-ops-reset');
+    if (btnSearch) btnSearch.onclick = () => renderFlightOpsChart();
+    if (btnReset) {
+        btnReset.onclick = () => {
+            const vpSelect = document.getElementById('flight-ops-vp-select-modal');
+            const periodType = document.getElementById('flight-ops-period-type');
+            if (vpSelect) vpSelect.value = activeVpId || 'ALL';
+            if (periodType) periodType.value = 'daily';
+            updateFlightOpsDateInputs();
+        };
+    }
+
+    function renderFlightOpsChart() {
+        const canvas = document.getElementById('flight-ops-modal-chart');
+        if (!canvas) return;
+
+        if (flightOpsChartInstance) {
+            flightOpsChartInstance.destroy();
+        }
+
+        const ctx = canvas.getContext('2d');
+        const periodType = document.getElementById('flight-ops-period-type')?.value || 'daily';
+
+        let labels = [];
+        let normalData = [];
+        let delayData = [];
+        let cancelData = [];
+
+        const chartTitle = document.getElementById('flight-ops-chart-title');
+        const startDateVal = document.getElementById('flight-ops-start-date')?.value;
+        const selectedDate = startDateVal ? new Date(startDateVal) : new Date();
+
+        if (chartTitle) chartTitle.textContent = "운항 통계 차트";
+
+        if (periodType === 'daily') {
+            const today = new Date();
+            let limitHour = 23;
+
+            // If selectedDate is today, limit to current hour
+            if (selectedDate.getFullYear() === today.getFullYear() &&
+                selectedDate.getMonth() === today.getMonth() &&
+                selectedDate.getDate() === today.getDate()) {
+                limitHour = today.getHours();
+            }
+
+            for (let i = 0; i <= limitHour; i++) {
+                labels.push(`${String(i).padStart(2, '0')}:00`);
+                normalData.push(Math.floor(Math.random() * 5) + 2);
+                delayData.push(Math.floor(Math.random() * 2));
+                cancelData.push(Math.floor(Math.random() * 1.5));
+            }
+        } else if (periodType === 'weekly') {
+            labels = ['월', '화', '수', '목', '금', '토', '일'];
+            normalData = [45, 52, 48, 50, 60, 30, 25];
+            delayData = [4, 2, 5, 3, 8, 1, 0];
+            cancelData = [1, 2, 0, 1, 3, 0, 0];
+        } else if (periodType === 'monthly') {
+            const month = selectedDate.getMonth() + 1;
+            const today = new Date();
+            let limitDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0).getDate();
+
+            // If current month, limit to today
+            if (selectedDate.getFullYear() === today.getFullYear() && selectedDate.getMonth() === today.getMonth()) {
+                limitDay = today.getDate();
+            }
+
+            for (let i = 1; i <= limitDay; i++) {
+                labels.push(`${month}월 ${i}일`);
+                normalData.push(Math.floor(Math.random() * 20) + 30);
+                delayData.push(Math.floor(Math.random() * 5));
+                cancelData.push(Math.floor(Math.random() * 2));
+            }
+        }
+
+        // Ensure Chart is available
+        if (typeof Chart === 'undefined') return;
+
+        flightOpsChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: '정상',
+                        data: normalData,
+                        backgroundColor: '#14b8a6', // Success color
+                        borderColor: '#0f766e',
+                        borderWidth: 1,
+                        barThickness: 12
+                    },
+                    {
+                        label: '지연',
+                        data: delayData,
+                        backgroundColor: '#f97316', // Warning color
+                        borderColor: '#c2410c',
+                        borderWidth: 1,
+                        barThickness: 12
+                    },
+                    {
+                        label: '취소',
+                        data: cancelData,
+                        backgroundColor: '#ef4444', // Danger color
+                        borderColor: '#b91c1c',
+                        borderWidth: 1,
+                        barThickness: 12
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        stacked: true,
+                        grid: { color: '#334155' },
+                        ticks: {
+                            color: '#94a3b8',
+                            callback: function (val, index) {
+                                const label = this.getLabelForValue(val);
+                                if (periodType === 'monthly') {
+                                    const dayMatch = label.match(/(\d+)일/);
+                                    if (dayMatch) {
+                                        const day = parseInt(dayMatch[1]);
+                                        if (day === 1 || day % 5 === 0) return label;
+                                    }
+                                    return "";
+                                }
+                                if (periodType === 'daily') {
+                                    const hourMatch = label.match(/(\d+):00/);
+                                    if (hourMatch) {
+                                        const hour = parseInt(hourMatch[1]);
+                                        if (hour % 4 === 0) return label; // Show every 4 hours for clarity
+                                    }
+                                    return "";
+                                }
+                                return label;
+                            }
+                        }
+                    },
+                    y: {
+                        stacked: true,
+                        grid: { color: '#334155' },
+                        ticks: { color: '#94a3b8', stepSize: 5 }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: { color: '#e2e8f0', font: { family: "'Inter', sans-serif" } }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                }
+            }
+        });
+    }
 
     // Initialize Lucide Icons
     if (window.lucide) lucide.createIcons();

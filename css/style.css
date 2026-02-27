@@ -7196,7 +7196,7 @@ input:checked+.slider:before {
 }
 
 .mon-timeline-code {
-  font-size: 0.625rem;
+  font-size: 0.8rem;
   font-weight: 800;
   color: var(--accent-teal);
   margin-bottom: 0.125rem;

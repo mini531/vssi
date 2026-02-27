@@ -316,8 +316,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     vertiports.forEach(v => {
-        const baseColor = v.stand === '가용' ? '#14b8a6' : '#f97316';
-        const hoverColor = v.stand === '가용' ? '#5eead4' : '#fb923c';
+        let baseColor = '#14b8a6'; // 낮음 (Success)
+        let hoverColor = '#5eead4';
+
+        if (v.crowd === '보통') {
+            baseColor = '#f59e0b'; // 보통 (Warning)
+            hoverColor = '#fbbf24';
+        } else if (v.crowd === '높음') {
+            baseColor = '#ef4444'; // 높음 (Danger)
+            hoverColor = '#fca5a5';
+        }
         const dot = L.circleMarker([v.lat, v.lng], {
             radius: 6,
             color: baseColor,
