@@ -753,22 +753,29 @@ document.addEventListener('DOMContentLoaded', () => {
             { label: '취소 운항', value: 3, color: 'text-error' }
         ];
 
-        container.innerHTML = `<ul class="list-none p-0 m-0 space-y-2 mt-1">${stats.map(s => `
-            <li class="db-stat-item">
-                <span class="db-stat-label">${s.label}</span>
-                <span class="db-stat-value ${s.color}">${s.value}</span>
-            </li>
-        `).join('')}</ul>`;
+        container.innerHTML = `
+            <ul class="list-none">
+                ${stats.map((s, idx) => `
+                    <li class="db-stat-item">
+                        <span class="db-stat-label">${s.label}</span>
+                        <span class="db-stat-value ${s.color}">${s.value}</span>
+                    </li>
+                `).join('')}
+            </ul>
+            <div class="db-stat-footer">
+                기준: 2026.02.02 07:24:15
+            </div>
+        `;
     }
 
     function renderSystemLoad() {
         const container = document.getElementById('db-sys-load-container');
         if (!container) return;
         const loads = [
-            { id: 'CPU', val: 12, unit: '%' },
-            { id: '메모리', val: 45, unit: '%' },
-            { id: '디스크', val: 5, unit: '%' },
-            { id: '네트워크', val: 24, unit: 'Mbps' }
+            { id: 'CPU', val: 12.24, unit: '%' },
+            { id: '메모리', val: 45.14, unit: '%' },
+            { id: '디스크', val: 5.22, unit: '%' },
+            { id: '네트워크', val: 24.4, unit: 'Mbps' }
         ];
 
         container.innerHTML = `
@@ -777,17 +784,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="db-card-label">${l.id} (${l.unit})</span>
                 <span class="db-card-value db-card-value-md text-accent-teal">${l.val}</span>
             </div>
-        `).join('')}</div>`;
+        `).join('')}</div>
+            <div class="db-stat-footer">
+                기준: 2026.02.02 07:24:15
+            </div>`;
     }
 
     function renderTopFlights() {
         const container = document.getElementById('db-top-flights-container');
         if (!container) return;
         const plans = [
-            { id: 'FP-VOS-2024-001', route: '길천 -> 태화강역', time: '14:30' },
-            { id: 'FP-VOS-2024-002', route: '울산대공원 -> 자수정 동굴', time: '15:10' },
-            { id: 'FP-VOS-2024-003', route: '울산역 -> 울산과학기술원', time: '16:00' },
-            { id: 'FP-VOS-2024-004', route: '울산공항 -> 일산해수욕장', time: '17:20' }
+            { id: 'FP-VOS-2024-001', route: '길천 → 태화강역', time: '14:30' },
+            { id: 'FP-VOS-2024-002', route: '울산대공원 → 자수정 동굴', time: '15:10' },
+            { id: 'FP-VOS-2024-003', route: '울산역 → 울산과학기술원', time: '16:00' },
+            { id: 'FP-VOS-2024-004', route: '울산공항 → 일산해수욕장', time: '17:20' }
         ];
 
         container.innerHTML = `
@@ -828,6 +838,208 @@ document.addEventListener('DOMContentLoaded', () => {
     renderNoticeList();
 
     renderSummaryLogs();
+
+    // ── ⑤ Flight Ops Stat Modal Logic ─────────────────────────────────
+    const flightOpsStatModal = document.getElementById('flight-ops-stat-modal');
+    const btnMoreFlightOps = document.getElementById('btn-more-flight-ops');
+    let flightOpsChartInstance = null;
+
+    if (btnMoreFlightOps) {
+        btnMoreFlightOps.onclick = () => openFlightOpsStatModal();
+    }
+
+    window.openFlightOpsStatModal = () => {
+        if (flightOpsStatModal) flightOpsStatModal.classList.add('active');
+
+        // Populate Vertiport Select
+        const vpSelectModal = document.getElementById('flight-ops-vp-select-modal');
+        if (vpSelectModal) {
+            vpSelectModal.innerHTML = '<option value="ALL">전체</option>' +
+                vertiports.map(v => `<option value="${v.id}">${v.name}</option>`).join('');
+
+            // Force "All" (전체) as default when opened from dashboard
+            vpSelectModal.value = 'ALL';
+        }
+
+        // Reset Filter
+        const filterContent = document.getElementById('flight-ops-filter-content');
+        const filterChevron = document.getElementById('flight-ops-filter-chevron');
+        if (filterContent) filterContent.classList.add('hidden');
+        if (filterChevron) {
+            filterChevron.setAttribute('data-lucide', 'chevron-down');
+            if (window.lucide) lucide.createIcons();
+        }
+
+        // Set Defaults
+        const periodTypeSelect = document.getElementById('flight-ops-period-type');
+        if (periodTypeSelect) periodTypeSelect.value = 'daily';
+
+        const today = new Date();
+        const startInput = document.getElementById('flight-ops-start-date');
+        const endInput = document.getElementById('flight-ops-end-date');
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        if (startInput) startInput.value = `${yyyy}-${mm}-${dd}`;
+        if (endInput) endInput.value = `${yyyy}-${mm}-${dd}`;
+
+        updateFlightOpsDateInputs();
+        renderFlightOpsChart();
+    };
+
+    window.closeFlightOpsStatModal = () => {
+        if (flightOpsStatModal) flightOpsStatModal.classList.remove('active');
+    };
+
+    window.toggleFlightOpsFilter = () => {
+        const content = document.getElementById('flight-ops-filter-content');
+        const chevron = document.getElementById('flight-ops-filter-chevron');
+        if (!content || !chevron) return;
+        const isHidden = content.classList.contains('hidden');
+        if (isHidden) {
+            content.classList.remove('hidden');
+            chevron.setAttribute('data-lucide', 'chevron-up');
+        } else {
+            content.classList.add('hidden');
+            chevron.setAttribute('data-lucide', 'chevron-down');
+        }
+        if (window.lucide) lucide.createIcons();
+    };
+
+    window.updateFlightOpsDateInputs = () => {
+        const periodType = document.getElementById('flight-ops-period-type')?.value || 'daily';
+        const startDateInput = document.getElementById('flight-ops-start-date');
+        const endDateInput = document.getElementById('flight-ops-end-date');
+        const dateSep = document.getElementById('flight-ops-date-sep');
+        const dateLabel = document.getElementById('flight-ops-date-label');
+
+        if (!startDateInput || !endDateInput) return;
+
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+
+        if (periodType === 'daily') {
+            if (dateLabel) dateLabel.textContent = '대상 일';
+            startDateInput.type = 'date';
+            startDateInput.value = `${yyyy}-${mm}-${String(today.getDate()).padStart(2, '0')}`;
+            endDateInput.style.display = 'none';
+            if (dateSep) dateSep.style.display = 'none';
+        } else if (periodType === 'weekly') {
+            if (dateLabel) dateLabel.textContent = '대상 주';
+            startDateInput.type = 'week';
+            // Current week
+            const d = new Date();
+            d.setHours(0, 0, 0, 0);
+            d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+            const yearStart = new Date(d.getFullYear(), 0, 1);
+            const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+            startDateInput.value = `${d.getFullYear()}-W${String(weekNo).padStart(2, '0')}`;
+            endDateInput.style.display = 'none';
+            if (dateSep) dateSep.style.display = 'none';
+        } else if (periodType === 'monthly') {
+            if (dateLabel) dateLabel.textContent = '대상 월';
+            startDateInput.type = 'month';
+            startDateInput.value = `${yyyy}-${mm}`;
+            endDateInput.style.display = 'none';
+            if (dateSep) dateSep.style.display = 'none';
+        }
+    };
+
+    const btnSearchM = document.getElementById('btn-flight-ops-search-modal');
+    const btnResetM = document.getElementById('btn-flight-ops-reset-modal');
+    if (btnSearchM) btnSearchM.onclick = () => renderFlightOpsChart();
+    if (btnResetM) {
+        btnResetM.onclick = () => {
+            const vpSelect = document.getElementById('flight-ops-vp-select-modal');
+            const periodType = document.getElementById('flight-ops-period-type');
+            if (vpSelect) vpSelect.value = 'ALL';
+            if (periodType) periodType.value = 'daily';
+            updateFlightOpsDateInputs();
+        };
+    }
+
+    function renderFlightOpsChart() {
+        const canvas = document.getElementById('flight-ops-modal-chart');
+        if (!canvas || typeof Chart === 'undefined') return;
+
+        if (flightOpsChartInstance) flightOpsChartInstance.destroy();
+        const ctx = canvas.getContext('2d');
+        const periodType = document.getElementById('flight-ops-period-type')?.value || 'daily';
+
+        // Mock data logic similar to IVM_MT_01_01.js
+        let labels = [], normalData = [], delayData = [], cancelData = [];
+        const today = new Date();
+        const startDateVal = document.getElementById('flight-ops-start-date')?.value;
+        const selectedDate = startDateVal ? new Date(startDateVal) : new Date();
+
+        if (periodType === 'daily') {
+            let limitHour = 23;
+            if (selectedDate.toDateString() === today.toDateString()) limitHour = today.getHours();
+            for (let i = 0; i <= limitHour; i++) {
+                labels.push(`${String(i).padStart(2, '0')}:00`);
+                normalData.push(Math.floor(Math.random() * 5) + 2);
+                delayData.push(Math.floor(Math.random() * 2));
+                cancelData.push(Math.floor(Math.random() * 1.5));
+            }
+        } else if (periodType === 'weekly') {
+            labels = ['월', '화', '수', '목', '금', '토', '일'];
+            normalData = [45, 52, 48, 50, 60, 30, 25];
+            delayData = [4, 2, 5, 3, 8, 1, 0];
+            cancelData = [1, 2, 0, 1, 3, 0, 0];
+        } else if (periodType === 'monthly') {
+            const month = selectedDate.getMonth() + 1;
+            let limitDay = new Date(selectedDate.getFullYear(), month, 0).getDate();
+            if (selectedDate.getFullYear() === today.getFullYear() && selectedDate.getMonth() === today.getMonth()) limitDay = today.getDate();
+            for (let i = 1; i <= limitDay; i++) {
+                labels.push(`${month}월 ${i}일`);
+                normalData.push(Math.floor(Math.random() * 20) + 30);
+                delayData.push(Math.floor(Math.random() * 5));
+                cancelData.push(Math.floor(Math.random() * 2));
+            }
+        }
+
+        flightOpsChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels,
+                datasets: [
+                    { label: '정상', data: normalData, backgroundColor: '#14b8a6', barThickness: 12 },
+                    { label: '지연', data: delayData, backgroundColor: '#f97316', barThickness: 12 },
+                    { label: '취소', data: cancelData, backgroundColor: '#ef4444', barThickness: 12 }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        stacked: true, grid: { color: '#334155' }, ticks: {
+                            color: '#94a3b8',
+                            callback: function (val, index) {
+                                const label = this.getLabelForValue(val);
+                                if (periodType === 'monthly') {
+                                    const dMatch = label.match(/(\d+)일/);
+                                    if (dMatch && (parseInt(dMatch[1]) === 1 || parseInt(dMatch[1]) % 5 === 0)) return label;
+                                    return "";
+                                }
+                                if (periodType === 'daily') {
+                                    const hMatch = label.match(/(\d+):00/);
+                                    if (hMatch && parseInt(hMatch[1]) % 4 === 0) return label;
+                                    return "";
+                                }
+                                return label;
+                            }
+                        }
+                    },
+                    y: { stacked: true, grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }
+                },
+                plugins: {
+                    legend: { display: true, position: 'top', labels: { color: '#e2e8f0' } },
+                    tooltip: { mode: 'index', intersect: false }
+                }
+            }
+        });
+    }
 
     // ── Lucide icons ────────────────────────────────────────────────────
     if (window.lucide) lucide.createIcons();

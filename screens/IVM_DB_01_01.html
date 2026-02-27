@@ -185,10 +185,13 @@
                                 <header class="pane-header">
                                     <div class="flex items-center gap-2">
                                         <i data-lucide="bar-chart-3" class="w-5 h-5 text-success"></i>
-                                        <h2 class="db-section-title">운항 현황 통계</h2>
+                                        <h2 class="db-section-title">운항 현황</h2>
                                     </div>
+                                    <button class="btn-xs btn-secondary" id="btn-more-flight-ops" title="더 보기">
+                                        <span>더 보기</span>
+                                    </button>
                                 </header>
-                                <div id="db-ops-stats-container" class="pane-content custom-scrollbar"></div>
+                                <div id="db-ops-stats-container" class="pane-content pb-2"></div>
                             </article>
                         </section>
 
@@ -367,6 +370,93 @@
             </div>
             <div class="modal-btn-group">
                 <button onclick="closeMapImageModal()" class="btn-md btn-primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flight Ops Statistics Modal -->
+    <div id="flight-ops-stat-modal" class="modal-overlay">
+        <div class="modal-dialog modal-big">
+            <div class="modal-header">
+                <h3 class="modal-title-left">운항 현황 통계</h3>
+                <i data-lucide="x" class="close-icon" onclick="closeFlightOpsStatModal()"></i>
+            </div>
+
+            <div class="modal-content">
+                <!-- Search Filter Area -->
+                <div class="search-panel mb-4">
+                    <div class="search-panel-header" onclick="toggleFlightOpsFilter()">
+                        <div class="search-panel-title-group">
+                            <i data-lucide="filter" class="status-card-icon text-success"></i>
+                            <span class="search-panel-title">검색 필터</span>
+                        </div>
+                        <i data-lucide="chevron-down" id="flight-ops-filter-chevron" class="filter-chevron"></i>
+                    </div>
+                    <div id="flight-ops-filter-content" class="search-panel-content hidden">
+                        <div class="filter-panel-inner">
+                            <div class="filter-grid">
+                                <div>
+                                    <label class="filter-label">버티포트</label>
+                                    <select class="filter-select filter-select-flex" id="flight-ops-vp-select-modal">
+                                        <!-- JS Generated -->
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="filter-label">기준</label>
+                                    <select class="filter-select filter-select-flex" id="flight-ops-period-type"
+                                        onchange="updateFlightOpsDateInputs()">
+                                        <option value="daily">일간</option>
+                                        <option value="weekly">주간</option>
+                                        <option value="monthly">월간</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="filter-label" id="flight-ops-date-label">기간</label>
+                                    <div class="filter-date-range">
+                                        <input type="date" id="flight-ops-start-date"
+                                            class="filter-input filter-input-flex"
+                                            onclick="try{this.showPicker()}catch(e){}">
+                                        <span class="filter-date-separator" id="flight-ops-date-sep">~</span>
+                                        <input type="date" id="flight-ops-end-date"
+                                            class="filter-input filter-input-flex"
+                                            onclick="try{this.showPicker()}catch(e){}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="filter-actions mt-4">
+                                <button class="filter-btn-common filter-btn-reset" id="btn-flight-ops-reset-modal">
+                                    <i data-lucide="rotate-ccw" class="trend-icon"></i> 초기화
+                                </button>
+                                <button class="filter-btn-common filter-btn-search" id="btn-flight-ops-search-modal">
+                                    <i data-lucide="search" class="trend-icon"></i> 조회
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart Area -->
+                <div class="table-main-wrapper" style="min-height: 400px; display: flex; flex-direction: column;">
+                    <div class="pane-header flex-none border-b-0">
+                        <div class="search-panel-title-group">
+                            <i data-lucide="bar-chart-2" class="status-card-icon text-success"></i>
+                            <span class="search-panel-title" id="flight-ops-chart-title">운항 현황 통계 차트</span>
+                        </div>
+                        <div class="pane-header-right">
+                            <button class="btn-sm btn-secondary">
+                                <i data-lucide="download" class="trend-icon"></i> 다운로드
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Chart container -->
+                    <div class="pane-content flex-1 flex flex-col items-center justify-center p-4">
+                        <canvas id="flight-ops-modal-chart"
+                            style="width: 100%; height: 100%; max-height: 350px;"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-btn-group">
+                <button onclick="closeFlightOpsStatModal()" class="btn-md btn-primary">확인</button>
             </div>
         </div>
     </div>

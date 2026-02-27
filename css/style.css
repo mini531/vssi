@@ -5981,7 +5981,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .db-stat-card {
   background-color: rgba(255, 255, 255, 0.05);
   border-radius: 0.125rem;
-  padding: 0.8rem;
+  padding: 0.5rem 0.8rem;
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -7215,4 +7215,19 @@ input:checked+.slider:before {
 .mon-timeline-text {
   font-size: 0.75rem;
   color: var(--text-primary);
+}
+
+.db-stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0;
+}
+
+.db-stat-footer {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #334155;
+  font-size: 10px;
+  color: #64748b;
 }
