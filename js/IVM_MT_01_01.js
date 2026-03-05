@@ -551,16 +551,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const itemsPerLogPage = 10;
 
     const mockLogs = [
-        { date: '2026년 2월 26일', time: '01:09:00 UTC', code: 'TG001', msg: 'Mode switch CRZ→APP', type: 'INFO' },
-        { date: '2026년 2월 26일', time: '01:07:59 UTC', code: 'TG004', msg: 'Latency high on link', type: 'WARN' },
-        { date: '2026년 2월 26일', time: '01:06:56 UTC', code: 'TG002', msg: 'Battery health check', type: 'INFO' },
-        { date: '2026년 2월 26일', time: '01:06:44 UTC', code: 'TG002', msg: 'Battery level low', type: 'ERROR' },
-        { date: '2026년 2월 26일', time: '01:06:17 UTC', code: 'TG002', msg: 'Battery health check', type: 'INFO' },
-        { date: '2026년 2월 26일', time: '01:04:55 UTC', code: 'TG003', msg: 'Geo-fence entering', type: 'INFO' },
-        { date: '2026년 2월 26일', time: '01:03:49 UTC', code: 'TG001', msg: 'Mode switch HOLD→CRZ', type: 'INFO' },
-        { date: '2026년 2월 26일', time: '01:03:24 UTC', code: 'TG003', msg: 'Geo-fence entering', type: 'INFO' },
-        { date: '2026년 2월 26일', time: '01:02:46 UTC', code: 'TG003', msg: 'Geo-fence entering', type: 'INFO' },
-        { date: '2026년 2월 26일', time: '01:02:29 UTC', code: 'TG002', msg: 'Battery level low', type: 'ERROR' }
+        { date: '2026.02.26', time: '01:09:00 UTC', code: 'TG001', msg: 'Mode switch CRZ→APP', type: 'INFO' },
+        { date: '2026.02.26', time: '01:07:59 UTC', code: 'TG004', msg: 'Latency high on link', type: 'WARN' },
+        { date: '2026.02.26', time: '01:06:56 UTC', code: 'TG002', msg: 'Battery health check', type: 'INFO' },
+        { date: '2026.02.26', time: '01:06:44 UTC', code: 'TG002', msg: 'Battery level low', type: 'ERROR' },
+        { date: '2026.02.26', time: '01:06:17 UTC', code: 'TG002', msg: 'Battery health check', type: 'INFO' },
+        { date: '2026.02.26', time: '01:04:55 UTC', code: 'TG003', msg: 'Geo-fence entering', type: 'INFO' },
+        { date: '2026.02.26', time: '01:03:49 UTC', code: 'TG001', msg: 'Mode switch HOLD→CRZ', type: 'INFO' },
+        { date: '2026.02.26', time: '01:03:24 UTC', code: 'TG003', msg: 'Geo-fence entering', type: 'INFO' },
+        { date: '2026.02.26', time: '01:02:46 UTC', code: 'TG003', msg: 'Geo-fence entering', type: 'INFO' },
+        { date: '2026.02.26', time: '01:02:29 UTC', code: 'TG002', msg: 'Battery level low', type: 'ERROR' }
     ];
 
     window.openEventLogModal = () => {
@@ -607,7 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mockLogs.forEach(log => {
             const tr = document.createElement('tr');
             tr.className = 'data-table-row';
-            // Combined date and time
+            // Combined date and time (Target: YYYY.MM.DD HH:mm:ss)
             const dateTime = `${log.date} ${log.time.replace(' UTC', '')}`;
             tr.innerHTML = `
                 <td class="td-date text-center">${dateTime}</td>
