@@ -2129,7 +2129,9 @@ input:-webkit-autofill:active {
 
 
 /* Date Picker Dark Mode */
-input[type="date"]::-webkit-calendar-picker-indicator {
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="week"]::-webkit-calendar-picker-indicator,
+input[type="month"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
   opacity: 0.6;
   cursor: pointer;
@@ -2406,13 +2408,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /* Date Input overrides */
-.filter-input[type="date"] {
+.filter-input[type="date"],
+.filter-input[type="week"],
+.filter-input[type="month"] {
   position: relative;
   cursor: pointer;
   padding: 0.25rem 0.75rem;
 }
 
-.filter-input[type="date"]::-webkit-calendar-picker-indicator {
+.filter-input[type="date"]::-webkit-calendar-picker-indicator,
+.filter-input[type="week"]::-webkit-calendar-picker-indicator,
+.filter-input[type="month"]::-webkit-calendar-picker-indicator {
   background: transparent;
   cursor: pointer;
   position: absolute;
@@ -2426,7 +2432,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   z-index: 10;
 }
 
-.filter-input[type="date"]::after {
+.filter-input[type="date"]::after,
+.filter-input[type="week"]::after,
+.filter-input[type="month"]::after {
   content: "";
   position: absolute;
   right: 0.75rem;
@@ -3035,7 +3043,9 @@ select.error:focus {
 
 
 /* Date Picker Dark Mode */
-input[type="date"]::-webkit-calendar-picker-indicator {
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="week"]::-webkit-calendar-picker-indicator,
+input[type="month"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
   opacity: 0.6;
   cursor: pointer;

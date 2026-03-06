@@ -1362,7 +1362,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const startDateVal = document.getElementById('flight-ops-start-date')?.value;
         const selectedDate = startDateVal ? new Date(startDateVal) : new Date();
 
-        if (chartTitle) chartTitle.textContent = "운항 통계 차트";
+        if (chartTitle) chartTitle.textContent = "운항 통계";
 
         if (periodType === 'daily') {
             const today = new Date();
