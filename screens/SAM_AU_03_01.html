@@ -65,13 +65,28 @@
                                                     class="filter-input">
                                             </div>
                                             <div>
-                                                <label class="filter-label">설명</label>
-                                                <input type="text" id="filter-desc" placeholder="설명"
+                                                <label class="filter-label">MAC</label>
+                                                <input type="text" id="filter-mac" placeholder="MAC"
+                                                    class="filter-input">
+                                            </div>
+                                            <div>
+                                                <label class="filter-label">용도</label>
+                                                <input type="text" id="filter-purpose" placeholder="용도"
+                                                    class="filter-input">
+                                            </div>
+                                            <div>
+                                                <label class="filter-label">신청자 이름</label>
+                                                <input type="text" id="filter-req-name" placeholder="신청자 이름"
+                                                    class="filter-input">
+                                            </div>
+                                            <div>
+                                                <label class="filter-label">신청자 소속</label>
+                                                <input type="text" id="filter-req-dept" placeholder="신청자 소속"
                                                     class="filter-input">
                                             </div>
                                             <div>
                                                 <label class="filter-label">등록자</label>
-                                                <input type="text" id="filter-user" placeholder="등록자 이름"
+                                                <input type="text" id="filter-user" placeholder="등록자"
                                                     class="filter-input">
                                             </div>
                                         </div>
@@ -94,7 +109,10 @@
                                     <thead>
                                         <tr>
                                             <th>IP 주소</th>
-                                            <th>설명</th>
+                                            <th>MAC</th>
+                                            <th>용도</th>
+                                            <th>신청자 이름</th>
+                                            <th>신청자 소속</th>
                                             <th>등록자</th>
                                             <th class="text-center">등록 일시</th>
                                             <th class="text-center w-24">관리</th>
@@ -142,16 +160,34 @@
             <div class="modal-content">
                 <div class="registration-form-panel">
                     <div class="mb-4">
-                        <label class="form-label">접근 IP 주소 (또는 대역) <span
-                                class="text-error required-mark">*</span></label>
-                        <input type="text" id="reg-ip" class="form-input"
-                            placeholder="예: 192.168.1.100 또는 192.168.1.* (또는 /24)" oninput="resetError('reg-ip')">
+                        <label class="form-label">IP 주소 <span class="text-error required-mark">*</span></label>
+                        <input type="text" id="reg-ip" class="form-input" placeholder="예: 192.168.1.100"
+                            oninput="resetError('reg-ip')">
                         <div id="error-reg-ip" class="form-error"></div>
                     </div>
+                    <div class="mb-4">
+                        <label class="form-label">MAC <span class="text-error required-mark">*</span></label>
+                        <input type="text" id="reg-mac" class="form-input" placeholder="예: 00:0C:29:43:2F:C8"
+                            oninput="resetError('reg-mac')">
+                        <div id="error-reg-mac" class="form-error"></div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">용도 <span class="text-error required-mark">*</span></label>
+                        <input type="text" id="reg-purpose" class="form-input" placeholder="예: 통합 서버 운영"
+                            oninput="resetError('reg-purpose')">
+                        <div id="error-reg-purpose" class="form-error"></div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">신청자 이름 <span class="text-error required-mark">*</span></label>
+                        <input type="text" id="reg-req-name" class="form-input" placeholder="신청자 이름 입력"
+                            oninput="resetError('reg-req-name')">
+                        <div id="error-reg-req-name" class="form-error"></div>
+                    </div>
                     <div>
-                        <label class="form-label">설명</label>
-                        <textarea id="reg-desc" class="form-input min-h-[80px] py-2"
-                            placeholder="용도 및 비고 사항을 입력해 주세요."></textarea>
+                        <label class="form-label">신청자 소속 <span class="text-error required-mark">*</span></label>
+                        <input type="text" id="reg-req-dept" class="form-input" placeholder="신청자 소속 입력"
+                            oninput="resetError('reg-req-dept')">
+                        <div id="error-reg-req-dept" class="form-error"></div>
                     </div>
                 </div>
             </div>

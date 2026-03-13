@@ -34,11 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 'vp.yoon', name: '윤지민', dept: '잠실버티포트', email: 'jm.yoon@k-uam.com', phone: '010-6789-0981', role: 'role_vertiport', roleName: '버티포트 운용자', status: 'used', systems: ['IVMS'] },
         { id: 'vp.han', name: '한정국', dept: '수서버티포트', email: 'jk.han@k-uam.com', phone: '010-7890-9870', role: 'role_vertiport', roleName: '버티포트 운용자', status: 'used', systems: ['IVMS'] },
         // unassigned
-        { id: 'staff.kim', name: '김철수', dept: '인사팀', email: 'cs.kim@sams.com', phone: '010-1111-2222', role: 'unassigned', roleName: '미배정', status: 'used', systems: [] },
-        { id: 'staff.lee', name: '이영희', dept: '재무팀', email: 'yh.lee@sams.com', phone: '010-3333-4444', role: 'unassigned', roleName: '미배정', status: 'used', systems: [] },
-        { id: 'manager.park', name: '박지성', dept: '총무팀', email: 'js.park@sams.com', phone: '010-5555-6666', role: 'unassigned', roleName: '미배정', status: 'used', systems: [] },
-        { id: 'eng.choi', name: '최현우', dept: '시설관리팀', email: 'hw.choi@sams.com', phone: '010-7777-8888', role: 'unassigned', roleName: '미배정', status: 'used', systems: [] },
-        { id: 'intern.jung', name: '정민아', dept: 'IT지원팀', email: 'ma.jung@sams.com', phone: '010-9999-0000', role: 'unassigned', roleName: '미배정', status: 'used', systems: [] }
+        { id: 'eng.choi', name: '최현우', dept: '시설관리팀', email: 'hw.choi@sams.com', phone: '010-7777-8888', role: 'unassigned', roleName: '미배정', status: 'normal', systems: [] },
+        { id: 'intern.jung', name: '정민아', dept: 'IT지원팀', email: 'ma.jung@sams.com', phone: '010-9999-0000', role: 'unassigned', roleName: '미배정', status: 'normal', systems: [] },
+        { id: 'user.out1', name: '이탈퇴', dept: '운영기획팀', email: 'out1@sams.com', phone: '010-0000-0001', role: 'unassigned', roleName: '미배정', status: 'withdrawn', systems: [], withdrawalDate: '2026.03.12 15:30:00' },
+        { id: 'user.out2', name: '박탈퇴', dept: '보안관제팀', email: 'out2@sams.com', phone: '010-0000-0002', role: 'unassigned', roleName: '미배정', status: 'withdrawn', systems: [], withdrawalDate: '2026.03.11 11:20:00' }
     ];
 
     // Role Definition
@@ -55,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const statuses = [
         { id: 'normal', name: '정상' },
         { id: 'locked', name: '잠김' },
-        { id: 'suspended', name: '정지' },
+        { id: 'suspended', name: '휴면' },
         { id: 'withdrawn', name: '탈퇴' },
         { id: 'pending', name: '승인 대기' }
     ];
@@ -92,6 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const userRegDateInput = document.getElementById('user-reg-date');
     const userModDateInput = document.getElementById('user-mod-date');
     const userRegistrantInput = document.getElementById('user-registrant');
+    const userLastLoginInput = document.getElementById('user-last-login');
+    const userWithdrawalDateInput = document.getElementById('user-withdrawal-date');
+    const userPwErrorCountInput = document.getElementById('user-pw-error-count');
 
     // Buttons
     const btnCheckId = document.getElementById('btn-check-id');
@@ -156,6 +158,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // Filter by Role
         if (filterUserRole && filterUserRole.value !== 'all') {
             filteredUsers = filteredUsers.filter(u => u.role === filterUserRole.value);
+        }
+
+        // Filter by Status
+        if (filterUserStatus && filterUserStatus.value !== 'all') {
+            filteredUsers = filteredUsers.filter(u => {
+                let statusId = u.status;
+                if (statusId === 'used') statusId = 'normal';
+                if (statusId === 'unused') statusId = 'suspended';
+                return statusId === filterUserStatus.value;
+            });
         }
 
         if (filterUserType && filterUserKeyword) {
@@ -224,9 +236,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (user.status === 'unused') user.status = 'suspended';
 
             // Add mock dates if missing
-            if (!user.regDate) user.regDate = '2024.01.15 10:30:00';
-            if (!user.modDate) user.modDate = '2024.02.01 14:20:00';
+            if (!user.regDate) user.regDate = '2026.01.15 10:30:00';
+            if (!user.modDate) user.modDate = '2026.02.01 14:20:00';
             if (!user.registrant) user.registrant = '시스템관리자';
+            if (!user.lastLogin) user.lastLogin = '2026.03.11 09:12:45';
+            if (user.pwErrorCount === undefined) user.pwErrorCount = Math.floor(Math.random() * 5);
+            if (user.status === 'withdrawn' && !user.withdrawalDate) user.withdrawalDate = '2026.03.12 18:00:00';
 
             userListBody.appendChild(tr);
         });
@@ -309,6 +324,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (userRegDateInput) userRegDateInput.value = user.regDate || '-';
         if (userModDateInput) userModDateInput.value = user.modDate || '-';
         if (userRegistrantInput) userRegistrantInput.value = user.registrant || '시스템관리자';
+        if (userLastLoginInput) userLastLoginInput.value = user.lastLogin || '-';
+        if (userWithdrawalDateInput) {
+            userWithdrawalDateInput.value = (user.status === 'withdrawn') ? (user.withdrawalDate || '-') : '-';
+        }
+        if (userPwErrorCountInput) userPwErrorCountInput.value = user.pwErrorCount !== undefined ? user.pwErrorCount : '0';
 
         // Show View Mode
         resetViewMode();

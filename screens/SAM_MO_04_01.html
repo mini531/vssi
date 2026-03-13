@@ -58,13 +58,13 @@
                                         <div class="filter-panel-inner">
                                             <div class="filter-grid">
                                                 <div class="filter-grid-wide">
-                                                    <label class="filter-label">인터페이스 명</label>
+                                                    <label class="filter-label">인터페이스 항목</label>
                                                     <input type="text" id="filter-keyword" class="filter-input"
-                                                        placeholder="인터페이스 명 검색"
+                                                        placeholder="인터페이스 항목 검색"
                                                         onkeyup="if(event.key === 'Enter') applyFilter()">
                                                 </div>
                                                 <div>
-                                                    <label class="filter-label">송신 노드</label>
+                                                    <label class="filter-label">송신자 명칭</label>
                                                     <select id="filter-sender" class="filter-select">
                                                         <option value="all">전체</option>
                                                         <option value="WAS(IVS) VM#1">WAS VM#1</option>
@@ -74,7 +74,7 @@
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <label class="filter-label">수신 노드</label>
+                                                    <label class="filter-label">수신자 명칭</label>
                                                     <select id="filter-receiver" class="filter-select">
                                                         <option value="all">전체</option>
                                                         <option value="WAS(IVS) VM#1">WAS VM#1</option>
@@ -84,7 +84,7 @@
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <label class="filter-label">유형</label>
+                                                    <label class="filter-label">프로토콜</label>
                                                     <select id="filter-type" class="filter-select">
                                                         <option value="all">전체</option>
                                                         <option value="MQ">MQ</option>
@@ -117,10 +117,10 @@
                                     <table class="data-table">
                                         <thead>
                                             <tr>
-                                                <th>인터페이스 명</th>
-                                                <th>송신 노드</th>
-                                                <th>수신 노드</th>
-                                                <th class="text-center">유형</th>
+                                                <th>인터페이스 항목</th>
+                                                <th>송신자 명칭</th>
+                                                <th>수신자 명칭</th>
+                                                <th class="text-center">프로토콜</th>
                                                 <th class="text-center">상태</th>
                                             </tr>
                                         </thead>
@@ -174,18 +174,26 @@
                                 </div>
 
                                 <div class="pane-content custom-scrollbar p-standard flex-1 flex flex-col">
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-standard mb-sm"
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 min-[1400px]:grid-cols-4 gap-standard mb-sm"
                                         id="detail-summary-grid">
                                         <div class="flex-1">
-                                            <h4 class="modal-section-title">송신 노드</h4>
+                                            <h4 class="modal-section-title">송신자 명칭</h4>
                                             <div class="data-value whitespace-nowrap" id="net-detail-source">-</div>
                                         </div>
                                         <div class="flex-1">
-                                            <h4 class="modal-section-title">수신 노드</h4>
+                                            <h4 class="modal-section-title">송신자 IP/Port</h4>
+                                            <div class="data-value whitespace-nowrap" id="net-detail-source-ip">-</div>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h4 class="modal-section-title">수신자 명칭</h4>
                                             <div class="data-value whitespace-nowrap" id="net-detail-target">-</div>
                                         </div>
                                         <div class="flex-1">
-                                            <h4 class="modal-section-title">유형</h4>
+                                            <h4 class="modal-section-title">수신자 IP/Port</h4>
+                                            <div class="data-value whitespace-nowrap" id="net-detail-target-ip">-</div>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h4 class="modal-section-title">프로토콜</h4>
                                             <div class="data-value whitespace-nowrap" id="net-detail-type">-</div>
                                         </div>
                                         <div class="flex-1">
@@ -195,23 +203,19 @@
 
                                         <!-- MQ Items (Hidden by default, shown for MQ type) -->
                                         <div class="flex-1 mq-only hidden">
-                                            <h4 class="modal-section-title">큐 적체량</h4>
+                                            <h4 class="modal-section-title">큐 적재량 (건)</h4>
                                             <div class="data-value" id="mq-depth">0</div>
                                         </div>
                                         <div class="flex-1 mq-only hidden">
                                             <h4 class="modal-section-title">활성 컨슈머</h4>
                                             <div class="data-value" id="mq-consumers">0</div>
                                         </div>
-                                        <div class="flex-1 mq-only hidden">
-                                            <h4 class="modal-section-title">마지막 활동</h4>
-                                            <div class="data-value" id="mq-last-activity">-</div>
-                                        </div>
                                     </div>
 
                                     <!-- Processing History Table -->
                                     <div id="history-section" class="hidden">
                                         <div class="section-header">
-                                            <h4 class="modal-section-title">요청 내역</h4>
+                                            <h4 class="modal-section-title">이벤트 발생 내역</h4>
                                         </div>
 
                                         <!-- Processing History Filter -->
@@ -228,16 +232,8 @@
                                             <div id="log-filter-content" class="search-panel-content hidden">
                                                 <div class="filter-panel-inner">
                                                     <div class="filter-grid">
-                                                        <div>
-                                                            <label class="filter-label">상태</label>
-                                                            <select id="filter-log-status" class="filter-select">
-                                                                <option value="all">전체</option>
-                                                                <option value="성공">성공</option>
-                                                                <option value="실패">실패</option>
-                                                            </select>
-                                                        </div>
                                                         <div class="filter-grid-wide">
-                                                            <label class="filter-label">요청 일시</label>
+                                                            <label class="filter-label">이벤트 발생 일시</label>
                                                             <div class="filter-date-range">
                                                                 <input type="date" id="filter-log-date-start"
                                                                     class="filter-input filter-input-flex"
@@ -247,6 +243,22 @@
                                                                     class="filter-input filter-input-flex"
                                                                     onclick="try{this.showPicker()}catch(e){}">
                                                             </div>
+                                                        </div>
+                                                        <div>
+                                                            <label class="filter-label">송수신 여부</label>
+                                                            <select id="filter-log-direction" class="filter-select">
+                                                                <option value="all">전체</option>
+                                                                <option value="송신">송신</option>
+                                                                <option value="수신">수신</option>
+                                                            </select>
+                                                        </div>
+                                                        <div>
+                                                            <label class="filter-label">상태</label>
+                                                            <select id="filter-log-status" class="filter-select">
+                                                                <option value="all">전체</option>
+                                                                <option value="성공">성공</option>
+                                                                <option value="실패">실패</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -267,11 +279,12 @@
                                             <table class="data-table">
                                                 <thead>
                                                     <tr>
-                                                        <th class="text-center">요청 일시</th>
-                                                        <th class="text-right">용량 (KB)</th>
+                                                        <th class="text-center">이벤트 발생 일시</th>
+                                                        <th class="text-center">송수신 여부</th>
+                                                        <th class="text-right">패킷 용량 (KB)</th>
                                                         <th class="text-right">응답 시간 (ms)</th>
                                                         <th class="text-center">상태</th>
-                                                        <th class="text-center">오류 내용</th>
+                                                        <th class="text-center">오류 코드</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="data-table-body" id="log-body">

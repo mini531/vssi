@@ -55,6 +55,16 @@
                                         </div>
                                     </div>
                                     <div>
+                                        <label class="filter-label">발생 유형</label>
+                                        <select id="filter-type" class="filter-select">
+                                            <option value="all">전체</option>
+                                            <option value="시스템">시스템</option>
+                                            <option value="보안">보안</option>
+                                            <option value="네트워크">네트워크</option>
+                                            <option value="데이터베이스">데이터베이스</option>
+                                        </select>
+                                    </div>
+                                    <div>
                                         <label class="filter-label">심각도</label>
                                         <select id="filter-severity" class="filter-select">
                                             <option value="all">전체</option>
@@ -102,9 +112,10 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center" style="width: 180px;">발생 일시</th>
+                                            <th style="width: 110px;">발생 유형</th>
                                             <th class="text-center" style="width: 100px;">심각도</th>
-                                            <th style="width: 150px;">오류 코드</th>
-                                            <th>메시지</th>
+                                            <th class="text-center" style="width: 120px;">오류 코드</th>
+                                            <th>오류 내용</th>
                                         </tr>
                                     </thead>
                                     <tbody id="log-body" class="data-table-body">

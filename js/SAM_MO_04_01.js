@@ -2,23 +2,23 @@
 
 // Sample Interface Data
 const interfaceData = [
-    { id: 1, name: 'MQ_IVS_VCDM_SYSTEM_INFO', sender: 'WAS(IVS) VM#1', receiver: 'VCDM운용 VM#1', type: 'MQ', status: '정상', txCount: '124,501', errorCount: 0, successRate: 99.9, tps: 45, tpsDiff: 5.2, latency: 12 },
-    { id: 2, name: 'MQ_VCDM_IVS_COMMAND', sender: 'VCDM운용 VM#1', receiver: 'WAS(IVS) VM#1', type: 'MQ', status: '정상', txCount: '85,200', errorCount: 0, successRate: 100.0, tps: 12, tpsDiff: -2.1, latency: 8 },
-    { id: 3, name: 'REST_WEB_VCDM_AUTH_SYNC', sender: 'WEB(IVS) VM#1', receiver: 'VCDM운용 VM#2', type: 'REST', status: '지연', txCount: '12,400', errorCount: 15, successRate: 98.5, tps: 120, tpsDiff: 15.4, latency: 450 },
-    { id: 4, name: 'MQ_IVS_VCDM_ALARM_EVENT', sender: 'WAS(IVS) VM#2', receiver: 'VCDM운용 VM#1', type: 'MQ', status: '장애', txCount: '45,201', errorCount: 1542, successRate: 75.2, tps: 0, tpsDiff: -100, latency: 0 },
-    { id: 5, name: 'REST_VCDM_WEB_TELEMETRY', sender: 'VCDM운용 VM#2', receiver: 'WEB(IVS) VM#2', type: 'REST', status: '정상', txCount: '1,204,500', errorCount: 5, successRate: 99.9, tps: 850, tpsDiff: 8.7, latency: 5 },
-    { id: 6, name: 'MQ_IVS_DB_LOG_SAVE', sender: 'WAS(IVS) VM#1', receiver: '통합DB(IVS) VM#1', type: 'MQ', status: '정상', txCount: '945,000', errorCount: 0, successRate: 99.9, tps: 210, tpsDiff: 1.5, latency: 15 },
-    { id: 7, name: 'MQ_DB_VCDM_FILE_TRANS', sender: '통합DB(IVS) VM#2', receiver: 'VCDM운용 VM#2', type: 'MQ', status: '지연', txCount: '1,201', errorCount: 60, successRate: 95.0, tps: 5, tpsDiff: -12.3, latency: 1500 }
+    { id: 1, name: 'MQ_IVS_VCDM_SYSTEM_INFO', sender: 'WAS(IVS) VM#1', senderIp: '192.168.10.11:1414', receiver: 'VCDM운용 VM#1', receiverIp: '192.168.20.101:1414', type: 'MQ', status: '정상', txCount: '124,501', errorCount: 0, successRate: 99.9, tps: 45, tpsDiff: 5.2, latency: 12 },
+    { id: 2, name: 'MQ_VCDM_IVS_COMMAND', sender: 'VCDM운용 VM#1', senderIp: '192.168.20.101:1414', receiver: 'WAS(IVS) VM#1', receiverIp: '192.168.10.11:1414', type: 'MQ', status: '정상', txCount: '85,200', errorCount: 0, successRate: 100.0, tps: 12, tpsDiff: -2.1, latency: 8 },
+    { id: 3, name: 'REST_WEB_VCDM_AUTH_SYNC', sender: 'WEB(IVS) VM#1', senderIp: '192.168.10.21:8080', receiver: 'VCDM운용 VM#2', receiverIp: '192.168.20.102:8080', type: 'REST', status: '지연', txCount: '12,400', errorCount: 15, successRate: 98.5, tps: 120, tpsDiff: 15.4, latency: 450 },
+    { id: 4, name: 'MQ_IVS_VCDM_ALARM_EVENT', sender: 'WAS(IVS) VM#2', senderIp: '192.168.10.12:1414', receiver: 'VCDM운용 VM#1', receiverIp: '192.168.20.101:1414', type: 'MQ', status: '장애', txCount: '45,201', errorCount: 1542, successRate: 75.2, tps: 0, tpsDiff: -100, latency: 0 },
+    { id: 5, name: 'REST_VCDM_WEB_TELEMETRY', sender: 'VCDM운용 VM#2', senderIp: '192.168.20.102:8080', receiver: 'WEB(IVS) VM#2', receiverIp: '192.168.10.22:8080', type: 'REST', status: '정상', txCount: '1,204,500', errorCount: 5, successRate: 99.9, tps: 850, tpsDiff: 8.7, latency: 5 },
+    { id: 6, name: 'MQ_IVS_DB_LOG_SAVE', sender: 'WAS(IVS) VM#1', senderIp: '192.168.10.11:1414', receiver: '통합DB(IVS) VM#1', receiverIp: '192.168.30.51:1414', type: 'MQ', status: '정상', txCount: '945,000', errorCount: 0, successRate: 99.9, tps: 210, tpsDiff: 1.5, latency: 15 },
+    { id: 7, name: 'MQ_DB_VCDM_FILE_TRANS', sender: '통합DB(IVS) VM#2', senderIp: '192.168.30.52:1414', receiver: 'VCDM운용 VM#2', receiverIp: '192.168.20.102:1414', type: 'MQ', status: '지연', txCount: '1,201', errorCount: 60, successRate: 95.0, tps: 5, tpsDiff: -12.3, latency: 1500 }
 ];
 
 // Sample Transaction Logs
 const transactionLogs = [
-    { time: '2026.02.11 09:15:24', status: '성공', volume: '1.20', latency: '12', error: '-' },
-    { time: '2026.02.11 09:15:22', status: '성공', volume: '0.80', latency: '15', error: '-' },
-    { time: '2026.02.11 09:15:18', status: '실패', volume: '0.00', latency: '0', error: '404: Not Found' },
-    { time: '2026.02.11 09:15:15', status: '성공', volume: '2.50', latency: '10', error: '-' },
-    { time: '2026.02.11 09:15:10', status: '실패', volume: '0.00', latency: '5000', error: '504: Gateway Timeout' },
-    { time: '2026.02.11 09:15:05', status: '성공', volume: '1.40', latency: '14', error: '-' }
+    { time: '2026.02.11 09:15:24', status: '성공', volume: '1.20', latency: '12', error: '-', direction: '송신' },
+    { time: '2026.02.11 09:15:22', status: '성공', volume: '0.80', latency: '15', error: '-', direction: '수신' },
+    { time: '2026.02.11 09:15:18', status: '실패', volume: '0.00', latency: '0', error: '404', direction: '송신' },
+    { time: '2026.02.11 09:15:15', status: '성공', volume: '2.50', latency: '10', error: '-', direction: '수신' },
+    { time: '2026.02.11 09:15:10', status: '실패', volume: '0.00', latency: '5000', error: '504', direction: '송신' },
+    { time: '2026.02.11 09:15:05', status: '성공', volume: '1.40', latency: '14', error: '-', direction: '수신' }
 ];
 
 let filteredData = [...interfaceData];
@@ -88,10 +88,10 @@ function renderInterfaceList() {
             item.status === '지연' ? 'badge-warning' : 'badge-error';
 
         row.innerHTML = `
-            <td data-label="인터페이스 명">${item.name}</td>
-            <td data-label="송신 노드">${item.sender}</td>
-            <td data-label="수신 노드">${item.receiver}</td>
-            <td class="td-center" data-label="유형">${item.type}</td>
+            <td data-label="인터페이스 항목">${item.name}</td>
+            <td data-label="송신자 명칭">${item.sender}</td>
+            <td data-label="수신자 명칭">${item.receiver}</td>
+            <td class="td-center" data-label="프로토콜">${item.type}</td>
             <td class="td-center" data-label="상태"><span class="badge ${statusBadgeClass}">${item.status}</span></td>
         `;
 
@@ -116,7 +116,9 @@ function selectInterface(item, element) {
     // Populate summary info
     document.getElementById('selected-interface-name').textContent = item.name;
     document.getElementById('net-detail-source').textContent = item.sender;
+    document.getElementById('net-detail-source-ip').textContent = item.senderIp;
     document.getElementById('net-detail-target').textContent = item.receiver;
+    document.getElementById('net-detail-target-ip').textContent = item.receiverIp;
     document.getElementById('net-detail-type').textContent = item.type;
 
     // Status Badge
@@ -140,14 +142,9 @@ function selectInterface(item, element) {
         // Populate MQ Data (Mock)
         const depth = document.getElementById('mq-depth');
         const consumers = document.getElementById('mq-consumers');
-        const lastAct = document.getElementById('mq-last-activity');
 
-        if (depth) depth.textContent = Math.floor(Math.random() * 20).toLocaleString();
+        if (depth) depth.textContent = Math.floor(Math.random() * 50).toLocaleString();
         if (consumers) consumers.textContent = (Math.floor(Math.random() * 3) + 1).toLocaleString();
-        if (lastAct) {
-            const now = new Date();
-            lastAct.textContent = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
-        }
     } else {
         if (historySection) historySection.classList.add('hidden');
         mqItems.forEach(el => el.classList.add('hidden'));
@@ -164,6 +161,7 @@ function selectInterface(item, element) {
 // Reset Log Filter
 function resetLogFilter() {
     document.getElementById('filter-log-status').value = 'all';
+    document.getElementById('filter-log-direction').value = 'all';
     document.getElementById('filter-log-date-start').value = '';
     document.getElementById('filter-log-date-end').value = '';
     applyLogFilter();
@@ -172,11 +170,13 @@ function resetLogFilter() {
 // Apply Log Filter
 function applyLogFilter() {
     const statusFilter = document.getElementById('filter-log-status').value;
+    const directionFilter = document.getElementById('filter-log-direction').value;
     const dateStart = document.getElementById('filter-log-date-start').value;
     const dateEnd = document.getElementById('filter-log-date-end').value;
 
     filteredLogs = transactionLogs.filter(log => {
         const statusMatch = statusFilter === 'all' || log.status === statusFilter;
+        const directionMatch = directionFilter === 'all' || log.direction === directionFilter;
 
         let dateMatch = true;
         if (dateStart || dateEnd) {
@@ -185,7 +185,7 @@ function applyLogFilter() {
             if (dateEnd && logDate > dateEnd) dateMatch = false;
         }
 
-        return statusMatch && dateMatch;
+        return statusMatch && directionMatch && dateMatch;
     });
 
     renderLogs();
@@ -207,12 +207,15 @@ function renderLogs() {
 
         const volumeFormatted = parseFloat(log.volume).toFixed(2);
 
+        const directionBadgeClass = log.direction === '송신' ? 'bg-info-alpha text-info' : 'bg-success-alpha text-success';
+
         row.innerHTML = `
-            <td class="td-date td-center" data-label="요청 일시">${log.time}</td>
-            <td class="td-number" data-label="용량 (KB)">${volumeFormatted}</td>
+            <td class="td-date td-center" data-label="이벤트 발생 일시">${log.time}</td>
+            <td class="td-center" data-label="송수신 여부"><span class="badge ${directionBadgeClass}">${log.direction}</span></td>
+            <td class="td-number" data-label="패킷 용량 (KB)">${volumeFormatted}</td>
             <td class="td-number" data-label="응답 시간 (ms)">${log.latency}</td>
             <td class="td-center" data-label="상태"><span class="badge ${statusBadgeClass}">${log.status}</span></td>
-            <td data-label="오류 내용">${log.error}</td>
+            <td class="td-center" data-label="오류 코드">${log.error}</td>
         `;
 
         tbody.appendChild(row);
