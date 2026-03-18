@@ -316,15 +316,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     vertiports.forEach(v => {
-        let baseColor = '#14b8a6'; // 낮음 (Success)
-        let hoverColor = '#5eead4';
+        let baseColor = '#1EBB9E'; // 낮음 (Success)
+        let hoverColor = '#2DD4BF';
 
         if (v.crowd === '보통') {
-            baseColor = '#f59e0b'; // 보통 (Warning)
-            hoverColor = '#fbbf24';
+            baseColor = '#FF9F1C'; // 보통 (Warning)
+            hoverColor = '#FFB852';
         } else if (v.crowd === '높음') {
-            baseColor = '#ef4444'; // 높음 (Danger)
-            hoverColor = '#fca5a5';
+            baseColor = '#F54337'; // 높음 (Danger)
+            hoverColor = '#FF7B72';
         }
         const dot = L.circleMarker([v.lat, v.lng], {
             radius: 6,
@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.beginPath();
                 ctx.moveTo(centerX, centerY);
                 ctx.lineTo(nx, ny);
-                ctx.strokeStyle = isHovered ? 'rgba(20, 184, 166, 0.9)' : 'rgba(20, 184, 166, 0.3)';
+                ctx.strokeStyle = isHovered ? 'rgba(97, 66, 254, 0.9)' : 'rgba(97, 66, 254, 0.3)';
                 ctx.lineWidth = isHovered ? 2 : 1;
                 ctx.stroke();
                 ctx.setLineDash([]);
@@ -426,7 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 ctx.fillStyle = isHovered ? '#334155' : 'rgba(30, 41, 59, 1)';
                 ctx.fillRect(nx - nw / 2, ny - nh / 2, nw, nh);
-                ctx.strokeStyle = isHovered ? '#2dd4bf' : '#14b8a6';
+                ctx.strokeStyle = isHovered ? '#7B61FF' : '#6142FE';
                 ctx.lineWidth = isHovered ? 2 : 1;
                 ctx.strokeRect(nx - nw / 2, ny - nh / 2, nw, nh);
 
@@ -440,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const hubR = 24 * Math.max(0.85, layoutScale);
             ctx.beginPath();
             ctx.arc(centerX, centerY, hubR, 0, Math.PI * 2);
-            ctx.strokeStyle = '#2dd4bf';
+            ctx.strokeStyle = '#6142FE';
             ctx.lineWidth = 3;
             ctx.stroke();
             ctx.fillStyle = '#0f172a';
@@ -518,7 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const dataPoints = 60;
             const data = type === 'net' ? { in: new Array(dataPoints).fill(0), out: new Array(dataPoints).fill(0) } : new Array(dataPoints).fill(0);
 
-            const primaryColor = type === 'net' ? '#14b8a6' : '#3b82f6';
+            const primaryColor = type === 'net' ? '#6142FE' : '#3b82f6';
             const secondaryColor = '#3b82f6';
             const gridColor = '#334155';
 
@@ -1004,9 +1004,9 @@ document.addEventListener('DOMContentLoaded', () => {
             data: {
                 labels,
                 datasets: [
-                    { label: '정상', data: normalData, backgroundColor: '#14b8a6', barThickness: 12 },
-                    { label: '지연', data: delayData, backgroundColor: '#f97316', barThickness: 12 },
-                    { label: '취소', data: cancelData, backgroundColor: '#ef4444', barThickness: 12 }
+                    { label: '정상', data: normalData, backgroundColor: '#1EBB9E', barThickness: 12 },
+                    { label: '지연', data: delayData, backgroundColor: '#FF9F1C', barThickness: 12 },
+                    { label: '취소', data: cancelData, backgroundColor: '#F54337', barThickness: 12 }
                 ]
             },
             options: {

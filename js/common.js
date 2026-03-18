@@ -241,6 +241,8 @@ function initSystemTitle() {
             headerTitle.href = 'COM_IT_01_01.html';
         } else if (activeAcronym === 'IVMS') {
             headerTitle.href = 'IVM_DB_01_01.html';
+        } else if (activeAcronym === 'IFPS') {
+            headerTitle.href = 'IFP_DB_01_01.html';
         } else {
             headerTitle.href = 'SAM_DB_01_01.html';
         }
@@ -272,6 +274,8 @@ function switchSystem(name, acronym) {
             headerTitle.href = 'COM_IT_01_01.html';
         } else if (acronym === 'IVMS') {
             headerTitle.href = 'IVM_DB_01_01.html';
+        } else if (acronym === 'IFPS') {
+            headerTitle.href = 'IFP_DB_01_01.html';
         } else {
             headerTitle.href = 'SAM_DB_01_01.html';
         }
@@ -291,6 +295,8 @@ function switchSystem(name, acronym) {
         window.open('COM_IT_01_01.html', '_blank');
     } else if (acronym === 'IVMS') {
         window.open('IVM_DB_01_01.html', '_blank');
+    } else if (acronym === 'IFPS') {
+        window.open('IFP_DB_01_01.html', '_blank');
     } else if (acronym === 'SAMS') {
         window.open('SAM_DB_01_01.html', '_blank');
     }

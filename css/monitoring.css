@@ -7,7 +7,7 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: #050810;
+    background-color: #05060F;
 }
 
 #monitoring-map {
@@ -40,7 +40,6 @@
 .overlay-panel-title {
     font-size: 0.875rem;
     font-weight: 700;
-    color: var(--text-primary);
     letter-spacing: 0.025em;
     white-space: nowrap;
 }
@@ -95,7 +94,7 @@
 .overlay-panel {
     position: relative;
     z-index: 10;
-    background: rgba(15, 23, 42, 0.2);
+    background: #13141F;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -113,7 +112,7 @@
     display: flex;
     justify-content: flex-end;
     border-top: 1px solid rgba(30, 41, 59, 0.3);
-    background: rgba(15, 23, 42, 0.1);
+    background: #13141F;
 }
 
 /* Specific component overrides if any */
@@ -144,7 +143,7 @@
 }
 
 .mon-status-item.active {
-    background: rgba(20, 184, 166, 0.15);
+    background: rgba(97, 66, 254, 0.15);
     border-left: 2px solid var(--accent-teal);
 }
 
@@ -219,7 +218,7 @@
 }
 
 .mon-kpi-card {
-    background: rgba(15, 23, 42, 0.2);
+    background: #13141F;
     border: 1px solid rgba(30, 41, 59, 0.5);
     padding: 0.5rem;
     text-align: center;
@@ -293,7 +292,7 @@
     position: relative;
     flex-shrink: 0;
     margin-top: 0.4rem;
-    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+    box-shadow: 0 0 0 3px rgba(97, 66, 254, 0.2);
     z-index: 2;
 }
 
@@ -334,7 +333,7 @@
 }
 
 .mon-flight-item.active {
-    background: rgba(20, 184, 166, 0.15);
+    background: rgba(97, 66, 254, 0.15);
     border-left: 2px solid var(--accent-teal);
 }
 
@@ -422,7 +421,7 @@
     height: 18px;
     background: var(--accent-teal);
     border-radius: 4px;
-    box-shadow: 0 0 10px rgba(20, 184, 166, 0.5);
+    box-shadow: 0 0 10px rgba(97, 66, 254, 0.5);
     z-index: 2;
 }
 
@@ -442,7 +441,7 @@
     position: absolute;
     width: 28px;
     height: 2px;
-    background: rgba(20, 184, 166, 0.6);
+    background: rgba(97, 66, 254, 0.6);
     top: 50%;
     left: 50%;
     transform-origin: center;
@@ -610,7 +609,7 @@
 .vp-kpi-value {
     font-size: 1.125rem;
     font-weight: 700;
-    color: var(--text-primary);
+    color: var(--text-secondary);
 }
 
 /* Badge inside a KPI card should not stretch full width */
@@ -645,18 +644,18 @@
     background: rgba(15, 23, 42, 0.3);
     padding: 0.25rem 0.625rem;
     font-size: 0.75rem;
-    color: var(--text-primary);
+    color: var(--text-secondary);
 }
 
 .vp-chip-success {
-    background: rgba(20, 184, 166, 0.1);
-    border-color: rgba(20, 184, 166, 0.4);
+    background: rgba(30, 187, 158, 0.1);
+    border-color: rgba(30, 187, 158, 0.4);
     color: var(--success);
 }
 
 .vp-chip-warning {
-    background: rgba(249, 115, 22, 0.1);
-    border-color: rgba(249, 115, 22, 0.4);
+    background: rgba(255, 159, 28, 0.1);
+    border-color: rgba(255, 159, 28, 0.4);
     color: var(--warning);
 }
 
@@ -681,7 +680,7 @@
 .vp-tl-wrap {
     position: relative;
     border: 1px solid rgba(51, 65, 85, 0.3);
-    background: rgba(15, 23, 42, 0.2);
+    background: #13141F;
     overflow: hidden;
 }
 
@@ -720,7 +719,7 @@
     color: var(--text-primary);
     font-size: 0.7rem;
     padding: 4px 8px;
-    border: 1px solid rgba(20, 184, 166, 0.4);
+    border: 1px solid rgba(97, 66, 254, 0.4);
     white-space: nowrap;
     z-index: 10;
 }

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IFPS - 대시보드</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/monitoring.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="dashboard-body app-screen-height" data-system-acronym="IFPS" data-page-title="대시보드">
+    <!-- Header -->
+    <div data-include="../components/header.html"></div>
+
+    <!-- Main Flex Container -->
+    <div class="flex flex-1 overflow-hidden">
+
+        <!-- Sidebar -->
+        <div data-include="../components/sidebar.html"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col overflow-hidden" id="main-content">
+            <div class="flex-1 overflow-y-auto custom-scrollbar dashboard-content-full scroll-view-standard">
+                <div class="dashboard-section">
+
+                    <!-- ── Row 1: 상단 3컬럼 그리드 ──── -->
+                    <div class="dashboard-layout-grid">
+
+                        <!-- ① 일일 자원예약 현황 -->
+                        <section class="col-4 dashboard-section">
+                            <article class="db-feed-pane flex-1">
+                                <header class="pane-header">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="calendar-check" class="w-4 h-4 text-primary"></i>
+                                        <h2 class="db-section-title">일일 자원예약 현황</h2>
+                                    </div>
+                                </header>
+                                <!-- 요약 카운트 영역 -->
+                                <div class="ifps-summary-bar">
+                                    <button class="db-stat-card db-stat-card-compact ifps-summary-card ifps-card-all"
+                                        id="rs-sum-all" onclick="filterReservationList('all')">
+                                        <span class="db-card-label">전체 (건)</span>
+                                        <span class="db-card-value db-card-value-md text-white" id="rs-cnt-all">6</span>
+                                    </button>
+                                    <button class="db-stat-card db-stat-card-compact ifps-summary-card" id="rs-sum-wait"
+                                        onclick="filterReservationList('대기')">
+                                        <span class="db-card-label">대기 (건)</span>
+                                        <span class="db-card-value db-card-value-md text-warning"
+                                            id="rs-cnt-wait">1</span>
+                                    </button>
+                                    <button class="db-stat-card db-stat-card-compact ifps-summary-card" id="rs-sum-ok"
+                                        onclick="filterReservationList('승인')">
+                                        <span class="db-card-label">승인 (건)</span>
+                                        <span class="db-card-value db-card-value-md text-success"
+                                            id="rs-cnt-ok">2</span>
+                                    </button>
+                                    <button class="db-stat-card db-stat-card-compact ifps-summary-card" id="rs-sum-adj"
+                                        onclick="filterReservationList('확정')">
+                                        <span class="db-card-label">확정 (건)</span>
+                                        <span class="db-card-value db-card-value-md text-info" id="rs-cnt-adj">2</span>
+                                    </button>
+                                    <button class="db-stat-card db-stat-card-compact ifps-summary-card" id="rs-sum-err"
+                                        onclick="filterReservationList('반려')">
+                                        <span class="db-card-label">반려 (건)</span>
+                                        <span class="db-card-value db-card-value-md text-error" id="rs-cnt-err">1</span>
+                                    </button>
+                                </div>
+                                <!-- 카드 목록 -->
+                                <div class="pane-content custom-scrollbar ifps-list-scroll">
+                                    <ul class="ifps-card-list" id="reservation-list"></ul>
+                                </div>
+                            </article>
+                        </section>
+
+                        <!-- ② 버티포트 현황 -->
+                        <section class="col-4 dashboard-section">
+                            <article class="db-feed-pane flex-1">
+                                <header class="pane-header">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="building-2" class="w-4 h-4 text-primary"></i>
+                                        <h2 class="db-section-title">버티포트 현황</h2>
+                                    </div>
+                                    <span class="text-sub ifps-vp-filter-label" id="vp-filter-label"></span>
+                                </header>
+                                <div class="pane-content custom-scrollbar ifps-list-scroll">
+                                    <div id="vp-card-grid" class="ifps-vp-grid"></div>
+                                </div>
+                            </article>
+                        </section>
+
+                        <!-- ③ 일일 비행계획 현황 -->
+                        <section class="col-4 dashboard-section">
+                            <article class="db-feed-pane flex-1">
+                                <header class="pane-header">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="file-check-2" class="w-4 h-4 text-primary"></i>
+                                        <h2 class="db-section-title">일일 비행계획 현황</h2>
+                                    </div>
+                                </header>
+                                <!-- 요약 카운트 영역 -->
+                                <div class="ifps-summary-bar">
+                                    <button class="db-stat-card db-stat-card-compact ifps-summary-card ifps-card-all"
+                                        id="fp-sum-all" onclick="filterFlightList('all')">
+                                        <span class="db-card-label">전체 (건)</span>
+                                        <span class="db-card-value db-card-value-md text-white" id="fp-cnt-all">7</span>
+                                    </button>
+                                    <button class="db-stat-card db-stat-card-compact ifps-summary-card" id="fp-sum-ok"
+                                        onclick="filterFlightList('승인')">
+                                        <span class="db-card-label">승인 (건)</span>
+                                        <span class="db-card-value db-card-value-md text-success"
+                                            id="fp-cnt-ok">3</span>
+                                    </button>
+                                    <button class="db-stat-card db-stat-card-compact ifps-summary-card" id="fp-sum-adj"
+                                        onclick="filterFlightList('확정')">
+                                        <span class="db-card-label">확정 (건)</span>
+                                        <span class="db-card-value db-card-value-md text-info" id="fp-cnt-adj">3</span>
+                                    </button>
+                                    <button class="db-stat-card db-stat-card-compact ifps-summary-card" id="fp-sum-err"
+                                        onclick="filterFlightList('반려')">
+                                        <span class="db-card-label">반려 (건)</span>
+                                        <span class="db-card-value db-card-value-md text-error" id="fp-cnt-err">1</span>
+                                    </button>
+                                </div>
+                                <!-- 카드 목록 -->
+                                <div class="pane-content custom-scrollbar ifps-list-scroll">
+                                    <ul class="ifps-card-list" id="flight-plan-list"></ul>
+                                </div>
+                            </article>
+                        </section>
+                    </div>
+
+                    <!-- ── Row 2: 하단 타임라인 ──── -->
+                    <div class="dashboard-layout-grid flex-none">
+                        <section class="col-12 dashboard-section">
+
+                            <article class="db-feed-pane ifps-timeline-pane flex-1">
+                                <header class="pane-header">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="git-branch" class="w-4 h-4 text-primary"></i>
+                                        <h2 class="db-section-title">타임라인 정보</h2>
+                                    </div>
+                                    <span class="ifps-timeline-subject" id="timeline-subject"></span>
+                                </header>
+                                <div class="ifps-timeline-body">
+                                    <div id="timeline-track" class="ifps-timeline-slot">
+                                        <!-- JS 생성 -->
+                                    </div>
+                                </div>
+                            </article>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- System Switcher Modal -->
+    <div data-include="../components/system-switcher.html"></div>
+
+    <!-- Scripts -->
+    <script src="../js/include.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/IFP_DB_01_01.js"></script>
+</body>
+
+</html>

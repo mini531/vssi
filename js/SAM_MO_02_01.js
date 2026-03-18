@@ -194,7 +194,7 @@ const ChartManager = {
         const data = new Array(dataPoints).fill(0);
         const data2 = type === 'net' ? new Array(dataPoints).fill(0) : null;
 
-        const primaryColor = type === 'net' ? '#14b8a6' : '#3b82f6'; // Teal for Inbound
+        const primaryColor = type === 'net' ? '#6142FE' : '#3b82f6'; // Purple for Inbound
         const secondaryColor = '#3b82f6'; // Blue for Outbound
         const gridColor = '#334155';
 

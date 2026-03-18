@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.beginPath();
                 ctx.moveTo(centerX, centerY);
                 ctx.lineTo(nx, ny);
-                ctx.strokeStyle = isHovered ? 'rgba(20, 184, 166, 0.9)' : 'rgba(20, 184, 166, 0.3)';
+                ctx.strokeStyle = isHovered ? 'rgba(97,66,254, 0.9)' : 'rgba(97,66,254, 0.8)';
                 ctx.lineWidth = isHovered ? 2 : 1;
                 ctx.stroke();
                 ctx.setLineDash([]);
@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 ctx.fillStyle = isHovered ? '#334155' : 'rgba(30, 41, 59, 1)'; // Fully opaque boxes
                 ctx.fillRect(nx - 35, ny - 12, 70, 24);
-                ctx.strokeStyle = isHovered ? '#2dd4bf' : '#14b8a6';
+                ctx.strokeStyle = isHovered ? '#7B61FF' : '#6142FE';
                 ctx.lineWidth = isHovered ? 2 : 1;
                 ctx.strokeRect(nx - 35, ny - 12, 70, 24);
 
@@ -326,7 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // 3. Draw Center Hub last (to block link lines effectively)
             ctx.beginPath();
             ctx.arc(centerX, centerY, 24, 0, Math.PI * 2);
-            ctx.strokeStyle = '#2dd4bf';
+            ctx.strokeStyle = '#6142FE';
             ctx.lineWidth = 3;
             ctx.stroke();
             ctx.fillStyle = '#0f172a'; // Fully opaque slate blocks the links
@@ -397,7 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Draw airway polyline
     L.polyline(ROUTE_COORDS, {
-        color: '#14b8a6',
+        color: '#6142FE',
         weight: 1,
         opacity: 0.5,
         dashArray: '5, 5'
@@ -407,7 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ROUTE_COORDS.forEach(coord => {
         L.circleMarker(coord, {
             radius: 3,
-            color: '#14b8a6',
+            color: '#6142FE',
             fillColor: '#0f172a',
             fillOpacity: 1,
             weight: 1
@@ -653,7 +653,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const dataPoints = 60;
             const data = type === 'net' ? { in: new Array(dataPoints).fill(0), out: new Array(dataPoints).fill(0) } : new Array(dataPoints).fill(0);
 
-            const primaryColor = type === 'net' ? '#10b981' : '#3b82f6';
+            const primaryColor = type === 'net' ? '#6142FE' : '#6142FE';
             const secondaryColor = '#3b82f6';
             const gridColor = '#334155';
 
@@ -1415,7 +1415,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     {
                         label: '정상',
                         data: normalData,
-                        backgroundColor: '#14b8a6', // Success color
+                        backgroundColor: '#1EBB9E', // Success color
                         borderColor: '#0f766e',
                         borderWidth: 1,
                         barThickness: 12

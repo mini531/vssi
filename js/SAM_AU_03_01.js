@@ -41,9 +41,9 @@ function renderIpList(data) {
         const tr = document.createElement('tr');
         tr.className = 'data-table-row';
         tr.innerHTML = `
-            <td data-label="IP 주소" class="font-mono text-teal-400">${item.ip}</td>
-            <td data-label="MAC" class="font-mono text-slate-400">${item.mac || '-'}</td>
-            <td data-label="용도" class="table-text-wrap">${item.purpose || '-'}</td>
+            <td data-label="IP 주소">${item.ip}</td>
+            <td data-label="MAC">${item.mac || '-'}</td>
+            <td data-label="용도">${item.purpose || '-'}</td>
             <td data-label="신청자 이름">${item.reqName || '-'}</td>
             <td data-label="신청자 소속">${item.reqDept || '-'}</td>
             <td data-label="등록자">${item.user || '-'}</td>

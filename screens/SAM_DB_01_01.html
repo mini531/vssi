@@ -37,7 +37,7 @@
                                 <div class="flex items-baseline mt-2">
                                     <span class="db-card-value font-bold text-3xl">28</span>
                                 </div>
-                                <div class="db-sub-label text-success flex items-center gap-1 mt-2">
+                                <div class="db-sub-label text-info flex items-center gap-1 mt-2">
                                     <i data-lucide="layers" class="w-3 h-3"></i> 전체 시스템 중 노드 수
                                 </div>
                             </article>
@@ -58,14 +58,14 @@
                             <article class="db-stat-card" onclick="location.href='SAM_US_01_01.html'">
                                 <span class="db-card-label">활성 사용자</span>
                                 <span class="db-card-value">1,240</span>
-                                <div class="db-sub-label text-success flex items-center gap-1">
+                                <div class="db-sub-label text-info flex items-center gap-1">
                                     <i data-lucide="users" class="w-3 h-3"></i> 전체 가입자 중 활성 상태
                                 </div>
                             </article>
                             <article class="db-stat-card" onclick="location.href='SAM_US_01_01.html'">
                                 <span class="db-card-label">가입 승인 요청</span>
                                 <span class="db-card-value">8</span>
-                                <div class="db-sub-label text-info">
+                                <div class="db-sub-label text-info flex items-center gap-1">
                                     <i data-lucide="clock" class="w-3 h-3"></i> 승인 대기 중
                                 </div>
                             </article>
@@ -90,7 +90,7 @@
                             <div class="db-card-p6 h-full">
                                 <header class="db-card-header">
                                     <div class="search-panel-title-group">
-                                        <i data-lucide="layout-grid" class="w-5 h-5 text-success"></i>
+                                        <i data-lucide="layout-grid" class="w-5 h-5 text-primary"></i>
                                         <h2 class="db-section-title">인프라 상태 매트릭스</h2>
                                     </div>
                                     <button class="btn-xs btn-secondary" onclick="location.href='SAM_MO_01_01.html'">
@@ -104,25 +104,34 @@
                                     <div class="infra-grid-header">장애 (Failure)</div>
                                     <div class="infra-resource-label">CPU</div>
                                     <div class="infra-status-card success" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">23</span></div>
+                                        <span class="infra-status-count">23</span>
+                                    </div>
                                     <div class="infra-status-card warning" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">2</span></div>
+                                        <span class="infra-status-count">2</span>
+                                    </div>
                                     <div class="infra-status-card error" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">1</span></div>
+                                        <span class="infra-status-count">1</span>
+                                    </div>
                                     <div class="infra-resource-label">메모리</div>
                                     <div class="infra-status-card success" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">25</span></div>
+                                        <span class="infra-status-count">25</span>
+                                    </div>
                                     <div class="infra-status-card warning" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">1</span></div>
+                                        <span class="infra-status-count">1</span>
+                                    </div>
                                     <div class="infra-status-card error" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">0</span></div>
+                                        <span class="infra-status-count">0</span>
+                                    </div>
                                     <div class="infra-resource-label">네트워크</div>
                                     <div class="infra-status-card success" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">14</span></div>
+                                        <span class="infra-status-count">14</span>
+                                    </div>
                                     <div class="infra-status-card warning" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">0</span></div>
+                                        <span class="infra-status-count">0</span>
+                                    </div>
                                     <div class="infra-status-card error" onclick="location.href='SAM_MO_01_01.html'">
-                                        <span class="infra-status-count">1</span></div>
+                                        <span class="infra-status-count">1</span>
+                                    </div>
                                 </div>
                             </div>
                         </section>
@@ -131,7 +140,7 @@
                             <section class="db-feed-pane h-full">
                                 <header class="pane-header select-none">
                                     <div class="flex items-center gap-2">
-                                        <i data-lucide="zap" class="w-5 h-5 text-success"></i>
+                                        <i data-lucide="zap" class="w-5 h-5 text-primary"></i>
                                         <span class="db-section-title">실시간 장애 스트림</span>
                                     </div>
                                     <button class="btn-xs btn-secondary" onclick="location.href='SAM_SY_02_01.html'">더
@@ -169,7 +178,7 @@
                             <section class="db-feed-pane h-full">
                                 <header class="pane-header select-none">
                                     <div class="flex items-center gap-2">
-                                        <i data-lucide="shield-check" class="w-5 h-5 text-success"></i>
+                                        <i data-lucide="shield-check" class="w-5 h-5 text-primary"></i>
                                         <span class="db-section-title">최근 사용자 활동 로그</span>
                                     </div>
                                     <button class="btn-xs btn-secondary" onclick="location.href='SAM_LG_02_01.html'">더
@@ -187,7 +196,7 @@
                             <article class="db-feed-pane h-full">
                                 <header class="pane-header">
                                     <div class="flex items-center gap-2">
-                                        <i data-lucide="activity" class="w-5 h-5 text-success"></i>
+                                        <i data-lucide="activity" class="w-5 h-5 text-primary"></i>
                                         <h2 class="db-section-title text-sm">인프라 그룹별 최대 CPU 부하 추이</h2>
                                     </div>
                                     <button class="btn-xs btn-secondary" onclick="location.href='SAM_MO_01_01.html'">더
@@ -205,7 +214,7 @@
                                         </button>
                                         <div class="chart-legend-scroll custom-scrollbar" id="chart-cpu-legend">
                                             <div class="chart-legend-item">
-                                                <div class="legend-dot" style="background:#14b8a6"></div>
+                                                <div class="legend-dot" style="background:#1EBB9E"></div>
                                                 <span>VOS운용서버</span>
                                             </div>
                                             <div class="chart-legend-item">
@@ -247,7 +256,7 @@
                             <article class="db-feed-pane h-full">
                                 <header class="pane-header">
                                     <div class="flex items-center gap-2">
-                                        <i data-lucide="user-plus" class="w-5 h-5 text-success"></i>
+                                        <i data-lucide="user-plus" class="w-5 h-5 text-primary"></i>
                                         <h2 class="db-section-title">사용자 등록 현황</h2>
                                     </div>
                                     <button class="btn-xs btn-secondary" onclick="location.href='SAM_US_01_01.html'">더
@@ -266,7 +275,7 @@
                             <section class="db-feed-pane h-full">
                                 <header class="pane-header select-none">
                                     <div class="flex items-center gap-2">
-                                        <i data-lucide="megaphone" class="w-5 h-5 text-success"></i>
+                                        <i data-lucide="megaphone" class="w-5 h-5 text-primary"></i>
                                         <span class="db-section-title">공지사항</span>
                                     </div>
                                     <button class="btn-xs btn-secondary" onclick="location.href='SAM_BD_01_01.html'">더

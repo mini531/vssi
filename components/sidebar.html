@@ -122,6 +122,56 @@
             <span>공지사항</span>
         </button>
 
+        <!-- IFPS Group -->
+        <button class="sidebar-nav-btn active" data-system="IFPS" onclick="location.href='IFP_DB_01_01.html'">
+            <i data-lucide="layout-grid" class="sidebar-icon"></i>
+            <span>대시보드</span>
+        </button>
+
+        <div data-system="IFPS">
+            <button onclick="toggleSubmenu('ifps-reservation-sub', this)" class="sidebar-nav-btn group">
+                <div class="sidebar-group-label">
+                    <i data-lucide="calendar-check" class="sidebar-icon"></i>
+                    <span>예약 현황</span>
+                </div>
+                <i data-lucide="chevron-right" class="sidebar-chevron"></i>
+            </button>
+            <div id="ifps-reservation-sub" class="hidden sidebar-submenu">
+                <button class="sidebar-sub-btn" onclick="location.href='IFP_RS_01_01.html'">예약 관리</button>
+                <button class="sidebar-sub-btn">타임라인</button>
+            </div>
+        </div>
+
+        <button class="sidebar-nav-btn" data-system="IFPS">
+            <i data-lucide="radar" class="sidebar-icon"></i>
+            <span>비행 계획 모니터링</span>
+        </button>
+
+        <button class="sidebar-nav-btn" data-system="IFPS">
+            <i data-lucide="plane" class="sidebar-icon"></i>
+            <span>운항 현황</span>
+        </button>
+
+        <div data-system="IFPS">
+            <button onclick="toggleSubmenu('ifps-history-sub', this)" class="sidebar-nav-btn group">
+                <div class="sidebar-group-label">
+                    <i data-lucide="archive" class="sidebar-icon"></i>
+                    <span>이력 조회</span>
+                </div>
+                <i data-lucide="chevron-right" class="sidebar-chevron"></i>
+            </button>
+            <div id="ifps-history-sub" class="hidden sidebar-submenu">
+                <button class="sidebar-sub-btn">자원 예약</button>
+                <button class="sidebar-sub-btn">비행 계획</button>
+                <button class="sidebar-sub-btn">이벤트 로그</button>
+            </div>
+        </div>
+
+        <button class="sidebar-nav-btn" data-system="IFPS">
+            <i data-lucide="bar-chart-3" class="sidebar-icon"></i>
+            <span>비행 통계 분석</span>
+        </button>
+
     </div>
 
     <!-- Sidebar Footer -->

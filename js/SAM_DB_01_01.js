@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Monitoring Groups & Node Pool
     const groups = [
-        { id: 'VOS_RUN', name: 'VOS운용서버', color: '#14b8a6' },
+        { id: 'VOS_RUN', name: 'VOS운용서버', color: '#1EBB9E' },
         { id: 'WAS_RUN', name: 'WAS서버', color: '#3b82f6' },
         { id: 'WEB_RUN', name: 'WEB서버', color: '#a855f7' },
         { id: 'DB_TOTAL', name: '통합DB', color: '#f59e0b' },
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         label: '등록 건 수',
                         data: [12, 18, 15, 22, 19, 25, 14], // Simulated dynamic data
                         backgroundColor: 'rgba(20, 184, 166, 0.6)',
-                        borderColor: '#14b8a6',
+                        borderColor: '#1EBB9E',
                         borderWidth: 1,
                         borderRadius: 2,
                         maxBarThickness: 10
