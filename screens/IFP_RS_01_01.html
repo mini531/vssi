@@ -104,51 +104,59 @@
                         </div>
                     </div>
 
-                    <!-- Summary Bar (Row 2) - Mini Height -->
-                    <div class="summary-panel">
-                        <div class="summary-header">
-                            <span class="summary-header-label">예약 형식</span>
-                            <span class="summary-header-label">상태</span>
-                        </div>
-                        <div class="summary-grid">
-                            <div class="summary-items" id="summary-type">
-                                <button class="summary-item active" data-type="all">
-                                    <span class="db-card-label">전체 (건)</span>
+                    <!-- Summary Bar (Row 2) - New Flat Card Layout -->
+                    <div class="summary-container-row">
+                        <!-- 예약 형식 Card -->
+                        <div class="summary-group-card">
+                            <div class="summary-group-header">
+                                <i data-lucide="layers" class="w-3.5 h-3.5 text-primary"></i>
+                                <span class="summary-group-title">예약 형식</span>
+                            </div>
+                            <div class="summary-group-body" id="summary-type">
+                                <button class="summary-flat-item active" data-type="all">
+                                    <span class="db-card-label">전체</span>
                                     <span class="db-card-value text-white count">0</span>
                                 </button>
-                                <button class="summary-item" data-type="정기">
-                                    <span class="db-card-label">정기 (건)</span>
+                                <button class="summary-flat-item" data-type="정기">
+                                    <span class="db-card-label">정기</span>
                                     <span class="db-card-value text-info count">0</span>
                                 </button>
-                                <button class="summary-item" data-type="부정기">
-                                    <span class="db-card-label">부정기 (건)</span>
+                                <button class="summary-flat-item" data-type="부정기">
+                                    <span class="db-card-label">부정기</span>
                                     <span class="db-card-value text-purple count">0</span>
                                 </button>
-                                <button class="summary-item" data-type="주문형">
-                                    <span class="db-card-label">주문형 (건)</span>
+                                <button class="summary-flat-item" data-type="주문형">
+                                    <span class="db-card-label">주문형</span>
                                     <span class="db-card-value text-orange count">0</span>
                                 </button>
                             </div>
-                            <!-- Spacer for Status label alignment if needed, but flex-1 will handle card distribution -->
-                            <div class="summary-items" id="summary-status">
-                                <button class="summary-item active" data-status="all">
-                                    <span class="db-card-label">전체 (건)</span>
+                        </div>
+
+                        <!-- 상태 Card -->
+                        <div class="summary-group-card">
+                            <div class="summary-group-header">
+                                <i data-lucide="activity" class="w-3.5 h-3.5 text-primary"></i>
+                                <span class="summary-group-title">상태</span>
+                            </div>
+                            <div class="summary-group-body" id="summary-status">
+                                <button class="summary-flat-item active" data-status="all">
+                                    <span class="db-card-label">전체</span>
                                     <span class="db-card-value text-white count">0</span>
                                 </button>
-                                <button class="summary-item" data-status="대기">
-                                    <span class="db-card-label">대기 (건)</span>
+                                <button class="summary-flat-item" data-status="대기">
+                                    <span class="db-card-label">대기</span>
                                     <span class="db-card-value text-warning count">0</span>
                                 </button>
-                                <button class="summary-item" data-status="승인">
-                                    <span class="db-card-label">승인 (건)</span>
+                                <button class="summary-flat-item" data-status="승인">
+                                    <span class="db-card-label">승인</span>
                                     <span class="db-card-value text-success count">0</span>
                                 </button>
-                                <button class="summary-item" data-status="확정">
-                                    <span class="db-card-label">확정 (건)</span>
+                                <button class="summary-flat-item" data-status="확정">
+                                    <span class="db-card-label">확정</span>
                                     <span class="db-card-value text-info count">0</span>
                                 </button>
-                                <button class="summary-item" data-status="반려">
-                                    <span class="db-card-label">반려 (건)</span>
+                                <button class="summary-flat-item" data-status="반려">
+                                    <span class="db-card-label">반려</span>
                                     <span class="db-card-value text-error count">0</span>
                                 </button>
                             </div>
@@ -219,7 +227,7 @@
     </div>
     <!-- Reservation Detail Modal -->
     <div id="reservation-detail-modal" class="modal-overlay">
-        <div class="modal-dialog modal-wide">
+        <div class="modal-dialog modal-big">
             <div class="modal-header">
                 <h3 class="modal-title-left">예약 정보</h3>
                 <i data-lucide="x" class="close-icon" onclick="closeReservationDetail()"></i>
@@ -240,14 +248,14 @@
                     <div class="modal-summary-panel-3col">
                         <div class="summary-item">
                             <span class="info-label">예약 번호</span>
-                            <span class="info-value text-success" id="modal-res-id">-</span>
+                            <span class="info-value" id="modal-res-id">-</span>
                         </div>
                         <div class="summary-item">
                             <span class="info-label">상태</span>
                             <div class="info-value" id="modal-res-status">-</div>
                         </div>
                         <div class="summary-item">
-                            <span class="info-label">비행계획 매칭</span>
+                            <span class="info-label">비행 계획서 매칭</span>
                             <div class="info-value" id="modal-res-matching">-</div>
                         </div>
                     </div>
@@ -256,11 +264,11 @@
                     <div id="fpl-match-section" class="hidden">
                         <div class="fpl-match-card">
                             <div class="fpl-match-info">
-                                <span class="fpl-match-label">매칭된 비행계획서</span>
+                                <span class="fpl-match-label">매칭된 비행 계획서</span>
                                 <span class="fpl-match-id" id="modal-fpl-id">FPL-2026-0001</span>
                             </div>
-                            <button class="btn-sm btn-primary">
-                                <i data-lucide="external-link" class="w-3.5 h-3.5 mr-1"></i> 비행계획서 보기
+                            <button class="btn-sm btn-primary" onclick="switchModalTab('fpl')">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5 mr-1"></i> 비행 계획서 보기
                             </button>
                         </div>
                     </div>
@@ -271,7 +279,7 @@
                             <i data-lucide="file-text" class="modal-card-icon"></i>
                             <h4 class="modal-card-title">예약 정보</h4>
                         </div>
-                        <div class="info-grid info-grid-3col">
+                        <div class="info-grid info-grid-5col">
                             <div class="info-item">
                                 <span class="info-label">운항사</span>
                                 <div class="info-value-block" id="modal-res-operator">-</div>
@@ -301,7 +309,7 @@
                             <i data-lucide="building-2" class="modal-card-icon"></i>
                             <h4 class="modal-card-title">버티포트 정보</h4>
                         </div>
-                        <div class="info-grid">
+                        <div class="info-grid info-grid-4col">
                             <div class="info-item">
                                 <span class="info-label">이륙 버티포트</span>
                                 <div class="info-value-block" id="modal-res-from">-</div>
@@ -327,7 +335,7 @@
                             <i data-lucide="box" class="modal-card-icon"></i>
                             <h4 class="modal-card-title">자원 정보</h4>
                         </div>
-                        <div class="info-grid">
+                        <div class="info-grid info-grid-4col">
                             <div class="info-item">
                                 <span class="info-label">이륙 자원</span>
                                 <div class="info-value-block">FATO-A1</div>
@@ -350,34 +358,154 @@
 
                 <!-- Tab Content: Flight Plan -->
                 <div id="modal-tab-fpl" class="hidden">
-                    <div class="modal-info-card">
-                        <div class="modal-card-header">
-                            <i data-lucide="file-check-2" class="modal-card-icon"></i>
-                            <h4 class="modal-card-title">비행 계획서 상세</h4>
+                    <div class="modal-summary-panel-4col mb-4">
+                        <div class="summary-item">
+                            <span class="info-label">예약 번호</span>
+                            <span class="info-value text-white" id="modal-fpl-res-id">-</span>
                         </div>
-                        <div class="info-grid info-grid-3col">
-                            <div class="info-item">
-                                <span class="info-label">비행계획 ID</span>
-                                <div class="info-value-block font-bold text-teal-400" id="modal-fpl-detail-id">-</div>
+                        <div class="summary-item">
+                            <span class="info-label">비행 계획서 번호</span>
+                            <span class="info-value text-teal-400" id="modal-fpl-id-summary">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="info-label">비행 계획서 매칭</span>
+                            <div><span class="badge badge-success">매칭 완료</span></div>
+                        </div>
+                        <div class="summary-item">
+                            <span class="info-label">매칭 일시</span>
+                            <span class="info-value" id="modal-fpl-match-datetime">-</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-4">
+                        <!-- 기본 정보 -->
+                        <div class="modal-info-card mb-0">
+                            <div class="modal-card-header">
+                                <i data-lucide="info" class="w-4 h-4 text-primary"></i>
+                                <h4 class="modal-card-title">기본 정보</h4>
                             </div>
-                            <div class="info-item">
-                                <span class="info-label">제출 일시</span>
-                                <div class="info-value-block">2026-03-17 09:00:00</div>
+                            <div class="info-grid info-grid-4col overflow-visible">
+                                <div class="info-item">
+                                    <span class="info-label">ID</span>
+                                    <div class="info-value-block" id="modal-fpl-basic-id">-
+                                    </div>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">편명</span>
+                                    <div class="info-value-block" id="modal-fpl-basic-flightNo">-</div>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">운항사</span>
+                                    <div class="info-value-block" id="modal-fpl-basic-operator">-</div>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">기종</span>
+                                    <div class="info-value-block">Type A</div>
+                                </div>
                             </div>
-                            <div class="info-item">
-                                <span class="info-label">승인 상태</span>
-                                <div class="info-value-block text-success">정상 승인</div>
+                        </div>
+
+                        <!-- 경로 정보 -->
+                        <div class="modal-info-card mb-0">
+                            <div class="modal-card-header">
+                                <i data-lucide="map-pin" class="w-4 h-4 text-primary"></i>
+                                <h4 class="modal-card-title">경로 정보</h4>
+                            </div>
+                            <div class="info-grid info-grid-4col overflow-visible">
+                                <div class="info-item">
+                                    <span class="info-label">출발</span>
+                                    <div class="info-value-block" id="modal-fpl-route-from">-</div>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">도착</span>
+                                    <div class="info-value-block" id="modal-fpl-route-to">-</div>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">경로</span>
+                                    <div class="info-value-block" id="modal-fpl-route-path">-</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- 시간 정보 -->
+                            <div class="modal-info-card mb-0">
+                                <div class="modal-card-header">
+                                    <i data-lucide="clock" class="w-4 h-4 text-primary"></i>
+                                    <h4 class="modal-card-title">시간 정보</h4>
+                                </div>
+                                <div class="info-grid overflow-visible">
+                                    <div class="info-item">
+                                        <span class="info-label">출발 예상 시각 (EOBT)</span>
+                                        <div class="info-value-block" id="modal-fpl-time-eobt">-</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">도착 예정 시각 (ELDT)</span>
+                                        <div class="info-value-block" id="modal-fpl-time-eldt">-</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 예약 매칭 -->
+                            <div class="modal-info-card mb-0">
+                                <div class="modal-card-header">
+                                    <i data-lucide="link" class="w-4 h-4 text-primary"></i>
+                                    <h4 class="modal-card-title">예약 매칭</h4>
+                                </div>
+                                <div class="info-grid overflow-visible">
+                                    <div class="info-item">
+                                        <span class="info-label">예약 번호</span>
+                                        <div class="info-value-block" id="modal-fpl-match-res-id">-</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">매칭 상태</span>
+                                        <div class="info-value-block text-success">매칭 완료</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 비고 -->
+                        <div class="modal-info-card mb-0">
+                            <div class="modal-card-header">
+                                <i data-lucide="message-square" class="w-4 h-4 text-primary"></i>
+                                <h4 class="modal-card-title">비고</h4>
+                            </div>
+                            <div class="px-1 py-1 text-sm text-dim">
+                                정상 비행계획
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Tab Content: Log (Temporary) -->
+                <!-- Tab Content: Log -->
                 <div id="modal-tab-log" class="hidden">
-                    <div class="empty-state py-20">
-                        <i data-lucide="list-todo" class="empty-state-icon"></i>
-                        <p class="empty-state-text">처리 이력 로그 정보가 없습니다.</p>
+                    <div class="modal-summary-panel-2col mb-4">
+                        <div class="summary-item">
+                            <span class="info-label">예약 번호</span>
+                            <span class="info-value" id="modal-log-res-id">RS-2026-001</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="info-label">이력</span>
+                            <span class="info-value" id="modal-log-history-count">총 6건</span>
+                        </div>
                     </div>
+
+                    <!-- 처리 이력 Timeline -->
+                    <div class="modal-info-card mb-0">
+                        <div class="modal-card-header">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="history" class="w-4 h-4 text-primary"></i>
+                                <h4 class="modal-card-title">처리 이력</h4>
+                            </div>
+                        </div>
+                        <div class="modal-log-timeline-wrapper">
+                            <div id="log-timeline-container" class="log-timeline">
+                                <!-- Logs rendered by JS -->
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

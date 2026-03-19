@@ -13,28 +13,38 @@ const VERTIPORTS = [
     { id: 'VP-08', name: '울산공항' },
 ];
 
-/** 더미 예약 데이터 */
+/** 더미 예약 데이터 생성 (오늘 날짜 기준) */
+const _today = new Date();
+const _format = (d) => {
+    const y = d.getFullYear();
+    const m = (d.getMonth() + 1).toString().padStart(2, '0');
+    const _d = d.getDate().toString().padStart(2, '0');
+    return `${y}-${m}-${_d}`;
+};
+const todayStr = _format(_today);
+const yesterdayStr = _format(new Date(_today.getTime() - 86400000));
+
 const MOCK_RESERVATIONS = [
-    { id: 'RS-2026-0001', date: '2026-03-17', type: '정기', operator: '운항사A', flightNo: 'UA101', from: 'VP-01', depTime: '09:10', to: 'VP-03', arrTime: '10:15', status: '대기', matching: '매칭 대기' },
-    { id: 'RS-2026-0002', date: '2026-03-17', type: '정기', operator: '운항사B', flightNo: 'UB202', from: 'VP-02', depTime: '10:20', to: 'VP-04', arrTime: '10:45', status: '승인', matching: '매칭 완료' },
-    { id: 'RS-2026-0003', date: '2026-03-17', type: '부정기', operator: '운항사C', flightNo: 'UC303', from: 'VP-03', depTime: '11:30', to: 'VP-05', arrTime: '12:15', status: '확정', matching: '매칭 완료' },
-    { id: 'RS-2026-0004', date: '2026-03-17', type: '주문형', operator: '운항사D', flightNo: 'UD404', from: 'VP-07', depTime: '13:00', to: 'VP-06', arrTime: '13:45', status: '반려-승인', matching: '매칭 대기' },
-    { id: 'RS-2026-0005', date: '2026-03-17', type: '부정기', operator: '운항사D', flightNo: 'UD405', from: 'VP-05', depTime: '14:30', to: 'VP-08', arrTime: '15:15', status: '승인', matching: '매칭 완료' },
-    { id: 'RS-2026-0006', date: '2026-03-17', type: '정기', operator: '운항사A', flightNo: 'UA102', from: 'VP-06', depTime: '15:00', to: 'VP-04', arrTime: '15:45', status: '확정', matching: '매칭 완료' },
-    { id: 'RS-2026-0007', date: '2026-03-17', type: '주문형', operator: '운항사B', flightNo: 'UB203', from: 'VP-01', depTime: '16:10', to: 'VP-02', arrTime: '16:50', status: '대기', matching: '매칭 대기' },
-    { id: 'RS-2026-0008', date: '2026-03-17', type: '정기', operator: '운항사C', flightNo: 'UC304', from: 'VP-04', depTime: '08:00', to: 'VP-07', arrTime: '08:45', status: '반려-확정', matching: '매칭 대기' },
-    { id: 'RS-2026-0009', date: '2026-03-17', type: '부정기', operator: '운항사A', flightNo: 'UA103', from: 'VP-08', depTime: '09:30', to: 'VP-05', arrTime: '10:20', status: '확정', matching: '매칭 완료' },
-    { id: 'RS-2026-0010', date: '2026-03-17', type: '정기', operator: '운항사B', flightNo: 'UB204', from: 'VP-02', depTime: '11:00', to: 'VP-01', arrTime: '11:45', status: '승인', matching: '매칭 완료' },
-    { id: 'RS-2026-0011', date: '2026-03-17', type: '주문형', operator: '운항사C', flightNo: 'UC305', from: 'VP-03', depTime: '12:15', to: 'VP-04', arrTime: '13:00', status: '대기', matching: '매칭 대기' },
-    { id: 'RS-2026-0012', date: '2026-03-17', type: '부정기', operator: '운항사D', flightNo: 'UD406', from: 'VP-05', depTime: '14:00', to: 'VP-03', arrTime: '14:50', status: '승인', matching: '매칭 완료' },
-    { id: 'RS-2026-0013', date: '2026-03-17', type: '정기', operator: '운항사A', flightNo: 'UA104', from: 'VP-06', depTime: '15:30', to: 'VP-08', arrTime: '16:20', status: '확정', matching: '매칭 완료' },
-    { id: 'RS-2026-0014', date: '2026-03-17', type: '부정기', operator: '운항사B', flightNo: 'UB205', from: 'VP-01', depTime: '10:00', to: 'VP-07', arrTime: '10:45', status: '대기', matching: '매칭 대기' },
-    { id: 'RS-2026-0015', date: '2026-03-17', type: '주문형', operator: '운항사C', flightNo: 'UC306', from: 'VP-04', depTime: '11:45', to: 'VP-02', arrTime: '12:30', status: '반려-확정', matching: '매칭 대기' },
-    { id: 'RS-2026-0016', date: '2026-03-17', type: '정기', operator: '운항사D', flightNo: 'UD407', from: 'VP-08', depTime: '13:20', to: 'VP-05', arrTime: '14:10', status: '승인', matching: '매칭 완료' },
-    { id: 'RS-2026-0017', date: '2026-03-17', type: '부정기', operator: '운항사A', flightNo: 'UA105', from: 'VP-02', depTime: '15:10', to: 'VP-06', arrTime: '15:55', status: '확정', matching: '매칭 완료' },
-    { id: 'RS-2026-0018', date: '2026-03-17', type: '정기', operator: '운항사C', flightNo: 'UC307', from: 'VP-07', depTime: '16:40', to: 'VP-01', arrTime: '17:25', status: '승인', matching: '매칭 완료' },
-    { id: 'RS-2026-0019', date: '2026-03-17', type: '주문형', operator: '운항사B', flightNo: 'UB206', from: 'VP-05', depTime: '09:00', to: 'VP-08', arrTime: '10:00', status: '대기', matching: '매칭 대기' },
-    { id: 'RS-2026-0020', date: '2026-03-17', type: '정기', operator: '운항사D', flightNo: 'UD408', from: 'VP-03', depTime: '10:30', to: 'VP-04', arrTime: '11:15', status: '확정', matching: '매칭 완료' },
+    { id: 'RS-2026-0001', date: yesterdayStr, type: '정기', operator: '운항사A', flightNo: 'UA101', from: 'VP-01', depTime: '09:10', to: 'VP-03', arrTime: '10:15', status: '대기', matching: '매칭 대기' },
+    { id: 'RS-2026-0002', date: todayStr, type: '정기', operator: '운항사B', flightNo: 'UB202', from: 'VP-02', depTime: '10:20', to: 'VP-04', arrTime: '10:45', status: '승인', matching: '매칭 완료', fplId: 'FPL-2026-0001' },
+    { id: 'RS-2026-0003', date: todayStr, type: '부정기', operator: '운항사C', flightNo: 'UC303', from: 'VP-03', depTime: '11:30', to: 'VP-05', arrTime: '12:15', status: '확정', matching: '매칭 완료', fplId: 'FPL-2026-0002' },
+    { id: 'RS-2026-0004', date: todayStr, type: '주문형', operator: '운항사D', flightNo: 'UD404', from: 'VP-07', depTime: '13:00', to: 'VP-06', arrTime: '13:45', status: '반려-승인', matching: '매칭 대기' },
+    { id: 'RS-2026-0005', date: todayStr, type: '부정기', operator: '운항사D', flightNo: 'UD405', from: 'VP-05', depTime: '14:30', to: 'VP-08', arrTime: '15:15', status: '승인', matching: '매칭 완료', fplId: 'FPL-2026-0003' },
+    { id: 'RS-2026-0006', date: todayStr, type: '정기', operator: '운항사A', flightNo: 'UA102', from: 'VP-06', depTime: '15:00', to: 'VP-04', arrTime: '15:45', status: '확정', matching: '매칭 완료', fplId: 'FPL-2026-0004' },
+    { id: 'RS-2026-0007', date: todayStr, type: '주문형', operator: '운항사B', flightNo: 'UB203', from: 'VP-01', depTime: '16:10', to: 'VP-02', arrTime: '16:50', status: '대기', matching: '매칭 대기' },
+    { id: 'RS-2026-0008', date: todayStr, type: '정기', operator: '운항사C', flightNo: 'UC304', from: 'VP-04', depTime: '08:00', to: 'VP-07', arrTime: '08:45', status: '반려-확정', matching: '매칭 대기' },
+    { id: 'RS-2026-0009', date: todayStr, type: '부정기', operator: '운항사A', flightNo: 'UA103', from: 'VP-08', depTime: '09:30', to: 'VP-05', arrTime: '10:20', status: '확정', matching: '매칭 완료', fplId: 'FPL-2026-0005' },
+    { id: 'RS-2026-0010', date: todayStr, type: '정기', operator: '운항사B', flightNo: 'UB204', from: 'VP-02', depTime: '11:00', to: 'VP-01', arrTime: '11:45', status: '승인', matching: '매칭 완료', fplId: 'FPL-2026-0006' },
+    { id: 'RS-2026-0011', date: todayStr, type: '주문형', operator: '운항사C', flightNo: 'UC305', from: 'VP-03', depTime: '12:15', to: 'VP-04', arrTime: '13:00', status: '대기', matching: '매칭 대기' },
+    { id: 'RS-2026-0012', date: todayStr, type: '부정기', operator: '운항사D', flightNo: 'UD406', from: 'VP-05', depTime: '14:00', to: 'VP-03', arrTime: '14:50', status: '승인', matching: '매칭 완료', fplId: 'FPL-2026-0007' },
+    { id: 'RS-2026-0013', date: todayStr, type: '정기', operator: '운항사A', flightNo: 'UA104', from: 'VP-06', depTime: '15:30', to: 'VP-08', arrTime: '16:20', status: '확정', matching: '매칭 완료', fplId: 'FPL-2026-0008' },
+    { id: 'RS-2026-0014', date: todayStr, type: '부정기', operator: '운항사B', flightNo: 'UB205', from: 'VP-01', depTime: '10:00', to: 'VP-07', arrTime: '10:45', status: '대기', matching: '매칭 대기' },
+    { id: 'RS-2026-0015', date: todayStr, type: '주문형', operator: '운항사C', flightNo: 'UC306', from: 'VP-04', depTime: '11:45', to: 'VP-02', arrTime: '12:30', status: '반려-확정', matching: '매칭 대기' },
+    { id: 'RS-2026-0016', date: todayStr, type: '정기', operator: '운항사D', flightNo: 'UD407', from: 'VP-08', depTime: '13:20', to: 'VP-05', arrTime: '14:10', status: '승인', matching: '매칭 완료', fplId: 'FPL-2026-0009' },
+    { id: 'RS-2026-0017', date: todayStr, type: '부정기', operator: '운항사A', flightNo: 'UA105', from: 'VP-02', depTime: '15:10', to: 'VP-06', arrTime: '15:55', status: '확정', matching: '매칭 완료', fplId: 'FPL-2026-0010' },
+    { id: 'RS-2026-0018', date: todayStr, type: '정기', operator: '운항사C', flightNo: 'UC307', from: 'VP-07', depTime: '16:40', to: 'VP-01', arrTime: '17:25', status: '승인', matching: '매칭 완료', fplId: 'FPL-2026-0011' },
+    { id: 'RS-2026-0019', date: todayStr, type: '주문형', operator: '운항사B', flightNo: 'UB206', from: 'VP-05', depTime: '09:00', to: 'VP-08', arrTime: '10:00', status: '대기', matching: '매칭 대기' },
+    { id: 'RS-2026-0020', date: todayStr, type: '정기', operator: '운항사D', flightNo: 'UD408', from: 'VP-03', depTime: '10:30', to: 'VP-04', arrTime: '11:15', status: '확정', matching: '매칭 완료', fplId: 'FPL-2026-0012' },
 ];
 
 /** 상태별 배지 클래스 매핑 */
@@ -137,14 +147,12 @@ function performSearch() {
     currentFilters.matching = document.getElementById('filter-matching')?.value || 'all';
 
     currentSearchedData = getSearchedData();
-    renderSummary(currentSearchedData);
     renderReservations(currentSearchedData);
 }
 
 /** 필터 초기화 */
 function resetFilters() {
-    // 입력 필드 초기화 (시나리오에 맞춰 2026-03-17 고정)
-    const defaultDate = '2026-03-17';
+    const defaultDate = todayStr;
     if (document.getElementById('filter-date-start')) document.getElementById('filter-date-start').value = defaultDate;
     if (document.getElementById('filter-date-end')) document.getElementById('filter-date-end').value = defaultDate;
     if (document.getElementById('filter-rsv-no')) document.getElementById('filter-rsv-no').value = '';
@@ -158,27 +166,43 @@ function resetFilters() {
     currentFilters.type = 'all';
     currentFilters.status = 'all';
 
-    document.querySelectorAll('.summary-item').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.summary-flat-item').forEach(btn => btn.classList.remove('active'));
     document.querySelector('#summary-type [data-type="all"]')?.classList.add('active');
     document.querySelector('#summary-status [data-status="all"]')?.classList.add('active');
+
 
     performSearch();
 }
 
-/** 써머리 통계 계산 및 렌더링 */
-function renderSummary(data = MOCK_RESERVATIONS) {
-    const typeCounts = { all: data.length, '정기': 0, '부정기': 0, '주문형': 0 };
-    const statusCounts = { all: data.length, '대기': 0, '승인': 0, '확정': 0, '반려': 0 };
+/** 써머리 통계 계산 및 렌더링 (상호 유기적 필터링 반영) */
+function renderSummary(data = currentSearchedData) {
+    // 1. 예약 형식 통계 계산 (현재 선택된 '상태' 필터 영향 받음)
+    const dataFilteredByStatus = data.filter(rs => {
+        if (currentFilters.status === 'all') return true;
+        if (currentFilters.status === '반려') return rs.status.startsWith('반려');
+        return rs.status === currentFilters.status;
+    });
 
-    data.forEach(rs => {
+    const typeCounts = { all: dataFilteredByStatus.length, '정기': 0, '부정기': 0, '주문형': 0 };
+    dataFilteredByStatus.forEach(rs => {
         if (typeCounts[rs.type] !== undefined) typeCounts[rs.type]++;
+    });
 
+    // 2. 상태 통계 계산 (현재 선택된 '예약 형식' 필터 영향 받음)
+    const dataFilteredByType = data.filter(rs => {
+        if (currentFilters.type === 'all') return true;
+        return rs.type === currentFilters.type;
+    });
+
+    const statusCounts = { all: dataFilteredByType.length, '대기': 0, '승인': 0, '확정': 0, '반려': 0 };
+    dataFilteredByType.forEach(rs => {
         if (rs.status === '대기') statusCounts['대기']++;
         else if (rs.status === '승인') statusCounts['승인']++;
         else if (rs.status === '확정') statusCounts['확정']++;
         else if (rs.status.startsWith('반려')) statusCounts['반려']++;
     });
 
+    // 3. UI 업데이트
     Object.keys(typeCounts).forEach(key => {
         const btn = document.querySelector(`#summary-type [data-type="${key}"]`);
         if (btn) btn.querySelector('.db-card-value').textContent = typeCounts[key];
@@ -195,6 +219,9 @@ let currentSearchedData = [];
 
 /** 테이블 렌더링 (필터 적용) */
 function renderReservations(data = currentSearchedData) {
+    // 써머리 통계 상호 업데이트
+    renderSummary(data);
+
     const tbody = document.getElementById('reservation-table-body');
     const totalCount = document.getElementById('total-count');
     if (!tbody) return;
@@ -215,14 +242,14 @@ function renderReservations(data = currentSearchedData) {
             <td class="td-center"><span class="badge ${STATUS_BADGE_MAP[rs.status]}">${rs.status}</span></td>
             <td class="td-center"><span class="badge ${STATUS_BADGE_MAP[rs.matching]}">${rs.matching}</span></td>
             <td class="td-center">
-                <button class="btn-table-action btn-detail" title="세부 정보" data-id="${rs.id}">
-                    <i data-lucide="info" class="w-3.5 h-3.5"></i>
+                <button class="btn-xs btn-secondary btn-detail" title="세부 정보" data-id="${rs.id}">
+                    <i data-lucide="info" class="w-3 h-3"></i>
                     <span>세부 정보</span>
                 </button>
             </td>
             <td class="td-center">
-                <button class="btn-table-action" title="로그">
-                    <i data-lucide="history" class="w-3.5 h-3.5"></i>
+                <button class="btn-xs btn-secondary btn-log" title="로그" data-id="${rs.id}">
+                    <i data-lucide="history" class="w-3 h-3"></i>
                     <span>로그</span>
                 </button>
             </td>
@@ -236,13 +263,21 @@ function renderReservations(data = currentSearchedData) {
     document.querySelectorAll('.btn-detail').forEach(btn => {
         btn.onclick = (e) => {
             const id = e.target.closest('button').dataset.id;
-            openReservationDetail(id);
+            openReservationDetail(id, 'detail');
+        };
+    });
+
+    // 로그 버튼 이벤트 바인딩
+    document.querySelectorAll('.btn-log').forEach(btn => {
+        btn.onclick = (e) => {
+            const id = e.target.closest('button').dataset.id;
+            openReservationDetail(id, 'log');
         };
     });
 }
 
 /** 상세 모달 열기 */
-function openReservationDetail(id) {
+function openReservationDetail(id, initialTab = 'detail') {
     const rs = MOCK_RESERVATIONS.find(item => item.id === id);
     if (!rs) return;
 
@@ -256,6 +291,12 @@ function openReservationDetail(id) {
     document.getElementById('modal-res-to').textContent = vpName(rs.to);
     document.getElementById('modal-res-depTime').textContent = rs.depTime;
     document.getElementById('modal-res-arrTime').textContent = rs.arrTime;
+    document.getElementById('modal-log-res-id').textContent = rs.id;
+
+    // 로그 탭 타임라인 렌더링
+    renderLogTimeline(rs);
+
+    // 상태 배지
 
     // 상태 배지
     const statusEl = document.getElementById('modal-res-status');
@@ -272,16 +313,36 @@ function openReservationDetail(id) {
     if (rs.matching === '매칭 완료') {
         fplSection.classList.remove('hidden');
         fplTabHeader.classList.remove('hidden');
-        const fplId = `FPL-${rs.date.replace(/-/g, '')}-${rs.id.split('-').pop()}`;
+
+        const fplId = rs.fplId || `FPL-${rs.date.replace(/-/g, '')}-${rs.id.split('-').pop()}`;
+
+        // 상세 섹션 내 요약 정보
         document.getElementById('modal-fpl-id').textContent = fplId;
-        document.getElementById('modal-fpl-detail-id').textContent = fplId;
+
+        // 비행계획서 탭 데이터 채우기
+        document.getElementById('modal-fpl-res-id').textContent = rs.id;
+        document.getElementById('modal-fpl-id-summary').textContent = fplId;
+
+        document.getElementById('modal-fpl-basic-id').textContent = fplId;
+        document.getElementById('modal-fpl-basic-flightNo').textContent = rs.flightNo;
+        document.getElementById('modal-fpl-basic-operator').textContent = rs.operator;
+
+        document.getElementById('modal-fpl-route-from').textContent = vpName(rs.from);
+        document.getElementById('modal-fpl-route-to').textContent = vpName(rs.to);
+        document.getElementById('modal-fpl-route-path').textContent = `${vpName(rs.from)} → ${vpName(rs.to)}`;
+
+        document.getElementById('modal-fpl-time-eobt').textContent = rs.depTime;
+        document.getElementById('modal-fpl-time-eldt').textContent = rs.arrTime;
+
+        document.getElementById('modal-fpl-match-res-id').textContent = rs.id;
+        document.getElementById('modal-fpl-match-datetime').textContent = `${todayStr} 10:00:15`;
     } else {
         fplSection.classList.add('hidden');
         fplTabHeader.classList.add('hidden');
     }
 
     // 모달 활성화 및 탭 초기화
-    switchModalTab('detail');
+    switchModalTab(initialTab);
     document.getElementById('reservation-detail-modal').classList.add('active');
     if (window.lucide) lucide.createIcons();
 }
@@ -313,6 +374,8 @@ function switchModalTab(tab) {
         if (fplTab) fplTab.classList.remove('hidden');
         tabItems[2].classList.add('active');
     }
+
+    if (window.lucide) lucide.createIcons();
 }
 
 /** CSV 다운로드 */
@@ -363,8 +426,8 @@ function downloadReservationsAsCSV() {
 /** 이벤트 바인딩 */
 function initEvents() {
     // 써머리 클릭
-    const typeItems = document.querySelectorAll('#summary-type .summary-item');
-    const statusItems = document.querySelectorAll('#summary-status .summary-item');
+    const typeItems = document.querySelectorAll('#summary-type .summary-flat-item');
+    const statusItems = document.querySelectorAll('#summary-status .summary-flat-item');
 
     typeItems.forEach(item => {
         item.addEventListener('click', () => {
@@ -399,8 +462,7 @@ function initEvents() {
 
 /** 초기화 */
 document.addEventListener('DOMContentLoaded', () => {
-    // 날짜 기본값 설정 (데이터 시나리오에 맞춰 2026-03-17 고정)
-    const defaultDate = '2026-03-17';
+    const defaultDate = todayStr;
     const startInput = document.getElementById('filter-date-start');
     const endInput = document.getElementById('filter-date-end');
     if (startInput) startInput.value = defaultDate;
@@ -412,3 +474,130 @@ document.addEventListener('DOMContentLoaded', () => {
     // 초기 검색 실행 (전체 데이터 로드)
     performSearch();
 });
+
+/** 처리 이력 타임라인 렌더링 */
+function renderLogTimeline(rs) {
+    const container = document.getElementById('log-timeline-container');
+    if (!container) return;
+
+    const logs = [];
+    const baseDate = todayStr;
+
+    // 1. 요청 (기본)
+    logs.push({
+        category: 'REQUEST',
+        actor: rs.operator,
+        action: '예약 요청',
+        timestamp: `${baseDate} 10:00:05`,
+        details: `${vpName(rs.from)} → ${vpName(rs.to)} 노선 FATO 예약 요청`
+    });
+
+    // 2. 승인 (승인 이상 상태)
+    if (['승인', '확정', '완료', '반려-승인', '반려-확정'].includes(rs.status)) {
+        logs.push({
+            category: 'APPROVAL',
+            actor: vpName(rs.from),
+            action: '이륙 버티포트 승인',
+            timestamp: `${baseDate} 10:00:08`,
+            details: '이륙 자원(FATO 1) 승인 완료'
+        });
+        logs.push({
+            category: 'APPROVAL',
+            actor: vpName(rs.to),
+            action: '착륙 버티포트 승인',
+            timestamp: `${baseDate} 10:00:10`,
+            details: '착륙 자원(FATO 1) 승인 완료'
+        });
+    }
+
+    // 3. 반려-승인 (VPO 타임아웃 등)
+    if (rs.status === '반려-승인') {
+        logs.push({
+            category: 'SYSTEM',
+            actor: '통합버티포트시스템',
+            action: '예약 반려',
+            timestamp: `${baseDate} 10:10:25`,
+            details: 'VPO 응답 타임아웃으로 예약 반려 및 운항사에 통보'
+        });
+    }
+
+    // 4. 자원 배정 (확정 이상 상태)
+    if (['확정', '완료', '반려-확정'].includes(rs.status)) {
+        logs.push({
+            category: 'ALLOCATION',
+            actor: '통합버티포트시스템',
+            action: 'FATO 자원 배정',
+            timestamp: `${baseDate} 10:00:11`,
+            details: '출도착 FATO 자원(A1, B2) 배정 및 10분 안전 마진 확보'
+        });
+    }
+
+    // 5. 확정 및 통보
+    if (['확정', '완료'].includes(rs.status)) {
+        logs.push({
+            category: 'CONFIRMATION',
+            actor: '통합버티포트시스템',
+            action: '예약 확정 및 통보',
+            timestamp: `${baseDate} 10:00:12`,
+            details: `최종 예약 확정 통보 (${rs.operator})`
+        });
+        
+        // FPL 매칭
+        if (rs.matching === '매칭 완료') {
+            logs.push({
+                category: 'SYSTEM',
+                actor: '통합비행계획시스템',
+                action: '비행계획서 매칭',
+                timestamp: `${baseDate} 10:00:15`,
+                details: `비행계획서 ${rs.fplId || 'FPL-2026-0001'}와 예약 정보 매칭 완료`
+            });
+        }
+    }
+
+    // 6. 반려-확정
+    if (rs.status === '반려-확정') {
+        logs.push({
+            category: 'SYSTEM',
+            actor: '통합버티포트시스템',
+            action: '예약 반려',
+            timestamp: `${baseDate} 10:05:00`,
+            details: 'FATO 자원 할당 실패로 예약 반려 및 운항사에 통보'
+        });
+    }
+
+    // 시간 역순 정렬 (최근 것이 위로)
+    logs.reverse();
+
+    // 카테고리 한글 매핑
+    const categoryMap = {
+        'REQUEST': '요청',
+        'APPROVAL': '승인',
+        'ALLOCATION': '배정',
+        'CONFIRMATION': '확정',
+        'SYSTEM': '시스템'
+    };
+
+    // HTML 생성
+    container.innerHTML = logs.map(log => `
+        <div class="log-timeline-item">
+            <div class="log-timeline-dot dot-${log.category.toLowerCase()}"></div>
+            <div class="log-item-header">
+                <div class="log-item-title-group">
+                    <span class="log-category-badge badge-${log.category.toLowerCase()}">${categoryMap[log.category] || log.category}</span>
+                </div>
+                <span class="log-item-timestamp">${log.timestamp}</span>
+            </div>
+            <div class="log-item-details">
+                <span class="log-item-actor-tag">${log.actor}</span>
+                <span class="log-detail-text-content">${log.action} - ${log.details}</span>
+            </div>
+        </div>
+    `).join('');
+
+    // 이력 총 건수 업데이트
+    const historyCountEl = document.getElementById('modal-log-history-count');
+    if (historyCountEl) {
+        historyCountEl.textContent = `총 ${logs.length}건`;
+    }
+}
+

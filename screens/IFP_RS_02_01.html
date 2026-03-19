@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IFPS - 예약 타임라인</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* 버튼 포커스 시 발생하는 브라우저 기본 테두리 제거 */
+        #prev-week, #next-week, #week-picker-btn, #weekly-date-picker {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        #prev-week:focus, #next-week:focus, #week-picker-btn:focus, #weekly-date-picker:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+    </style>
+</head>
+
+<body class="dashboard-body app-screen-height" data-system-acronym="IFPS" data-page-title="예약 타임라인">
+    <!-- Header (Fixed Top) -->
+    <div data-include="../components/header.html"></div>
+
+    <!-- Main Flex Container (Sidebar + Content) -->
+    <div class="dashboard-main-flex">
+
+        <!-- Sidebar -->
+        <div data-include="../components/sidebar.html"></div>
+
+        <!-- Main Content (Pushed by Sidebar) -->
+        <main class="dashboard-main" id="main-content">
+
+            <!-- Content Scroll Area -->
+            <div class="dashboard-content dashboard-content-full custom-scrollbar">
+                <div class="dashboard-container dashboard-container-full">
+
+                    <!-- Weekly Schedule Selection (Row 1) -->
+                    <div class="search-panel mb-4">
+                        <div class="pane-header flex-none">
+                            <div class="search-panel-title-group">
+                                <i data-lucide="calendar" class="status-card-icon text-primary"></i>
+                                <span class="search-panel-title">주간 예약 운영 현황</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span id="current-week-range" class="text-xs font-bold text-slate-400">2026.03.16 ~
+                                    2026.03.22</span>
+                                <div class="relative">
+                                    <button id="week-picker-btn"
+                                        class="p-1 hover:bg-white/5 border border-white/10 rounded focus:outline-none">
+                                        <i data-lucide="calendar" class="w-4 h-4 text-slate-400"></i>
+                                    </button>
+                                    <input type="date" id="weekly-date-picker"
+                                        class="absolute inset-0 opacity-0 cursor-pointer w-full h-full focus:outline-none"
+                                        onclick="try{this.showPicker()}catch(e){}">
+                                </div>
+                                <div class="flex border border-white/10 rounded overflow-hidden">
+                                    <button id="prev-week" class="p-1 hover:bg-white/5 border-r border-white/10 focus:outline-none"><i
+                                            data-lucide="chevron-left" class="w-4 h-4 text-slate-400"></i></button>
+                                    <button id="next-week" class="p-1 hover:bg-white/5 focus:outline-none"><i data-lucide="chevron-right"
+                                            class="w-4 h-4 text-slate-400"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="search-panel-content">
+                            <div class="filter-panel-inner">
+                                <div class="weekly-calendar-body" id="weekly-calendar-container">
+                                    <div class="flex gap-px bg-white/5 border border-white/5 rounded overflow-hidden"
+                                        id="weekly-days">
+                                        <!-- Dynamic -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline View (Row 2) -->
+                    <div class="table-main-wrapper flex-1 min-h-[600px] flex flex-col">
+                        <div class="pane-header flex-none">
+                            <div class="search-panel-title-group">
+                                <i data-lucide="clock" class="status-card-icon text-primary"></i>
+                                <span class="search-panel-title font-bold">버티포트별 타임라인</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="flex items-center gap-3 text-[10px] text-slate-500 uppercase font-bold tracking-wider">
+                                    <div class="flex items-center gap-1.5"><span
+                                            class="w-2 h-2 rounded-full bg-success"></span>승인</div>
+                                    <div class="flex items-center gap-1.5"><span
+                                            class="w-2 h-2 rounded-full bg-info"></span>확정</div>
+                                    <div class="flex items-center gap-1.5"><span
+                                            class="w-2 h-2 rounded-full bg-warning"></span>대기</div>
+                                    <div class="flex items-center gap-1.5"><span
+                                            class="w-2 h-2 rounded-full bg-error"></span>반려</div>
+                                </div>
+                                <span id="selected-date-display"
+                                    class="text-xs font-bold text-primary pl-4 border-l border-white/10">2026.03.18
+                                    (수)</span>
+                            </div>
+                        </div>
+
+                        <div class="flex-1 min-h-0 flex flex-col">
+                            <div
+                                class="timeline-scroll-container flex-1 overflow-auto custom-scrollbar bg-black/20 relative">
+                                <!-- Sticky Time Header -->
+                                <div
+                                    class="timeline-time-header flex sticky top-0 z-20 bg-[#13141F] border-bottom border-white/10">
+                                    <div
+                                        class="timeline-vp-col-header w-32 flex-none border-r border-white/10 bg-[#1A1B27] px-3 py-2 text-[10px] font-bold text-slate-500 uppercase italic">
+                                        버티포트</div>
+                                    <div class="timeline-grid-header flex-1 flex" id="timeline-hours-header">
+                                        <!-- 00 ~ 23 hours will be injected here -->
+                                    </div>
+                                </div>
+
+                                <!-- Timeline Rows (Vertiports) -->
+                                <div class="timeline-rows-container relative" id="timeline-rows">
+                                    <!-- Vertiport rows will be injected here -->
+                                </div>
+
+                                <!-- Real-time Indicator -->
+                                <div id="current-time-marker"
+                                    class="absolute top-0 bottom-0 w-px bg-red-500 z-30 shadow-[0_0_8px_rgba(239,68,68,0.5)] pointer-events-none"
+                                    style="left: 0; display: none;">
+                                    <div class="absolute -top-1 -left-1 w-2 h-2 bg-red-500 rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/include.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/IFP_RS_02_01.js"></script>
+</body>
+
+</html>
