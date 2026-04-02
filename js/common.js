@@ -262,35 +262,10 @@ function initSystemTitle() {
 
 // Switch System
 function switchSystem(name, acronym) {
-    localStorage.setItem('vssi-system-name', name);
-    localStorage.setItem('vssi-system-acronym', acronym);
-
-    // Update Header
-    const headerTitle = document.getElementById('header-system-title');
-    if (headerTitle) {
-        headerTitle.innerText = name;
-        // Dynamic Link Update
-        if (acronym === 'VSSI') {
-            headerTitle.href = 'COM_IT_01_01.html';
-        } else if (acronym === 'IVMS') {
-            headerTitle.href = 'IVM_DB_01_01.html';
-        } else if (acronym === 'IFPS') {
-            headerTitle.href = 'IFP_DB_01_01.html';
-        } else {
-            headerTitle.href = 'SAM_DB_01_01.html';
-        }
-    }
-
-    // Update Switcher UI
-    updateSwitcherUI(acronym);
-
     // Close Modal
     toggleSystemSwitcher();
 
-    // Update Sidebar
-    updateSidebarMenu();
-
-    // Redirect to the new system's gateway
+    // Redirect to the new system's gateway in a new tab
     if (acronym === 'VSSI') {
         window.open('COM_IT_01_01.html', '_blank');
     } else if (acronym === 'IVMS') {
@@ -298,6 +273,9 @@ function switchSystem(name, acronym) {
     } else if (acronym === 'IFPS') {
         window.open('IFP_DB_01_01.html', '_blank');
     } else if (acronym === 'SAMS') {
+        window.open('SAM_DB_01_01.html', '_blank');
+    } else {
+        // Fallback for others (IFRS, V-CDM)
         window.open('SAM_DB_01_01.html', '_blank');
     }
 }

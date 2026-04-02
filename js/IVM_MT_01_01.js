@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.beginPath();
                 ctx.moveTo(centerX, centerY);
                 ctx.lineTo(nx, ny);
-                ctx.strokeStyle = isHovered ? 'rgba(97,66,254, 0.9)' : 'rgba(97,66,254, 0.8)';
+                ctx.strokeStyle = isHovered ? 'rgba(97,66,254, 0.9)' : 'rgba(97,66,254, 0.8 )';
                 ctx.lineWidth = isHovered ? 2 : 1;
                 ctx.stroke();
                 ctx.setLineDash([]);

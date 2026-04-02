@@ -61,6 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'COM_LG_03_02',
         'COM_LG_03_03',
         'SAM_ER_01_01',
+        'IFP_DB_01_01',
+        'IFP_RS_01_01',
+        'IFP_RS_02_01',
         'IVM_DB_01_01',
         'IVM_MT_01_01',
         'IVM_CS_01_01'
